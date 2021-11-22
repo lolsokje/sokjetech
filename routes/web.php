@@ -20,6 +20,7 @@ Route::get('', [HomeController::class, 'index'])->name('index');
 
 Route::get('/auth/discord/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/discord/callback', [AuthController::class, 'callback'])->name('auth.callback');
+Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
     Route::get('', [CircuitController::class, 'index'])->name('index');

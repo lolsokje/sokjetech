@@ -1,5 +1,5 @@
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/inertia-vue3';
+import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';
 import 'bootstrap';
 import route from 'ziggy';
 import Layout from './Shared/Layout';
@@ -20,6 +20,7 @@ createInertiaApp({
             .use(plugin)
             .mixin({ methods: { route } })
             .component('fa', FontAwesomeIcon)
+            .component('Link', Link)
             .mount(el);
     },
 });

@@ -1,14 +1,15 @@
 <template>
 	<nav class="sidebar" :class="sidebarActive">
-		<ul class="list-unstyled nav flex-column mt-5">
+		<img v-if="user" :src="user.avatar" alt="" class="rounded-circle mx-auto d-block mt-4">
+		<ul v-if="user" class="list-unstyled nav flex-column mt-5">
+			<li class="nav-item ps-3">
+				<Link :href="route('auth.logout')" method="POST" as="button" class="btn btn-link">Logout</Link>
+			</li>
+		</ul>
+		<ul v-else class="list-unstyled nav flex-column mt-5">
 			<li class="nav-item ps-3">
 				<a :href="route('auth.redirect')" class="nav-link">Log in</a>
 			</li>
-			<!--			<li class="nav-item"><a href="#" class="nav-link ps-3" data-bs-target="#testMenu" data-bs-toggle="collapse">Test</a>-->
-			<!--			</li>-->
-			<!--			<ul class="list-unstyled collapse" id="testMenu">-->
-			<!--				<li class="nav-item"><a href="#" class="nav-link ps-4">Nog een test</a></li>-->
-			<!--			</ul>-->
 		</ul>
 	</nav>
 
@@ -28,6 +29,9 @@ export default {
 		},
 		sidebarActive () {
 			return this.visible ? '' : 'inactive';
+		},
+		user () {
+			return this.$page.props.auth.user;
 		},
 	},
 	methods: {
