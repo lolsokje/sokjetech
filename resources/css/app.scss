@@ -1,1 +1,30 @@
+@import 'variables';
+
 @import 'bootstrap';
+
+body {
+  background-color: $darker;
+  color: $color;
+}
+
+.sidebar {
+  min-width: 300px;
+  max-width: 300px;
+  background-color: $dark;
+  height: 100vh;
+  transition: all 0.3s;
+
+  .nav-item {
+    &:hover {
+      background-color: $darker;
+    }
+  }
+
+  &.inactive {
+    margin-left: -300px;
+  }
+}
+
+#content {
+  min-height: 100vh;
+}
