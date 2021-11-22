@@ -14,8 +14,9 @@
     "guzzlehttp/guzzle": "^7.0.1",
     "inertiajs/inertia-laravel": "^0.4.5",
     "laravel/framework": "^8.65",
-    "laravel/sanctum": "^2.11",
+    "laravel/socialite": "^5.2",
     "laravel/tinker": "^2.5",
+    "martinbean/socialite-discord-provider": "^1.2",
     "squizlabs/php_codesniffer": "*",
     "tightenco/ziggy": "^1.4"
   },
