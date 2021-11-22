@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserFactory extends Factory
+class CircuitFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,10 +15,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'discord_id' => $this->faker->randomNumber(9),
-            'username' => $this->faker->userName(),
-            'avatar' => $this->faker->image(),
-            'is_admin' => false,
+            'name' => $this->faker->city(),
+            'country' => $this->faker->countryCode(),
+            'user_id' => User::factory()->create()->id,
         ];
     }
 }

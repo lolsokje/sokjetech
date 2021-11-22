@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,9 @@ Route::get('', [HomeController::class, 'index'])->name('index');
 
 Route::get('/auth/discord/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/discord/callback', [AuthController::class, 'callback'])->name('auth.callback');
+
+Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
+    Route::get('', [CircuitController::class, 'index'])->name('index');
+    Route::post('store', [CircuitController::class, 'store'])->name('store');
+    Route::put('{circuit}/update', [CircuitController::class, 'update'])->name('update');
+});
