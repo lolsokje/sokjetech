@@ -7,6 +7,8 @@ import {
     faHome,
     faPlus,
     faRoad,
+    faSignInAlt,
+    faSignOutAlt,
     faThList,
     faTimes,
 } from '@fortawesome/free-solid-svg-icons';
@@ -19,5 +21,7 @@ library.add(faRoad);
 library.add(faThList);
 library.add(faHome);
 library.add(faPlus);
+library.add(faSignInAlt);
+library.add(faSignOutAlt);
 
 export default FontAwesomeIcon;

@@ -10,12 +10,17 @@
 			</li>
 			<template v-if="user">
 				<CollapseMenu :items="state.circuitNavItems" icon="road" label="Circuits" />
-				<li class="nav-item ps-3">
-					<Link :href="route('auth.logout')" as="button" class="btn btn-link" method="POST">Logout</Link>
+				<li class="nav-item ps-3 mt-3">
+					<Link :href="route('auth.logout')" as="button" class="btn btn-link nav-link" method="POST">
+						<fa class="me-1" icon="sign-out-alt"></fa>
+						Logout
+					</Link>
 				</li>
 			</template>
 			<li v-else class="nav-item ps-3">
-				<a :href="route('auth.redirect')" class="nav-link">Log in</a>
+				<a :href="route('auth.redirect')" class="nav-link">
+					<fa class="me-1" icon="sign-in-alt"></fa>
+					Log in</a>
 			</li>
 		</ul>
 	</nav>
