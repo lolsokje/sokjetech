@@ -33,3 +33,17 @@ body {
 .btn-link {
   text-decoration: none;
 }
+
+.nav-item.has-sub {
+  .collapsable {
+    display: none;
+  }
+
+  &.open {
+    background-color: $darker;
+
+    .collapsable {
+      display: block;
+    }
+  }
+}
