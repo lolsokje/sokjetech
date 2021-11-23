@@ -1,8 +1,8 @@
 <template>
 	<nav class="sidebar">
-		<img v-if="user" :src="user.avatar" alt="" class="rounded-circle mx-auto d-block my-5">
+		<img v-if="user" :src="user.avatar" alt="" class="rounded-circle mx-auto d-block mt-5">
 		<ul class="list-unstyled nav flex-column">
-			<li class="nav-item ps-3">
+			<li class="nav-item ps-3 mt-5">
 				<Link :href="route('index')" class="nav-link">
 					<fa class="me-1" icon="home"></fa>
 					Home
@@ -14,7 +14,7 @@
 					<Link :href="route('auth.logout')" as="button" class="btn btn-link" method="POST">Logout</Link>
 				</li>
 			</template>
-			<li v-else class="nav-item ps-3 mt-5">
+			<li v-else class="nav-item ps-3">
 				<a :href="route('auth.redirect')" class="nav-link">Log in</a>
 			</li>
 		</ul>
