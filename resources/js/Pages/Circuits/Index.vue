@@ -8,12 +8,16 @@
 		<tr>
 			<th>Name</th>
 			<th>Country</th>
+			<th></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr v-for="circuit in circuits" v-bind:key="circuit.id">
 			<td>{{ circuit.name }}</td>
 			<td>{{ circuit.country }}</td>
+			<td>
+				<Link :href="route('circuits.edit', circuit)">edit</Link>
+			</td>
 		</tr>
 		</tbody>
 	</table>

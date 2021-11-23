@@ -7,6 +7,10 @@ body {
   color: $color;
 }
 
+a {
+  text-decoration: none;
+}
+
 .sidebar {
   min-width: 300px;
   max-width: 300px;

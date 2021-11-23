@@ -36,6 +36,21 @@ class CircuitController extends Controller
     }
 
     /**
+     * @param Circuit $circuit
+     *
+     * @return Response
+     * @throws AuthorizationException
+     */
+    public function edit(Circuit $circuit): Response
+    {
+        $this->authorize('alter', $circuit);
+
+        return Inertia::render('Circuits/Edit', [
+            'circuit' => $circuit,
+        ]);
+    }
+
+    /**
      * @param CircuitCreateRequest $request
      * @param Circuit $circuit
      *
