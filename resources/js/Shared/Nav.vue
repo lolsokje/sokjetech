@@ -9,7 +9,7 @@
 				</Link>
 			</li>
 			<template v-if="user">
-				<CollapseMenu :items="circuitNavItems" icon="road" label="Circuits" />
+				<CollapseMenu :items="state.circuitNavItems" icon="road" label="Circuits" />
 				<li class="nav-item ps-3">
 					<Link :href="route('auth.logout')" as="button" class="btn btn-link" method="POST">Logout</Link>
 				</li>
@@ -20,30 +20,17 @@
 		</ul>
 	</nav>
 </template>
-<script>
+<script setup>
 import CollapseMenu from './CollapseMenu';
+import { computed, reactive } from 'vue';
+import { usePage } from '@inertiajs/inertia-vue3';
 
-export default {
-	name: 'Nav',
-	components: { CollapseMenu },
-	data () {
-		return {
-			circuitNavItems: [
-				{ url: route('circuits.index'), label: 'View', icon: 'th-list' },
-				{ url: route('circuits.create'), label: 'Create', icon: 'plus' },
-			],
-		};
-	},
-	computed: {
-		user () {
-			return this.$page.props.auth.user;
-		},
-	},
-	methods: {
-		toggleMenu (event) {
-			const parent = event.target.parentNode;
-			parent.classList.contains('open') ? parent.classList.remove('open') : parent.classList.add('open');
-		},
-	},
-};
+const state = reactive({
+	circuitNavItems: [
+		{ url: route('circuits.index'), label: 'View', icon: 'th-list' },
+		{ url: route('circuits.create'), label: 'Create', icon: 'plus' },
+	],
+});
+
+const user = computed(() => usePage().props.value.auth.user);
 </script>

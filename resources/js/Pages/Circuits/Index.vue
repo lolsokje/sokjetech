@@ -20,13 +20,11 @@
 	<p v-else>No circuits added yet</p>
 </template>
 
-<script>
-export default {
-	props: {
-		circuits: {
-			type: Array,
-			required: true,
-		},
+<script setup>
+const props = defineProps({
+	circuits: {
+		type: Array,
+		required: true,
 	},
-};
+});
 </script>

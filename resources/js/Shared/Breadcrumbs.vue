@@ -6,27 +6,19 @@
 	</nav>
 </template>
 
-<script>
-export default {
-	name: 'Breadcrumbs',
-	data () {
-		return {
-			visible: true,
-		};
-	},
-	computed: {
-		sidebarIcon () {
-			return this.visible ? 'times' : 'bars';
-		},
-		sidebarActive () {
-			return this.visible ? '' : 'inactive';
-		},
-	},
-	methods: {
-		toggleSidebar () {
-			this.visible = !this.visible;
-			this.$emit('toggleVisible', this.visible);
-		},
-	},
-};
+<script setup>
+import { computed, reactive } from 'vue';
+
+const state = reactive({
+	visible: true,
+});
+
+const emit = defineEmits(['toggleVisible']);
+
+function toggleSidebar () {
+	state.visible = !state.visible;
+	emit('toggleVisible', state.visible);
+}
+
+const sidebarIcon = computed(() => state.visible ? 'times' : 'bars');
 </script>

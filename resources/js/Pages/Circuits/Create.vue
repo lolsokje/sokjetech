@@ -16,17 +16,11 @@
 	</form>
 </template>
 
-<script>
+<script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 
-export default {
-	setup () {
-		const form = useForm({
-			name: null,
-			country: null,
-		});
-
-		return { form };
-	},
-};
+const form = useForm({
+	name: null,
+	country: null,
+});
 </script>

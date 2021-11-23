@@ -16,41 +16,23 @@
 	</li>
 </template>
 
-<script>
+<script setup>
+import { computed, reactive } from 'vue';
 
-export default {
-	props: {
-		icon: {
-			type: String,
-			required: false,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
-		items: {
-			type: Array,
-			required: true,
-		},
-	},
-	name: 'CollapseMenu',
-	data () {
-		return {
-			open: false,
-		};
-	},
-	methods: {
-		toggleMenu () {
-			this.open = !this.open;
-		},
-	},
-	computed: {
-		sidebarStatus () {
-			return this.open ? 'open' : '';
-		},
-		caretIcon () {
-			return this.open ? 'caret-down' : 'caret-right';
-		},
-	},
-};
+const props = defineProps({
+	icon: { type: String, required: false },
+	label: { type: String, required: true },
+	items: { type: Array, required: true },
+});
+
+const state = reactive({
+	open: false,
+});
+
+function toggleMenu () {
+	state.open = !state.open;
+}
+
+const sidebarStatus = computed(() => state.open ? 'open' : '');
+const caretIcon = computed(() => state.open ? 'caret-down' : 'caret-right');
 </script>
