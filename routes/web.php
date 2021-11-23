@@ -24,6 +24,7 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logou
 
 Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
     Route::get('', [CircuitController::class, 'index'])->name('index');
+    Route::get('create', [CircuitController::class, 'create'])->name('create');
     Route::post('store', [CircuitController::class, 'store'])->name('store');
     Route::put('{circuit}/update', [CircuitController::class, 'update'])->name('update');
 });

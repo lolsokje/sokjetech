@@ -6,11 +6,26 @@ use App\Http\Requests\CircuitCreateRequest;
 use App\Models\Circuit;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CircuitController extends Controller
 {
-    public function index()
+    public function __construct()
     {
+        $this->middleware(['auth']);
+    }
+
+    public function index(): Response
+    {
+        return Inertia::render('Circuits/Index', [
+            'circuits' => auth()->user()->circuits()->orderBy('name')->get(),
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Circuits/Create');
     }
 
     public function store(CircuitCreateRequest $request): RedirectResponse

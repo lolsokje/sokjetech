@@ -9,7 +9,7 @@
 				</Link>
 			</li>
 			<template v-if="user">
-				<CollapseMenu :items="mainNavItems" icon="road" label="Circuits" />
+				<CollapseMenu :items="circuitNavItems" icon="road" label="Circuits" />
 				<li class="nav-item ps-3">
 					<Link :href="route('auth.logout')" as="button" class="btn btn-link" method="POST">Logout</Link>
 				</li>
@@ -28,8 +28,9 @@ export default {
 	components: { CollapseMenu },
 	data () {
 		return {
-			mainNavItems: [
+			circuitNavItems: [
 				{ url: route('circuits.index'), label: 'View', icon: 'th-list' },
+				{ url: route('circuits.create'), label: 'Create', icon: 'plus' },
 			],
 		};
 	},

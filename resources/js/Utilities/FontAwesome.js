@@ -5,6 +5,7 @@ import {
     faCaretDown,
     faCaretRight,
     faHome,
+    faPlus,
     faRoad,
     faThList,
     faTimes,
@@ -17,5 +18,6 @@ library.add(faCaretDown);
 library.add(faRoad);
 library.add(faThList);
 library.add(faHome);
+library.add(faPlus);
 
 export default FontAwesomeIcon;
