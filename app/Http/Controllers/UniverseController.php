@@ -13,7 +13,9 @@ class UniverseController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Index');
+        return Inertia::render('Universes/Index', [
+            'universes' => auth()->user()->universes,
+        ]);
     }
 
     public function store(UniverseCreateRequest $request): RedirectResponse

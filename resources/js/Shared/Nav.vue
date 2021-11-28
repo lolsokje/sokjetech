@@ -10,6 +10,7 @@
 			</li>
 			<template v-if="user">
 				<CollapseMenu :items="state.circuitNavItems" icon="road" label="Circuits" />
+				<CollapseMenu :items="state.universeNavItems" icon="globe" label="Universes"/>
 				<li class="nav-item ps-3 mt-3">
 					<Link :href="route('auth.logout')" as="button" class="btn btn-link nav-link" method="POST">
 						<fa class="me-1" icon="sign-out-alt"></fa>
@@ -34,6 +35,9 @@ const state = reactive({
 	circuitNavItems: [
 		{ url: route('circuits.index'), label: 'View', icon: 'th-list' },
 		{ url: route('circuits.create'), label: 'Create', icon: 'plus' },
+	],
+	universeNavItems: [
+		{ url: route('universes.index'), label: 'View', icon: 'th-list' },
 	],
 });
 

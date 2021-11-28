@@ -4,6 +4,7 @@ import {
     faBars,
     faCaretDown,
     faCaretRight,
+    faGlobe,
     faHome,
     faPlus,
     faRoad,
@@ -23,5 +24,6 @@ library.add(faHome);
 library.add(faPlus);
 library.add(faSignInAlt);
 library.add(faSignOutAlt);
+library.add(faGlobe);
 
 export default FontAwesomeIcon;
