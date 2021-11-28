@@ -18,4 +18,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Circuit::class);
     }
+
+    public function universes(): HasMany
+    {
+        return $this->hasMany(Universe::class);
+    }
 }

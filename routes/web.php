@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UniverseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +29,10 @@ Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
     Route::get('{circuit}/edit', [CircuitController::class, 'edit'])->name('edit');
     Route::post('store', [CircuitController::class, 'store'])->name('store');
     Route::put('{circuit}/update', [CircuitController::class, 'update'])->name('update');
+});
+
+Route::group(['prefix' => 'universes', 'as' => 'universes.'], function () {
+    Route::get('', [UniverseController::class, 'index'])->name('index');
+    Route::post('store', [UniverseController::class, 'store'])->name('store');
+    Route::put('{universe}', [UniverseController::class, 'update'])->name('update');
 });
