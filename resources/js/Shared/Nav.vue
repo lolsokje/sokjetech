@@ -38,6 +38,7 @@ const state = reactive({
 	],
 	universeNavItems: [
 		{ url: route('universes.index'), label: 'View', icon: 'th-list' },
+		{ url: route('universes.create'), label: 'Create', icon: 'plus' },
 	],
 });
 

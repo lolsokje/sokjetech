@@ -33,6 +33,8 @@ Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
 
 Route::group(['prefix' => 'universes', 'as' => 'universes.'], function () {
     Route::get('', [UniverseController::class, 'index'])->name('index');
+    Route::get('create', [UniverseController::class, 'create'])->name('create');
     Route::post('store', [UniverseController::class, 'store'])->name('store');
+    Route::get('{universe}/edit', [UniverseController::class, 'edit'])->name('edit');
     Route::put('{universe}', [UniverseController::class, 'update'])->name('update');
 });

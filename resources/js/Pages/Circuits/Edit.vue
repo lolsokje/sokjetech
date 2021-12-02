@@ -1,7 +1,7 @@
 <template>
 	<h1>Edit "{{ circuit.name }}"</h1>
 
-	<form @submit.prevent="form.put(route('circuits.update', circuit))">
+	<form @submit.prevent="form.put(route('circuits.update', circuit))" class="form-narrow">
 		<div class="mb-3">
 			<label for="name" class="form-label">Name</label>
 			<input type="text" class="form-control" id="name" v-model="form.name" required>

@@ -1,7 +1,7 @@
 <template>
 	<h1>Create circuit</h1>
 
-	<form @submit.prevent="form.post(route('circuits.store'))">
+	<form class="form-narrow" @submit.prevent="form.post(route('circuits.store'))">
 		<div class="mb-3">
 			<label for="name" class="form-label">Name</label>
 			<input type="text" class="form-control" id="name" v-model="form.name" required>

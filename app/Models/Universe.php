@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,25 +26,21 @@ class Universe extends Model
     public static function visibilityLabels(): array
     {
         return [
-            self::VISIBILITY_PUBLIC => 'public',
-            self::VISIBILITY_PRIVATE => 'private',
-            self::VISIBILITY_AUTH => 'auth',
+            self::VISIBILITY_PUBLIC => 'Public',
+            self::VISIBILITY_PRIVATE => 'Private',
+            self::VISIBILITY_AUTH => 'Logged in only',
         ];
     }
 
-    public function isPublic(): bool
+    public function scopeVisible(Builder $query): Builder
     {
-        return $this->visibility === self::VISIBILITY_PUBLIC;
-    }
-
-    public function isPrivate(): bool
-    {
-        return $this->visibility === self::VISIBILITY_PRIVATE;
-    }
-
-    public function isAuthRequired(): bool
-    {
-        return $this->visibility === self::VISIBILITY_AUTH;
+        if (auth()->check()) {
+            $query->where(function (Builder $query) {
+                $query->where('visibility', self::VISIBILITY_AUTH)
+                    ->orWhere('user_id', auth()->user()->id);
+            });
+        }
+        return $query->orWhere('visibility', self::VISIBILITY_PUBLIC);
     }
 
     public function user(): BelongsTo

@@ -1,6 +1,8 @@
 <template>
 	<h1>Universes</h1>
 
+	<Link :href="route('universes.create')" class="btn btn-primary my-3">Add universe</Link>
+
 	<table class="table table-dark" v-if="universes.length">
 		<thead>
 		<tr>
@@ -12,7 +14,9 @@
 		<tbody>
 		<tr v-for="universe in universes" v-bind:key="universe.id">
 			<td>{{ universe.name }}</td>
-			<td>edit</td>
+			<td>
+				<Link :href="route('universes.edit', universe)" v-if="universe.can">edit</Link>
+			</td>
 			<td>view</td>
 		</tr>
 		</tbody>

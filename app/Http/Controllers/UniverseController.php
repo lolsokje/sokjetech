@@ -11,10 +11,30 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UniverseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth'])->only('create', 'edit');
+    }
+
     public function index(): Response
     {
+        $universes = Universe::visible()->orderBy('name')->get();
+
         return Inertia::render('Universes/Index', [
-            'universes' => auth()->user()->universes,
+            'universes' => $universes->map(function (Universe $universe) {
+                return [
+                    'name' => $universe->name,
+                    'id' => $universe->id,
+                    'can' => auth()->user()?->id === $universe->user_id,
+                ];
+            }),
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Universes/Create', [
+            'visibilities' => Universe::visibilityLabels(),
         ]);
     }
 
@@ -26,10 +46,19 @@ class UniverseController extends Controller
     }
 
     /**
-     * @param UniverseCreateRequest $request
-     * @param Universe $universe
-     *
-     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function edit(Universe $universe): Response
+    {
+        $this->authorize('update', $universe);
+
+        return Inertia::render('Universes/Edit', [
+            'universe' => $universe,
+            'visibilities' => Universe::visibilityLabels(),
+        ]);
+    }
+
+    /**
      * @throws AuthorizationException
      */
     public function update(UniverseCreateRequest $request, Universe $universe): RedirectResponse

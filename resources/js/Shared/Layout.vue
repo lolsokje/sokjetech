@@ -3,11 +3,13 @@
 		<Nav :class="state.sidebarActive" />
 
 		<div id="content" class="p-5">
-			<Breadcrumbs @toggleVisible="toggleSidebar" />
+			<Breadcrumbs @toggleVisible="toggleSidebar"/>
 
-			<div class="mt-5 bg-dark p-4">
-				<slot />
-			</div>
+			<main>
+				<div class="mt-5 bg-dark p-4">
+					<slot/>
+				</div>
+			</main>
 		</div>
 	</div>
 </template>

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class UniverseControllerTest extends TestCase
@@ -14,7 +15,6 @@ class UniverseControllerTest extends TestCase
     /** @test */
     public function anAuthorizedUserCanCreateUniverses()
     {
-        $this->withoutExceptionHandling();
         $user = User::factory()->create();
 
         $this->actingAs($user);
@@ -40,6 +40,13 @@ class UniverseControllerTest extends TestCase
 
         $response->assertForbidden();
         $this->assertDatabaseCount('universes', 0);
+    }
+
+    /** @test */
+    public function anUnauthorizedUserCannotViewTheCreateUniversePage()
+    {
+        $this->get(route('universes.create'))
+            ->assertRedirect(route('index'));
     }
 
     /** @test */
@@ -85,6 +92,23 @@ class UniverseControllerTest extends TestCase
     }
 
     /** @test */
+    public function anUnauthorizedUserCannotViewTheEditUniversePage()
+    {
+        $this->get(route('universes.edit', Universe::factory()->create()))
+            ->assertRedirect(route('index'));
+    }
+
+    /** @test */
+    public function anAuthorizedUserCannotViewAnotherUsersEditUniversePage()
+    {
+        $universe = Universe::factory()->create(['user_id' => User::factory()->create()->id]);
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('universes.edit', [$universe]))
+            ->assertForbidden();
+    }
+
+    /** @test */
     public function anUnauthorizedUserCannotUpdateUniverses()
     {
         $universe = Universe::factory()->create();
@@ -100,5 +124,36 @@ class UniverseControllerTest extends TestCase
 
         $this->assertEquals($name, $universe->fresh()->name);
         $this->assertEquals($visibility, $universe->fresh()->visibility);
+    }
+
+    /** @test */
+    public function anAuthorizedUserCanOnlyViewPublicAndTheirOwnUniverses()
+    {
+        $user = User::factory()->create();
+
+        Universe::factory()->create(['visibility' => Universe::VISIBILITY_PRIVATE]);
+        Universe::factory()->create(['visibility' => Universe::VISIBILITY_PUBLIC]);
+        Universe::factory()->create(['visibility' => Universe::VISIBILITY_AUTH]);
+
+        $this->actingAs($user);
+
+        $response = $this->get(route('universes.index'));
+
+        $response
+            ->assertInertia(fn(Assert $page) => $page
+                ->has('universes', 2)
+            );
+    }
+
+    /** @test */
+    public function anUnauthorizedUserCanOnlyViewPublicUniverses()
+    {
+        Universe::factory()->create(['visibility' => Universe::VISIBILITY_PRIVATE]);
+        Universe::factory()->create(['visibility' => Universe::VISIBILITY_PUBLIC]);
+        Universe::factory()->create(['visibility' => Universe::VISIBILITY_AUTH]);
+
+        $this->get(route('universes.index'))
+            ->assertInertia(fn(Assert $page) => $page
+                ->has('universes', 1));
     }
 }
