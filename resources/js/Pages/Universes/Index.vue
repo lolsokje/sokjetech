@@ -15,9 +15,11 @@
 		<tr v-for="universe in universes" v-bind:key="universe.id">
 			<td>{{ universe.name }}</td>
 			<td>
-				<Link :href="route('universes.edit', universe)" v-if="universe.can">edit</Link>
+				<Link :href="route('universes.edit', universe)" v-if="universe.can.edit">edit</Link>
 			</td>
-			<td>view</td>
+			<td>
+				<Link :href="route('universes.show', universe)">view</Link>
+			</td>
 		</tr>
 		</tbody>
 	</table>

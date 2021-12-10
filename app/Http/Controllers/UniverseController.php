@@ -25,7 +25,9 @@ class UniverseController extends Controller
                 return [
                     'name' => $universe->name,
                     'id' => $universe->id,
-                    'can' => auth()->user()?->id === $universe->user_id,
+                    'can' => [
+                        'edit' => auth()->user()?->id === $universe->user_id,
+                    ],
                 ];
             }),
         ]);
@@ -43,6 +45,15 @@ class UniverseController extends Controller
         $request->user()->universes()->create($request->validated());
 
         return redirect(route('universes.index'));
+    }
+
+    public function show(Universe $universe): Response
+    {
+        $this->authorize('view', $universe);
+
+        return Inertia::render('Universes/View', [
+            'universe' => $universe,
+        ]);
     }
 
     /**

@@ -13,14 +13,24 @@ class UniversePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
-     * @param Universe $universe
+     * @param  User|null  $user
+     * @param  Universe  $universe
      *
      * @return bool
      */
-    public function view(User $user, Universe $universe): bool
+    public function view(?User $user, Universe $universe): bool
     {
-        return true;
+        $visibility = $universe->visibility;
+
+        if ($visibility === Universe::VISIBILITY_PUBLIC) {
+            return true;
+        }
+
+        if ($visibility === Universe::VISIBILITY_AUTH) {
+            return $user !== null;
+        }
+
+        return $visibility === Universe::VISIBILITY_PRIVATE && $user && $user->id === $universe->user_id;
     }
 
     /**
