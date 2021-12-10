@@ -7,8 +7,8 @@
 		</a>
 		<ul class="collapsable list-unstyled ps-3">
 			<li class="nav-item" v-for="(item, index) in items" v-bind:key="index">
-				<Link class="nav-link" :href="item.url">
-					<fa v-if="item.icon" :icon="item.icon" class="me-1" />
+				<Link class="nav-link" :href="item.url" v-if="item.authRequired && user || !item.authRequired">
+					<fa v-if="item.icon" :icon="item.icon" class="me-1"/>
 					{{ item.label }}
 				</Link>
 			</li>
@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed, reactive } from 'vue';
+import { usePage } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
 	icon: { type: String, required: false },
@@ -35,4 +36,5 @@ function toggleMenu () {
 
 const sidebarStatus = computed(() => state.open ? 'open' : '');
 const caretIcon = computed(() => state.open ? 'caret-down' : 'caret-right');
+const user = computed(() => usePage().props.value.auth.user);
 </script>

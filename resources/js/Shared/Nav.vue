@@ -8,17 +8,15 @@
 					Home
 				</Link>
 			</li>
-			<template v-if="user">
-				<CollapseMenu :items="state.circuitNavItems" icon="road" label="Circuits" />
-				<CollapseMenu :items="state.universeNavItems" icon="globe" label="Universes"/>
-				<li class="nav-item ps-3 mt-3">
-					<Link :href="route('auth.logout')" as="button" class="btn btn-link nav-link" method="POST">
-						<fa class="me-1" icon="sign-out-alt"></fa>
-						Logout
-					</Link>
-				</li>
-			</template>
-			<li v-else class="nav-item ps-3">
+			<CollapseMenu v-if="user" :items="state.circuitNavItems" icon="road" label="Circuits"/>
+			<CollapseMenu :items="state.universeNavItems" icon="globe" label="Universes"/>
+			<li v-if="user" class="nav-item ps-3 mt-3">
+				<Link :href="route('auth.logout')" as="button" class="btn btn-link nav-link" method="POST">
+					<fa class="me-1" icon="sign-out-alt"></fa>
+					Logout
+				</Link>
+			</li>
+			<li v-if="!user" class="nav-item ps-3 mt-3">
 				<a :href="route('auth.redirect')" class="nav-link">
 					<fa class="me-1" icon="sign-in-alt"></fa>
 					Log in</a>
@@ -29,18 +27,19 @@
 <script setup>
 import CollapseMenu from './CollapseMenu';
 import { computed, reactive } from 'vue';
+import MenuItem from '../Utilities/MenuItem';
 import { usePage } from '@inertiajs/inertia-vue3';
+
+const user = computed(() => usePage().props.value.auth.user);
 
 const state = reactive({
 	circuitNavItems: [
-		{ url: route('circuits.index'), label: 'View', icon: 'th-list' },
-		{ url: route('circuits.create'), label: 'Create', icon: 'plus' },
+		new MenuItem(route('circuits.index'), 'View', 'th-list'),
+		new MenuItem(route('circuits.create'), 'Create', 'plus'),
 	],
 	universeNavItems: [
-		{ url: route('universes.index'), label: 'View', icon: 'th-list' },
-		{ url: route('universes.create'), label: 'Create', icon: 'plus' },
+		new MenuItem(route('universes.index'), 'View', 'th-list'),
+		new MenuItem(route('universes.create'), 'Create', 'plus', true),
 	],
 });
-
-const user = computed(() => usePage().props.value.auth.user);
 </script>

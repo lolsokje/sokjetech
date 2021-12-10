@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper d-flex">
-		<Nav :class="state.sidebarActive" />
+		<Nav :class="state.sidebarActive"/>
 
 		<div id="content" class="p-5">
 			<Breadcrumbs @toggleVisible="toggleSidebar"/>
@@ -23,7 +23,7 @@ const state = reactive({
 	sidebarActive: '',
 });
 
-function toggleSidebar (visible) {
+async function toggleSidebar (visible) {
 	state.sidebarActive = visible ? '' : 'inactive';
 }
 </script>
