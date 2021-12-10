@@ -55,3 +55,22 @@ a {
 .form-narrow {
   width: 50%;
 }
+
+.table-dark {
+  th {
+    background-color: $darker;
+    padding: 1rem;
+  }
+
+  tbody {
+    tr, td {
+      padding: 1rem 0 1rem 1rem;
+    }
+
+    tr:hover {
+      td {
+        background-color: $lighter;
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
 
 	<Link :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</Link>
 
-	<table class="table table-dark" v-if="circuits.length">
+	<table class="table table-borderless table-dark" v-if="circuits.length">
 		<thead>
 		<tr>
 			<th>Name</th>

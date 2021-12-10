@@ -3,7 +3,7 @@
 
 	<Link :href="route('universes.create')" class="btn btn-primary my-3">Add universe</Link>
 
-	<table class="table table-dark" v-if="universes.length">
+	<table class="table table-borderless table-dark" v-if="universes.length">
 		<thead>
 		<tr>
 			<th>Name</th>
