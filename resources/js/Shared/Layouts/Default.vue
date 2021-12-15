@@ -15,8 +15,8 @@
 </template>
 
 <script setup>
-import Nav from './Nav';
-import Breadcrumbs from './Breadcrumbs';
+import Nav from '../Nav';
+import Breadcrumbs from '../Breadcrumbs';
 import { reactive } from 'vue';
 
 const state = reactive({

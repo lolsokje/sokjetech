@@ -2,7 +2,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';
 import 'bootstrap';
 import route from 'ziggy';
-import Layout from './Shared/Layout';
+import Default from './Shared/Layouts/Default';
 import FontAwesomeIcon from './Utilities/FontAwesome';
 
 createInertiaApp({
@@ -10,7 +10,7 @@ createInertiaApp({
         let page = require(`./Pages/${name}`).default;
 
         if (page.layout === undefined) {
-            page.layout = Layout;
+            page.layout = Default;
         }
 
         return page;
