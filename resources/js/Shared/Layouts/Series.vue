@@ -8,21 +8,16 @@
 			<main>
 				<div class="wrapper d-flex">
 					<div class="w-100 mt-5 bg-dark p-4">
-						<h1>{{ universe.name }}</h1>
+						<h1>{{ series.name }}</h1>
 						<slot/>
 					</div>
 					<div class="w-25 ms-5 mt-5 bg-dark p-4">
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<Link :href="route('universes.series.index', [universe])" class="nav-link">Series</Link>
+								<a class="nav-link" href="#">Engines</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#">Teams</a>
-							</li>
-							<li class="nav-item">
-								<Link :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">
-									Drivers
-								</Link>
 							</li>
 						</ul>
 					</div>
@@ -42,6 +37,10 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
+	series: {
+		type: Object,
+		required: true,
+	},
 });
 
 const state = reactive({
@@ -54,5 +53,5 @@ async function toggleSidebar (visible) {
 </script>
 
 <script>
-export default { name: 'UniverseLayout' };
+export default { name: 'SeriesLayout' };
 </script>

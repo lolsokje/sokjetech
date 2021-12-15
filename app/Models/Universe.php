@@ -53,4 +53,9 @@ class Universe extends Model
     {
         return $this->hasMany(Driver::class);
     }
+
+    public function series(): HasMany
+    {
+        return $this->hasMany(Series::class);
+    }
 }

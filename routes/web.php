@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,5 +47,9 @@ Route::group(['prefix' => 'universes', 'as' => 'universes.'], function () {
         Route::post('store', [DriverController::class, 'store'])->name('store');
         Route::get('{driver}/edit', [DriverController::class, 'edit'])->name('edit');
         Route::put('{driver}', [DriverController::class, 'update'])->name('update');
+    });
+
+    Route::group(['prefix' => '{universe}'], function () {
+        Route::resource('series', SeriesController::class)->except('destroy');
     });
 });

@@ -29,4 +29,9 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Driver::class, Universe::class);
     }
+
+    public function series(): HasManyThrough
+    {
+        return $this->hasManyThrough(Series::class, Universe::class);
+    }
 }
