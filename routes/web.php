@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UniverseController;
 use Illuminate\Support\Facades\Route;
@@ -38,4 +39,12 @@ Route::group(['prefix' => 'universes', 'as' => 'universes.'], function () {
     Route::get('{universe}', [UniverseController::class, 'show'])->name('show');
     Route::get('{universe}/edit', [UniverseController::class, 'edit'])->name('edit');
     Route::put('{universe}', [UniverseController::class, 'update'])->name('update');
+
+    Route::group(['prefix' => '{universe}/drivers', 'as' => 'drivers.'], function () {
+        Route::get('', [DriverController::class, 'index'])->name('index');
+        Route::get('create', [DriverController::class, 'create'])->name('create');
+        Route::post('store', [DriverController::class, 'store'])->name('store');
+        Route::get('{driver}/edit', [DriverController::class, 'edit'])->name('edit');
+        Route::put('{driver}', [DriverController::class, 'update'])->name('update');
+    });
 });

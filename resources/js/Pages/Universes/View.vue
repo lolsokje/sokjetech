@@ -1,12 +1,13 @@
 <template>
-	<h1>{{ universe.name }}</h1>
+
 </template>
 
 <script setup>
-const props = defineProps({
-	universe: {
-		type: Object,
-		required: true,
-	},
-});
+
+</script>
+
+<script>
+import Universe from '../../Shared/Layouts/Universe';
+
+export default { layout: Universe };
 </script>
