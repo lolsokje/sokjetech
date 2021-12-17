@@ -17,7 +17,7 @@
 								<Link :href="route('universes.series.index', [universe])" class="nav-link">Series</Link>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">Teams</a>
+								<Link :href="route('universes.teams.index', [universe])" class="nav-link">Teams</Link>
 							</li>
 							<li class="nav-item">
 								<Link :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">

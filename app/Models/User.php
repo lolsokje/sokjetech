@@ -34,4 +34,9 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Series::class, Universe::class);
     }
+
+    public function teams(): HasManyThrough
+    {
+        return $this->hasManyThrough(Team::class, Universe::class);
+    }
 }

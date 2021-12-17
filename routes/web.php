@@ -5,6 +5,7 @@ use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,5 @@ Route::resource('universes', UniverseController::class)->except('destroy');
 Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], function () {
     Route::resource('drivers', DriverController::class)->except('destroy');
     Route::resource('series', SeriesController::class)->except('destroy');
+    Route::resource('teams', TeamController::class)->except('destroy');
 });

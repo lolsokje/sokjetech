@@ -58,4 +58,9 @@ class Universe extends Model
     {
         return $this->hasMany(Series::class);
     }
+
+    public function teams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
 }
