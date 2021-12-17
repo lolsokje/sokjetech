@@ -1,5 +1,7 @@
 <template>
 	<form class="form-narrow" @submit.prevent="form.post(route('universes.teams.store', [universe]))">
+		<Errors :errors="form.errors"/>
+
 		<div class="mb-3">
 			<label class="form-label" for="full_name">Full name</label>
 			<input id="full_name" v-model="form.full_name" class="form-control" required type="text">
@@ -38,6 +40,7 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import CountrySelect from '../../Shared/CountrySelect';
+import Errors from '../../Shared/Errors';
 
 defineProps({
 	universe: {

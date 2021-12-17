@@ -1,5 +1,7 @@
 <template>
 	<form class="form-narrow" @submit.prevent="form.put(route('universes.drivers.update', [universe, driver]))">
+		<Errors :errors="form.errors"/>
+
 		<div class="row mb-3">
 			<div class="col">
 				<label class="form-label" for="first_name">First name</label>
@@ -28,6 +30,7 @@
 <script setup>
 import CountrySelect from '../../Shared/CountrySelect';
 import { useForm } from '@inertiajs/inertia-vue3';
+import Errors from '../../Shared/Errors';
 
 const props = defineProps({
 	universe: {

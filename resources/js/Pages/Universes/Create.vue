@@ -2,6 +2,8 @@
 	<h1>Create universe</h1>
 
 	<form @submit.prevent="form.post(route('universes.store'))" class="form-narrow">
+		<Errors :errors="form.errors"/>
+
 		<div class="mb-3">
 			<label for="name" class="form-label">Name</label>
 			<input type="text" class="form-control" id="name" v-model="form.name" required>
@@ -22,6 +24,7 @@
 <script setup>
 
 import { useForm } from '@inertiajs/inertia-vue3';
+import Errors from '../../Shared/Errors';
 
 const props = defineProps({
 	visibilities: {
