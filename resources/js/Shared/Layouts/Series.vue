@@ -11,7 +11,7 @@
 						<a class="nav-link" href="#">Engines</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Teams</a>
+						<a class="nav-link" href="#">Seasons</a>
 					</li>
 				</ul>
 			</div>
