@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EngineCreateRequest;
 use App\Models\Engine;
 use App\Models\Series;
+use Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -22,7 +23,7 @@ class EngineController extends Controller
         return Inertia::render('Engines/Index', [
             'series' => $series->load(['engines' => fn(HasMany $query) => $query->orderBy('name')]),
             'can' => [
-                'edit' => request()->user()?->can('update', $series->universe),
+                'edit' => Gate::check('owns-universe', $series->universe),
             ],
         ]);
     }

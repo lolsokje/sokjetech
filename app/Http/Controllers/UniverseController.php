@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UniverseCreateRequest;
 use App\Models\Universe;
+use Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,7 +27,7 @@ class UniverseController extends Controller
                     'name' => $universe->name,
                     'id' => $universe->id,
                     'can' => [
-                        'edit' => auth()->user()?->id === $universe->user_id,
+                        'edit' => Gate::check('owns-universe', $universe),
                     ],
                 ];
             }),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DriverCreateRequest;
 use App\Models\Driver;
 use App\Models\Universe;
+use Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -22,7 +23,7 @@ class DriverController extends Controller
         return Inertia::render('Drivers/Index', [
             'universe' => $universe->load(['drivers' => fn(HasMany $query) => $query->orderBy('last_name')]),
             'can' => [
-                'edit' => $universe->user_id === auth()->user()?->id,
+                'edit' => Gate::check('owns-universe', $universe),
             ]
         ]);
     }

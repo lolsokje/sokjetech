@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Universe;
 use App\Models\User;
+use Gate;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UniversePolicy
@@ -43,6 +44,6 @@ class UniversePolicy
      */
     public function update(User $user, Universe $universe): bool
     {
-        return $user->id === $universe->user_id;
+        return Gate::check('owns-universe', $universe);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TeamCreateRequest;
 use App\Models\Team;
 use App\Models\Universe;
+use Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -22,7 +23,7 @@ class TeamController extends Controller
         return Inertia::render('Teams/Index', [
             'universe' => $universe->load(['teams' => fn(HasMany $query) => $query->orderBy('full_name')]),
             'can' => [
-                'edit' => auth()->user()?->can('update', $universe),
+                'edit' => Gate::check('owns-universe', $universe),
             ]
         ]);
     }
