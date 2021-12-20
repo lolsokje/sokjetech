@@ -11,8 +11,6 @@ class Circuit extends Model
 {
     use HasFactory, Uuids;
 
-    protected $guarded = false;
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

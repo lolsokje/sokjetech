@@ -18,8 +18,6 @@ class Universe extends Model
     public const VISIBILITY_PRIVATE = 2;
     public const VISIBILITY_AUTH = 3;
 
-    protected $guarded = [];
-
     public static function visibilities(): array
     {
         return array_keys(self::visibilityLabels());

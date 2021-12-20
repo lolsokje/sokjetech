@@ -12,8 +12,6 @@ class Engine extends Model
 {
     use HasFactory, Uuids;
 
-    protected $guarded = [];
-
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class);

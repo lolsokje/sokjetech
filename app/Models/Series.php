@@ -13,8 +13,6 @@ class Series extends Model
 {
     use HasFactory, Uuids;
 
-    protected $guarded = [];
-
     public function universe(): BelongsTo
     {
         return $this->belongsTo(Universe::class);

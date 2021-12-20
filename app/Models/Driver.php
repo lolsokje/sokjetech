@@ -12,8 +12,6 @@ class Driver extends Model
 {
     use HasFactory, Uuids;
 
-    protected $guarded = [];
-
     protected $appends = [
         'fullName',
         'readableDob',

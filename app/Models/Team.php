@@ -12,8 +12,6 @@ class Team extends Model
 {
     use HasFactory, Uuids;
 
-    protected $guarded = [];
-
     protected $appends = [
         'styleString',
     ];
