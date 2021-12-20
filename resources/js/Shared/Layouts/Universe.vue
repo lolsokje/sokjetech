@@ -4,6 +4,7 @@
 
 		<div id="content" class="p-5">
 			<Breadcrumbs @toggleVisible="toggleSidebar"/>
+			<Toast/>
 
 			<main>
 				<div class="wrapper d-flex">
@@ -36,6 +37,7 @@
 import Nav from '../Nav';
 import Breadcrumbs from '../Breadcrumbs';
 import { reactive } from 'vue';
+import Toast from '../Toast';
 
 const props = defineProps({
 	universe: {

@@ -74,3 +74,15 @@ a {
     }
   }
 }
+
+.alert {
+  min-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.alert-success {
+  background: $success;
+  border-color: $success;
+  color: white;
+}

@@ -40,7 +40,8 @@ class DriverController extends Controller
 
         $universe->drivers()->create($request->validated());
 
-        return redirect(route('universes.drivers.index', [$universe]));
+        return redirect(route('universes.drivers.index', [$universe]))
+            ->with('notice', 'Driver created');
     }
 
     public function edit(Universe $universe, Driver $driver): Response
@@ -57,6 +58,7 @@ class DriverController extends Controller
 
         $driver->update($request->validated());
 
-        return redirect(route('universes.drivers.index', [$universe]));
+        return redirect(route('universes.drivers.index', [$universe]))
+            ->with('notice', 'Driver updated');
     }
 }

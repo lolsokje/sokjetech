@@ -42,7 +42,8 @@ class SeriesController extends Controller
 
         $universe->series()->create($request->validated());
 
-        return redirect(route('universes.series.index', [$universe]));
+        return redirect(route('universes.series.index', [$universe]))
+            ->with('notice', 'Series created');
     }
 
     public function show(Universe $universe, Series $series): Response
@@ -71,6 +72,7 @@ class SeriesController extends Controller
 
         $series->update($request->validated());
 
-        return redirect(route('universes.series.index', [$universe]));
+        return redirect(route('universes.series.index', [$universe]))
+            ->with('notice', 'Circuit updated');
     }
 }

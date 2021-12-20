@@ -44,7 +44,8 @@ class UniverseController extends Controller
     {
         $request->user()->universes()->create($request->validated());
 
-        return redirect(route('universes.index'));
+        return redirect(route('universes.index'))
+            ->with('notice', 'Universe created');
     }
 
     public function show(Universe $universe): Response
@@ -78,6 +79,7 @@ class UniverseController extends Controller
 
         $universe->update($request->validated());
 
-        return redirect(route('universes.index'));
+        return redirect(route('universes.index'))
+            ->with('notice', 'Universe updated');
     }
 }

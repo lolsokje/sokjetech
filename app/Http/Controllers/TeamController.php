@@ -42,7 +42,8 @@ class TeamController extends Controller
 
         $universe->teams()->create($request->validated());
 
-        return redirect(route('universes.teams.index', [$universe]));
+        return redirect(route('universes.teams.index', [$universe]))
+            ->with('notice', 'Team created');
     }
 
     public function show(Universe $universe, Team $team): Response
@@ -70,6 +71,7 @@ class TeamController extends Controller
 
         $team->update($request->validated());
 
-        return redirect(route('universes.teams.index', [$universe]));
+        return redirect(route('universes.teams.index', [$universe]))
+            ->with('notice', 'Team updated');
     }
 }

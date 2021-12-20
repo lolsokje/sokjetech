@@ -27,7 +27,8 @@ class CircuitController extends Controller
     {
         $request->user()->circuits()->create($request->validated());
 
-        return redirect(route('circuits.index'));
+        return redirect(route('circuits.index'))
+            ->with('notice', 'Circuit created');
     }
 
     /**
@@ -58,6 +59,7 @@ class CircuitController extends Controller
 
         $circuit->update($request->validated());
 
-        return redirect(route('circuits.index'));
+        return redirect(route('circuits.index'))
+            ->with('notice', 'Circuit updated');
     }
 }
