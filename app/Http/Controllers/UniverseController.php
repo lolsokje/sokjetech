@@ -49,13 +49,12 @@ class UniverseController extends Controller
             ->with('notice', 'Universe created');
     }
 
-    public function show(Universe $universe): Response
+    public function show(Universe $universe): RedirectResponse
     {
         $this->authorize('view', $universe);
 
-        return Inertia::render('Universes/View', [
-            'universe' => $universe,
-        ]);
+        // TODO decide what to show on universe index page
+        return redirect(route('universes.series.index', [$universe]));
     }
 
     /**
