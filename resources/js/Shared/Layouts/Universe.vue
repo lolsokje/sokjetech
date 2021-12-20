@@ -1,43 +1,31 @@
 <template>
-	<div class="wrapper d-flex">
-		<Nav :class="state.sidebarActive"/>
-
-		<div id="content" class="p-5">
-			<Breadcrumbs @toggleVisible="toggleSidebar"/>
-			<Toast/>
-
-			<main>
-				<div class="wrapper d-flex">
-					<div class="w-100 mt-5 bg-dark p-4">
-						<h1>{{ universe.name }}</h1>
-						<slot/>
-					</div>
-					<div class="w-25 ms-5 mt-5 bg-dark p-4">
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<Link :href="route('universes.series.index', [universe])" class="nav-link">Series</Link>
-							</li>
-							<li class="nav-item">
-								<Link :href="route('universes.teams.index', [universe])" class="nav-link">Teams</Link>
-							</li>
-							<li class="nav-item">
-								<Link :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">
-									Drivers
-								</Link>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</main>
+	<Base>
+		<div class="wrapper d-flex">
+			<div class="w-100 mt-5 bg-dark p-4">
+				<h1>{{ universe.name }}</h1>
+				<slot/>
+			</div>
+			<div class="w-25 ms-5 mt-5 bg-dark p-4">
+				<ul class="nav flex-column">
+					<li class="nav-item">
+						<Link :href="route('universes.series.index', [universe])" class="nav-link">Series</Link>
+					</li>
+					<li class="nav-item">
+						<Link :href="route('universes.teams.index', [universe])" class="nav-link">Teams</Link>
+					</li>
+					<li class="nav-item">
+						<Link :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">
+							Drivers
+						</Link>
+					</li>
+				</ul>
+			</div>
 		</div>
-	</div>
+	</Base>
 </template>
 
 <script setup>
-import Nav from '../Nav';
-import Breadcrumbs from '../Breadcrumbs';
-import { reactive } from 'vue';
-import Toast from '../Toast';
+import Base from './Base';
 
 const props = defineProps({
 	universe: {
@@ -45,14 +33,6 @@ const props = defineProps({
 		required: true,
 	},
 });
-
-const state = reactive({
-	sidebarActive: '',
-});
-
-async function toggleSidebar (visible) {
-	state.sidebarActive = visible ? '' : 'inactive';
-}
 </script>
 
 <script>
