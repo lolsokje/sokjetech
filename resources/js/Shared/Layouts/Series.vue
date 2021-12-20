@@ -8,7 +8,7 @@
 			<div class="w-25 ms-5 mt-5 bg-dark p-4">
 				<ul class="nav flex-column">
 					<li class="nav-item">
-						<a class="nav-link" href="#">Engines</a>
+						<Link :href="route('series.engines.index', [series])" class="nav-link">Engines</Link>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#">Seasons</a>
@@ -23,10 +23,6 @@
 import Base from './Base';
 
 const props = defineProps({
-	universe: {
-		type: Object,
-		required: true,
-	},
 	series: {
 		type: Object,
 		required: true,

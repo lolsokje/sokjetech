@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\EngineController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\TeamController;
@@ -23,4 +24,8 @@ Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], functio
     Route::resource('drivers', DriverController::class)->except('destroy');
     Route::resource('series', SeriesController::class)->except('destroy');
     Route::resource('teams', TeamController::class)->except('destroy');
+});
+
+Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
+    Route::resource('engines', EngineController::class)->except('destroy', 'show');
 });
