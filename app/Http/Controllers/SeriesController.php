@@ -47,14 +47,12 @@ class SeriesController extends Controller
             ->with('notice', 'Series created');
     }
 
-    public function show(Universe $universe, Series $series): Response
+    public function show(Universe $universe, Series $series): RedirectResponse
     {
         $this->authorize('view', $universe);
 
-        return Inertia::render('Series/View', [
-            'universe' => $universe,
-            'series' => $series,
-        ]);
+        // TODO decide what to show on series index page
+        return redirect(route('series.seasons.index', [$series]));
     }
 
     public function edit(Universe $universe, Series $series): Response

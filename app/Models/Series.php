@@ -27,4 +27,9 @@ class Series extends Model
     {
         return $this->hasManyThrough(User::class, Universe::class);
     }
+
+    public function seasons(): HasMany
+    {
+        return $this->hasMany(Season::class);
+    }
 }
