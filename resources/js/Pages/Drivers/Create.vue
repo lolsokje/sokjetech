@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
+
 	<form class="form-narrow" @submit.prevent="form.post(route('universes.drivers.store', universe))">
 		<Errors :errors="form.errors"/>
 
@@ -31,6 +33,7 @@
 import CountrySelect from '../../Shared/CountrySelect';
 import { useForm } from '@inertiajs/inertia-vue3';
 import Errors from '../../Shared/Errors';
+import BackLink from '../../Shared/BackLink';
 
 defineProps({
 	universe: {

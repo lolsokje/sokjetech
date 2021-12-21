@@ -1,7 +1,9 @@
 <template>
+	<BackLink :backTo="route('universes.index')" label="universe overview"/>
+
 	<h3>Drivers</h3>
 
-	<Link :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3" v-if="can.edit">Add
+	<Link v-if="can.edit" :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">Add
 		driver
 	</Link>
 
@@ -20,7 +22,7 @@
 			<td>{{ driver.readableDob }}</td>
 			<td>{{ driver.country }}</td>
 			<td>
-				<Link :href="route('universes.drivers.edit', [universe, driver])" v-if="can.edit">edit</Link>
+				<Link v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">edit</Link>
 			</td>
 		</tr>
 		</tbody>
@@ -28,6 +30,8 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
+
 defineProps({
 	universe: {
 		type: Object,

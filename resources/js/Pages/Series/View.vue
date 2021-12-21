@@ -1,8 +1,10 @@
 <template>
-
+	<BackLink :backTo="route('universes.series.index', [universe])" label="series overview"/>
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
+
 defineProps({
 	universe: {
 		type: Object,

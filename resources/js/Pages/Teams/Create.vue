@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('universes.teams.index', [universe])" label="team overview"/>
+
 	<form class="form-narrow" @submit.prevent="form.post(route('universes.teams.store', [universe]))">
 		<Errors :errors="form.errors"/>
 
@@ -41,6 +43,7 @@
 import { useForm } from '@inertiajs/inertia-vue3';
 import CountrySelect from '../../Shared/CountrySelect';
 import Errors from '../../Shared/Errors';
+import BackLink from '../../Shared/BackLink';
 
 defineProps({
 	universe: {

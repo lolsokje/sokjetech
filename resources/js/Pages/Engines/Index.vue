@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('universes.series.show', [series.universe, series])" label="series overview"/>
+
 	<h3>Engines</h3>
 
 	<Link v-if="can.edit" :href="route('series.engines.create', [series])" class="btn btn-primary my-3">Add engine
@@ -23,6 +25,8 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
+
 defineProps({
 	series: {
 		type: Object,

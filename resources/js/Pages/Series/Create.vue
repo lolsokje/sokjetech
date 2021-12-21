@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('universes.series.index', [universe])" label="series overview"/>
+
 	<form @submit.prevent="form.post(route('universes.series.store', [universe]))" class="form-narrow">
 		<Errors :errors="form.errors"/>
 
@@ -14,6 +16,7 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import Errors from '../../Shared/Errors';
+import BackLink from '../../Shared/BackLink';
 
 defineProps({
 	universe: {

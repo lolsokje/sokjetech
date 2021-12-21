@@ -1,13 +1,15 @@
 <template>
-	<form @submit.prevent="form.put(route('universes.series.update', [universe, series]))" class="form-narrow">
+	<BackLink :backTo="route('universes.series.index', [universe])" label="series overview"/>
+
+	<form class="form-narrow" @submit.prevent="form.put(route('universes.series.update', [universe, series]))">
 		<Errors :errors="form.errors"/>
 
 		<div class="mb-3">
-			<label for="name" class="form-label">Name</label>
-			<input type="text" id="name" v-model="form.name" class="form-control" required>
+			<label class="form-label" for="name">Name</label>
+			<input id="name" v-model="form.name" class="form-control" required type="text">
 		</div>
 
-		<button type="submit" class="btn btn-primary">Save series</button>
+		<button class="btn btn-primary" type="submit">Save series</button>
 	</form>
 </template>
 
@@ -15,6 +17,7 @@
 import { defineProps } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import Errors from '../../Shared/Errors';
+import BackLink from '../../Shared/BackLink';
 
 const props = defineProps({
 	universe: {

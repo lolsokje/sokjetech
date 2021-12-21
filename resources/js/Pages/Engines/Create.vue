@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('series.engines.index', [series])" label="engine overview"/>
+
 	<form @submit.prevent="form.post(route('series.engines.store', [series]))" class="form-narrow">
 		<div class="mb-3">
 			<label for="name" class="form-label">Name</label>
@@ -11,6 +13,7 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
+import BackLink from '../../Shared/BackLink';
 
 defineProps({
 	series: {

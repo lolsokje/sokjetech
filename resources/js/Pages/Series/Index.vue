@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('universes.index')" label="universe overview"/>
+
 	<h3>Series</h3>
 
 	<Link v-if="can.edit" :href="route('universes.series.create', [universe])" class="btn btn-primary my-3">Add series
@@ -15,7 +17,7 @@
 		<tr v-for="series in universe.series" :key="series.id">
 			<td>{{ series.name }}</td>
 			<td>
-				<Link :href="route('universes.series.edit', [universe, series])" v-if="can.edit">edit</Link>
+				<Link v-if="can.edit" :href="route('universes.series.edit', [universe, series])">edit</Link>
 			</td>
 			<td>
 				<Link :href="route('universes.series.show', [universe, series])">view</Link>
@@ -26,6 +28,8 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
+
 const props = defineProps({
 	universe: {
 		type: Object,

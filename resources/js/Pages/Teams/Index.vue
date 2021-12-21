@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('universes.index')" label="universe overview"/>
+
 	<h3>Teams</h3>
 
 	<Link v-if="can.edit" :href="route('universes.teams.create', [universe])" class="btn btn-primary my-3">Add team
@@ -29,6 +31,8 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
+
 defineProps({
 	universe: {
 		type: Object,
