@@ -111,7 +111,6 @@ class RaceControllerTest extends TestCase
     /** @test */
     public function newRacesAreAddedAfterAlreadyExistingRaces()
     {
-        $this->withoutExceptionHandling();
         $user = User::factory()->create();
         $season = $this->createSeasonForUser($user);
         Race::factory()->for($season)->create(['order' => 1]);
@@ -124,6 +123,28 @@ class RaceControllerTest extends TestCase
             ]);
 
         $race = $season->races()->where('order', 2)->first();
+        $this->assertEquals('Test race with automatically generated order', $race->name);
+    }
+
+    /** @test */
+    public function newRacesAreAddedAfterReorderedRaces()
+    {
+        $user = User::factory()->create();
+        $season = $this->createSeasonForUser($user);
+        $race1 = Race::factory()->for($season)->create(['order' => 1]);
+        $race2 = Race::factory()->for($season)->create(['order' => 2]);
+
+        $race1->update(['order' => 2]);
+        $race2->update(['order' => 1]);
+
+        $this->actingAs($user)
+            ->post(route('seasons.races.store', [$season]), [
+                'circuit_id' => Circuit::factory()->create()->id,
+                'name' => 'Test race with automatically generated order',
+                'stints' => [['min_rng' => 0, 'max_rng' => 30]],
+            ]);
+
+        $race = $season->races()->where('order', 3)->first();
         $this->assertEquals('Test race with automatically generated order', $race->name);
     }
 

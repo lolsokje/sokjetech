@@ -43,7 +43,7 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $lastRace = $season->races()->latest()->first();
+        $lastRace = $season->races()->latest('order')->first();
         $order = $lastRace ? $lastRace->order + 1 : 1;
 
         $data = array_merge(['order' => $order], $request->validated());
