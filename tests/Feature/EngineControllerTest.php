@@ -177,12 +177,4 @@ class EngineControllerTest extends TestCase
             ->get(route('series.engines.edit', [$engine->series, $engine]))
             ->assertForbidden();
     }
-
-    private function createSeriesForUser(User $user): Series
-    {
-        $series = Series::factory()->create();
-        $series->universe->update(['user_id' => $user->id]);
-
-        return $series;
-    }
 }

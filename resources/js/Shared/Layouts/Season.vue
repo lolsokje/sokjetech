@@ -8,7 +8,7 @@
 			<div class="w-25 ms-5 mt-5 bg-dark p-4">
 				<ul class="nav flex-column">
 					<li class="nav-item">
-						<a href="#" class="nav-link">Calendar</a>
+						<Link :href="route('seasons.races.index', [season])" class="nav-link">Races</Link>
 					</li>
 				</ul>
 			</div>

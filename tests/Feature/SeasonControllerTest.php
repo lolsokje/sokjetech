@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Season;
 use App\Models\Series;
-use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -196,10 +195,5 @@ class SeasonControllerTest extends TestCase
                 'year' => 2021
             ])
             ->assertRedirect(route('series.seasons.index', [$series]));
-    }
-
-    private function createSeriesForUser(User $user): Series
-    {
-        return Series::factory()->for(Universe::factory()->for($user)->create())->create();
     }
 }

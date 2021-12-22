@@ -5,6 +5,7 @@ use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RaceController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\TeamController;
@@ -30,4 +31,10 @@ Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], functio
 Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
     Route::resource('engines', EngineController::class)->except('destroy', 'show');
     Route::resource('seasons', SeasonController::class)->except('destroy');
+});
+
+Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
+    Route::get('races/reorder', [RaceController::class, 'reorder'])->name('races.reorder');
+    Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
+    Route::resource('races', RaceController::class)->except('destroy');
 });
