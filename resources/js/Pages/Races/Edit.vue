@@ -9,12 +9,8 @@
 			<input id="name" v-model="form.name" class="form-control" type="text">
 		</div>
 
-		<div class="mb-3">
-			<label class="form-label" for="circuit">Circuit</label>
-			<select id="circuit" v-model="form.circuit_id" class="form-control" required>
-				<option v-for="circuit in circuits" :key="circuit.id" :value="circuit.id">{{ circuit.name }}</option>
-			</select>
-		</div>
+		<SearchableDropdown :items="circuits" :selected-item="selectedCircuit" label="Select a circuit" text-key="name"
+							@selected="setCircuit"/>
 
 		<h4>Stints</h4>
 
@@ -53,6 +49,7 @@
 </template>
 
 <script setup>
+import SearchableDropdown from '../../Shared/SearchableDropdown';
 import Errors from '../../Shared/Errors';
 import BackLink from '../../Shared/BackLink';
 import { useForm } from '@inertiajs/inertia-vue3';
@@ -80,6 +77,8 @@ const form = useForm({
 	stints: props.race.stints,
 });
 
+const selectedCircuit = props.circuits.find((circuit) => circuit.id === form.circuit_id);
+
 function addStint () {
 	const lastNumber = form.stints[form.stints.length - 1].number;
 	form.stints.push({
@@ -99,6 +98,10 @@ function deleteStint (number) {
 	form.stints.forEach((stint, index) => {
 		stint.number = index + 1;
 	});
+}
+
+function setCircuit (circuit) {
+	form.circuit_id = circuit ? circuit.id : '';
 }
 </script>
 
