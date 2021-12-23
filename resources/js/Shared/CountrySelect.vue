@@ -1,16 +1,15 @@
 <template>
 	<div class="mb-3">
-		<label class="form-label" for="country">{{ label }}</label>
-		<select id="country" v-model="state.country" class="form-control" @change.prevent="changeCountry">
-			<option value="">Select a country</option>
-			<option v-for="(country, index) in countries" :key="index" :value="country.code">{{ country.name }}</option>
-		</select>
+		<SearchableDropdown :items="countries" :label="label" :selected-item="selectedCountry" text-key="name"
+							value-key="code"
+							@selected="changeCountry"/>
 	</div>
 </template>
 
 <script setup>
 import countries from '../Utilities/Countries';
 import { reactive } from 'vue';
+import SearchableDropdown from './SearchableDropdown';
 
 const props = defineProps({
 	label: {
@@ -25,13 +24,16 @@ const props = defineProps({
 	},
 });
 
+const selectedCountry = countries.find((country) => country.code === props.country);
+
 const state = reactive({
 	country: props.country,
 });
 
 const emit = defineEmits(['countryChanged']);
 
-function changeCountry () {
+function changeCountry (country) {
+	state.country = country ? country.code : '';
 	emit('countryChanged', state.country);
 }
 </script>
