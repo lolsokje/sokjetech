@@ -7,6 +7,7 @@ import {
     faCheck,
     faGlobe,
     faHome,
+    faInfoCircle,
     faPlus,
     faRoad,
     faSignInAlt,
@@ -27,5 +28,6 @@ library.add(faSignInAlt);
 library.add(faSignOutAlt);
 library.add(faGlobe);
 library.add(faCheck);
+library.add(faInfoCircle);
 
 export default FontAwesomeIcon;

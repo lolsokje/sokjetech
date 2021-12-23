@@ -2,6 +2,10 @@
 	<BackLink :backTo="route('seasons.races.index', [season])" label="race overview"/>
 
 	<form class="form-narrow" @submit.prevent="form.put(route('seasons.races.order', [season]))">
+		<p>
+			<fa icon="info-circle"/>
+			<i class="ms-2">drag and drop to reorder races</i>
+		</p>
 		<table class="table table-borderless table-dark">
 			<thead>
 			<tr>
