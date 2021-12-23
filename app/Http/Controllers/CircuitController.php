@@ -14,7 +14,7 @@ class CircuitController extends Controller
     public function index(): Response
     {
         return Inertia::render('Circuits/Index', [
-            'circuits' => auth()->user()->circuits()->orderBy('name')->get(),
+            'circuits' => auth()->user()->circuits()->orderBy('name')->paginate(15),
         ]);
     }
 
