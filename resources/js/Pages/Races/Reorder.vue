@@ -50,15 +50,28 @@ function dragStart (event, id) {
 }
 
 function drop (event) {
-	const droppedRaceId = event.target.parentNode.dataset.race;
-	const dropped = form.races.find((race) => race.id === droppedRaceId);
+	const droppedOnRaceId = event.target.parentNode.dataset.race;
+	const droppedOn = form.races.find((race) => race.id === droppedOnRaceId);
 	const dragged = form.races.find((race) => race.id === event.dataTransfer.getData('id'));
 
-	const droppedOrder = dropped.order;
-	dropped.order = dragged.order;
-	dragged.order = droppedOrder;
+	if (droppedOn.id === dragged.id) {
+		return;
+	}
 
-	form.races.sort((raceOne, raceTwo) => raceOne.order > raceTwo.order);
+	const droppedIndex = form.races.indexOf(droppedOn);
+	const draggedIndex = form.races.indexOf(dragged);
+	form.races = moveRace(draggedIndex, droppedIndex);
+
+	form.races.map((race, index) => {
+		race.order = index + 1;
+	});
+}
+
+function moveRace (from, to) {
+	const copy = [...form.races];
+	const raceToMove = copy.splice(from, 1)[0];
+	copy.splice(to, 0, raceToMove);
+	return copy;
 }
 </script>
 
