@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,5 +21,18 @@ class Circuit extends Model
     public function races(): HasMany
     {
         return $this->hasMany(Race::class);
+    }
+
+    public function scopeSearch(Builder $query, ?string $search = ''): Builder
+    {
+        return $query->where('name', 'LIKE', '%'.$search.'%')
+            ->orWhere('country', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeSort(Builder $query, ?string $field, ?string $direction): Builder
+    {
+        $field = $field ?? 'name';
+        $direction = $direction ?? 'asc';
+        return $query->orderBy($field, $direction);
     }
 }

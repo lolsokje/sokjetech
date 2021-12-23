@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CircuitCreateRequest;
+use App\Http\Requests\CircuitFilterRequest;
 use App\Models\Circuit;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
@@ -11,10 +12,15 @@ use Inertia\Response;
 
 class CircuitController extends Controller
 {
-    public function index(): Response
+    public function index(CircuitFilterRequest $request): Response
     {
+        $circuits = auth()->user()->circuits()
+            ->search($request->get('search'))
+            ->sort($request->get('field'), $request->get('direction'))
+            ->paginate(15);
+
         return Inertia::render('Circuits/Index', [
-            'circuits' => auth()->user()->circuits()->orderBy('name')->paginate(15),
+            'circuits' => $circuits,
         ]);
     }
 
@@ -32,7 +38,7 @@ class CircuitController extends Controller
     }
 
     /**
-     * @param Circuit $circuit
+     * @param  Circuit  $circuit
      *
      * @return Response
      * @throws AuthorizationException
@@ -47,8 +53,8 @@ class CircuitController extends Controller
     }
 
     /**
-     * @param CircuitCreateRequest $request
-     * @param Circuit $circuit
+     * @param  CircuitCreateRequest  $request
+     * @param  Circuit  $circuit
      *
      * @return RedirectResponse
      * @throws AuthorizationException

@@ -12,6 +12,8 @@ import {
     faRoad,
     faSignInAlt,
     faSignOutAlt,
+    faSortAlphaDownAlt,
+    faSortAlphaUp,
     faThList,
     faTimes,
 } from '@fortawesome/free-solid-svg-icons';
@@ -29,5 +31,7 @@ library.add(faSignOutAlt);
 library.add(faGlobe);
 library.add(faCheck);
 library.add(faInfoCircle);
+library.add(faSortAlphaUp);
+library.add(faSortAlphaDownAlt);
 
 export default FontAwesomeIcon;
