@@ -21,6 +21,7 @@ class CircuitController extends Controller
 
         return Inertia::render('Circuits/Index', [
             'circuits' => $circuits,
+            'filters' => $request->all(['search', 'field', 'direction']),
         ]);
     }
 

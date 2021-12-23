@@ -9,15 +9,15 @@
 defineProps({
 	currentField: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	requiredField: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	direction: {
 		type: String,
-		required: true,
+		required: false,
 	},
 });
 </script>

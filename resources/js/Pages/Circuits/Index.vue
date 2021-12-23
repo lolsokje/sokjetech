@@ -11,11 +11,11 @@
 			<tr>
 				<th role="button" @click="sort('name')">
 					<span>Name</span>
-					<OrderIcon :current-field="params.field" required-field="name" :direction="params.direction"/>
+					<OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
 				</th>
 				<th role="button" @click="sort('country')">
 					<span>Country</span>
-					<OrderIcon :current-field="params.field" required-field="country" :direction="params.direction"/>
+					<OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
 				</th>
 				<th></th>
 			</tr>
@@ -46,15 +46,23 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
+	filters: {
+		type: Object,
+		required: true,
+	},
 });
-
-const urlParams = new URLSearchParams(window.location.search);
 
 const params = reactive({
-	search: urlParams.get('search') ?? null,
-	field: urlParams.get('field') ?? null,
-	direction: urlParams.get('direction') ?? null,
+	search: props.filters.search,
+	field: props.filters.field,
+	direction: props.filters.direction,
 });
+
+const defaults = {
+	search: '',
+	field: 'name',
+	direction: 'asc',
+};
 
 function sort (field) {
 	params.field = field;
@@ -62,6 +70,16 @@ function sort (field) {
 }
 
 watch(params, () => {
-	Inertia.get(route('circuits.index'), params, { replace: true, preserveState: true });
+	let requestParams = params;
+
+	Object.entries(requestParams).forEach((entry) => {
+		const [key, value] = entry;
+
+		if (defaults[key] === value || value === null || value === '') {
+			delete requestParams[key];
+		}
+	});
+
+	Inertia.get(route('circuits.index'), requestParams, { replace: true, preserveState: true });
 });
 </script>
