@@ -9,10 +9,7 @@
 			<input id="name" v-model="form.name" class="form-control" required type="text">
 		</div>
 
-		<div class="mb-3">
-			<label class="form-label" for="country">Country</label>
-			<input id="country" v-model="form.country" class="form-control" required type="text">
-		</div>
+		<CountrySelect @countryChanged="setCountry"/>
 
 		<button class="btn btn-primary">Create</button>
 	</form>
@@ -21,9 +18,14 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import Errors from '../../Shared/Errors';
+import CountrySelect from '../../Shared/CountrySelect';
 
 const form = useForm({
 	name: null,
 	country: null,
 });
+
+function setCountry (country) {
+	form.country = country;
+}
 </script>
