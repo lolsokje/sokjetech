@@ -53,9 +53,9 @@ const props = defineProps({
 });
 
 const params = reactive({
-	search: props.filters.search,
-	field: props.filters.field,
-	direction: props.filters.direction,
+	search: props.filters.search ?? '',
+	field: props.filters.field ?? '',
+	direction: props.filters.direction ?? '',
 });
 
 const defaults = {
@@ -75,7 +75,7 @@ watch(params, () => {
 	Object.entries(requestParams).forEach((entry) => {
 		const [key, value] = entry;
 
-		if (defaults[key] === value || value === null || value === '') {
+		if (value === null || value === '') {
 			delete requestParams[key];
 		}
 	});
