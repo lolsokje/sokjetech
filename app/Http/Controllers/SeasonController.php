@@ -47,14 +47,12 @@ class SeasonController extends Controller
             ->with('notice', 'Season created');
     }
 
-    public function show(Series $series, Season $season): Response
+    public function show(Series $series, Season $season): RedirectResponse
     {
-        $this->authorize('update', $series->universe);
+        $this->authorize('view', $series->universe);
 
-        return Inertia::render('Seasons/View', [
-            'series' => $series,
-            'season' => $season,
-        ]);
+        // TODO decide what to show on season index page
+        return redirect(route('seasons.races.index', [$season]));
     }
 
     public function edit(Series $series, Season $season): Response
