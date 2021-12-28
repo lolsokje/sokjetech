@@ -49,7 +49,7 @@ const props = defineProps({
 const form = useForm({
 	first_name: props.driver.first_name,
 	last_name: props.driver.last_name,
-	dob: props.driver.editDob,
+	dob: props.driver.edit_dob,
 	country: props.driver.country,
 });
 

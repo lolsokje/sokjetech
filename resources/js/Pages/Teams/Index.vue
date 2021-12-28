@@ -19,7 +19,7 @@
 		</thead>
 		<tbody>
 		<tr v-for="team in universe.teams" :key="team.id">
-			<td :style="team.styleString">{{ team.full_name }}</td>
+			<td :style="team.style_string">{{ team.full_name }}</td>
 			<td>{{ team.short_name }}</td>
 			<td>{{ team.team_principal }}</td>
 			<td>{{ team.country }}</td>

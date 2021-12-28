@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,8 +32,8 @@ class Series extends Model
         return $this->hasMany(Season::class);
     }
 
-    public function getUserAttribute(): User
+    public function user(): Attribute
     {
-        return $this->universe->user;
+        return Attribute::get(fn() => $this->universe->user);
     }
 }

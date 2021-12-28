@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,12 +14,14 @@ class Team extends Model
     use HasFactory, Uuids;
 
     protected $appends = [
-        'styleString',
+        'style_string',
     ];
 
-    public function getStyleStringAttribute(): string
+    public function styleString(): Attribute
     {
-        return "background-color:$this->primary_colour;color:$this->secondary_colour;text-align:center;font-weight:bold";
+        return Attribute::get(function () {
+            return "background-color:$this->primary_colour;color:$this->secondary_colour;text-align:center;font-weight:bold";
+        });
     }
 
     public function universe(): BelongsTo

@@ -2,7 +2,7 @@
 	<Base>
 		<div class="wrapper d-flex">
 			<div class="w-100 mt-5 bg-dark p-4">
-				<h1>{{ season.fullName }}</h1>
+				<h1>{{ season.full_name }}</h1>
 				<slot/>
 			</div>
 			<div class="w-25 ms-5 mt-5 bg-dark p-4">

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,23 +18,23 @@ class Season extends Model
     ];
 
     protected $appends = [
-        'fullName',
+        'full_name',
         'universe',
     ];
 
-    public function getFullNameAttribute(): string
+    public function fullName(): Attribute
     {
-        return "$this->year {$this->series->name} season";
+        return Attribute::get(fn() => "$this->year {$this->series->name}");
+    }
+
+    public function universe(): Attribute
+    {
+        return Attribute::get(fn() => $this->series->universe);
     }
 
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class);
-    }
-
-    public function getUniverseAttribute(): Universe
-    {
-        return $this->series->universe;
     }
 
     public function races(): HasMany

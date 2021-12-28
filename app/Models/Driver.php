@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,28 +14,29 @@ class Driver extends Model
     use HasFactory, Uuids;
 
     protected $appends = [
-        'fullName',
-        'readableDob',
-        'editDob',
+        'full_name',
+        'readable_dob',
+        'edit_dob',
     ];
 
     protected $casts = [
         'dob' => 'datetime',
     ];
 
-    public function getReadableDobAttribute(): string
+    public function readableDob(): Attribute
     {
-        return $this->dob->format('F jS, Y');
+        return Attribute::get(fn() => $this->dob->format('F jS, Y'));
     }
 
-    public function getEditDobAttribute(): string
+
+    public function editDob(): Attribute
     {
-        return $this->dob->format('Y-m-d');
+        return Attribute::get(fn() => $this->dob->format('Y-m-d'));
     }
 
-    public function getFullNameAttribute(): string
+    public function fullName(): Attribute
     {
-        return trim("{$this->first_name} $this->last_name");
+        return Attribute::get(fn() => trim("$this->first_name $this->last_name"));
     }
 
     public function universe(): BelongsTo
