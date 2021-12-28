@@ -3,11 +3,13 @@
 
 	<h3>Races</h3>
 
-	<Link v-if="can.edit" :href="route('seasons.races.create', [season])" class="btn btn-primary my-3">Add race</Link>
-	<Link v-if="can.edit && season.races.length > 1" :href="route('seasons.races.reorder', [season])"
-		  class="btn btn-primary my-3 ms-3">Reorder
-		races
-	</Link>
+	<InertiaLink v-if="can.edit" :href="route('seasons.races.create', [season])" class="btn btn-primary my-3">
+		Add race
+	</InertiaLink>
+	<InertiaLink v-if="can.edit && season.races.length > 1" :href="route('seasons.races.reorder', [season])"
+				 class="btn btn-primary my-3 ms-3">
+		Reorder races
+	</InertiaLink>
 
 	<table class="table table-borderless table-dark">
 		<thead>
@@ -27,7 +29,9 @@
 				<fa v-else icon="times"/>
 			</td>
 			<td>
-				<Link v-if="can.edit && !race.completed" :href="route('seasons.races.edit', [season, race])">edit</Link>
+				<InertiaLink v-if="can.edit && !race.completed" :href="route('seasons.races.edit', [season, race])">
+					edit
+				</InertiaLink>
 				<a v-if="race.completed" href="#">results</a>
 			</td>
 		</tr>

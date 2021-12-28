@@ -1,5 +1,5 @@
 <template>
-	<Link :href="backTo" class="d-block my-3">&larr; back to {{ label }}</Link>
+	<InertiaLink :href="backTo" class="d-block my-3">&larr; back to {{ label }}</InertiaLink>
 </template>
 
 <script setup>

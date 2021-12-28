@@ -8,15 +8,19 @@
 			<div class="w-25 ms-5 mt-5 bg-dark p-4">
 				<ul class="nav flex-column">
 					<li class="nav-item">
-						<Link :href="route('universes.series.index', [universe])" class="nav-link">Series</Link>
+						<InertiaLink :href="route('universes.series.index', [universe])" class="nav-link">
+							Series
+						</InertiaLink>
 					</li>
 					<li class="nav-item">
-						<Link :href="route('universes.teams.index', [universe])" class="nav-link">Teams</Link>
+						<InertiaLink :href="route('universes.teams.index', [universe])" class="nav-link">
+							Teams
+						</InertiaLink>
 					</li>
 					<li class="nav-item">
-						<Link :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">
+						<InertiaLink :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">
 							Drivers
-						</Link>
+						</InertiaLink>
 					</li>
 				</ul>
 			</div>

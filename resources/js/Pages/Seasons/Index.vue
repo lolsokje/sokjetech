@@ -3,8 +3,9 @@
 
 	<h3>Seasons</h3>
 
-	<Link v-if="can.edit" :href="route('series.seasons.create', [series])" class="btn btn-primary my-3">Create season
-	</Link>
+	<InertiaLink v-if="can.edit" :href="route('series.seasons.create', [series])" class="btn btn-primary my-3">
+		Create season
+	</InertiaLink>
 
 	<table class="table table-borderless table-dark">
 		<thead>
@@ -17,10 +18,10 @@
 		<tr v-for="season in series.seasons" :key="season.id">
 			<td>{{ season.year }}</td>
 			<td>
-				<Link v-if="can.edit" :href="route('series.seasons.edit', [series, season])">edit</Link>
+				<InertiaLink v-if="can.edit" :href="route('series.seasons.edit', [series, season])">edit</InertiaLink>
 			</td>
 			<td>
-				<Link :href="route('series.seasons.show', [series, season])">view</Link>
+				<InertiaLink :href="route('series.seasons.show', [series, season])">view</InertiaLink>
 			</td>
 		</tr>
 		</tbody>

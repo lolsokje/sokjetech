@@ -20,7 +20,7 @@ createInertiaApp({
             .use(plugin)
             .mixin({ methods: { route } })
             .component('fa', FontAwesomeIcon)
-            .component('Link', Link)
+            .component('InertiaLink', Link)
             .mount(el);
     },
 });

@@ -3,8 +3,9 @@
 
 	<h3>Teams</h3>
 
-	<Link v-if="can.edit" :href="route('universes.teams.create', [universe])" class="btn btn-primary my-3">Add team
-	</Link>
+	<InertiaLink v-if="can.edit" :href="route('universes.teams.create', [universe])" class="btn btn-primary my-3">
+		Add team
+	</InertiaLink>
 
 	<table class="table table-borderless table-dark">
 		<thead>
@@ -23,7 +24,7 @@
 			<td>{{ team.team_principal }}</td>
 			<td>{{ team.country }}</td>
 			<td>
-				<Link :href="route('universes.teams.edit', [universe, team])" v-if="can.edit">edit</Link>
+				<InertiaLink v-if="can.edit" :href="route('universes.teams.edit', [universe, team])">edit</InertiaLink>
 			</td>
 		</tr>
 		</tbody>

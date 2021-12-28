@@ -3,7 +3,7 @@
 		<ul class="pagination">
 			<li v-for="(link, index) in links" :key="index" :class="{ 'disabled': !link.url }" class="page-item">
 				<a v-if="!link.url" class="page-link" href="#" v-html="link.label"/>
-				<Link v-else :href="link.url" class="page-link" v-html="link.label"/>
+				<InertiaLink v-else :href="link.url" class="page-link" v-html="link.label"/>
 			</li>
 		</ul>
 	</div>

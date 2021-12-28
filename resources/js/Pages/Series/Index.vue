@@ -3,8 +3,9 @@
 
 	<h3>Series</h3>
 
-	<Link v-if="can.edit" :href="route('universes.series.create', [universe])" class="btn btn-primary my-3">Add series
-	</Link>
+	<InertiaLink v-if="can.edit" :href="route('universes.series.create', [universe])" class="btn btn-primary my-3">
+		Add series
+	</InertiaLink>
 
 	<table class="table table-borderless table-dark">
 		<thead>
@@ -17,10 +18,12 @@
 		<tr v-for="series in universe.series" :key="series.id">
 			<td>{{ series.name }}</td>
 			<td>
-				<Link v-if="can.edit" :href="route('universes.series.edit', [universe, series])">edit</Link>
+				<InertiaLink v-if="can.edit" :href="route('universes.series.edit', [universe, series])">
+					edit
+				</InertiaLink>
 			</td>
 			<td>
-				<Link :href="route('universes.series.show', [universe, series])">view</Link>
+				<InertiaLink :href="route('universes.series.show', [universe, series])">view</InertiaLink>
 			</td>
 		</tr>
 		</tbody>

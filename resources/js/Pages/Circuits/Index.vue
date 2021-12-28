@@ -1,7 +1,7 @@
 <template>
 	<h1>Circuits</h1>
 
-	<Link :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</Link>
+	<InertiaLink :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</InertiaLink>
 
 	<template v-if="circuits.data.length">
 		<input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
@@ -25,7 +25,7 @@
 				<td>{{ circuit.name }}</td>
 				<td>{{ circuit.country }}</td>
 				<td>
-					<Link :href="route('circuits.edit', circuit)">edit</Link>
+					<InertiaLink :href="route('circuits.edit', circuit)">edit</InertiaLink>
 				</td>
 			</tr>
 			</tbody>

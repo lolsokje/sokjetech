@@ -3,9 +3,9 @@
 
 	<h3>Drivers</h3>
 
-	<Link v-if="can.edit" :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">Add
-		driver
-	</Link>
+	<InertiaLink v-if="can.edit" :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">
+		Add driver
+	</InertiaLink>
 
 	<table class="table table-borderless table-dark">
 		<thead>
@@ -22,7 +22,9 @@
 			<td>{{ driver.readableDob }}</td>
 			<td>{{ driver.country }}</td>
 			<td>
-				<Link v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">edit</Link>
+				<InertiaLink v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">
+					edit
+				</InertiaLink>
 			</td>
 		</tr>
 		</tbody>

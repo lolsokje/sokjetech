@@ -3,8 +3,9 @@
 
 	<h3>Engines</h3>
 
-	<Link v-if="can.edit" :href="route('series.engines.create', [series])" class="btn btn-primary my-3">Add engine
-	</Link>
+	<InertiaLink v-if="can.edit" :href="route('series.engines.create', [series])" class="btn btn-primary my-3">
+		Add engine
+	</InertiaLink>
 
 	<table class="table table-borderless table-dark">
 		<thead>
@@ -17,7 +18,7 @@
 		<tr v-for="engine in series.engines" :key="engine.id">
 			<td>{{ engine.name }}</td>
 			<td>
-				<Link v-if="can.edit" :href="route('series.engines.edit', [series, engine])">edit</Link>
+				<InertiaLink v-if="can.edit" :href="route('series.engines.edit', [series, engine])">edit</InertiaLink>
 			</td>
 		</tr>
 		</tbody>

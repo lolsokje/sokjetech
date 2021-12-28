@@ -1,16 +1,16 @@
 <template>
-	<li class="nav-item has-sub ps-3" :class="sidebarStatus">
+	<li :class="sidebarStatus" class="nav-item has-sub ps-3">
 		<a class="nav-link" href="#" @click="toggleMenu">
-			<fa v-if="icon" :icon="icon" class="me-1" />
+			<fa v-if="icon" :icon="icon" class="me-1"/>
 			{{ this.label }}
-			<fa :icon="caretIcon" pull="right" class="me-2 mt-1"></fa>
+			<fa :icon="caretIcon" class="me-2 mt-1" pull="right"></fa>
 		</a>
 		<ul class="collapsable list-unstyled ps-3">
-			<li class="nav-item" v-for="(item, index) in items" v-bind:key="index">
-				<Link class="nav-link" :href="item.url" v-if="item.authRequired && user || !item.authRequired">
+			<li v-for="(item, index) in items" v-bind:key="index" class="nav-item">
+				<InertiaLink v-if="item.authRequired && user || !item.authRequired" :href="item.url" class="nav-link">
 					<fa v-if="item.icon" :icon="item.icon" class="me-1"/>
 					{{ item.label }}
-				</Link>
+				</InertiaLink>
 			</li>
 		</ul>
 	</li>
