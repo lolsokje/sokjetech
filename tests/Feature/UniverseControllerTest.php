@@ -14,14 +14,12 @@ class UniverseControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('universes.store'), [
-            'name' => 'Universe name',
-            'visibility' => Universe::VISIBILITY_PUBLIC,
-        ]);
-
-        $response->assertRedirect(route('universes.index'));
+        $this->actingAs($user)
+            ->post(route('universes.store'), [
+                'name' => 'Universe name',
+                'visibility' => Universe::VISIBILITY_PUBLIC,
+            ])
+            ->assertRedirect(route('universes.index'));
 
         $this->assertDatabaseCount('universes', 1);
         $this->assertCount(1, $user->universes);
@@ -30,12 +28,11 @@ class UniverseControllerTest extends TestCase
     /** @test */
     public function anUnauthorizedUserCannotCreateUniverses()
     {
-        $response = $this->post(route('universes.store'), [
+        $this->post(route('universes.store'), [
             'name' => 'Universe name',
             'visibility' => Universe::VISIBILITY_PUBLIC,
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
         $this->assertDatabaseCount('universes', 0);
     }
 
@@ -52,14 +49,12 @@ class UniverseControllerTest extends TestCase
         $user = User::factory()->create();
         $universe = Universe::factory()->create(['user_id' => $user->id]);
 
-        $this->actingAs($user);
-
-        $response = $this->put(route('universes.update', [$universe]), [
-            'name' => 'New name',
-            'visibility' => Universe::VISIBILITY_PRIVATE,
-        ]);
-
-        $response->assertRedirect(route('universes.index'));
+        $this->actingAs($user)
+            ->put(route('universes.update', [$universe]), [
+                'name' => 'New name',
+                'visibility' => Universe::VISIBILITY_PRIVATE,
+            ])
+            ->assertRedirect(route('universes.index'));
 
         $this->assertEquals('New name', $universe->fresh()->name);
         $this->assertEquals(Universe::VISIBILITY_PRIVATE, $universe->fresh()->visibility);
@@ -75,14 +70,12 @@ class UniverseControllerTest extends TestCase
         $name = $universe->name;
         $visibility = $universe->visibility;
 
-        $this->actingAs($secondUser);
-
-        $response = $this->put(route('universes.update', [$universe]), [
-            'name' => 'New name',
-            'visibility' => Universe::VISIBILITY_PRIVATE,
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs($secondUser)
+            ->put(route('universes.update', [$universe]), [
+                'name' => 'New name',
+                'visibility' => Universe::VISIBILITY_PRIVATE,
+            ])
+            ->assertForbidden();
 
         $this->assertEquals($name, $universe->fresh()->name);
         $this->assertEquals($visibility, $universe->fresh()->visibility);
@@ -133,12 +126,11 @@ class UniverseControllerTest extends TestCase
         $name = $universe->name;
         $visibility = $universe->visibility;
 
-        $response = $this->put(route('universes.update', [$universe]), [
+        $this->put(route('universes.update', [$universe]), [
             'name' => 'New name',
             'visibility' => Universe::VISIBILITY_PRIVATE,
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertEquals($name, $universe->fresh()->name);
         $this->assertEquals($visibility, $universe->fresh()->visibility);
@@ -155,9 +147,7 @@ class UniverseControllerTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get(route('universes.index'));
-
-        $response
+        $this->get(route('universes.index'))
             ->assertInertia(fn(Assert $page) => $page
                 ->has('universes', 2)
             );

@@ -13,14 +13,12 @@ class CircuitControllerTest extends TestCase
     public function anAuthorizedUserCanCreateACircuit()
     {
         $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $response = $this->post(route('circuits.store'), [
-            'name' => 'Zandvoort',
-            'country' => 'nl'
-        ]);
-
-        $response->assertRedirect(route('circuits.index'));
+        $this->actingAs($user)
+            ->post(route('circuits.store'), [
+                'name' => 'Zandvoort',
+                'country' => 'nl'
+            ])
+            ->assertRedirect(route('circuits.index'));
 
         $this->assertDatabaseCount('circuits', 1);
         $this->assertCount(1, $user->circuits);
@@ -29,12 +27,11 @@ class CircuitControllerTest extends TestCase
     /** @test */
     public function anUnauthorizedUserCannotCreateACircuit()
     {
-        $response = $this->post(route('circuits.store'), [
+        $this->post(route('circuits.store'), [
             'name' => 'Zandvoort',
             'country' => 'nl'
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('circuits', 0);
     }
@@ -45,14 +42,11 @@ class CircuitControllerTest extends TestCase
         $user = User::factory()->create();
         $circuit = Circuit::factory()->create(['user_id' => $user->id]);
 
-        $this->actingAs($user);
-
-        $response = $this->put(route('circuits.update', [$circuit]), [
-            'name' => 'New name',
-            'country' => 'NC'
-        ]);
-
-        $response->assertRedirect(route('circuits.index'));
+        $this->actingAs($user)
+            ->put(route('circuits.update', [$circuit]), [
+                'name' => 'New name',
+                'country' => 'NC'
+            ])->assertRedirect(route('circuits.index'));
 
         $this->assertEquals('New name', $circuit->fresh()->name);
         $this->assertEquals('NC', $circuit->fresh()->country);
@@ -66,14 +60,11 @@ class CircuitControllerTest extends TestCase
         $name = $circuit->name;
         $country = $circuit->country;
 
-        $this->actingAs(User::factory()->create());
-
-        $response = $this->put(route('circuits.update', [$circuit]), [
-            'name' => 'New name',
-            'country' => 'NC'
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs(User::factory()->create())
+            ->put(route('circuits.update', [$circuit]), [
+                'name' => 'New name',
+                'country' => 'NC'
+            ])->assertForbidden();
 
         $this->assertEquals($name, $circuit->fresh()->name);
         $this->assertEquals($country, $circuit->fresh()->country);

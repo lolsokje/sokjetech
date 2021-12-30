@@ -16,13 +16,11 @@ class SeriesControllerTest extends TestCase
         $user = User::factory()->create();
         $universe = Universe::factory()->create(['user_id' => $user->id]);
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('universes.series.store', [$universe]), [
-            'name' => 'Formula One',
-        ]);
-
-        $response->assertRedirect(route('universes.series.index', [$universe]));
+        $this->actingAs($user)
+            ->post(route('universes.series.store', [$universe]), [
+                'name' => 'Formula One',
+            ])
+            ->assertRedirect(route('universes.series.index', [$universe]));
 
         $this->assertDatabaseCount('series', 1);
         $this->assertCount(1, $universe->series);
@@ -33,11 +31,10 @@ class SeriesControllerTest extends TestCase
     {
         $universe = Universe::factory()->create();
 
-        $response = $this->post(route('universes.series.store', [$universe]), [
+        $this->post(route('universes.series.store', [$universe]), [
             'name' => 'Formula One',
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('series', 0);
         $this->assertCount(0, $universe->series);
@@ -49,13 +46,11 @@ class SeriesControllerTest extends TestCase
         $user = User::factory()->create();
         $universe = Universe::factory()->create();
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('universes.series.store', [$universe]), [
-            'name' => 'Formula One',
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->post(route('universes.series.store', [$universe]), [
+                'name' => 'Formula One',
+            ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('series', 0);
         $this->assertCount(0, $universe->series);
@@ -68,13 +63,11 @@ class SeriesControllerTest extends TestCase
         $universe = Universe::factory()->create(['user_id' => $user->id]);
         $series = Series::factory()->create(['universe_id' => $universe->id]);
 
-        $this->actingAs($user);
-
-        $response = $this->put(route('universes.series.update', [$universe, $series]), [
-            'name' => 'Formula One',
-        ]);
-
-        $response->assertRedirect(route('universes.series.index', [$universe]));
+        $this->actingAs($user)
+            ->put(route('universes.series.update', [$universe, $series]), [
+                'name' => 'Formula One',
+            ])
+            ->assertRedirect(route('universes.series.index', [$universe]));
 
         $this->assertEquals('Formula One', $series->fresh()->name);
     }
@@ -86,11 +79,10 @@ class SeriesControllerTest extends TestCase
         $series = Series::factory()->create(['universe_id' => $universe->id]);
         $name = $series->name;
 
-        $response = $this->put(route('universes.series.update', [$universe, $series]), [
+        $this->put(route('universes.series.update', [$universe, $series]), [
             'name' => 'Formula One',
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertEquals($name, $series->fresh()->name);
     }
@@ -103,13 +95,11 @@ class SeriesControllerTest extends TestCase
         $series = Series::factory()->create(['universe_id' => $universe->id]);
         $name = $series->name;
 
-        $this->actingAs($user);
-
-        $response = $this->put(route('universes.series.update', [$universe, $series]), [
-            'name' => 'Formula One',
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->put(route('universes.series.update', [$universe, $series]), [
+                'name' => 'Formula One',
+            ])
+            ->assertForbidden();
 
         $this->assertEquals($name, $series->fresh()->name);
     }
@@ -153,9 +143,8 @@ class SeriesControllerTest extends TestCase
         $universe = Universe::factory()->create();
         $series = Series::factory()->create(['universe_id' => $universe->id]);
 
-        $response = $this->get(route('universes.series.edit', [$universe, $series]));
-
-        $response->assertRedirect(route('index'));
+        $this->get(route('universes.series.edit', [$universe, $series]))
+            ->assertRedirect(route('index'));
     }
 
     /** @test */
@@ -164,11 +153,9 @@ class SeriesControllerTest extends TestCase
         $user = User::factory()->create();
         $universe = Universe::factory()->create();
 
-        $this->actingAs($user);
-
-        $response = $this->get(route('universes.series.create', [$universe]));
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->get(route('universes.series.create', [$universe]))
+            ->assertForbidden();
     }
 
     /** @test */
@@ -178,11 +165,9 @@ class SeriesControllerTest extends TestCase
         $universe = Universe::factory()->create();
         $series = Series::factory()->create(['universe_id' => $universe->id]);
 
-        $this->actingAs($user);
-
-        $response = $this->get(route('universes.series.edit', [$universe, $series]));
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->get(route('universes.series.edit', [$universe, $series]))
+            ->assertForbidden();
     }
 
     /** @test */

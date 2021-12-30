@@ -16,16 +16,14 @@ class DriverControllerTest extends TestCase
         $user = User::factory()->create();
         $universe = Universe::factory()->create(['user_id' => $user->id]);
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('universes.drivers.store', [$universe]), [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'dob' => null,
-            'country' => 'AF',
-        ]);
-
-        $response->assertRedirect(route('universes.drivers.index', [$universe]));
+        $this->actingAs($user)
+            ->post(route('universes.drivers.store', [$universe]), [
+                'first_name' => 'First',
+                'last_name' => 'Last',
+                'dob' => null,
+                'country' => 'AF',
+            ])
+            ->assertRedirect(route('universes.drivers.index', [$universe]));
 
         $this->assertDatabaseCount('drivers', 1);
         $this->assertCount(1, $universe->drivers);
@@ -36,14 +34,13 @@ class DriverControllerTest extends TestCase
     {
         $universe = Universe::factory()->create();
 
-        $response = $this->post(route('universes.drivers.store', [$universe]), [
+        $this->post(route('universes.drivers.store', [$universe]), [
             'first_name' => 'First',
             'last_name' => 'Last',
             'dob' => now()->format('Y-m-d'),
             'country' => 'AF',
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('drivers', 0);
         $this->assertCount(0, $universe->drivers);
@@ -55,16 +52,14 @@ class DriverControllerTest extends TestCase
         $universe = Universe::factory()->create();
         $user = User::factory()->create();
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('universes.drivers.store', [$universe]), [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'dob' => now()->format('Y-m-d'),
-            'country' => 'AF',
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->post(route('universes.drivers.store', [$universe]), [
+                'first_name' => 'First',
+                'last_name' => 'Last',
+                'dob' => now()->format('Y-m-d'),
+                'country' => 'AF',
+            ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('drivers', 0);
         $this->assertCount(0, $universe->drivers);
@@ -76,18 +71,16 @@ class DriverControllerTest extends TestCase
         $user = User::factory()->create();
         $universe = Universe::factory()->create(['user_id' => $user->id]);
         $driver = Driver::factory()->create(['universe_id' => $universe->id]);
-
-        $this->actingAs($user);
-
         $newDate = now()->subMonth()->format('Y-m-d');
-        $response = $this->put(route('universes.drivers.update', [$universe, $driver]), [
-            'first_name' => 'New First',
-            'last_name' => 'New Last',
-            'dob' => $newDate,
-            'country' => 'AL',
-        ]);
 
-        $response->assertRedirect(route('universes.drivers.index', [$universe]));
+        $this->actingAs($user)
+            ->put(route('universes.drivers.update', [$universe, $driver]), [
+                'first_name' => 'New First',
+                'last_name' => 'New Last',
+                'dob' => $newDate,
+                'country' => 'AL',
+            ])
+            ->assertRedirect(route('universes.drivers.index', [$universe]));
 
         $this->assertEquals('New First', $driver->fresh()->first_name);
         $this->assertEquals('New Last', $driver->fresh()->last_name);
@@ -102,14 +95,14 @@ class DriverControllerTest extends TestCase
         $driver = Driver::factory()->create(['universe_id' => $universe->id]);
 
         $newDate = now()->subMonth()->format('Y-m-d');
-        $response = $this->put(route('universes.drivers.update', [$universe, $driver]), [
+
+        $this->put(route('universes.drivers.update', [$universe, $driver]), [
             'first_name' => 'New First',
             'last_name' => 'New Last',
             'dob' => $newDate,
             'country' => 'AL',
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertEquals($driver->first_name, $driver->fresh()->first_name);
         $this->assertEquals($driver->last_name, $driver->fresh()->last_name);
@@ -123,18 +116,16 @@ class DriverControllerTest extends TestCase
         $universe = Universe::factory()->create();
         $user = User::factory()->create();
         $driver = Driver::factory()->create(['universe_id' => $universe->id]);
-
-        $this->actingAs($user);
-
         $newDate = now()->subMonth()->format('Y-m-d');
-        $response = $this->put(route('universes.drivers.update', [$universe, $driver]), [
-            'first_name' => 'New First',
-            'last_name' => 'New Last',
-            'dob' => $newDate,
-            'country' => 'AL',
-        ]);
 
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->put(route('universes.drivers.update', [$universe, $driver]), [
+                'first_name' => 'New First',
+                'last_name' => 'New Last',
+                'dob' => $newDate,
+                'country' => 'AL',
+            ])
+            ->assertForbidden();
 
         $this->assertEquals($driver->first_name, $driver->fresh()->first_name);
         $this->assertEquals($driver->last_name, $driver->fresh()->last_name);

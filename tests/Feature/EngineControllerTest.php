@@ -16,13 +16,11 @@ class EngineControllerTest extends TestCase
         $user = User::factory()->create();
         $series = $this->createSeriesForUser($user);
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('series.engines.store', [$series]), [
-            'name' => 'Honda',
-        ]);
-
-        $response->assertRedirect(route('series.engines.index', [$series]));
+        $this->actingAs($user)
+            ->post(route('series.engines.store', [$series]), [
+                'name' => 'Honda',
+            ])
+            ->assertRedirect(route('series.engines.index', [$series]));
 
         $this->assertDatabaseCount('engines', 1);
         $this->assertCount(1, $series->engines);
@@ -33,11 +31,10 @@ class EngineControllerTest extends TestCase
     {
         $series = Series::factory()->create();
 
-        $response = $this->post(route('series.engines.store', [$series]), [
+        $this->post(route('series.engines.store', [$series]), [
             'name' => 'Honda',
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('engines', 0);
         $this->assertCount(0, $series->engines);
@@ -49,13 +46,11 @@ class EngineControllerTest extends TestCase
         $user = User::factory()->create();
         $series = Series::factory()->create();
 
-        $this->actingAs($user);
-
-        $response = $this->post(route('series.engines.store', [$series]), [
-            'name' => 'Honda',
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->post(route('series.engines.store', [$series]), [
+                'name' => 'Honda',
+            ])
+            ->assertForbidden();
 
         $this->assertDatabaseCount('engines', 0);
         $this->assertCount(0, $series->engines);
@@ -68,13 +63,11 @@ class EngineControllerTest extends TestCase
         $series = $this->createSeriesForUser($user);
         $engine = Engine::factory()->for($series)->create();
 
-        $this->actingAs($user);
-
-        $response = $this->put(route('series.engines.update', [$series, $engine]), [
-            'name' => 'Ferrari',
-        ]);
-
-        $response->assertRedirect(route('series.engines.index', [$series]));
+        $this->actingAs($user)
+            ->put(route('series.engines.update', [$series, $engine]), [
+                'name' => 'Ferrari',
+            ])
+            ->assertRedirect(route('series.engines.index', [$series]));
 
         $this->assertEquals('Ferrari', $engine->fresh()->name);
     }
@@ -86,11 +79,10 @@ class EngineControllerTest extends TestCase
         $engine = Engine::factory()->for($series)->create();
         $name = $engine->name;
 
-        $response = $this->put(route('series.engines.update', [$series, $engine]), [
+        $this->put(route('series.engines.update', [$series, $engine]), [
             'name' => 'Ferrari',
-        ]);
-
-        $response->assertForbidden();
+        ])
+            ->assertForbidden();
 
         $this->assertEquals($name, $engine->fresh()->name);
     }
@@ -102,13 +94,11 @@ class EngineControllerTest extends TestCase
         $engine = Engine::factory()->create();
         $name = $engine->name;
 
-        $this->actingAs($user);
-
-        $response = $this->put(route('series.engines.update', [$engine->series, $engine]), [
-            'name' => 'Ferrari',
-        ]);
-
-        $response->assertForbidden();
+        $this->actingAs($user)
+            ->put(route('series.engines.update', [$engine->series, $engine]), [
+                'name' => 'Ferrari',
+            ])
+            ->assertForbidden();
 
         $this->assertEquals($name, $engine->fresh()->name);
     }
