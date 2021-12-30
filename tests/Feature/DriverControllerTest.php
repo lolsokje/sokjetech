@@ -6,6 +6,7 @@ use App\Models\Driver;
 use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class DriverControllerTest extends TestCase
@@ -160,4 +161,39 @@ class DriverControllerTest extends TestCase
             ->assertRedirect(route('index'));
     }
 
+    /** @test */
+    public function anAuthenticatedUserCanViewDriverCreatePage()
+    {
+        $universe = Universe::factory()->create();
+
+        $this->actingAs($universe->user)
+            ->get(route('universes.drivers.create', [$universe]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCanViewDriverEditPage()
+    {
+        $universe = Universe::factory()->create();
+        $driver = Driver::factory()->for($universe)->create();
+
+        $this->actingAs($universe->user)
+            ->get(route('universes.drivers.edit', [$universe, $driver]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllDriversInTheSelectedUniverse()
+    {
+        $universe = Universe::factory()->create();
+        Driver::factory(5)->for($universe)->create();
+        Driver::factory(5)->for(Universe::factory()->create())->create();
+
+        $this->actingAs($universe->user)
+            ->get(route('universes.drivers.index', [$universe]))
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Drivers/Index')
+                ->has('universe.drivers', 5)
+            );
+    }
 }

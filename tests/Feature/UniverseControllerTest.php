@@ -92,6 +92,27 @@ class UniverseControllerTest extends TestCase
     }
 
     /** @test */
+    public function anAuthenticatedUserCanViewUniverseCreatePage()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.create'))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCanViewUniverseEditPage()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.edit', [$universe]))
+            ->assertOk();
+    }
+
+    /** @test */
     public function anUnauthorizedUserCannotViewTheEditUniversePage()
     {
         $this->get(route('universes.edit', Universe::factory()->create()))

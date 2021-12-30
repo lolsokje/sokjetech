@@ -12,6 +12,11 @@ use Inertia\Response;
 
 class CircuitController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth'])->only('create', 'edit');
+    }
+
     public function index(CircuitFilterRequest $request): Response
     {
         $circuits = auth()->user()->circuits()

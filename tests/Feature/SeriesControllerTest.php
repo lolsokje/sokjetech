@@ -6,6 +6,7 @@ use App\Models\Series;
 use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class SeriesControllerTest extends TestCase
@@ -117,6 +118,29 @@ class SeriesControllerTest extends TestCase
     }
 
     /** @test */
+    public function aUniverseOwnerCanSeeViewSeriesCreatePage()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.series.create', [$universe]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function aUniverseOwnerCanViewSeriesEditPage()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+        $series = Series::factory()->for($universe)->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.series.edit', [$universe, $series]))
+            ->assertOk();
+    }
+
+    /** @test */
     public function anUnauthenticatedUserCannotViewTheSeriesCreatePage()
     {
         $universe = Universe::factory()->create();
@@ -162,5 +186,21 @@ class SeriesControllerTest extends TestCase
         $response = $this->get(route('universes.series.edit', [$universe, $series]));
 
         $response->assertForbidden();
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllSeriesInTheSelectedUniverse()
+    {
+        $universe = Universe::factory()->create();
+        Series::factory(5)->for($universe)->create();
+        Series::factory(5)->create();
+
+        $this->actingAs($universe->user)
+            ->get(route('universes.series.index', [$universe]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Series/Index')
+                ->has('universe.series', 5)
+            );
     }
 }

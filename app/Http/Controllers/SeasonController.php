@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SeasonCreateRequest;
 use App\Models\Season;
 use App\Models\Series;
-use Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 

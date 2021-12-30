@@ -6,6 +6,7 @@ use App\Models\Season;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class SeasonControllerTest extends TestCase
@@ -195,5 +196,21 @@ class SeasonControllerTest extends TestCase
                 'year' => 2021
             ])
             ->assertRedirect(route('series.seasons.index', [$series]));
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllSeasonsForTheSelectedSeries()
+    {
+        $user = User::factory()->create();
+        $series = $this->createSeriesForUser($user);
+        Season::factory(5)->for($series)->create();
+
+        $this->actingAs($user)
+            ->get(route('series.seasons.index', [$series]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Seasons/Index')
+                ->has('series.seasons', 5)
+            );
     }
 }

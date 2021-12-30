@@ -35,6 +35,9 @@
 			</div>
 		</div>
 
+		<TeamNamePreview :name="form.full_name" :background-colour="form.primary_colour"
+						 :text-colour="form.secondary_colour"/>
+
 		<button class="btn btn-primary mt-3" type="submit">Save team</button>
 	</form>
 </template>
@@ -44,6 +47,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import CountrySelect from '../../Shared/CountrySelect';
 import Errors from '../../Shared/Errors';
 import BackLink from '../../Shared/BackLink';
+import TeamNamePreview from '../../Shared/TeamNamePreview';
 
 const props = defineProps({
 	universe: {

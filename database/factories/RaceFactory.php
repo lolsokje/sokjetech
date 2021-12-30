@@ -16,8 +16,8 @@ class RaceFactory extends Factory
      */
     public function definition(): array
     {
-        $series = Series::factory()->create();
-        $season = Season::factory()->for($series)->create();
+        $series = Series::first() ?? Series::factory()->create();
+        $season = $series->seasons()->first() ?? Season::factory()->for($series)->create();
         $user = $series->user;
         return [
             'season_id' => $season,

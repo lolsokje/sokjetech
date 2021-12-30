@@ -6,6 +6,7 @@ use App\Models\Team;
 use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class TeamControllerTest extends TestCase
@@ -148,6 +149,29 @@ class TeamControllerTest extends TestCase
     }
 
     /** @test */
+    public function aUniverseOwnerCanViewTeamCreatePage()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.teams.create', [$universe]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function aUniverseOwnerCanViewTeamEditPage()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+        $team = Team::factory()->for($universe)->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.teams.edit', [$universe, $team]))
+            ->assertOk();
+    }
+
+    /** @test */
     public function anUnauthenticatedUserCannotViewTeamCreatePage()
     {
         $universe = Universe::factory()->create();
@@ -194,5 +218,39 @@ class TeamControllerTest extends TestCase
         $response = $this->get(route('universes.teams.edit', [$universe, $team]));
 
         $response->assertForbidden();
+    }
+
+    /** @test */
+    public function theShowPageShowsTheCorrectTeam()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+        Team::factory(5)->for($universe)->create();
+        $team = $universe->teams()->first();
+
+        $this->actingAs($user)
+            ->get(route('universes.teams.show', [$universe, $team]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Teams/View')
+                ->where('team.full_name', $team->full_name)
+            );
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllTeamsInSelectedUniverse()
+    {
+        $user = User::factory()->create();
+        $universe = Universe::factory()->for($user)->create();
+        Team::factory(5)->for($universe)->create();
+        Team::factory(5)->create();
+
+        $this->actingAs($user)
+            ->get(route('universes.teams.index', [$universe]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Teams/Index')
+                ->has('universe.teams', 5)
+            );
     }
 }

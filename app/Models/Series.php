@@ -17,6 +17,10 @@ class Series extends Model
         'user',
     ];
 
+    protected $with = [
+        'universe',
+    ];
+
     public function universe(): BelongsTo
     {
         return $this->belongsTo(Universe::class);
