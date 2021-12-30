@@ -5,14 +5,11 @@ namespace Tests\Feature;
 use App\Models\Engine;
 use App\Models\Series;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class EngineControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function aUniverseOwnerCanCreateEngines()
     {

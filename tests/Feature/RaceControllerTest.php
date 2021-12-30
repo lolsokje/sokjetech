@@ -7,14 +7,11 @@ use App\Models\Race;
 use App\Models\Season;
 use App\Models\Universe;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class RaceControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function aUniverseOwnerCanCreateRaces()
     {

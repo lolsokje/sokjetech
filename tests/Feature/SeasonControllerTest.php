@@ -5,14 +5,11 @@ namespace Tests\Feature;
 use App\Models\Season;
 use App\Models\Series;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class SeasonControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function aUniverseOwnerCanCreateSeasons()
     {

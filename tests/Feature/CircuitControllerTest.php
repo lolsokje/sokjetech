@@ -4,14 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Circuit;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class CircuitControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function anAuthorizedUserCanCreateACircuit()
     {

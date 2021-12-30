@@ -5,14 +5,11 @@ namespace Tests\Feature;
 use App\Models\Driver;
 use App\Models\Universe;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class DriverControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function aUniverseOwnerCanCreateDrivers()
     {

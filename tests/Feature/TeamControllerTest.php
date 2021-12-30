@@ -5,14 +5,11 @@ namespace Tests\Feature;
 use App\Models\Team;
 use App\Models\Universe;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class TeamControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function aUniverseOwnerCanCreateTeams()
     {
