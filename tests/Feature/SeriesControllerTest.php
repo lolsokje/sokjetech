@@ -1,188 +1,156 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Series;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\Assert;
-use Tests\TestCase;
 
-class SeriesControllerTest extends TestCase
-{
-    /** @test */
-    public function aUniverseOwnerCanCreateSeriesInTheirUniverse()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->create(['user_id' => $user->id]);
+test('a universe owner can create series in their universe', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create(['user_id' => $user->id]);
 
-        $this->actingAs($user)
-            ->post(route('universes.series.store', [$universe]), [
-                'name' => 'Formula One',
-            ])
-            ->assertRedirect(route('universes.series.index', [$universe]));
-
-        $this->assertDatabaseCount('series', 1);
-        $this->assertCount(1, $universe->series);
-    }
-
-    /** @test */
-    public function anUnauthenticatedUserCannotCreateASeries()
-    {
-        $universe = Universe::factory()->create();
-
-        $this->post(route('universes.series.store', [$universe]), [
+    $this->actingAs($user)
+        ->post(route('universes.series.store', [$universe]), [
             'name' => 'Formula One',
         ])
-            ->assertForbidden();
+        ->assertRedirect(route('universes.series.index', [$universe]));
 
-        $this->assertDatabaseCount('series', 0);
-        $this->assertCount(0, $universe->series);
-    }
+    $this->assertDatabaseCount('series', 1);
+    $this->assertCount(1, $universe->series);
+});
 
-    /** @test */
-    public function anAuthenticatedUserCannotCreateSeriesInAnotherUsersUniverse()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->create();
+test('an unauthenticated user can\'t create a series', function () {
+    $universe = Universe::factory()->create();
 
-        $this->actingAs($user)
-            ->post(route('universes.series.store', [$universe]), [
-                'name' => 'Formula One',
-            ])
-            ->assertForbidden();
+    $this->post(route('universes.series.store', [$universe]), [
+        'name' => 'Formula One',
+    ])
+        ->assertForbidden();
 
-        $this->assertDatabaseCount('series', 0);
-        $this->assertCount(0, $universe->series);
-    }
+    $this->assertDatabaseCount('series', 0);
+    $this->assertCount(0, $universe->series);
+});
 
-    /** @test */
-    public function aUniverseOwnerCanUpdateTheirSeries()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->create(['user_id' => $user->id]);
-        $series = Series::factory()->create(['universe_id' => $universe->id]);
+test('an authenticated user can\'t create series in another user\'s universe', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create();
 
-        $this->actingAs($user)
-            ->put(route('universes.series.update', [$universe, $series]), [
-                'name' => 'Formula One',
-            ])
-            ->assertRedirect(route('universes.series.index', [$universe]));
-
-        $this->assertEquals('Formula One', $series->fresh()->name);
-    }
-
-    /** @test */
-    public function anUnauthenticatedUserCannotEditSeries()
-    {
-        $universe = Universe::factory()->create();
-        $series = Series::factory()->create(['universe_id' => $universe->id]);
-        $name = $series->name;
-
-        $this->put(route('universes.series.update', [$universe, $series]), [
+    $this->actingAs($user)
+        ->post(route('universes.series.store', [$universe]), [
             'name' => 'Formula One',
         ])
-            ->assertForbidden();
+        ->assertForbidden();
 
-        $this->assertEquals($name, $series->fresh()->name);
-    }
+    $this->assertDatabaseCount('series', 0);
+    $this->assertCount(0, $universe->series);
+});
 
-    /** @test */
-    public function aUserCannotEditAnotherUsersSeries()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->create();
-        $series = Series::factory()->create(['universe_id' => $universe->id]);
-        $name = $series->name;
+test('a universe owner can update their series', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create(['user_id' => $user->id]);
+    $series = Series::factory()->create(['universe_id' => $universe->id]);
 
-        $this->actingAs($user)
-            ->put(route('universes.series.update', [$universe, $series]), [
-                'name' => 'Formula One',
-            ])
-            ->assertForbidden();
+    $this->actingAs($user)
+        ->put(route('universes.series.update', [$universe, $series]), [
+            'name' => 'Formula One',
+        ])
+        ->assertRedirect(route('universes.series.index', [$universe]));
 
-        $this->assertEquals($name, $series->fresh()->name);
-    }
+    $this->assertEquals('Formula One', $series->fresh()->name);
+});
 
-    /** @test */
-    public function aUniverseOwnerCanSeeViewSeriesCreatePage()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->for($user)->create();
+test('an authenticated user can\'t edit series', function () {
+    $universe = Universe::factory()->create();
+    $series = Series::factory()->create(['universe_id' => $universe->id]);
+    $name = $series->name;
 
-        $this->actingAs($user)
-            ->get(route('universes.series.create', [$universe]))
-            ->assertOk();
-    }
+    $this->put(route('universes.series.update', [$universe, $series]), [
+        'name' => 'Formula One',
+    ])
+        ->assertForbidden();
 
-    /** @test */
-    public function aUniverseOwnerCanViewSeriesEditPage()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->for($user)->create();
-        $series = Series::factory()->for($universe)->create();
+    $this->assertEquals($name, $series->fresh()->name);
+});
 
-        $this->actingAs($user)
-            ->get(route('universes.series.edit', [$universe, $series]))
-            ->assertOk();
-    }
+test('a user can\'t edit another user\'s series', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create();
+    $series = Series::factory()->create(['universe_id' => $universe->id]);
+    $name = $series->name;
 
-    /** @test */
-    public function anUnauthenticatedUserCannotViewTheSeriesCreatePage()
-    {
-        $universe = Universe::factory()->create();
+    $this->actingAs($user)
+        ->put(route('universes.series.update', [$universe, $series]), [
+            'name' => 'Formula One',
+        ])
+        ->assertForbidden();
 
-        $response = $this->get(route('universes.series.create', [$universe]));
+    $this->assertEquals($name, $series->fresh()->name);
+});
 
-        $response->assertRedirect(route('index'));
-    }
+test('a universe owner can view the series create page', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->for($user)->create();
 
-    /** @test */
-    public function anUnauthenticatedUserCannotViewTheSeriesEditPage()
-    {
-        $universe = Universe::factory()->create();
-        $series = Series::factory()->create(['universe_id' => $universe->id]);
+    $this->actingAs($user)
+        ->get(route('universes.series.create', [$universe]))
+        ->assertOk();
+});
 
-        $this->get(route('universes.series.edit', [$universe, $series]))
-            ->assertRedirect(route('index'));
-    }
+test('a universe owner can view the series edit page', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->for($user)->create();
+    $series = Series::factory()->for($universe)->create();
 
-    /** @test */
-    public function aUserCannotViewAnotherUsersSeriesCreatePage()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->create();
+    $this->actingAs($user)
+        ->get(route('universes.series.edit', [$universe, $series]))
+        ->assertOk();
+});
 
-        $this->actingAs($user)
-            ->get(route('universes.series.create', [$universe]))
-            ->assertForbidden();
-    }
+test('an unauthenticated user can\'t view the series create page', function () {
+    $universe = Universe::factory()->create();
 
-    /** @test */
-    public function aUserCannotViewAnotherUsersSeriesEditPage()
-    {
-        $user = User::factory()->create();
-        $universe = Universe::factory()->create();
-        $series = Series::factory()->create(['universe_id' => $universe->id]);
+    $response = $this->get(route('universes.series.create', [$universe]));
 
-        $this->actingAs($user)
-            ->get(route('universes.series.edit', [$universe, $series]))
-            ->assertForbidden();
-    }
+    $response->assertRedirect(route('index'));
+});
 
-    /** @test */
-    public function theIndexPageShowsAllSeriesInTheSelectedUniverse()
-    {
-        $universe = Universe::factory()->create();
-        Series::factory(5)->for($universe)->create();
-        Series::factory(5)->create();
+test('an unauthenticated user can\'t view the series edit page', function () {
+    $universe = Universe::factory()->create();
+    $series = Series::factory()->create(['universe_id' => $universe->id]);
 
-        $this->actingAs($universe->user)
-            ->get(route('universes.series.index', [$universe]))
-            ->assertOk()
-            ->assertInertia(fn(Assert $page) => $page
-                ->component('Series/Index')
-                ->has('universe.series', 5)
-            );
-    }
-}
+    $this->get(route('universes.series.edit', [$universe, $series]))
+        ->assertRedirect(route('index'));
+});
+
+test('a user can\'t view another user\'s series create page', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('universes.series.create', [$universe]))
+        ->assertForbidden();
+});
+
+test('a user can\'t view another user\'s series edit page', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create();
+    $series = Series::factory()->create(['universe_id' => $universe->id]);
+
+    $this->actingAs($user)
+        ->get(route('universes.series.edit', [$universe, $series]))
+        ->assertForbidden();
+});
+
+it('shows all series in the selected universe on the index page', function () {
+    $universe = Universe::factory()->create();
+    Series::factory(3)->for($universe)->create();
+    Series::factory(3)->create();
+
+    $this->actingAs($universe->user)
+        ->get(route('universes.series.index', [$universe]))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->component('Series/Index')
+            ->has('universe.series', 3)
+        );
+});
