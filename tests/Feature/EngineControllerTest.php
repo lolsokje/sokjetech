@@ -1,196 +1,151 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Engine;
 use App\Models\Series;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
-use Tests\TestCase;
 
-class EngineControllerTest extends TestCase
-{
-    use RefreshDatabase;
+test('a universe owner can create engines', function () {
+    $user = User::factory()->create();
+    $series = createSeriesForUser($user);
 
-    /** @test */
-    public function aUniverseOwnerCanCreateEngines()
-    {
-        $user = User::factory()->create();
-        $series = $this->createSeriesForUser($user);
-
-        $this->actingAs($user);
-
-        $response = $this->post(route('series.engines.store', [$series]), [
+    $this->actingAs($user)
+        ->post(route('series.engines.store', [$series]), [
             'name' => 'Honda',
-        ]);
+        ])
+        ->assertRedirect(route('series.engines.index', [$series]));
 
-        $response->assertRedirect(route('series.engines.index', [$series]));
+    $this->assertDatabaseCount('engines', 1);
+    $this->assertCount(1, $series->engines);
+});
 
-        $this->assertDatabaseCount('engines', 1);
-        $this->assertCount(1, $series->engines);
-    }
+test('an unauthenticated user can\'t create engines', function () {
+    $series = Series::factory()->create();
 
-    /** @test */
-    public function anUnauthenticatedUserCannotCreateEngines()
-    {
-        $series = Series::factory()->create();
+    $this->post(route('series.engines.store', [$series]), [
+        'name' => 'Honda',
+    ])
+        ->assertForbidden();
 
-        $response = $this->post(route('series.engines.store', [$series]), [
+    $this->assertDatabaseCount('engines', 0);
+    $this->assertCount(0, $series->engines);
+});
+
+test('an authenticated user can\'t create engines in another user\'s universe', function () {
+    $user = User::factory()->create();
+    $series = Series::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('series.engines.store', [$series]), [
             'name' => 'Honda',
-        ]);
+        ])
+        ->assertForbidden();
 
-        $response->assertForbidden();
+    $this->assertDatabaseCount('engines', 0);
+    $this->assertCount(0, $series->engines);
+});
 
-        $this->assertDatabaseCount('engines', 0);
-        $this->assertCount(0, $series->engines);
-    }
+test('a universe owner can edit their engines', function () {
+    $user = User::factory()->create();
+    $series = createSeriesForUser($user);
+    $engine = Engine::factory()->for($series)->create();
 
-    /** @test */
-    public function anAuthenticatedUserCannotCreateEnginesInAnotherUsersUniverse()
-    {
-        $user = User::factory()->create();
-        $series = Series::factory()->create();
-
-        $this->actingAs($user);
-
-        $response = $this->post(route('series.engines.store', [$series]), [
-            'name' => 'Honda',
-        ]);
-
-        $response->assertForbidden();
-
-        $this->assertDatabaseCount('engines', 0);
-        $this->assertCount(0, $series->engines);
-    }
-
-    /** @test */
-    public function aUniverseOwnerCanEditTheirEngines()
-    {
-        $user = User::factory()->create();
-        $series = $this->createSeriesForUser($user);
-        $engine = Engine::factory()->for($series)->create();
-
-        $this->actingAs($user);
-
-        $response = $this->put(route('series.engines.update', [$series, $engine]), [
+    $this->actingAs($user)
+        ->put(route('series.engines.update', [$series, $engine]), [
             'name' => 'Ferrari',
-        ]);
+        ])
+        ->assertRedirect(route('series.engines.index', [$series]));
 
-        $response->assertRedirect(route('series.engines.index', [$series]));
+    $this->assertEquals('Ferrari', $engine->fresh()->name);
+});
 
-        $this->assertEquals('Ferrari', $engine->fresh()->name);
-    }
+test('an unauthenticated user can\'t update engines', function () {
+    $series = Series::factory()->create();
+    $engine = Engine::factory()->for($series)->create();
+    $name = $engine->name;
 
-    /** @test */
-    public function anUnauthenticatedUserCannotUpdateEngines()
-    {
-        $series = Series::factory()->create();
-        $engine = Engine::factory()->for($series)->create();
-        $name = $engine->name;
+    $this->put(route('series.engines.update', [$series, $engine]), [
+        'name' => 'Ferrari',
+    ])
+        ->assertForbidden();
 
-        $response = $this->put(route('series.engines.update', [$series, $engine]), [
+    $this->assertEquals($name, $engine->fresh()->name);
+});
+
+test('an authenticated user can\'t update another user\'s engines', function () {
+    $user = User::factory()->create();
+    $engine = Engine::factory()->create();
+    $name = $engine->name;
+
+    $this->actingAs($user)
+        ->put(route('series.engines.update', [$engine->series, $engine]), [
             'name' => 'Ferrari',
-        ]);
+        ])
+        ->assertForbidden();
 
-        $response->assertForbidden();
+    $this->assertEquals($name, $engine->fresh()->name);
+});
 
-        $this->assertEquals($name, $engine->fresh()->name);
-    }
+test('a universe owner can view the create engine page', function () {
+    $user = User::factory()->create();
+    $series = createSeriesForUser($user);
 
-    /** @test */
-    public function anAuthenticatedUserCannotUpdateAnotherUsersEngines()
-    {
-        $user = User::factory()->create();
-        $engine = Engine::factory()->create();
-        $name = $engine->name;
+    $this->actingAs($user)
+        ->get(route('series.engines.create', [$series]))
+        ->assertOk();
+});
 
-        $this->actingAs($user);
+test('an authenticated user can\'t view the create engine page', function () {
+    $series = Series::factory()->create();
 
-        $response = $this->put(route('series.engines.update', [$engine->series, $engine]), [
-            'name' => 'Ferrari',
-        ]);
+    $this->get(route('series.engines.create', [$series]))
+        ->assertRedirect(route('index'));
+});
 
-        $response->assertForbidden();
+test('an authenticated user can\'t view another user\'s create engine page', function () {
+    $user = User::factory()->create();
+    $series = Series::factory()->create();
 
-        $this->assertEquals($name, $engine->fresh()->name);
-    }
+    $this->actingAs($user)
+        ->get(route('series.engines.create', [$series]))
+        ->assertForbidden();
+});
 
-    /** @test */
-    public function aUniverseOwnerCanViewTheCreateEnginePage()
-    {
-        $user = User::factory()->create();
-        $series = $this->createSeriesForUser($user);
+test('a universe owner can view the update engine page', function () {
+    $user = User::factory()->create();
+    $series = createSeriesForUser($user);
+    $engine = Engine::factory()->for($series)->create();
 
-        $this->actingAs($user)
-            ->get(route('series.engines.create', [$series]))
-            ->assertOk();
-    }
+    $this->actingAs($user)
+        ->get(route('series.engines.edit', [$series, $engine]))
+        ->assertOk();
+});
 
-    /** @test */
-    public function anUnauthenticatedUserCannotViewTheCreateEnginePage()
-    {
-        $series = Series::factory()->create();
+test('an authenticated user can\'t view the update engine page', function () {
+    $engine = Engine::factory()->create();
 
-        $this->get(route('series.engines.create', [$series]))
-            ->assertRedirect(route('index'));
-    }
+    $this->get(route('series.engines.edit', [$engine->series, $engine]))
+        ->assertRedirect(route('index'));
+});
 
-    /** @test */
-    public function anAuthenticatedUserCannotViewAnotherUsersCreateEnginePage()
-    {
-        $user = User::factory()->create();
-        $series = Series::factory()->create();
+test('an authenticated user can\'t view another user\'s update engine page', function () {
+    $user = User::factory()->create();
+    $engine = Engine::factory()->create();
 
-        $this->actingAs($user)
-            ->get(route('series.engines.create', [$series]))
-            ->assertForbidden();
-    }
+    $this->actingAs($user)
+        ->get(route('series.engines.edit', [$engine->series, $engine]))
+        ->assertForbidden();
+});
 
-    /** @test */
-    public function aUniverseOwnerCanViewTheUpdateEnginePage()
-    {
-        $user = User::factory()->create();
-        $series = $this->createSeriesForUser($user);
-        $engine = Engine::factory()->for($series)->create();
+it('shows all engines in the selected series on the index page', function () {
+    $series = Series::factory()->create();
+    Engine::factory(3)->for($series)->create();
+    Engine::factory(3)->for(Series::factory()->create());
 
-        $this->actingAs($user)
-            ->get(route('series.engines.edit', [$series, $engine]))
-            ->assertOk();
-    }
-
-    /** @test */
-    public function anUnauthenticatedUserCannotViewTheUpdateEnginePage()
-    {
-        $engine = Engine::factory()->create();
-
-        $this->get(route('series.engines.edit', [$engine->series, $engine]))
-            ->assertRedirect(route('index'));
-    }
-
-    /** @test */
-    public function anAuthenticatedUserCannotViewAnotherUsersUpdateEnginePage()
-    {
-        $user = User::factory()->create();
-        $engine = Engine::factory()->create();
-
-        $this->actingAs($user)
-            ->get(route('series.engines.edit', [$engine->series, $engine]))
-            ->assertForbidden();
-    }
-
-    /** @test */
-    public function theIndexPageShowsAllEnginesInTheSelectedSeries()
-    {
-        $series = Series::factory()->create();
-        Engine::factory(3)->for($series)->create();
-        Engine::factory(3)->for(Series::factory()->create());
-
-        $this->actingAs($series->user)
-            ->get(route('series.engines.index', [$series]))
-            ->assertInertia(fn(Assert $page) => $page
-                ->component('Engines/Index')
-                ->has('series.engines', 3)
-            );
-    }
-}
+    $this->actingAs($series->user)
+        ->get(route('series.engines.index', [$series]))
+        ->assertInertia(fn(Assert $page) => $page
+            ->component('Engines/Index')
+            ->has('series.engines', 3)
+        );
+});
