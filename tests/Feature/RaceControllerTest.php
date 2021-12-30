@@ -5,8 +5,10 @@ namespace Tests\Feature;
 use App\Models\Circuit;
 use App\Models\Race;
 use App\Models\Season;
+use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class RaceControllerTest extends TestCase
@@ -186,6 +188,138 @@ class RaceControllerTest extends TestCase
             ],
         ])
             ->assertSessionDoesntHaveErrors(['stints']);
+    }
+
+    /** @test */
+    public function aUniverseOwnerCanViewRaceCreatePage()
+    {
+        $universe = Universe::factory()->create();
+        $season = $this->createSeasonForUser($universe->user);
+
+        $this->actingAs($universe->user)
+            ->get(route('seasons.races.create', $season))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function anUnauthenticatedUserCannotViewRaceCreatePage()
+    {
+        $season = Season::factory()->create();
+
+        $this->get(route('seasons.races.create', [$season]))
+            ->assertRedirect(route('index'));
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCannotViewCreateRacePageInOtherUniverses()
+    {
+        $season = Season::factory()->create();
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('seasons.races.create', [$season]))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function aUniverseOwnerCanViewRaceEditPage()
+    {
+        $user = User::factory()->create();
+        $season = $this->createSeasonForUser($user);
+        $race = Race::factory()->for($season)->create();
+
+        $this->actingAs($user)
+            ->get(route('seasons.races.edit', [$season, $race]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function aUniverseOwnerCanViewRaceReorderPage()
+    {
+        $user = User::factory()->create();
+        $season = $this->createSeasonForUser($user);
+        Race::factory(5)->for($season)->create();
+
+        $this->actingAs($user)
+            ->get(route('seasons.races.reorder', [$season]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Races/Reorder')
+                ->has('season.races', 5)
+            );
+    }
+
+    /** @test */
+    public function anUnauthenticatedUserCannotViewRaceReorderPage()
+    {
+        $race = Race::factory()->create();
+
+        $this->get(route('seasons.races.reorder', [$race->season]))
+            ->assertRedirect(route('index'));
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCannotViewRaceReorderRacesPageForOtherUniverse()
+    {
+        $race = Race::factory()->create();
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('seasons.races.reorder', [$race->season]))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function aUniverseOwnerCanReorderRaces()
+    {
+        $user = User::factory()->create();
+        $season = $this->createSeasonForUser($user);
+        $raceOne = Race::factory()->for($season)->create(['order' => 1]);
+        $raceTwo = Race::factory()->for($season)->create(['order' => 2]);
+
+        $this->actingAs($user)
+            ->put(route('seasons.races.order', [$season]), [
+                'races' => [
+                    ['id' => $raceOne->id, 'order' => 2],
+                    ['id' => $raceTwo->id, 'order' => 1],
+                ],
+            ])
+            ->assertRedirect(route('seasons.races.index', [$season]));
+
+        $this->assertEquals(2, $raceOne->fresh()->order);
+        $this->assertEquals(1, $raceTwo->fresh()->order);
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllRaces()
+    {
+        $user = User::factory()->create();
+        $season = $this->createSeasonForUser($user);
+        Race::factory(5)->for($season)->create();
+
+        $this->actingAs($user)
+            ->get(route('seasons.races.index', [$season]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Races/Index')
+                ->has('season.races', 5)
+            );
+    }
+
+    /** @test */
+    public function theShowPageShowsTheCorrectRace()
+    {
+        $user = User::factory()->create();
+        $season = $this->createSeasonForUser($user);
+        Race::factory(5)->for($season)->create();
+
+        $race = $season->races()->first();
+
+        $this->actingAs($user)
+            ->get(route('seasons.races.show', [$season, $race]))
+            ->assertOk()
+            ->assertInertia(fn(Assert $page) => $page
+                ->where('season.year', $season->year)
+                ->where('race.name', $race->name)
+            );
     }
 
     private function getRaceCreationData(Season $season, ?User $user = null): array

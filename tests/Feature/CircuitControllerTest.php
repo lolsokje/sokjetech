@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Circuit;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class CircuitControllerTest extends TestCase
@@ -79,5 +80,67 @@ class CircuitControllerTest extends TestCase
 
         $this->assertEquals($name, $circuit->fresh()->name);
         $this->assertEquals($country, $circuit->fresh()->country);
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCanViewTheCircuitCreatePage()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('circuits.create'))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function anUnauthenticatedUserCannotViewTheCircuitCreatePage()
+    {
+        $this->get(route('circuits.create'))
+            ->assertRedirect(route('index'));
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCanViewTheCircuitEditPage()
+    {
+        $user = User::factory()->create();
+        $circuit = Circuit::factory()->for($user)->create();
+
+        $this->actingAs($user)
+            ->get(route('circuits.edit', [$circuit]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function anUnauthenticatedUserCannotViewTheCircuitEditPage()
+    {
+        $circuit = Circuit::factory()->create();
+
+        $this->get(route('circuits.edit', [$circuit]))
+            ->assertRedirect(route('index'));
+    }
+
+    /** @test */
+    public function anAuthenticatedUserCannotViewAnotherUsersCircuitEditPage()
+    {
+        $circuit = Circuit::factory()->create();
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('circuits.edit', [$circuit]))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllCircuitsCreatedByAUser()
+    {
+        $user = User::factory()->create();
+        Circuit::factory(5)->for($user)->create();
+
+        $this->actingAs($user)
+            ->get(route('circuits.index'))
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Circuits/Index')
+                ->has('circuits.data', 5) // circuits.data since circuits are paginated
+                ->has('filters')
+            );
     }
 }

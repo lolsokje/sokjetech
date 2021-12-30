@@ -6,6 +6,7 @@ use App\Models\Engine;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\Assert;
 use Tests\TestCase;
 
 class EngineControllerTest extends TestCase
@@ -176,5 +177,20 @@ class EngineControllerTest extends TestCase
         $this->actingAs($user)
             ->get(route('series.engines.edit', [$engine->series, $engine]))
             ->assertForbidden();
+    }
+
+    /** @test */
+    public function theIndexPageShowsAllEnginesInTheSelectedSeries()
+    {
+        $series = Series::factory()->create();
+        Engine::factory(3)->for($series)->create();
+        Engine::factory(3)->for(Series::factory()->create());
+
+        $this->actingAs($series->user)
+            ->get(route('series.engines.index', [$series]))
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Engines/Index')
+                ->has('series.engines', 3)
+            );
     }
 }

@@ -49,10 +49,11 @@ class TeamController extends Controller
 
     public function show(Universe $universe, Team $team): Response
     {
-        $this->authorize('update', $universe);
+        $this->authorize('view', $universe);
 
         return Inertia::render('Teams/View', [
             'universe' => $universe,
+            'team' => $team,
         ]);
     }
 

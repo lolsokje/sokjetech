@@ -22,6 +22,10 @@ class Season extends Model
         'universe',
     ];
 
+    protected $with = [
+        'series',
+    ];
+
     public function fullName(): Attribute
     {
         return Attribute::get(fn() => "$this->year {$this->series->name}");

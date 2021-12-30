@@ -21,7 +21,7 @@ class UniversePolicy
      */
     public function view(?User $user, Universe $universe): bool
     {
-        $visibility = $universe->visibility;
+        $visibility = (int) $universe->visibility;
 
         if ($visibility === Universe::VISIBILITY_PUBLIC) {
             return true;
