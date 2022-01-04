@@ -10,6 +10,10 @@
 					<li class="nav-item">
 						<InertiaLink :href="route('seasons.races.index', [season])" class="nav-link">Races</InertiaLink>
 					</li>
+					<li class="nav-item">
+						<InertiaLink :href="route('seasons.entrants.index', [season])" class="nav-link">Entrants
+						</InertiaLink>
+					</li>
 				</ul>
 			</div>
 		</div>

@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class Team extends Model
+class Entrant extends Model
 {
     use HasFactory, Uuids;
 
@@ -25,18 +23,18 @@ class Team extends Model
         });
     }
 
-    public function universe(): BelongsTo
+    public function season(): BelongsTo
     {
-        return $this->belongsTo(Universe::class);
+        return $this->belongsTo(Season::class);
     }
 
-    public function user(): HasManyThrough
+    public function team(): BelongsTo
     {
-        return $this->hasManyThrough(User::class, Universe::class);
+        return $this->belongsTo(Team::class);
     }
 
-    public function entrants(): HasMany
+    public function engine(): BelongsTo
     {
-        return $this->hasMany(Entrant::class);
+        return $this->belongsTo(Engine::class);
     }
 }
