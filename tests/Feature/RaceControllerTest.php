@@ -289,10 +289,3 @@ function getRaceCreationData(Season $season, ?User $user = null): array
         'order' => 1,
     ];
 }
-
-function createSeasonForUser(User $user): Season
-{
-    $series = createSeriesForUser($user);
-
-    return Season::factory()->for($series)->create();
-}

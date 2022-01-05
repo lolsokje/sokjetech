@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
+use App\Http\Controllers\EntrantController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\SeasonController;
@@ -37,4 +38,6 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::get('races/reorder', [RaceController::class, 'reorder'])->name('races.reorder');
     Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
     Route::resource('races', RaceController::class)->except('destroy');
+
+    Route::resource('entrants', EntrantController::class)->except('destroy', 'show');
 });

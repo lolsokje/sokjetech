@@ -45,4 +45,19 @@ class Season extends Model
     {
         return $this->hasMany(Race::class);
     }
+
+    public function teams(): HasMany
+    {
+        return $this->series->universe->teams()->orderBy('full_name');
+    }
+
+    public function engines(): HasMany
+    {
+        return $this->series->engines()->orderBy('name');
+    }
+
+    public function entrants(): HasMany
+    {
+        return $this->hasMany(Entrant::class);
+    }
 }
