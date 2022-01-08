@@ -16,7 +16,7 @@ class UserFactory extends Factory
         return [
             'discord_id' => $this->faker->randomNumber(9),
             'username' => $this->faker->userName(),
-            'avatar' => $this->faker->image(),
+            'avatar' => null,
             'is_admin' => false,
         ];
     }
