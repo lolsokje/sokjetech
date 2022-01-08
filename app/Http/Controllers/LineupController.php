@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LineupCreateRequest;
+use App\Models\Entrant;
 use App\Models\Lineup;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,11 +34,24 @@ class LineupController extends Controller
         ]);
     }
 
-    public function store(LineupCreateRequest $request, Season $season): RedirectResponse
+    public function store(LineupCreateRequest $request, Season $season, Entrant $entrant): RedirectResponse
     {
         $this->authorize('update', $season->universe);
 
-        $season->drivers()->create($request->validated());
+        $drivers = $request->validated()['drivers'];
+
+        $entrant->drivers()->each(fn(Lineup $driver) => $driver->update(['active' => false]));
+
+        foreach ($drivers as $driver) {
+            $entrant->drivers()->updateOrCreate(
+                ['driver_id' => $driver['driver_id']],
+                [
+                    'season_id' => $season->id,
+                    'number' => $driver['number'],
+                    'active' => true,
+                ],
+            );
+        }
 
         return redirect(route('seasons.lineups.index', [$season]));
     }

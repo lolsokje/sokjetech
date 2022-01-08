@@ -2,6 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniqueActiveDriversInSeason;
+use App\Rules\UniqueDriversInRequest;
+use App\Rules\UniqueNumbersInRequest;
+use App\Rules\UniqueNumbersInSeason;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LineupCreateRequest extends FormRequest
@@ -23,10 +27,12 @@ class LineupCreateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $parameters = $this->route()->parameters;
+
         return [
-            'entrant_id' => ['required', 'exists:entrants,id'],
-            'driver_id' => ['required', 'exists:drivers,id'],
-            'number' => ['required', 'integer'],
+            'drivers' => ['required', 'array', new UniqueNumbersInRequest, new UniqueDriversInRequest],
+            'drivers.*.driver_id' => ['required', 'exists:drivers,id', new UniqueActiveDriversInSeason($parameters)],
+            'drivers.*.number' => ['required', 'integer', new UniqueNumbersInSeason($parameters)],
         ];
     }
 }

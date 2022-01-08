@@ -11,6 +11,10 @@ class Lineup extends Model
 {
     use HasFactory, Uuids;
 
+    protected $casts = [
+        'number' => 'integer',
+    ];
+
     public function driver(): BelongsTo
     {
         return $this->belongsTo(Driver::class);

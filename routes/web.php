@@ -41,5 +41,6 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::resource('races', RaceController::class)->except('destroy');
 
     Route::resource('entrants', EntrantController::class)->except('destroy', 'show');
-    Route::resource('lineups', LineupController::class)->except('destroy');
+    Route::resource('lineups', LineupController::class)->except('destroy', 'store');
+    Route::post('/{entrant}/lineups', [LineupController::class, 'store'])->name('lineups.store');
 });
