@@ -6,6 +6,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EntrantController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LineupController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
@@ -40,4 +41,5 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::resource('races', RaceController::class)->except('destroy');
 
     Route::resource('entrants', EntrantController::class)->except('destroy', 'show');
+    Route::resource('lineups', LineupController::class)->except('destroy');
 });

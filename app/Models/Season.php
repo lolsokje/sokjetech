@@ -60,4 +60,9 @@ class Season extends Model
     {
         return $this->hasMany(Entrant::class);
     }
+
+    public function drivers(): HasMany
+    {
+        return $this->hasMany(Lineup::class);
+    }
 }
