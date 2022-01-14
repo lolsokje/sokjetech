@@ -16,7 +16,7 @@ class SeasonFactory extends Factory
     {
         return [
             'series_id' => Series::factory()->create(),
-            'year' => $this->faker->year(2021),
+            'year' => $this->faker->numberBetween(1950, date('Y')),
         ];
     }
 }

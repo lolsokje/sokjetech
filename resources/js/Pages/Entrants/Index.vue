@@ -5,7 +5,7 @@
 		Add entrant
 	</InertiaLink>
 
-	<table class="table table-borderless table-dark">
+	<table class="table table-bordered table-dark">
 		<thead>
 		<tr>
 			<th>Full name</th>
@@ -13,12 +13,14 @@
 			<th>Team principal</th>
 			<th>Engine supplier</th>
 			<th>Country</th>
-			<th></th>
+			<th colspan="2"></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr v-for="entrant in season.entrants" :key="entrant.id">
-			<td :style="entrant.style_string">{{ entrant.full_name }}</td>
+			<td :style="entrant.style_string">
+				{{ entrant.full_name }}
+			</td>
 			<td>{{ entrant.short_name }}</td>
 			<td>{{ entrant.team_principal }}</td>
 			<td>
@@ -27,8 +29,11 @@
 				</span>
 			</td>
 			<td>{{ entrant.country }}</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink :href="route('seasons.entrants.edit', [season, entrant])">edit</InertiaLink>
+			</td>
+			<td class="small-centered">
+				<InertiaLink :href="route('seasons.racers.create', [season, entrant])">drivers</InertiaLink>
 			</td>
 		</tr>
 		</tbody>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Entrant extends Model
 {
@@ -36,5 +37,15 @@ class Entrant extends Model
     public function engine(): BelongsTo
     {
         return $this->belongsTo(Engine::class);
+    }
+
+    public function activeRacers(): HasMany
+    {
+        return $this->hasMany(Racer::class)->where('active', true);
+    }
+
+    public function allRacers(): HasMany
+    {
+        return $this->hasMany(Racer::class);
     }
 }

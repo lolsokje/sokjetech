@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Season extends Model
 {
@@ -59,5 +60,30 @@ class Season extends Model
     public function entrants(): HasMany
     {
         return $this->hasMany(Entrant::class);
+    }
+
+    public function drivers(): HasMany
+    {
+        return $this->hasMany(Racer::class);
+    }
+
+    public function activeRacers(): HasMany
+    {
+        return $this->drivers()->where('active', true);
+    }
+
+    public function pickedNumbers(): array
+    {
+        return $this->drivers()->get()->map(fn(Racer $driver) => $driver->number)->toArray();
+    }
+
+    public function availableDrivers(): Collection
+    {
+        return $this->universe->drivers()
+            ->whereNotIn('id', $this->drivers()
+                ->where('active', true)
+                ->pluck('driver_id'))
+            ->orderBy('first_name')
+            ->get();
     }
 }
