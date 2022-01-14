@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLineupsTable extends Migration
+class CreateRacersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateLineupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lineups', function (Blueprint $table) {
-            $table->foreignUuid('id')->primary();
+        Schema::create('racers', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->foreignUuid('season_id')->nullable()->constrained();
             $table->foreignUuid('driver_id')->nullable()->constrained();
             $table->foreignUuid('entrant_id')->nullable()->constrained();
@@ -33,6 +33,6 @@ class CreateLineupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lineups');
+        Schema::dropIfExists('racers');
     }
 }

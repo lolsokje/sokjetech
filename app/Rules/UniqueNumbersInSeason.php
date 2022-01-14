@@ -2,18 +2,21 @@
 
 namespace App\Rules;
 
-use App\Models\Lineup;
+use App\Models\Entrant;
+use App\Models\Racer;
 use App\Models\Season;
 use Illuminate\Contracts\Validation\Rule;
 
 class UniqueNumbersInSeason implements Rule
 {
     private Season $season;
+    private Entrant $entrant;
     private mixed $value;
 
     public function __construct(array $parameters)
     {
         $this->season = $parameters['season'];
+        $this->entrant = $parameters['entrant'];
     }
 
     /**
@@ -28,10 +31,11 @@ class UniqueNumbersInSeason implements Rule
     {
         $this->value = $value;
 
-        $count = Lineup::query()
+        $count = Racer::query()
             ->where('season_id', $this->season->id)
             ->where('number', $value)
             ->where('active', 1)
+            ->where('entrant_id', '!=', $this->entrant->id)
             ->count();
 
         return $count === 0;

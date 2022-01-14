@@ -14,7 +14,7 @@
 
 <script setup>
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
 	valueKey: {
@@ -68,8 +68,14 @@ function showItems () {
 }
 
 function exit () {
+	if (Object.keys(selected.value).length === 0) {
+		itemsShown.value = false;
+		searchFilter.value = '';
+		return;
+	}
+
 	if (!selected.value[props.valueKey]) {
-		selected.value = null;
+		selected.value = {};
 		searchFilter.value = '';
 	} else {
 		searchFilter.value = selected.value[props.textKey];
@@ -81,6 +87,13 @@ function exit () {
 onMounted(() => {
 	if (Object.keys(selected.value).length !== 0) {
 		searchFilter.value = selected.value[props.textKey];
+	}
+});
+
+watch(() => props.selectedItem, (newValue) => {
+	if (Object.keys(newValue).length === 0) {
+		searchFilter.value = '';
+		selected.value = {};
 	}
 });
 </script>

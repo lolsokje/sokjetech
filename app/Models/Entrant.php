@@ -39,13 +39,13 @@ class Entrant extends Model
         return $this->belongsTo(Engine::class);
     }
 
-    public function lineup(): HasMany
+    public function activeRacers(): HasMany
     {
-        return $this->hasMany(Lineup::class)->where('active', true);
+        return $this->hasMany(Racer::class)->where('active', true);
     }
 
-    public function drivers(): HasMany
+    public function allRacers(): HasMany
     {
-        return $this->hasMany(Lineup::class);
+        return $this->hasMany(Racer::class);
     }
 }

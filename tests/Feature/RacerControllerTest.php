@@ -2,9 +2,10 @@
 
 use App\Models\Driver;
 use App\Models\Entrant;
-use App\Models\Lineup;
+use App\Models\Racer;
 use App\Models\Season;
 use App\Models\User;
+use Inertia\Testing\Assert;
 
 test('a universe owner can add drivers to entrants', function () {
     $user = User::factory()->create();
@@ -13,7 +14,7 @@ test('a universe owner can add drivers to entrants', function () {
     $entrant = Entrant::factory()->for($season)->create();
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrant]), [
             'drivers' => [
                 [
                     'driver_id' => $drivers[0]->id,
@@ -25,10 +26,10 @@ test('a universe owner can add drivers to entrants', function () {
                 ],
             ],
         ])
-        ->assertRedirect(route('seasons.lineups.index', [$season]));
+        ->assertRedirect(route('seasons.racers.index', [$season]));
 
-    $this->assertDatabaseCount('lineups', 2);
-    $this->assertCount(2, $entrant->drivers);
+    $this->assertDatabaseCount('racers', 2);
+    $this->assertCount(2, $entrant->allRacers);
     $this->assertCount(2, $season->drivers);
 });
 
@@ -36,15 +37,15 @@ test('a driver number must be unique in the current season', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $drivers = Driver::factory(3)->for($season->universe)->create();
-    $entrant = Entrant::factory()->for($season)->create();
-    Lineup::factory()->for($season)->create([
+    $entrants = Entrant::factory(2)->for($season)->create();
+    Racer::factory()->for($season)->create([
         'driver_id' => $drivers[0]->id,
-        'entrant_id' => $entrant->id,
+        'entrant_id' => $entrants[0]->id,
         'number' => 2,
     ]);
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrants[1]]), [
             'drivers' => [
                 [
                     'driver_id' => $drivers[1]->id,
@@ -64,14 +65,14 @@ test('the driver numbers must be unique in the current request', function () {
     $season = createSeasonForUser($user);
     $drivers = Driver::factory(3)->for($season->universe)->create();
     $entrant = Entrant::factory()->for($season)->create();
-    Lineup::factory()->for($season)->create([
+    Racer::factory()->for($season)->create([
         'driver_id' => $drivers[0]->id,
         'entrant_id' => $entrant->id,
         'number' => 2,
     ]);
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrant]), [
             'drivers' => [
                 [
                     'driver_id' => $drivers[0]->id,
@@ -86,18 +87,46 @@ test('the driver numbers must be unique in the current request', function () {
         ->assertSessionHasErrors(['drivers' => 'The number 3 is used by more than one driver in the current lineup.']);
 });
 
+test('a driver already added to an entrant can be saved again with the same driver and number', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $drivers = Driver::factory(2)->for($season->universe)->create();
+    $entrant = Entrant::factory()->for($season)->create();
+    Racer::factory()->for($season)->create([
+        'driver_id' => $drivers[0]->id,
+        'entrant_id' => $entrant->id,
+        'number' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('seasons.racers.store', [$season, $entrant]), [
+            'drivers' => [
+                [
+                    'driver_id' => $drivers[0]->id,
+                    'number' => 2,
+                ],
+                [
+                    'driver_id' => $drivers[1]->id,
+                    'number' => 3,
+                ],
+            ]
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('seasons.racers.index', [$season]));
+});
+
 test('a driver can only be active for one team in a season', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $driver = Driver::factory()->for($season->universe)->create();
-    $entrant = Entrant::factory()->for($season)->create();
-    Lineup::factory()->for($season)->create([
+    $entrants = Entrant::factory(2)->for($season)->create();
+    Racer::factory()->for($season)->create([
         'driver_id' => $driver->id,
-        'entrant_id' => $entrant->id
+        'entrant_id' => $entrants[0]->id
     ]);
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrants[1]]), [
             'drivers' => [
                 [
                     'driver_id' => $driver->id,
@@ -115,7 +144,7 @@ test('the drivers in a request must be unique', function () {
     $entrant = Entrant::factory()->for($season)->create();
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrant]), [
             'drivers' => [
                 [
                     'driver_id' => $driver->id,
@@ -130,12 +159,31 @@ test('the drivers in a request must be unique', function () {
         ->assertSessionHasErrors(['drivers' => "Driver $driver->fullName has been added more than once."]);
 });
 
+it('only shows available drivers on the lineup create page', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $drivers = Driver::factory(3)->for($season->universe)->create();
+    $entrants = Entrant::factory(2)->for($season)->create();
+    Racer::factory()->for($season)->create([
+        'driver_id' => $drivers[0]->id,
+        'entrant_id' => $entrants[0]->id
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('seasons.racers.create', [$season, $entrants[1]]))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->component('Racers/Create')
+            ->has('drivers', 2)
+        );
+});
+
 test('an unauthenticated user cannot add drivers to entrants', function () {
     $season = Season::factory()->create();
     $driver = Driver::factory()->for($season->universe)->create();
     $entrant = Entrant::factory()->for($season)->create();
 
-    $this->post(route('seasons.lineups.store', [$season, $entrant]), [
+    $this->post(route('seasons.racers.store', [$season, $entrant]), [
         'drivers' => [
             [
                 'driver_id' => $driver->id,
@@ -145,8 +193,8 @@ test('an unauthenticated user cannot add drivers to entrants', function () {
     ])
         ->assertForbidden();
 
-    $this->assertDatabaseCount('lineups', 0);
-    $this->assertCount(0, $entrant->drivers);
+    $this->assertDatabaseCount('racers', 0);
+    $this->assertCount(0, $entrant->allRacers);
     $this->assertCount(0, $season->drivers);
 });
 
@@ -157,7 +205,7 @@ test('an authenticated user cannot add drivers to another users entrants', funct
     $entrant = Entrant::factory()->for($season)->create();
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrant]), [
             'drivers' => [
                 [
                     'driver_id' => $driver->id,
@@ -167,8 +215,8 @@ test('an authenticated user cannot add drivers to another users entrants', funct
         ])
         ->assertForbidden();
 
-    $this->assertDatabaseCount('lineups', 0);
-    $this->assertCount(0, $entrant->drivers);
+    $this->assertDatabaseCount('racers', 0);
+    $this->assertCount(0, $entrant->allRacers);
     $this->assertCount(0, $season->drivers);
 });
 
@@ -177,11 +225,11 @@ test('a universe owner can remove drivers from entrants', function () {
     $season = createSeasonForUser($user);
     $drivers = Driver::factory(3)->for($season->universe)->create();
     $entrant = Entrant::factory()->for($season)->create();
-    Lineup::factory()->for($entrant)->create(['driver_id' => $drivers[0]->id]);
-    Lineup::factory()->for($entrant)->create(['driver_id' => $drivers[1]->id]);
+    Racer::factory()->for($entrant)->create(['driver_id' => $drivers[0]->id]);
+    Racer::factory()->for($entrant)->create(['driver_id' => $drivers[1]->id]);
 
     $this->actingAs($user)
-        ->post(route('seasons.lineups.store', [$season, $entrant]), [
+        ->post(route('seasons.racers.store', [$season, $entrant]), [
             'drivers' => [
                 [
                     'driver_id' => $drivers[0]->id,
@@ -189,8 +237,8 @@ test('a universe owner can remove drivers from entrants', function () {
                 ],
             ],
         ])
-        ->assertRedirect(route('seasons.lineups.index', [$season]));
+        ->assertRedirect(route('seasons.racers.index', [$season]));
 
-    $this->assertCount(2, $entrant->drivers);
-    $this->assertCount(1, $entrant->lineup);
+    $this->assertCount(2, $entrant->allRacers);
+    $this->assertCount(1, $entrant->activeRacers);
 });

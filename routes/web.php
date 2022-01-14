@@ -6,8 +6,8 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EntrantController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LineupController;
 use App\Http\Controllers\RaceController;
+use App\Http\Controllers\RacerController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\TeamController;
@@ -41,6 +41,7 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::resource('races', RaceController::class)->except('destroy');
 
     Route::resource('entrants', EntrantController::class)->except('destroy', 'show');
-    Route::resource('lineups', LineupController::class)->except('destroy', 'store');
-    Route::post('/{entrant}/lineups', [LineupController::class, 'store'])->name('lineups.store');
+    Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
+    Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
+    Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
 });

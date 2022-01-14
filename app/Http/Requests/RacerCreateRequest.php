@@ -8,7 +8,7 @@ use App\Rules\UniqueNumbersInRequest;
 use App\Rules\UniqueNumbersInSeason;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LineupCreateRequest extends FormRequest
+class RacerCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

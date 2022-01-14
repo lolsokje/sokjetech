@@ -2,13 +2,15 @@
 
 namespace App\Rules;
 
-use App\Models\Lineup;
+use App\Models\Entrant;
+use App\Models\Racer;
 use App\Models\Season;
 use Illuminate\Contracts\Validation\Rule;
 
 class UniqueActiveDriversInSeason implements Rule
 {
     private Season $season;
+    private Entrant $entrant;
     private string $name;
 
     /**
@@ -19,6 +21,7 @@ class UniqueActiveDriversInSeason implements Rule
     public function __construct(array $parameters)
     {
         $this->season = $parameters['season'];
+        $this->entrant = $parameters['entrant'];
     }
 
     /**
@@ -31,14 +34,15 @@ class UniqueActiveDriversInSeason implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $lineup = Lineup::query()
+        $racer = Racer::query()
             ->where('season_id', $this->season->id)
             ->where('driver_id', $value)
             ->where('active', true)
+            ->where('entrant_id', '!=', $this->entrant->id)
             ->first();
 
-        if ($lineup) {
-            $this->name = $lineup->driver->fullName;
+        if ($racer) {
+            $this->name = $racer->driver->fullName;
             return false;
         }
         return true;

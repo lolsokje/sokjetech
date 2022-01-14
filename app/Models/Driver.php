@@ -50,8 +50,8 @@ class Driver extends Model
         return $this->hasManyThrough(User::class, Universe::class);
     }
 
-    public function lineups(): HasMany
+    public function racers(): HasMany
     {
-        return $this->hasMany(Lineup::class);
+        return $this->hasMany(Racer::class);
     }
 }

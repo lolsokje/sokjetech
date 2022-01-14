@@ -7,7 +7,7 @@ use App\Models\Entrant;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LineupFactory extends Factory
+class RacerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,7 @@ class LineupFactory extends Factory
     {
         return [
             'season_id' => Season::factory()->create(),
-            'driver_id' => Driver::factory()->create(),
+            'driver_id' => Driver::factory(),
             'entrant_id' => Entrant::factory()->create(),
             'number' => $this->faker->numberBetween(2, 999),
             'rating' => $this->faker->numberBetween(20, 40),
