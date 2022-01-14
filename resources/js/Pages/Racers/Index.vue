@@ -1,12 +1,17 @@
 <template>
 	<h3>Drivers</h3>
 
+	<input id="edit-mode" v-model="editMode" class="mb-3 form-check-inline" type="checkbox">
+	<label class="form-check-label" for="edit-mode">Edit mode?</label>
+
 	<table class="table table-bordered table-dark">
 		<thead>
 		<tr class="text-center">
 			<th>Team name</th>
+			<th v-if="editMode">Manage</th>
 			<th>Driver</th>
 			<th>#</th>
+			<th v-if="editMode">Manage</th>
 			<th>Team</th>
 			<th>Driver</th>
 			<th>Engine</th>
@@ -16,8 +21,18 @@
 		<tbody>
 		<tr v-for="driver in drivers" :key="driver.id">
 			<td :style="driver.style_string">{{ driver.team_name }}</td>
+			<td v-if="editMode" class="small-centered">
+				<InertiaLink :href="route('seasons.entrants.edit', [season, driver.entrant])">
+					entrant
+				</InertiaLink>
+			</td>
 			<td>{{ driver.driver_name }}</td>
 			<td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
+			<td v-if="editMode" class="small-centered">
+				<InertiaLink :href="route('seasons.racers.create', [season, driver.entrant])">
+					driver
+				</InertiaLink>
+			</td>
 			<td class="small-centered">{{ driver.team_rating }}</td>
 			<td class="small-centered">{{ driver.driver_rating }}</td>
 			<td class="small-centered">{{ driver.engine_rating }}</td>
@@ -28,7 +43,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
 	season: {
@@ -42,6 +57,7 @@ const props = defineProps({
 });
 
 const drivers = ref([]);
+const editMode = ref(false);
 
 onMounted(() => {
 	props.racers.forEach((racer) => {
@@ -58,12 +74,19 @@ onMounted(() => {
 			driver_rating: racer.rating,
 			engine_rating: engineRating,
 			total_rating: totalRating,
+			entrant: entrant,
 		});
 	});
 
 	drivers.value.sort((a, b) => {
 		return a.total_rating < b.total_rating;
 	});
+
+	editMode.value = localStorage.getItem('racers_edit_mode') === 'true';
+});
+
+watch(editMode, () => {
+	localStorage.setItem('racers_edit_mode', editMode.value.toString());
 });
 </script>
 
