@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('seasons.entrants.index', [season])" label="entrant overview"/>
+
 	<h2>{{ entrant.full_name }}'s drivers</h2>
 
 	<form class="form-narrow" @submit.prevent="form.post(route('seasons.racers.store', [season, entrant]))">
@@ -46,6 +48,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import SearchableDropdown from '../../Shared/SearchableDropdown';
 import { onMounted, reactive, ref } from 'vue';
 import Errors from '../../Shared/Errors';
+import BackLink from '../../Shared/BackLink';
 
 const props = defineProps({
 	season: {
