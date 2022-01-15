@@ -20,6 +20,15 @@
 						</InertiaLink>
 					</li>
 				</ul>
+
+				<p class="mt-2 mb-0 ps-3">Development</p>
+				<ul class="nav flex-column">
+					<li class="nav-item">
+						<InertiaLink :href="route('seasons.development.drivers', [season])" class="nav-link">
+							Driver
+						</InertiaLink>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</Base>

@@ -75,6 +75,14 @@ a {
       padding: 0;
       vertical-align: middle;
     }
+
+    &.big-centered {
+      width: 200px;
+      max-width: 200px;
+      text-align: center;
+      padding: 0;
+      vertical-align: middle;
+    }
   }
 
   th {
