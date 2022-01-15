@@ -10,7 +10,7 @@
 		<div class="col-4">
 			<input id="drivers-max" v-model="state.max" class="form-control" type="number">
 		</div>
-		<button class="btn btn-primary" @click.prevent="applyDriverDevRanges">Apply</button>
+		<button class="btn btn-primary" @click.prevent="applyDevRanges">Apply</button>
 
 		<div class="col-4">
 			<input id="edit-mode" v-model="state.hideInputs" class="form-check-inline mt-auto me-2"
@@ -19,13 +19,13 @@
 		</div>
 
 		<div class="ms-auto">
-			<button :disabled="!driverDevCompleted" class="btn btn-success" @click.prevent="runDriverDev">
+			<button :disabled="!devCompleted" class="btn btn-success" @click.prevent="runDev">
 				Run dev
 			</button>
 		</div>
 	</div>
 
-	<form @submit.prevent="storeDriverDev">
+	<form @submit.prevent="storeDev">
 		<table id="screenshot-target" class="table table-bordered table-dark">
 			<thead>
 			<tr>
@@ -33,22 +33,22 @@
 				<th>Driver</th>
 				<th>Team</th>
 				<th class="text-center">Current</th>
-				<th v-if="driverInputsHidden" class="text-center">Min</th>
-				<th v-if="driverInputsHidden" class="text-center">Max</th>
+				<th v-if="inputsHidden" class="text-center">Min</th>
+				<th v-if="inputsHidden" class="text-center">Max</th>
 				<th class="text-center">Dev</th>
 				<th class="text-center">New</th>
 			</tr>
 			</thead>
 			<tbody>
-			<tr v-for="driver in driverDevelopmentForm.drivers" :key="driver.id">
+			<tr v-for="driver in form.drivers" :key="driver.id">
 				<td :style="driver.team_style" class="small-centered">{{ driver.number }}</td>
 				<td>{{ driver.full_name }}</td>
 				<td :style="driver.team_style">{{ driver.team_name }}</td>
 				<td class="small-centered">{{ driver.rating }}</td>
-				<td v-if="driverInputsHidden" class="big-centered px-3">
+				<td v-if="inputsHidden" class="big-centered px-3">
 					<input v-model="driver.min" class="form-control" type="number">
 				</td>
-				<td v-if="driverInputsHidden" class="big-centered px-3">
+				<td v-if="inputsHidden" class="big-centered px-3">
 					<input v-model="driver.max" class="form-control" type="number">
 				</td>
 				<td class="small-centered">{{ driver.dev }}</td>
@@ -59,7 +59,7 @@
 
 		<div class="d-flex">
 			<CopyScreenshotButton/>
-			<button :disabled="driverDevCompleted" class="btn btn-primary ms-auto" type="submit">Save dev</button>
+			<button :disabled="devCompleted" class="btn btn-primary ms-auto" type="submit">Save dev</button>
 		</div>
 	</form>
 </template>
@@ -89,11 +89,11 @@ const state = reactive({
 	max: 0,
 });
 
-const driverDevelopmentForm = useForm({
+const form = useForm({
 	drivers: [],
 });
 
-function applyDriverDevRanges () {
+function applyDevRanges () {
 	const min = state.min;
 	const max = state.max;
 
@@ -104,20 +104,20 @@ function applyDriverDevRanges () {
 		state.error = null;
 	}
 
-	driverDevelopmentForm.drivers.forEach((driver) => {
+	form.drivers.forEach((driver) => {
 		driver.min = Math.round(min);
 		driver.max = Math.round(max);
 	});
 }
 
-function runDriverDev () {
+function runDev () {
 	verifyDevRanges();
 
 	if (state.error !== null) {
 		return;
 	}
 
-	driverDevelopmentForm.drivers.forEach((driver) => {
+	form.drivers.forEach((driver) => {
 		performDev(driver);
 	});
 
@@ -127,26 +127,26 @@ function runDriverDev () {
 function verifyDevRanges () {
 	state.error = null;
 
-	driverDevelopmentForm.drivers.forEach((driver) => {
+	form.drivers.forEach((driver) => {
 		if (driver.min >= driver.max) {
 			state.error = `The minimum bound for ${driver.full_name} must be lower than the maximum bound`;
 		}
 	});
 }
 
-function storeDriverDev () {
-	driverDevelopmentForm.post(route('seasons.development.drivers.store', [props.season]), {
+function storeDev () {
+	form.post(route('seasons.development.drivers.store', [props.season]), {
 		preserveState: true,
 		onSuccess: () => state.devCompleted = false,
 	});
 }
 
-const driverDevCompleted = computed(() => !state.devCompleted);
-const driverInputsHidden = computed(() => !state.hideInputs);
+const devCompleted = computed(() => !state.devCompleted);
+const inputsHidden = computed(() => !state.hideInputs);
 
 onMounted(() => {
 	props.drivers.forEach((driver) => {
-		driverDevelopmentForm.drivers.push({
+		form.drivers.push({
 			id: driver.id,
 			number: driver.number,
 			team_name: driver.entrant.full_name,
@@ -160,7 +160,7 @@ onMounted(() => {
 		});
 	});
 
-	driverDevelopmentForm.drivers.sort((a, b) => a.team_name.localeCompare(b.team_name));
+	form.drivers.sort((a, b) => a.team_name.localeCompare(b.team_name));
 });
 </script>
 
