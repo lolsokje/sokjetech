@@ -25,7 +25,7 @@
 		</div>
 	</div>
 
-	<form @submit.prevent="storeDev">
+	<form @submit.prevent="store">
 		<table id="screenshot-target" class="table table-bordered table-dark">
 			<thead>
 			<tr>
@@ -64,7 +64,7 @@
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed, onMounted, reactive } from 'vue';
 import CopyScreenshotButton from '../../Shared/CopyScreenshotButton';
-import { performDev } from '../../Utilities/Development';
+import Development from '../../Utilities/Development';
 
 const props = defineProps({
 	season: {
@@ -90,51 +90,25 @@ const form = useForm({
 });
 
 function applyDevRanges () {
-	const min = state.min;
-	const max = state.max;
-
-	if (min >= max) {
-		state.error = 'The minimum bound must be lower than the maximum bound';
-		return;
+	state.error = null;
+	if (Development.validateDevRange(state)) {
+		Development.applyDevRangesToItems(form.teams, state);
 	} else {
-		state.error = null;
+		state.error = 'The minimum bound must be equal to or lower than the maximum bound.';
 	}
-
-	form.teams.forEach((team) => {
-		team.min = Math.round(min);
-		team.max = Math.round(max);
-	});
 }
 
 function runDev () {
-	verifyDevRanges();
-
-	if (state.error !== null) {
-		return;
-	}
-
-	form.teams.forEach((team) => {
-		performDev(team);
-	});
-
-	state.devCompleted = true;
-}
-
-function verifyDevRanges () {
 	state.error = null;
-
-	form.teams.forEach((team) => {
-		if (team.min >= team.max) {
-			state.error = `The minimum bound for ${team.full_name} must be lower than the maximum bound`;
-		}
-	});
+	if (Development.performDev(form.teams)) {
+		state.devCompleted = true;
+	} else {
+		state.error = 'One of the teams\' dev ranges are invalid, the minimum bound must be equal to or lower than the maximum bound.';
+	}
 }
 
-function storeDev () {
-	form.post(route('seasons.development.teams.store', [props.season]), {
-		preserveState: true,
-		onSuccess: () => state.devCompleted = false,
-	});
+function store () {
+	Development.storeDev(form, route('seasons.development.teams.store', [props.season]), state);
 }
 
 const devCompleted = computed(() => !state.devCompleted);
