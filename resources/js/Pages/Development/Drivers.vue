@@ -25,9 +25,8 @@
 		</div>
 	</div>
 
-	<form
-		@submit.prevent="storeDriverDev">
-		<table class="table table-bordered table-dark">
+	<form @submit.prevent="storeDriverDev">
+		<table id="screenshot-target" class="table table-bordered table-dark">
 			<thead>
 			<tr>
 				<th class="text-center">#</th>
@@ -59,6 +58,7 @@
 		</table>
 
 		<div class="d-flex">
+			<CopyScreenshotButton/>
 			<button :disabled="driverDevCompleted" class="btn btn-primary ms-auto" type="submit">Save dev</button>
 		</div>
 	</form>
@@ -67,6 +67,8 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed, onMounted, reactive } from 'vue';
+import CopyScreenshotButton from '../../Shared/CopyScreenshotButton';
+import { performDev } from '../../Utilities/Development';
 
 const props = defineProps({
 	season: {
@@ -116,12 +118,7 @@ function runDriverDev () {
 	}
 
 	driverDevelopmentForm.drivers.forEach((driver) => {
-		const min = driver.min;
-		const max = driver.max;
-
-		const dev = Math.round(Math.random() * (max - min) + min);
-		driver.dev = dev;
-		driver.new = driver.rating + dev;
+		performDev(driver);
 	});
 
 	state.devCompleted = true;
@@ -141,17 +138,6 @@ function storeDriverDev () {
 	driverDevelopmentForm.post(route('seasons.development.drivers.store', [props.season]), {
 		preserveState: true,
 		onSuccess: () => state.devCompleted = false,
-	});
-}
-
-function resetDriverDev () {
-	state.min = 0;
-	state.max = 0;
-
-	driverDevelopmentForm.drivers.forEach((driver) => {
-		driver.min = 0;
-		driver.max = 0;
-		driver.dev = 0;
 	});
 }
 
