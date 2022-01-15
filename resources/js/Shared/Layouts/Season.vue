@@ -28,6 +28,11 @@
 							Driver
 						</InertiaLink>
 					</li>
+					<li class="nav-item">
+						<InertiaLink :href="route('seasons.development.teams', [season])" class="nav-link">
+							Teams
+						</InertiaLink>
+					</li>
 				</ul>
 			</div>
 		</div>
