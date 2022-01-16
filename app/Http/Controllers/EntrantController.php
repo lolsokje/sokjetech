@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EntrantCreateRequest;
 use App\Models\Entrant;
 use App\Models\Season;
-use Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -24,9 +23,6 @@ class EntrantController extends Controller
             'season' => $season->load([
                 'entrants' => fn(HasMany $query) => $query->orderBy('full_name')->with('engine')
             ]),
-            'can' => [
-                'edit' => Gate::check('owns-universe', $season->universe),
-            ],
         ]);
     }
 
@@ -38,9 +34,6 @@ class EntrantController extends Controller
             'season' => $season,
             'teams' => $season->teams,
             'engines' => $season->engines,
-            'can' => [
-                'edit' => Gate::check('owns-universe', $season->universe),
-            ],
         ]);
     }
 
@@ -62,9 +55,6 @@ class EntrantController extends Controller
             'teams' => $season->teams,
             'engines' => $season->engines,
             'entrant' => $entrant,
-            'can' => [
-                'edit' => Gate::check('owns-universe', $season->universe),
-            ],
         ]);
     }
 

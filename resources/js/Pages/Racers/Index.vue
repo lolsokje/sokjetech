@@ -1,17 +1,19 @@
 <template>
 	<h3>Drivers</h3>
 
-	<input id="edit-mode" v-model="editMode" class="mb-3 form-check-inline" type="checkbox">
-	<label class="form-check-label" for="edit-mode">Edit mode?</label>
+	<template v-if="can.edit">
+		<input id="edit-mode" v-model="editMode" class="mb-3 form-check-inline" type="checkbox">
+		<label class="form-check-label" for="edit-mode">Edit mode?</label>
+	</template>
 
 	<table class="table table-bordered table-dark">
 		<thead>
 		<tr class="text-center">
 			<th>Team name</th>
-			<th v-if="editMode">Manage</th>
+			<th v-if="canEdit">Manage</th>
 			<th>Driver</th>
 			<th>#</th>
-			<th v-if="editMode">Manage</th>
+			<th v-if="canEdit">Manage</th>
 			<th>Team</th>
 			<th>Driver</th>
 			<th>Engine</th>
@@ -21,14 +23,14 @@
 		<tbody>
 		<tr v-for="driver in drivers" :key="driver.id">
 			<td :style="driver.style_string">{{ driver.team_name }}</td>
-			<td v-if="editMode" class="small-centered">
+			<td v-if="canEdit" class="small-centered">
 				<InertiaLink :href="route('seasons.entrants.edit', [season, driver.entrant])">
 					entrant
 				</InertiaLink>
 			</td>
 			<td>{{ driver.driver_name }}</td>
 			<td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
-			<td v-if="editMode" class="small-centered">
+			<td v-if="canEdit" class="small-centered">
 				<InertiaLink :href="route('seasons.racers.create', [season, driver.entrant])">
 					driver
 				</InertiaLink>
@@ -54,10 +56,15 @@ const props = defineProps({
 		type: Array,
 		required: true,
 	},
+	can: {
+		type: Object,
+		required: true,
+	},
 });
 
 const drivers = ref([]);
 const editMode = ref(false);
+const canEdit = ref(props.can.edit && editMode);
 
 onMounted(() => {
 	props.racers.forEach((racer) => {

@@ -21,19 +21,21 @@
 					</li>
 				</ul>
 
-				<p class="mt-2 mb-0 ps-3">Development</p>
-				<ul class="nav flex-column">
-					<li class="nav-item">
-						<InertiaLink :href="route('seasons.development.drivers', [season])" class="nav-link">
-							Driver
-						</InertiaLink>
-					</li>
-					<li class="nav-item">
-						<InertiaLink :href="route('seasons.development.teams', [season])" class="nav-link">
-							Teams
-						</InertiaLink>
-					</li>
-				</ul>
+				<template v-if="can.edit">
+					<p class="mt-2 mb-0 ps-3">Development</p>
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<InertiaLink :href="route('seasons.development.drivers', [season])" class="nav-link">
+								Driver
+							</InertiaLink>
+						</li>
+						<li class="nav-item">
+							<InertiaLink :href="route('seasons.development.teams', [season])" class="nav-link">
+								Teams
+							</InertiaLink>
+						</li>
+					</ul>
+				</template>
 			</div>
 		</div>
 	</Base>
@@ -44,6 +46,10 @@ import Base from './Base';
 
 defineProps({
 	season: {
+		type: Object,
+		required: true,
+	},
+	can: {
 		type: Object,
 		required: true,
 	},
