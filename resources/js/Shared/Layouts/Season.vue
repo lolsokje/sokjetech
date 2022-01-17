@@ -22,15 +22,31 @@
 				</ul>
 
 				<template v-if="can.edit">
-					<p class="mt-2 mb-0 ps-3">Development</p>
+					<p class="mt-3 mb-0 ps-3">Development</p>
 					<ul class="nav flex-column">
 						<li class="nav-item">
 							<InertiaLink :href="route('seasons.development.drivers', [season])" class="nav-link">
-								Driver
+								Drivers
 							</InertiaLink>
 						</li>
 						<li class="nav-item">
 							<InertiaLink :href="route('seasons.development.teams', [season])" class="nav-link">
+								Teams
+							</InertiaLink>
+						</li>
+					</ul>
+
+					<p class="mt-3 mb-0 ps-3">Reliability</p>
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<InertiaLink :href="route('seasons.development.reliability.drivers', [season])"
+										 class="nav-link">
+								Drivers
+							</InertiaLink>
+						</li>
+						<li class="nav-item">
+							<InertiaLink :href="route('seasons.development.reliability.teams', [season])"
+										 class="nav-link">
 								Teams
 							</InertiaLink>
 						</li>
