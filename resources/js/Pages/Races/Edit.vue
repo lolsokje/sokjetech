@@ -16,7 +16,7 @@
 
 		<button class="btn btn-primary my-3" @click.prevent="addStint">Add stint</button>
 
-		<table class="table table-borderless table-dark">
+		<table class="table table-bordered table-dark">
 			<thead>
 			<tr class="text-center">
 				<th>Stint</th>
@@ -31,15 +31,15 @@
 			</thead>
 			<tbody>
 			<tr v-for="stint in form.stints" :key="stint.number" class="text-center">
-				<td>{{ stint.number }}</td>
+				<td class="small-centered">{{ stint.number }}</td>
 				<td><input v-model="stint.min_rng" class="form-control-sm" type="number"></td>
 				<td><input v-model="stint.max_rng" class="form-control-sm" type="number"></td>
 				<td><input v-model="stint.reliability" type="checkbox"></td>
 				<td><input v-model="stint.use_team_rating" type="checkbox"></td>
 				<td><input v-model="stint.use_driver_rating" type="checkbox"></td>
 				<td><input v-model="stint.use_engine_rating" type="checkbox"></td>
-				<td><span v-if="form.stints.length > 1" class="text-primary" role="button"
-						  @click="deleteStint(stint.number)">delete stint</span></td>
+				<td class="big-centered"><span v-if="form.stints.length > 1" class="text-primary" role="button"
+											   @click="deleteStint(stint.number)">delete stint</span></td>
 			</tr>
 			</tbody>
 		</table>

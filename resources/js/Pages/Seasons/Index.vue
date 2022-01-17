@@ -7,7 +7,7 @@
 		Create season
 	</InertiaLink>
 
-	<table class="table table-borderless table-dark">
+	<table class="table table-bordered table-dark table-narrow">
 		<thead>
 		<tr>
 			<th>Year</th>
@@ -17,10 +17,10 @@
 		<tbody>
 		<tr v-for="season in series.seasons" :key="season.id">
 			<td>{{ season.year }}</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink v-if="can.edit" :href="route('series.seasons.edit', [series, season])">edit</InertiaLink>
 			</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink :href="route('series.seasons.show', [series, season])">view</InertiaLink>
 			</td>
 		</tr>

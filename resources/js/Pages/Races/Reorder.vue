@@ -6,7 +6,7 @@
 			<fa icon="info-circle"/>
 			<i class="ms-2">drag and drop to reorder races</i>
 		</p>
-		<table class="table table-borderless table-dark">
+		<table class="table table-bordered table-dark">
 			<thead>
 			<tr>
 				<th>#</th>
@@ -16,7 +16,7 @@
 			<tbody>
 			<tr v-for="race in form.races" :key="race.id" :data-race="race.id" draggable="true" role="button"
 				@dragstart="dragStart($event, race.id)" @dragover.prevent="" @drop.prevent="drop">
-				<td>{{ race.order }}</td>
+				<td class="small-centered">{{ race.order }}</td>
 				<td>{{ race.name }}</td>
 			</tr>
 			</tbody>

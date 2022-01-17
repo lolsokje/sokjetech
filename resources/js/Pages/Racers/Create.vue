@@ -18,7 +18,7 @@
 		<button class="btn btn-primary" type="button" @click.prevent="addDriver">Add driver</button>
 
 		<p class="mt-3">Current drivers</p>
-		<table class="table table-borderless table-dark my-3">
+		<table class="table table-bordered table-dark my-3">
 			<thead>
 			<tr>
 				<th>Driver</th>
@@ -29,8 +29,8 @@
 			<tbody>
 			<tr v-for="driver in form.drivers" :key="driver.id">
 				<td>{{ driver.full_name }}</td>
-				<td>{{ driver.number }}</td>
-				<td>
+				<td class="small-centered">{{ driver.number }}</td>
+				<td class="small-centered">
 					<button class="btn btn-link p-0" role="button" @click.prevent="removeDriver(driver.id)">
 						delete
 					</button>

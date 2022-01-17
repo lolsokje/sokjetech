@@ -7,7 +7,7 @@
 		Add engine
 	</InertiaLink>
 
-	<table class="table table-borderless table-dark">
+	<table class="table table-bordered table-dark table-narrow">
 		<thead>
 		<tr>
 			<th>Name</th>
@@ -17,7 +17,7 @@
 		<tbody>
 		<tr v-for="engine in series.engines" :key="engine.id">
 			<td>{{ engine.name }}</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink v-if="can.edit" :href="route('series.engines.edit', [series, engine])">edit</InertiaLink>
 			</td>
 		</tr>

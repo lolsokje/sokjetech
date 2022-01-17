@@ -7,7 +7,7 @@
 		Add driver
 	</InertiaLink>
 
-	<table class="table table-borderless table-dark">
+	<table class="table table-bordered table-dark">
 		<thead>
 		<tr>
 			<th>Driver name</th>
@@ -20,8 +20,8 @@
 		<tr v-for="driver in universe.drivers" :key="driver.id">
 			<td>{{ driver.full_name }}</td>
 			<td>{{ driver.readable_dob }}</td>
-			<td>{{ driver.country }}</td>
-			<td>
+			<td class="small-centered">{{ driver.country }}</td>
+			<td class="small-centered">
 				<InertiaLink v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">
 					edit
 				</InertiaLink>

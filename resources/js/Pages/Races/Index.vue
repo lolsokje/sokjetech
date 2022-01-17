@@ -11,24 +11,24 @@
 		Reorder races
 	</InertiaLink>
 
-	<table class="table table-borderless table-dark">
+	<table class="table table-bordered table-dark">
 		<thead>
 		<tr>
-			<th>#</th>
+			<th class="text-center">#</th>
 			<th>Name</th>
-			<th>Completed</th>
+			<th class="text-center">Completed</th>
 			<th></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr v-for="race in season.races" :key="race.id">
-			<td>{{ race.order }}</td>
+			<td class="small-centered">{{ race.order }}</td>
 			<td>{{ race.name }}</td>
-			<td>
+			<td class="big-centered">
 				<fa v-if="race.completed" icon="check"/>
 				<fa v-else icon="times"/>
 			</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink v-if="can.edit && !race.completed" :href="route('seasons.races.edit', [season, race])">
 					edit
 				</InertiaLink>

@@ -7,7 +7,7 @@
 		Add team
 	</InertiaLink>
 
-	<table class="table table-borderless table-dark">
+	<table class="table table-bordered table-dark">
 		<thead>
 		<tr>
 			<th>Full name</th>
@@ -22,8 +22,8 @@
 			<td :style="team.style_string">{{ team.full_name }}</td>
 			<td>{{ team.short_name }}</td>
 			<td>{{ team.team_principal }}</td>
-			<td>{{ team.country }}</td>
-			<td>
+			<td class="small-centered">{{ team.country }}</td>
+			<td class="small-centered">
 				<InertiaLink v-if="can.edit" :href="route('universes.teams.edit', [universe, team])">edit</InertiaLink>
 			</td>
 		</tr>

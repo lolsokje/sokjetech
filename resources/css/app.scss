@@ -56,6 +56,10 @@ a {
   width: 50%;
 }
 
+.table-narrow {
+  width: 50%;
+}
+
 .table-dark {
   & > :not(:first-child) {
     border-top: none;
@@ -92,7 +96,7 @@ a {
 
   tbody {
     tr, td {
-      padding: 1rem 0 1rem 1rem;
+      padding: 0.5rem 0 0.5rem 1rem;
     }
 
     tr:hover {

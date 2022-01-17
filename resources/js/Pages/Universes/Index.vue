@@ -3,7 +3,7 @@
 
 	<InertiaLink :href="route('universes.create')" class="btn btn-primary my-3">Add universe</InertiaLink>
 
-	<table v-if="universes.length" class="table table-borderless table-dark">
+	<table v-if="universes.length" class="table table-bordered table-dark table-narrow">
 		<thead>
 		<tr>
 			<th>Name</th>
@@ -14,10 +14,10 @@
 		<tbody>
 		<tr v-for="universe in universes" v-bind:key="universe.id">
 			<td>{{ universe.name }}</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink v-if="universe.can.edit" :href="route('universes.edit', universe)">edit</InertiaLink>
 			</td>
-			<td>
+			<td class="small-centered">
 				<InertiaLink :href="route('universes.show', universe)">view</InertiaLink>
 			</td>
 		</tr>

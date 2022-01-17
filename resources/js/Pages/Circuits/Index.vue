@@ -6,7 +6,7 @@
 	<template v-if="circuits.data.length">
 		<input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
 
-		<table class="table table-borderless table-dark">
+		<table class="table table-bordered table-dark">
 			<thead>
 			<tr>
 				<th role="button" @click="sort('name')">
@@ -24,7 +24,7 @@
 			<tr v-for="circuit in circuits.data" v-bind:key="circuit.id">
 				<td>{{ circuit.name }}</td>
 				<td>{{ circuit.country }}</td>
-				<td>
+				<td class="small-centered">
 					<InertiaLink :href="route('circuits.edit', circuit)">edit</InertiaLink>
 				</td>
 			</tr>
