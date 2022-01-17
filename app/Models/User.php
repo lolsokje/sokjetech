@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
+use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, Uuids;
+    use HasFactory, Notifiable, Snowflake;
 
     public function circuits(): HasMany
     {

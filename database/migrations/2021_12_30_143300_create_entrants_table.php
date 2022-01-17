@@ -14,10 +14,10 @@ class CreateEntrantsTable extends Migration
     public function up()
     {
         Schema::create('entrants', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('season_id')->constrained();
-            $table->foreignUuid('team_id')->constrained();
-            $table->foreignUuid('engine_id')->nullable()->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('season_id')->constrained();
+            $table->foreignId('team_id')->constrained();
+            $table->foreignId('engine_id')->nullable()->constrained();
             $table->string('full_name');
             $table->string('short_name');
             $table->string('team_principal');

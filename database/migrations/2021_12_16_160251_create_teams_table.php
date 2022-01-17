@@ -14,8 +14,8 @@ class CreateTeamsTable extends Migration
     public function up()
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('universe_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('universe_id')->constrained();
             $table->string('full_name');
             $table->string('short_name');
             $table->string('team_principal');

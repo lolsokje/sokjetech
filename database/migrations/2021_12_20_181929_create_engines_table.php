@@ -14,8 +14,8 @@ class CreateEnginesTable extends Migration
     public function up()
     {
         Schema::create('engines', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('series_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('series_id')->constrained();
             $table->string('name');
             $table->timestamps();
         });

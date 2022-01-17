@@ -14,8 +14,8 @@ class CreateSeasonsTable extends Migration
     public function up()
     {
         Schema::create('seasons', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('series_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('series_id')->constrained();
             $table->integer('year');
             $table->timestamps();
         });

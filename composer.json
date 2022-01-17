@@ -11,6 +11,7 @@
     "php": "^8.0",
     "friendsofphp/php-cs-fixer": "^3.3",
     "fruitcake/laravel-cors": "^2.0",
+    "godruoyi/php-snowflake": "^2.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "inertiajs/inertia-laravel": "^0.4.5",
     "laravel/framework": "^8.77",
