@@ -55,8 +55,8 @@ function dragStart (event, id) {
 
 function drop (event) {
 	const droppedOnRaceId = event.target.parentNode.dataset.race;
-	const droppedOn = form.races.find((race) => race.id === droppedOnRaceId);
-	const dragged = form.races.find((race) => race.id === event.dataTransfer.getData('id'));
+	const droppedOn = form.races.find((race) => parseInt(race.id) === parseInt(droppedOnRaceId));
+	const dragged = form.races.find((race) => parseInt(race.id) === parseInt(event.dataTransfer.getData('id')));
 
 	if (droppedOn.id === dragged.id) {
 		return;
