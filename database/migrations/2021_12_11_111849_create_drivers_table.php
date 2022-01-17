@@ -14,8 +14,8 @@ class CreateDriversTable extends Migration
     public function up()
     {
         Schema::create('drivers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('universe_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('universe_id')->constrained();
             $table->string('first_name');
             $table->string('last_name');
             $table->date('dob')->nullable();

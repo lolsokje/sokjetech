@@ -14,8 +14,8 @@ class CreateUniversesTable extends Migration
     public function up()
     {
         Schema::create('universes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->unsignedInteger('visibility');
             $table->timestamps();

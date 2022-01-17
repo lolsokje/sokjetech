@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
+use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Racer extends Model
 {
-    use HasFactory, Uuids;
+    use HasFactory, Snowflake;
 
     protected $casts = [
         'number' => 'integer',

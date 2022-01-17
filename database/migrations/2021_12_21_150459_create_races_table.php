@@ -14,9 +14,9 @@ class CreateRacesTable extends Migration
     public function up()
     {
         Schema::create('races', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('season_id')->constrained();
-            $table->foreignUuid('circuit_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('season_id')->constrained();
+            $table->foreignId('circuit_id')->constrained();
             $table->string('name');
             $table->json('stints');
             $table->unsignedInteger('order')->nullable();

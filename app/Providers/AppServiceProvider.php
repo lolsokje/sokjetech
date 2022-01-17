@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\Universe;
 use App\Models\User;
 use Gate;
+use Godruoyi\Snowflake\RandomSequenceResolver;
+use Godruoyi\Snowflake\Snowflake;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +19,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('snowflake', function () {
+            return (new Snowflake(
+                config('snowflake.data_center'),
+                config('snowflake.worker_node'))
+            )
+                ->setStartTimeStamp(strtotime('2022-01-17') * 1000)
+                ->setSequenceResolver(new RandomSequenceResolver());
+        });
     }
 
     /**

@@ -14,10 +14,10 @@ class CreateRacersTable extends Migration
     public function up()
     {
         Schema::create('racers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('season_id')->nullable()->constrained();
-            $table->foreignUuid('driver_id')->nullable()->constrained();
-            $table->foreignUuid('entrant_id')->nullable()->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('season_id')->nullable()->constrained();
+            $table->foreignId('driver_id')->nullable()->constrained();
+            $table->foreignId('entrant_id')->nullable()->constrained();
             $table->unsignedInteger('number');
             $table->unsignedInteger('rating')->default(0);
             $table->unsignedInteger('reliability')->default(0);

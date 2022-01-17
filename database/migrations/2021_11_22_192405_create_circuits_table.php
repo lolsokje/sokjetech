@@ -14,10 +14,10 @@ class CreateCircuitsTable extends Migration
     public function up()
     {
         Schema::create('circuits', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('id')->primary();
             $table->string('name');
             $table->string('country');
-            $table->foreignUuid('user_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

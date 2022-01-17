@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
+use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Universe extends Model
 {
-    use HasFactory, Uuids;
+    use HasFactory, Snowflake;
 
     public const VISIBILITY_PUBLIC = 1;
     public const VISIBILITY_PRIVATE = 2;

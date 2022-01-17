@@ -14,8 +14,8 @@ class CreateSeriesTable extends Migration
     public function up()
     {
         Schema::create('series', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('universe_id')->constrained();
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('universe_id')->constrained();
             $table->string('name');
             $table->timestamps();
         });
