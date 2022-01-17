@@ -7,7 +7,6 @@ use App\Models\Season;
 use App\Models\Series;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,9 +21,6 @@ class SeasonController extends Controller
     {
         return Inertia::render('Seasons/Index', [
             'series' => $series->load(['seasons' => fn(HasMany $query) => $query->orderBy('year')]),
-            'can' => [
-                'edit' => Gate::check('owns-universe', $series->universe),
-            ],
         ]);
     }
 

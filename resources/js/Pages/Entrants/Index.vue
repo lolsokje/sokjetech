@@ -13,7 +13,7 @@
 			<th>Team principal</th>
 			<th>Engine supplier</th>
 			<th>Country</th>
-			<th colspan="2"></th>
+			<th colspan="2" v-if="can.edit"></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -29,12 +29,14 @@
 				</span>
 			</td>
 			<td>{{ entrant.country }}</td>
-			<td class="small-centered">
-				<InertiaLink :href="route('seasons.entrants.edit', [season, entrant])">edit</InertiaLink>
-			</td>
-			<td class="small-centered">
-				<InertiaLink :href="route('seasons.racers.create', [season, entrant])">drivers</InertiaLink>
-			</td>
+			<template v-if="can.edit">
+				<td class="small-centered">
+					<InertiaLink :href="route('seasons.entrants.edit', [season, entrant])">edit</InertiaLink>
+				</td>
+				<td class="small-centered">
+					<InertiaLink :href="route('seasons.racers.create', [season, entrant])">drivers</InertiaLink>
+				</td>
+			</template>
 		</tr>
 		</tbody>
 	</table>

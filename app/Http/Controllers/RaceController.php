@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RaceCreateRequest;
 use App\Models\Race;
 use App\Models\Season;
-use Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,9 +22,6 @@ class RaceController extends Controller
     {
         return Inertia::render('Races/Index', [
             'season' => $season->load(['races' => fn(HasMany $query) => $query->orderBy('order')]),
-            'can' => [
-                'edit' => Gate::check('owns-universe', $season->universe),
-            ],
         ]);
     }
 

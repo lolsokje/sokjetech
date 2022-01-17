@@ -10,8 +10,16 @@ use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\ShowDriverDevelopmentPageController;
+use App\Http\Controllers\ShowDriverReliabilityController;
+use App\Http\Controllers\ShowTeamDevelopmentPageController;
+use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
+use App\Http\Controllers\UpdateDriverRatingsController;
+use App\Http\Controllers\UpdateDriverReliabilityController;
+use App\Http\Controllers\UpdateTeamRatingsController;
+use App\Http\Controllers\UpdateTeamReliabilityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [HomeController::class, 'index'])->name('index');
@@ -44,4 +52,20 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
     Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
+
+    Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
+        Route::get('drivers', ShowDriverDevelopmentPageController::class)->name('drivers');
+        Route::post('drivers', UpdateDriverRatingsController::class)->name('drivers.store');
+
+        Route::get('teams', ShowTeamDevelopmentPageController::class)->name('teams');
+        Route::post('teams', UpdateTeamRatingsController::class)->name('teams.store');
+
+        Route::group(['prefix' => 'reliability', 'as' => 'reliability.'], function () {
+            Route::get('drivers', ShowDriverReliabilityController::class)->name('drivers');
+            Route::post('drivers', UpdateDriverReliabilityController::class)->name('drivers.store');
+
+            Route::get('teams', ShowTeamReliabilityController::class)->name('teams');
+            Route::post('teams', UpdateTeamReliabilityController::class)->name('teams.store');
+        });
+    });
 });

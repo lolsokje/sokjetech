@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Universe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,13 +40,37 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array
      */
-    public function share(Request $request)
+    public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
+        $universe = $this->getUniverseFromRequest($request);
+
+        $props = array_merge(parent::share($request), [
             'auth.user' => fn() => $request->user()
                 ? $request->user()->only('username', 'avatar')
                 : null,
             'notice' => $request->session()->get('notice'),
         ]);
+
+        if ($universe) {
+            $props['can']['edit'] = Gate::check('owns-universe', $universe);
+        }
+
+        return $props;
+    }
+
+    private function getUniverseFromRequest(Request $request): ?Universe
+    {
+        $route = $request->route();
+
+        if ($route->hasParameter('universe')) {
+            return new Universe($route->parameter('universe')->toArray());
+        } elseif ($route->hasParameter('series')) {
+            $series = $route->parameter('series');
+            return $series->universe;
+        } elseif ($route->hasParameter('season')) {
+            $season = $route->parameter('season');
+            return $season->universe;
+        }
+        return null;
     }
 }
