@@ -13,8 +13,8 @@ class CircuitPolicy
     /**
      * Determine whether the user can alter (update or delete) the model.
      *
-     * @param User $user
-     * @param Circuit $circuit
+     * @param  User  $user
+     * @param  Circuit  $circuit
      *
      * @return bool
      */

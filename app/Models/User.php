@@ -13,6 +13,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, Snowflake;
 
+    protected $casts = [
+        'id' => 'integer',
+    ];
+
     public function circuits(): HasMany
     {
         return $this->hasMany(Circuit::class);
