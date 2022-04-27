@@ -2,7 +2,7 @@
 
 use App\Models\Circuit;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('an authenticated user can create a circuit', function () {
     $user = User::factory()->create();

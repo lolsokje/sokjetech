@@ -3,7 +3,7 @@
 use App\Models\Racer;
 use App\Models\Season;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can view the driver reliability page', function () {
     $user = User::factory()->create();

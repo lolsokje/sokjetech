@@ -3,7 +3,7 @@
 use App\Models\Series;
 use App\Models\Universe;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can create series in their universe', function () {
     $user = User::factory()->create();

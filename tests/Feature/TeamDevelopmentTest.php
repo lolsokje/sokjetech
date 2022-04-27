@@ -3,7 +3,7 @@
 use App\Models\Entrant;
 use App\Models\Season;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can view the team development page', function () {
     $user = User::factory()->create();

@@ -3,7 +3,7 @@
 use App\Models\Season;
 use App\Models\Series;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can create seasons', function () {
     $user = User::factory()->create();

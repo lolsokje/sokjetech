@@ -5,7 +5,7 @@ use App\Models\Race;
 use App\Models\Season;
 use App\Models\Universe;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can create races', function () {
     $user = User::factory()->create();

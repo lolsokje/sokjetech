@@ -2,7 +2,7 @@
 
 use App\Models\Universe;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('an autheorized user can create universes', function () {
     $user = User::factory()->create();

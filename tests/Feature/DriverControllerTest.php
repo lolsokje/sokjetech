@@ -3,7 +3,7 @@
 use App\Models\Driver;
 use App\Models\Universe;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can create drivers', function () {
     $user = User::factory()->create();

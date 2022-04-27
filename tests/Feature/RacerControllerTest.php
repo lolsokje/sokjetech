@@ -5,7 +5,7 @@ use App\Models\Entrant;
 use App\Models\Racer;
 use App\Models\Season;
 use App\Models\User;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can add drivers to entrants', function () {
     $user = User::factory()->create();
