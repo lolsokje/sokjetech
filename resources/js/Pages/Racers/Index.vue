@@ -9,6 +9,7 @@
 	<table class="table table-bordered table-dark">
 		<thead>
 		<tr class="text-center">
+			<th>#</th>
 			<th>Team name</th>
 			<th v-if="canEdit">Manage</th>
 			<th>Driver</th>
@@ -21,7 +22,8 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr v-for="driver in drivers" :key="driver.id">
+		<tr v-for="(driver, key) in drivers" :key="driver.id">
+			<td class="small-centered">{{ key + 1 }}</td>
 			<td :style="driver.style_string">{{ driver.team_name }}</td>
 			<td v-if="canEdit" class="small-centered">
 				<InertiaLink :href="route('seasons.entrants.edit', [season, driver.entrant])">
