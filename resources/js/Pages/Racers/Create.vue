@@ -29,7 +29,9 @@
 			<tbody>
 			<tr v-for="driver in form.drivers" :key="driver.id">
 				<td>{{ driver.full_name }}</td>
-				<td class="small-centered">{{ driver.number }}</td>
+				<td class="small-centered">
+					<input type="number" class="form-control text-center" v-model="driver.number">
+				</td>
 				<td class="small-centered">
 					<button class="btn btn-link p-0" role="button" @click.prevent="removeDriver(driver.id)">
 						delete
