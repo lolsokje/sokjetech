@@ -48,10 +48,10 @@
 </template>
 
 <script setup>
-import BackLink from '../../Shared/BackLink';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '../../Shared/Errors';
-import SearchableDropdown from '../../Shared/SearchableDropdown';
+import Errors from '@/Shared/Errors';
+import SearchableDropdown from '@/Shared/SearchableDropdown';
+import BackLink from '@/Shared/BackLink';
 
 const props = defineProps({
 	season: {
@@ -109,7 +109,7 @@ function setCircuit (circuit) {
 </script>
 
 <script>
-import Season from '../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

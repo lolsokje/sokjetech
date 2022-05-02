@@ -30,10 +30,10 @@
 </template>
 
 <script setup>
-import CountrySelect from '../../Shared/CountrySelect';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '../../Shared/Errors';
-import BackLink from '../../Shared/BackLink';
+import CountrySelect from '@/Shared/CountrySelect';
+import Errors from '@/Shared/Errors';
+import BackLink from '@/Shared/BackLink';
 
 const props = defineProps({
 	universe: {
@@ -59,7 +59,7 @@ function setCountry (country) {
 </script>
 
 <script>
-import Universe from '../../Shared/Layouts/Universe';
+import Universe from '@/Shared/Layouts/Universe';
 
 export default { layout: Universe };
 </script>

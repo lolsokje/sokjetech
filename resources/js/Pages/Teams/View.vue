@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <script>
-import Universe from '../../Shared/Layouts/Universe';
+import Universe from '@/Shared/Layouts/Universe';
 
 export default { layout: Universe };
 </script>

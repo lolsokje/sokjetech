@@ -17,8 +17,8 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '../../Shared/Errors';
-import CountrySelect from '../../Shared/CountrySelect';
+import Errors from '@/Shared/Errors';
+import CountrySelect from '@/Shared/CountrySelect';
 
 const props = defineProps({
 	circuit: { type: Object, required: true },

@@ -47,10 +47,10 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import SearchableDropdown from '../../Shared/SearchableDropdown';
 import { onMounted, reactive, ref } from 'vue';
-import Errors from '../../Shared/Errors';
-import BackLink from '../../Shared/BackLink';
+import SearchableDropdown from '@/Shared/SearchableDropdown';
+import Errors from '@/Shared/Errors';
+import BackLink from '@/Shared/BackLink';
 
 const props = defineProps({
 	season: {
@@ -149,7 +149,7 @@ function getDriverInformation (driver) {
 </script>
 
 <script>
-import Season from '../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

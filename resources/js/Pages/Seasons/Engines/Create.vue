@@ -48,10 +48,10 @@
 </template>
 
 <script setup>
-import BackLink from '../../../Shared/BackLink';
-import Errors from '../../../Shared/Errors';
 import { computed, reactive, watch } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
+import BackLink from '@/Shared/BackLink';
+import Errors from '@/Shared/Errors';
 
 const props = defineProps({
 	season: {
@@ -98,7 +98,7 @@ watch(state, (newState) => {
 </script>
 
 <script>
-import Season from '../../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

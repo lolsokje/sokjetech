@@ -24,10 +24,9 @@
 </template>
 
 <script setup>
-
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '../../Shared/Errors';
-import BackLink from '../../Shared/BackLink';
+import Errors from '@/Shared/Errors';
+import BackLink from '@/Shared/BackLink';
 
 const props = defineProps({
 	visibilities: {

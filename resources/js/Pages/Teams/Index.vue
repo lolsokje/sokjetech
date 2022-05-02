@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import BackLink from '../../Shared/BackLink';
+import BackLink from '@/Shared/BackLink';
 
 defineProps({
 	universe: {
@@ -47,7 +47,7 @@ defineProps({
 </script>
 
 <script>
-import Universe from '../../Shared/Layouts/Universe';
+import Universe from '@/Shared/Layouts/Universe';
 
 export default { layout: Universe };
 </script>

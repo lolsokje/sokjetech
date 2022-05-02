@@ -90,12 +90,12 @@
 </template>
 
 <script setup>
-import BackLink from '../../Shared/BackLink';
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Development from '../../Utilities/Development';
-import DevelopmentEngine from '../../Utilities/DevelopmentEngine';
-import CopyScreenshotButton from '../../Shared/CopyScreenshotButton';
+import Development from '@/Utilities/Development';
+import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
+import BackLink from '@/Shared/BackLink';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
 	season: {
@@ -169,7 +169,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import BackLink from '../../../Shared/BackLink';
-import TeamDevelopment from '../../../Shared/TeamDevelopment';
+import BackLink from '@/Shared/BackLink';
+import TeamDevelopment from '@/Shared/TeamDevelopment';
 
 defineProps({
 	season: {
@@ -24,7 +24,7 @@ defineProps({
 </script>
 
 <script>
-import Season from '../../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

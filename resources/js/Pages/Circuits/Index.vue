@@ -36,10 +36,10 @@
 </template>
 
 <script setup>
-import Pagination from '../../Shared/Pagination';
 import { reactive, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
-import OrderIcon from '../../Shared/OrderIcon';
+import OrderIcon from '@/Shared/OrderIcon';
+import Pagination from '@/Shared/Pagination';
 
 const props = defineProps({
 	circuits: {

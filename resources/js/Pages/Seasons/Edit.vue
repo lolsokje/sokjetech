@@ -13,7 +13,7 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '../../Shared/Errors';
+import Errors from '@/Shared/Errors';
 
 const props = defineProps({
 	series: {
@@ -32,7 +32,7 @@ const form = useForm({
 </script>
 
 <script>
-import Series from '../../Shared/Layouts/Series';
+import Series from '@/Shared/Layouts/Series';
 
 export default { layout: Series };
 </script>

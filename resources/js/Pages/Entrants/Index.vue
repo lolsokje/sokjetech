@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import BackLink from '../../Shared/BackLink';
+import BackLink from '@/Shared/BackLink';
 
 defineProps({
 	season: {
@@ -60,7 +60,7 @@ defineProps({
 </script>
 
 <script>
-import Season from '../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

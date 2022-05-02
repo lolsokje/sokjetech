@@ -1,6 +1,6 @@
 <template>
 	<BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-	
+
 	<h2>Driver reliability</h2>
 
 	<DriverDevelopment :season="season" :drivers="drivers"
@@ -9,8 +9,8 @@
 </template>
 
 <script setup>
-import BackLink from '../../../Shared/BackLink';
-import DriverDevelopment from '../../../Shared/DriverDevelopment';
+import BackLink from '@/Shared/BackLink';
+import DriverDevelopment from '@/Shared/DriverDevelopment';
 
 defineProps({
 	season: {
@@ -25,7 +25,7 @@ defineProps({
 </script>
 
 <script>
-import Season from '../../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

@@ -51,10 +51,10 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import SearchableDropdown from '../../Shared/SearchableDropdown';
-import CountrySelect from '../../Shared/CountrySelect';
-import TeamNamePreview from '../../Shared/TeamNamePreview';
 import { computed } from 'vue';
+import SearchableDropdown from '@/Shared/SearchableDropdown';
+import CountrySelect from '@/Shared/CountrySelect';
+import TeamNamePreview from '@/Shared/TeamNamePreview';
 
 const props = defineProps({
 	season: {
@@ -119,7 +119,7 @@ const selectedEngine = computed(() => form.engine_id ? props.engines.find((engin
 </script>
 
 <script>
-import Season from '../../Shared/Layouts/Season';
+import Season from '@/Shared/Layouts/Season';
 
 export default { layout: Season };
 </script>

@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import BackLink from '../../Shared/BackLink';
+import BackLink from '@/Shared/BackLink';
 
 defineProps({
 	series: {
@@ -44,7 +44,7 @@ defineProps({
 </script>
 
 <script>
-import Series from '../../Shared/Layouts/Series';
+import Series from '@/Shared/Layouts/Series';
 
 export default { layout: Series };
 </script>
