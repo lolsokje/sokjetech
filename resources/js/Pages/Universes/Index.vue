@@ -1,7 +1,7 @@
 <template>
 	<h1>Universes</h1>
 
-	<InertiaLink :href="route('universes.create')" class="btn btn-primary my-3">Add universe</InertiaLink>
+	<InertiaLink :href="route('universes.create')" class="btn btn-primary my-3" v-if="user">Add universe</InertiaLink>
 
 	<table v-if="universes.length" class="table table-bordered table-dark table-narrow">
 		<thead>
@@ -27,10 +27,15 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/inertia-vue3';
+
 const props = defineProps({
 	universes: {
 		type: Array,
 		required: true,
 	},
 });
+
+const user = computed(() => usePage().props.value.auth.user);
 </script>
