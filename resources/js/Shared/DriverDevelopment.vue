@@ -11,16 +11,26 @@
 			</div>
 			<button class="btn btn-primary" @click.prevent="applyDevRanges">Apply</button>
 
-			<div class="col-4">
-				<input id="edit-mode" v-model="state.hideInputs" class="form-check-inline mt-auto me-2"
-					   type="checkbox">
-				<label class="form-check-label" for="edit-mode">Hide inputs</label>
-			</div>
-
 			<div class="ms-auto">
 				<button :disabled="!devCompleted" class="btn btn-success" @click.prevent="runDev">
 					Run dev
 				</button>
+			</div>
+		</div>
+
+		<div class="mb-3">
+			<div>
+				<div class="form-check-inline">
+					<input id="edit-mode" v-model="state.hideInputs" class="form-check-inline" type="checkbox">
+					<label class="form-check-label" for="edit-mode">Hide inputs</label>
+				</div>
+			</div>
+
+			<div>
+				<div class="form-check-inline">
+					<input type="checkbox" id="edit-ratings" v-model="state.editRatings" class="form-check-inline">
+					<label for="edit-ratings" class="form-check-label">Edit ratings directly?</label>
+				</div>
 			</div>
 		</div>
 
@@ -51,14 +61,21 @@
 						<input v-model="driver.max" class="form-control" type="number">
 					</td>
 					<td class="small-centered">{{ driver.dev }}</td>
-					<td class="small-centered">{{ driver.new }}</td>
+					<td class="small-centered">
+						<template v-if="!state.editRatings">{{ driver.new }}</template>
+						<template v-else>
+							<input type="number" class="form-control" v-model="driver.new">
+						</template>
+					</td>
 				</tr>
 				</tbody>
 			</table>
 
 			<div class="d-flex">
 				<CopyScreenshotButton/>
-				<button :disabled="devCompleted" class="btn btn-primary ms-auto" type="submit">Save dev</button>
+				<button :disabled="devCompleted && !state.editRatings" class="btn btn-primary ms-auto" type="submit">
+					Save dev
+				</button>
 			</div>
 		</form>
 	</template>
@@ -98,6 +115,7 @@ const state = reactive({
 	hideInputs: false,
 	min: 0,
 	max: 0,
+	editRatings: false,
 });
 
 const form = useForm({
