@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Universe;
+use App\Enums\UniverseVisibility;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class UniverseCreateRequest extends FormRequest
 {
@@ -27,7 +27,7 @@ class UniverseCreateRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'visibility' => ['required', 'integer', Rule::in(Universe::visibilities())],
+            'visibility' => ['required', new Enum(UniverseVisibility::class)],
         ];
     }
 }

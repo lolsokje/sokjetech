@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Universe;
+use App\Enums\UniverseVisibility;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,8 +17,26 @@ class UniverseFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'visibility' => Universe::VISIBILITY_PUBLIC,
+            'visibility' => UniverseVisibility::PUBLIC,
             'user_id' => User::factory()->create()->id,
         ];
+    }
+
+    public function private(): static
+    {
+        return $this->state(function ($attributes) {
+            return [
+                'visibility' => UniverseVisibility::PRIVATE,
+            ];
+        });
+    }
+
+    public function auth(): static
+    {
+        return $this->state(function ($attributes) {
+            return [
+                'visibility' => UniverseVisibility::AUTH,
+            ];
+        });
     }
 }

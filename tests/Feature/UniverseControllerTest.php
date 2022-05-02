@@ -1,16 +1,17 @@
 <?php
 
+use App\Enums\UniverseVisibility;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
-test('an autheorized user can create universes', function () {
+test('an authorized user can create universes', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
         ->post(route('universes.store'), [
             'name' => 'Universe name',
-            'visibility' => Universe::VISIBILITY_PUBLIC,
+            'visibility' => UniverseVisibility::PUBLIC->value,
         ])
         ->assertRedirect(route('universes.index'));
 
@@ -21,7 +22,7 @@ test('an autheorized user can create universes', function () {
 test('an unauthorized user can\'t create universes', function () {
     $this->post(route('universes.store'), [
         'name' => 'Universe name',
-        'visibility' => Universe::VISIBILITY_PUBLIC,
+        'visibility' => UniverseVisibility::PUBLIC->value,
     ])
         ->assertForbidden();
     $this->assertDatabaseCount('universes', 0);
@@ -34,31 +35,31 @@ test('an unauthorized user can\'t view the create universe page', function () {
 
 test('an authorized user can update their universes', function () {
     $user = User::factory()->create();
-    $universe = Universe::factory()->create(['user_id' => $user->id]);
+    $universe = Universe::factory()->for($user)->create();
 
     $this->actingAs($user)
         ->put(route('universes.update', [$universe]), [
             'name' => 'New name',
-            'visibility' => Universe::VISIBILITY_PRIVATE,
+            'visibility' => UniverseVisibility::PRIVATE->value,
         ])
         ->assertRedirect(route('universes.index'));
 
     $this->assertEquals('New name', $universe->fresh()->name);
-    $this->assertEquals(Universe::VISIBILITY_PRIVATE, $universe->fresh()->visibility);
+    $this->assertEquals(UniverseVisibility::PRIVATE, $universe->fresh()->visibility);
 });
 
 test('an authorized user can\'t update someone else\'s universes', function () {
     $firstUser = User::factory()->create();
     $secondUser = User::factory()->create();
 
-    $universe = Universe::factory()->create(['user_id' => $firstUser->id]);
+    $universe = Universe::factory()->for($firstUser)->create();
     $name = $universe->name;
     $visibility = $universe->visibility;
 
     $this->actingAs($secondUser)
         ->put(route('universes.update', [$universe]), [
             'name' => 'New name',
-            'visibility' => Universe::VISIBILITY_PRIVATE,
+            'visibility' => UniverseVisibility::PRIVATE->value,
         ])
         ->assertForbidden();
 
@@ -103,7 +104,7 @@ test('an unauthorized user can\'t update universes', function () {
 
     $this->put(route('universes.update', [$universe]), [
         'name' => 'New name',
-        'visibility' => Universe::VISIBILITY_PRIVATE,
+        'visibility' => UniverseVisibility::PRIVATE->value,
     ])
         ->assertForbidden();
 
@@ -114,9 +115,9 @@ test('an unauthorized user can\'t update universes', function () {
 it('only shows public and their own universes to authenticated users', function () {
     $user = User::factory()->create();
 
-    Universe::factory()->create(['visibility' => Universe::VISIBILITY_PRIVATE]);
-    Universe::factory()->create(['visibility' => Universe::VISIBILITY_PUBLIC]);
-    Universe::factory()->create(['visibility' => Universe::VISIBILITY_AUTH]);
+    Universe::factory()->create();
+    Universe::factory()->private()->create();
+    Universe::factory()->auth()->create();
 
     $this->actingAs($user);
 
@@ -127,9 +128,9 @@ it('only shows public and their own universes to authenticated users', function 
 });
 
 it('only shows public universes to unauthenticated users', function () {
-    Universe::factory()->create(['visibility' => Universe::VISIBILITY_PRIVATE]);
-    Universe::factory()->create(['visibility' => Universe::VISIBILITY_PUBLIC]);
-    Universe::factory()->create(['visibility' => Universe::VISIBILITY_AUTH]);
+    Universe::factory()->create();
+    Universe::factory()->private()->create();
+    Universe::factory()->auth()->create();
 
     $this->get(route('universes.index'))
         ->assertInertia(fn(Assert $page) => $page

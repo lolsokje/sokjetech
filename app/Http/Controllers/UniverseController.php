@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UniverseVisibility;
 use App\Http\Requests\UniverseCreateRequest;
 use App\Models\Universe;
 use Gate;
@@ -37,7 +38,7 @@ class UniverseController extends Controller
     public function create(): Response
     {
         return Inertia::render('Universes/Create', [
-            'visibilities' => Universe::visibilityLabels(),
+            'visibilities' => UniverseVisibility::labels(),
         ]);
     }
 
@@ -66,7 +67,7 @@ class UniverseController extends Controller
 
         return Inertia::render('Universes/Edit', [
             'universe' => $universe,
-            'visibilities' => Universe::visibilityLabels(),
+            'visibilities' => UniverseVisibility::labels(),
         ]);
     }
 

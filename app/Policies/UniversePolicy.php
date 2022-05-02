@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UniverseVisibility;
 use App\Models\Universe;
 use App\Models\User;
 use Gate;
@@ -21,24 +22,24 @@ class UniversePolicy
      */
     public function view(?User $user, Universe $universe): bool
     {
-        $visibility = (int) $universe->visibility;
+        $visibility = $universe->visibility;
 
-        if ($visibility === Universe::VISIBILITY_PUBLIC) {
+        if ($visibility === UniverseVisibility::PUBLIC) {
             return true;
         }
 
-        if ($visibility === Universe::VISIBILITY_AUTH) {
+        if ($visibility === UniverseVisibility::AUTH) {
             return $user !== null;
         }
 
-        return $visibility === Universe::VISIBILITY_PRIVATE && $user && $user->id === $universe->user_id;
+        return $visibility === UniverseVisibility::PRIVATE && $user && $user->id === $universe->user_id;
     }
 
     /**
      * Determine whether the user can update the model.
      *
-     * @param User $user
-     * @param Universe $universe
+     * @param  User  $user
+     * @param  Universe  $universe
      *
      * @return bool
      */

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UniverseVisibility;
 use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,33 +15,19 @@ class Universe extends Model
 {
     use HasFactory, Snowflake;
 
-    public const VISIBILITY_PUBLIC = 1;
-    public const VISIBILITY_PRIVATE = 2;
-    public const VISIBILITY_AUTH = 3;
-
-    public static function visibilities(): array
-    {
-        return array_keys(self::visibilityLabels());
-    }
-
-    public static function visibilityLabels(): array
-    {
-        return [
-            self::VISIBILITY_PUBLIC => 'Public',
-            self::VISIBILITY_PRIVATE => 'Private',
-            self::VISIBILITY_AUTH => 'Logged in only',
-        ];
-    }
+    protected $casts = [
+        'visibility' => UniverseVisibility::class,
+    ];
 
     public function scopeVisible(Builder $query): Builder
     {
         if (auth()->check()) {
             $query->where(function (Builder $query) {
-                $query->where('visibility', self::VISIBILITY_AUTH)
+                $query->where('visibility', UniverseVisibility::AUTH)
                     ->orWhere('user_id', auth()->user()->id);
             });
         }
-        return $query->orWhere('visibility', self::VISIBILITY_PUBLIC);
+        return $query->orWhere('visibility', UniverseVisibility::PUBLIC);
     }
 
     public function user(): BelongsTo
