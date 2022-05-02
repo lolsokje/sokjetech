@@ -17,7 +17,7 @@ class CreateEntrantsTable extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->foreignId('season_id')->constrained();
             $table->foreignId('team_id')->constrained();
-            $table->foreignId('engine_id')->nullable()->constrained();
+            $table->foreignId('engine_id')->nullable()->constrained('engine_seasons');
             $table->string('full_name');
             $table->string('short_name');
             $table->string('team_principal');

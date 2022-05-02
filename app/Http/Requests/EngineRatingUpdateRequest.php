@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EntrantCreateRequest extends FormRequest
+class EngineRatingUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,9 @@ class EntrantCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team_id' => ['required', 'exists:teams,id'],
-            'engine_id' => ['nullable', 'exists:engine_seasons,id'],
-            'full_name' => ['required'],
-            'short_name' => ['required'],
-            'team_principal' => ['required'],
-            'primary_colour' => ['required'],
-            'secondary_colour' => ['required'],
-            'country' => ['required'],
+            'engines' => ['required', 'array'],
+            'engines.*.id' => ['required', 'exists:engine_seasons,id'],
+            'engines.*.new' => ['required', 'integer', 'min:1'],
         ];
     }
 }

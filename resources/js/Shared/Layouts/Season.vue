@@ -19,6 +19,11 @@
 							Drivers
 						</InertiaLink>
 					</li>
+					<li class="nav-item">
+						<InertiaLink :href="route('seasons.engines.index', [season])" class="nav-link">
+							Engines
+						</InertiaLink>
+					</li>
 				</ul>
 
 				<template v-if="can.edit">
@@ -32,6 +37,11 @@
 						<li class="nav-item">
 							<InertiaLink :href="route('seasons.development.teams', [season])" class="nav-link">
 								Teams
+							</InertiaLink>
+						</li>
+						<li class="nav-item">
+							<InertiaLink :href="route('seasons.development.engines', [season])" class="nav-link">
+								Engines
 							</InertiaLink>
 						</li>
 					</ul>

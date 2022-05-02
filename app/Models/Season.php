@@ -52,9 +52,14 @@ class Season extends Model
         return $this->series->universe->teams()->orderBy('full_name');
     }
 
-    public function engines(): HasMany
+    public function baseEngines(): HasMany
     {
         return $this->series->engines()->orderBy('name');
+    }
+
+    public function engines(): HasMany
+    {
+        return $this->hasMany(EngineSeason::class);
     }
 
     public function entrants(): HasMany

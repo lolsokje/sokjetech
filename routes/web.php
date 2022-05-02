@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
+use App\Http\Controllers\EngineSeasonController;
 use App\Http\Controllers\EntrantController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
@@ -12,12 +13,14 @@ use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
+use App\Http\Controllers\ShowEngineDevelopmentPageController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
 use App\Http\Controllers\UpdateDriverReliabilityController;
+use App\Http\Controllers\UpdateEngineRatingsController;
 use App\Http\Controllers\UpdateTeamRatingsController;
 use App\Http\Controllers\UpdateTeamReliabilityController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +51,7 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
     Route::resource('races', RaceController::class)->except('destroy');
 
+    Route::resource('engines', EngineSeasonController::class)->except('destroy', 'show');
     Route::resource('entrants', EntrantController::class)->except('destroy', 'show');
     Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
@@ -59,6 +63,9 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
         Route::get('teams', ShowTeamDevelopmentPageController::class)->name('teams');
         Route::post('teams', UpdateTeamRatingsController::class)->name('teams.store');
+
+        Route::get('engines', ShowEngineDevelopmentPageController::class)->name('engines');
+        Route::post('engines', UpdateEngineRatingsController::class)->name('engines.store');
 
         Route::group(['prefix' => 'reliability', 'as' => 'reliability.'], function () {
             Route::get('drivers', ShowDriverReliabilityController::class)->name('drivers');

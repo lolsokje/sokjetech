@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Engine;
+use App\Models\EngineSeason;
 use App\Models\Entrant;
 use App\Models\Season;
 use App\Models\Team;
@@ -155,7 +155,7 @@ function getTeamCreationData(Team $team, ?array $merge = []): array
 {
     return array_merge([
         'team_id' => $team->id,
-        'engine_id' => Engine::factory()->create()->id,
+        'engine_id' => EngineSeason::factory()->create()->id,
         'full_name' => $team->full_name,
         'short_name' => $team->short_name,
         'team_principal' => $team->team_principal,

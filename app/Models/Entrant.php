@@ -36,7 +36,7 @@ class Entrant extends Model
 
     public function engine(): BelongsTo
     {
-        return $this->belongsTo(Engine::class);
+        return $this->belongsTo(EngineSeason::class);
     }
 
     public function activeRacers(): HasMany

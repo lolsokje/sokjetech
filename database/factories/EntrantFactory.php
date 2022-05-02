@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Engine;
+use App\Models\EngineSeason;
 use App\Models\Season;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,7 +20,7 @@ class EntrantFactory extends Factory
         return [
             'season_id' => Season::factory()->create(),
             'team_id' => $team->id,
-            'engine_id' => Engine::factory()->create(),
+            'engine_id' => EngineSeason::factory()->create(),
             'full_name' => $team->full_name,
             'short_name' => $team->short_name,
             'team_principal' => $team->team_principal,
