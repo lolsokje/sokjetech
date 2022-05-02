@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
+
 	<h2>Team reliability</h2>
 
 	<TeamDevelopment :season="season" :teams="teams" type="reliability"
@@ -6,6 +8,7 @@
 </template>
 
 <script setup>
+import BackLink from '../../../Shared/BackLink';
 import TeamDevelopment from '../../../Shared/TeamDevelopment';
 
 defineProps({

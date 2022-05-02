@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
+
 	<h2>Driver development</h2>
 
 	<DriverDevelopment :form-route="route('seasons.development.drivers.store', [season])" :drivers="drivers"
@@ -6,6 +8,7 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
 import DriverDevelopment from '../../Shared/DriverDevelopment';
 
 const props = defineProps({

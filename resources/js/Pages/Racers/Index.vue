@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
+
 	<h3>Drivers</h3>
 
 	<template v-if="can.edit">
@@ -47,6 +49,7 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
 import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({

@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
+
 	<h2>Engine development</h2>
 
 	<template v-if="engines.length">
@@ -88,6 +90,7 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import Development from '../../Utilities/Development';

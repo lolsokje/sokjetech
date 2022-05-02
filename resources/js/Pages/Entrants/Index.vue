@@ -1,4 +1,6 @@
 <template>
+	<BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
+
 	<h3>Entrants</h3>
 
 	<InertiaLink v-if="can.edit" :href="route('seasons.entrants.create', [season])" class="btn btn-primary mb-3">
@@ -43,6 +45,8 @@
 </template>
 
 <script setup>
+import BackLink from '../../Shared/BackLink';
+
 defineProps({
 	season: {
 		type: Object,
