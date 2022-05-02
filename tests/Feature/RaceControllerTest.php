@@ -50,7 +50,7 @@ test('a universe owner can update races', function () {
         ->put(route('seasons.races.update', [$season, $race]), [
             'circuit_id' => $race->circuit->id,
             'name' => 'New name',
-            'stints' => $race->stints,
+            'stints' => $race->stints->toArray(),
             'order' => $race->order,
         ])
         ->assertRedirect(route('seasons.races.index', [$season]));

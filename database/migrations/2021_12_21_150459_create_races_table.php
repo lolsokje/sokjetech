@@ -18,7 +18,6 @@ class CreateRacesTable extends Migration
             $table->foreignId('season_id')->constrained();
             $table->foreignId('circuit_id')->constrained();
             $table->string('name');
-            $table->json('stints');
             $table->unsignedInteger('order')->nullable();
             $table->boolean('completed')->default(false);
             $table->timestamps();

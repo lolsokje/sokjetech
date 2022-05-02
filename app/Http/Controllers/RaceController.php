@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Stints\CreateStintsAction;
+use App\Actions\Stints\UpdateStintsAction;
 use App\Http\Requests\RaceCreateRequest;
 use App\Models\Race;
 use App\Models\Season;
@@ -42,8 +44,10 @@ class RaceController extends Controller
         $lastRace = $season->races()->latest('order')->first();
         $order = $lastRace ? $lastRace->order + 1 : 1;
 
-        $data = array_merge(['order' => $order], $request->validated());
-        $season->races()->create($data);
+        $data = array_merge(['order' => $order], $request->safe()->except('stints'));
+        $race = $season->races()->create($data);
+
+        (new CreateStintsAction($race, $request->safe()->only('stints')['stints']))->handle();
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race created');
@@ -63,7 +67,7 @@ class RaceController extends Controller
 
         return Inertia::render('Races/Edit', [
             'season' => $season,
-            'race' => $race,
+            'race' => $race->load('stints'),
             'circuits' => auth()->user()->circuits,
         ]);
     }
@@ -72,7 +76,9 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $race->update($request->validated());
+        $race->update($request->safe()->except('stints'));
+
+        (new UpdateStintsAction($race, $request->safe(['stints'])['stints']))->handle();
 
         return redirect(route('seasons.races.index', [$season]));
     }

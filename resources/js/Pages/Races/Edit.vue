@@ -31,7 +31,7 @@
 			</thead>
 			<tbody>
 			<tr v-for="stint in form.stints" :key="stint.number" class="text-center">
-				<td class="small-centered">{{ stint.number }}</td>
+				<td class="small-centered">{{ stint.order }}</td>
 				<td><input v-model="stint.min_rng" class="form-control-sm" type="number"></td>
 				<td><input v-model="stint.max_rng" class="form-control-sm" type="number"></td>
 				<td><input v-model="stint.reliability" type="checkbox"></td>
@@ -80,9 +80,9 @@ const form = useForm({
 const selectedCircuit = props.circuits.find((circuit) => circuit.id === form.circuit_id);
 
 function addStint () {
-	const lastNumber = form.stints[form.stints.length - 1].number;
+	const lastOrder = form.stints[form.stints.length - 1].order;
 	form.stints.push({
-		number: lastNumber + 1,
+		order: lastOrder + 1,
 		min_rng: 0,
 		max_rng: 30,
 		reliability: false,
@@ -92,11 +92,11 @@ function addStint () {
 	});
 }
 
-function deleteStint (number) {
-	form.stints = form.stints.filter((stint) => stint.number !== number);
+function deleteStint (order) {
+	form.stints = form.stints.filter((stint) => stint.order !== order);
 
 	form.stints.forEach((stint, index) => {
-		stint.number = index + 1;
+		stint.order = index + 1;
 	});
 }
 

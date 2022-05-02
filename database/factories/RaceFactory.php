@@ -3,12 +3,19 @@
 namespace Database\Factories;
 
 use App\Models\Circuit;
+use App\Models\Race;
 use App\Models\Season;
 use App\Models\Series;
+use App\Models\Stint;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RaceFactory extends Factory
 {
+    public function configure()
+    {
+        return $this->afterCreating(fn(Race $race) => Stint::factory(3)->for($race)->create());
+    }
+
     /**
      * Define the model's default state.
      *
@@ -23,7 +30,6 @@ class RaceFactory extends Factory
             'season_id' => $season,
             'circuit_id' => Circuit::factory()->for($user)->create(),
             'name' => "$season->year {$this->faker->country()} Grand Prix",
-            'stints' => [['min_rng' => 0, 'max_rng' => 30]],
             'order' => 1,
             'completed' => false,
         ];
