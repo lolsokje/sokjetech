@@ -51,7 +51,7 @@ class RaceController extends Controller
 
     public function show(Season $season, Race $race): Response
     {
-        return Inertia::render('Races/View', [
+        return Inertia::render('Races/Show', [
             'season' => $season,
             'race' => $race,
         ]);

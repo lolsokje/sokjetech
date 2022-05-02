@@ -182,7 +182,7 @@ it('shows the correct team on the show page', function () {
         ->get(route('universes.teams.show', [$universe, $team]))
         ->assertOk()
         ->assertInertia(fn(Assert $page) => $page
-            ->component('Teams/View')
+            ->component('Teams/Show')
             ->where('team.full_name', $team->full_name)
         );
 });

@@ -47,7 +47,7 @@ class TeamController extends Controller
     {
         $this->authorize('view', $universe);
 
-        return Inertia::render('Teams/View', [
+        return Inertia::render('Teams/Show', [
             'universe' => $universe,
             'team' => $team,
         ]);
