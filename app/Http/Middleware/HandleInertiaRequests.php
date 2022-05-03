@@ -45,16 +45,17 @@ class HandleInertiaRequests extends Middleware
     private function getUniverseFromRequest(Request $request): ?Universe
     {
         $parameters = $request->route()->parameters();
+        $parameterKeys = array_keys($parameters);
 
-        if (in_array('universe', $parameters)) {
+        if (in_array('universe', $parameterKeys)) {
             return new Universe($parameters['universe']->toArray());
         }
 
-        if (in_array('series', $parameters)) {
+        if (in_array('series', $parameterKeys)) {
             return $parameters['series']->universe;
         }
 
-        if (in_array('season', $parameters)) {
+        if (in_array('season', $parameterKeys)) {
             return $parameters['season']->universe;
         }
         return null;

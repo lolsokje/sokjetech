@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
-uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature');
+uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature', 'Unit');
 
 function createSeriesForUser(User $user): Series
 {
