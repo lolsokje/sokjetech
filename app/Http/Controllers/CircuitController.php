@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CircuitCreateRequest;
 use App\Http\Requests\CircuitFilterRequest;
 use App\Models\Circuit;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -43,12 +42,6 @@ class CircuitController extends Controller
             ->with('notice', 'Circuit created');
     }
 
-    /**
-     * @param  Circuit  $circuit
-     *
-     * @return Response
-     * @throws AuthorizationException
-     */
     public function edit(Circuit $circuit): Response
     {
         $this->authorize('alter', $circuit);
@@ -58,13 +51,6 @@ class CircuitController extends Controller
         ]);
     }
 
-    /**
-     * @param  CircuitCreateRequest  $request
-     * @param  Circuit  $circuit
-     *
-     * @return RedirectResponse
-     * @throws AuthorizationException
-     */
     public function update(CircuitCreateRequest $request, Circuit $circuit): RedirectResponse
     {
         $this->authorize('alter', $circuit);

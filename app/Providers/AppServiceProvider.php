@@ -22,7 +22,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('snowflake', function () {
             return (new Snowflake(
                 config('snowflake.data_center'),
-                config('snowflake.worker_node'))
+                config('snowflake.worker_node')
+            )
             )
                 ->setStartTimeStamp(strtotime('2022-05-01') * 1000)
                 ->setSequenceResolver(new RandomSequenceResolver());
@@ -40,8 +41,8 @@ class AppServiceProvider extends ServiceProvider
 
         Model::preventLazyLoading(!$this->app->isProduction());
 
-        Gate::define('owns-universe', function (?User $user, Universe $universe) {
-            return $universe->user_id === $user?->id;
+        Gate::define('owns-universe', function (?User $user, ?Universe $universe = null) {
+            return $universe?->user_id === $user?->id;
         });
     }
 }

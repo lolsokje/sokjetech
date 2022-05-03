@@ -20,7 +20,7 @@ class SeriesController extends Controller
     public function index(Universe $universe): Response
     {
         return Inertia::render('Series/Index', [
-            'universe' => $universe->load(['series' => fn(HasMany $query) => $query->orderBy('name')]),
+            'universe' => $universe->load(['series' => fn (HasMany $query) => $query->orderBy('name')]),
         ]);
     }
 
@@ -57,7 +57,7 @@ class SeriesController extends Controller
 
         return Inertia::render('Series/Edit', [
             'universe' => $universe,
-            'series' => $series
+            'series' => $series,
         ]);
     }
 

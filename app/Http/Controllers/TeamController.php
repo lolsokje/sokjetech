@@ -20,7 +20,7 @@ class TeamController extends Controller
     public function index(Universe $universe): Response
     {
         return Inertia::render('Teams/Index', [
-            'universe' => $universe->load(['teams' => fn(HasMany $query) => $query->orderBy('full_name')]),
+            'universe' => $universe->load(['teams' => fn (HasMany $query) => $query->orderBy('full_name')]),
         ]);
     }
 

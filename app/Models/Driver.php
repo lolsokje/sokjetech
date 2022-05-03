@@ -26,18 +26,17 @@ class Driver extends Model
 
     public function readableDob(): Attribute
     {
-        return Attribute::get(fn() => $this->dob->format('F jS, Y'));
+        return Attribute::get(fn () => $this->dob->format('F jS, Y'));
     }
-
 
     public function editDob(): Attribute
     {
-        return Attribute::get(fn() => $this->dob->format('Y-m-d'));
+        return Attribute::get(fn () => $this->dob->format('Y-m-d'));
     }
 
     public function fullName(): Attribute
     {
-        return Attribute::get(fn() => trim("$this->first_name $this->last_name"));
+        return Attribute::get(fn () => trim("$this->first_name $this->last_name"));
     }
 
     public function universe(): BelongsTo

@@ -8,11 +8,6 @@ class UniqueNumbersInRequest implements Rule
 {
     private ?int $number;
 
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Determine if the validation rule passes.
      *

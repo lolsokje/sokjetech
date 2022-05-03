@@ -166,8 +166,9 @@ it('shows all engines added to a season on the index page', function () {
 
     get(route('seasons.engines.index', [$season]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Seasons/Engines/Index')
-            ->has('engines', 3)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Seasons/Engines/Index')
+                ->has('engines', 3)
         );
 });

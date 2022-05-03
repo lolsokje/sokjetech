@@ -13,10 +13,11 @@ test('a universe owner can view the team development page', function () {
     $this->actingAs($user)
         ->get(route('seasons.development.teams', [$season]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Development/Teams')
-            ->has('season')
-            ->has('teams', 4)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Development/Teams')
+                ->has('season')
+                ->has('teams', 4)
         );
 });
 

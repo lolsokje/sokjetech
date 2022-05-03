@@ -2,20 +2,14 @@
 
 namespace App\Actions\Stints;
 
-use App\Actions\ActionInterface;
-use App\Models\Race;
+use App\Actions\Action;
 
-class CreateStintsAction extends StintAction implements ActionInterface
+class CreateStintsAction extends StintAction implements Action
 {
-    public function __construct(protected Race $race, protected array $stints)
-    {
-        parent::__construct($race, $stints);
-    }
-
     public function handle(): void
     {
         $stints = $this->getStintsOrder($this->stints);
 
-        $stints->each(fn(array $stint) => $this->race->stints()->create($stint));
+        $stints->each(fn (array $stint) => $this->race->stints()->create($stint));
     }
 }

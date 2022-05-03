@@ -38,6 +38,6 @@ class Series extends Model
 
     public function user(): Attribute
     {
-        return Attribute::get(fn() => $this->universe->user);
+        return Attribute::get(fn () => $this->universe->user);
     }
 }

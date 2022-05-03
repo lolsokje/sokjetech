@@ -17,10 +17,11 @@ test('a universe owner can view the engine development page', function () {
     actingAs($user)
         ->get(route('seasons.development.engines', [$season]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Development/Engines')
-            ->has('season')
-            ->has('engines', 4)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Development/Engines')
+                ->has('season')
+                ->has('engines', 4)
         );
 });
 

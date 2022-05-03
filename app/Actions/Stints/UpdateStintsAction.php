@@ -2,9 +2,9 @@
 
 namespace App\Actions\Stints;
 
-use App\Actions\ActionInterface;
+use App\Actions\Action;
 
-class UpdateStintsAction extends StintAction implements ActionInterface
+class UpdateStintsAction extends StintAction implements Action
 {
     public function handle(): void
     {
@@ -16,6 +16,6 @@ class UpdateStintsAction extends StintAction implements ActionInterface
         $stints = $this->getStintsOrder($this->stints);
 
         $this->race->stints()->delete();
-        $stints->each(fn(array $stint) => $this->race->stints()->create($stint));
+        $stints->each(fn (array $stint) => $this->race->stints()->create($stint));
     }
 }

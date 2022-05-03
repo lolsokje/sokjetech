@@ -20,7 +20,7 @@ class DriverController extends Controller
     public function index(Universe $universe): Response
     {
         return Inertia::render('Drivers/Index', [
-            'universe' => $universe->load(['drivers' => fn(HasMany $query) => $query->orderBy('last_name')]),
+            'universe' => $universe->load(['drivers' => fn (HasMany $query) => $query->orderBy('last_name')]),
         ]);
     }
 
@@ -45,7 +45,7 @@ class DriverController extends Controller
     {
         return Inertia::render('Drivers/Edit', [
             'universe' => $universe,
-            'driver' => $driver
+            'driver' => $driver,
         ]);
     }
 

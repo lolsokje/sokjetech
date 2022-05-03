@@ -144,8 +144,9 @@ it('shows all engines in the selected series on the index page', function () {
 
     $this->actingAs($series->user)
         ->get(route('series.engines.index', [$series]))
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Engines/Index')
-            ->has('series.engines', 3)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Engines/Index')
+                ->has('series.engines', 3)
         );
 });

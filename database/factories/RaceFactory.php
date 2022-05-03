@@ -13,7 +13,7 @@ class RaceFactory extends Factory
 {
     public function configure()
     {
-        return $this->afterCreating(fn(Race $race) => Stint::factory(3)->for($race)->create());
+        return $this->afterCreating(fn (Race $race) => Stint::factory(3)->for($race)->create());
     }
 
     /**

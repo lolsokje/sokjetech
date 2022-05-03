@@ -13,23 +13,10 @@ class HandleInertiaRequests extends Middleware
      * The root template that's loaded on the first page visit.
      *
      * @see https://inertiajs.com/server-side-setup#root-template
+     *
      * @var string
      */
     protected $rootView = 'app';
-
-    /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
-     *
-     * @param  Request  $request
-     *
-     * @return string|null
-     */
-    public function version(Request $request)
-    {
-        return parent::version($request);
-    }
 
     /**
      * Defines the props that are shared by default.
@@ -44,32 +31,31 @@ class HandleInertiaRequests extends Middleware
     {
         $universe = $this->getUniverseFromRequest($request);
 
-        $props = array_merge(parent::share($request), [
-            'auth.user' => fn() => $request->user()
+        return array_merge(parent::share($request), [
+            'auth.user' => fn () => $request->user()
                 ? $request->user()->only('username', 'avatar')
                 : null,
             'notice' => $request->session()->get('notice'),
+            'can' => [
+                'edit' => Gate::check('owns-universe', $universe),
+            ],
         ]);
-
-        if ($universe) {
-            $props['can']['edit'] = Gate::check('owns-universe', $universe);
-        }
-
-        return $props;
     }
 
     private function getUniverseFromRequest(Request $request): ?Universe
     {
-        $route = $request->route();
+        $parameters = $request->route()->parameters();
 
-        if ($route->hasParameter('universe')) {
-            return new Universe($route->parameter('universe')->toArray());
-        } elseif ($route->hasParameter('series')) {
-            $series = $route->parameter('series');
-            return $series->universe;
-        } elseif ($route->hasParameter('season')) {
-            $season = $route->parameter('season');
-            return $season->universe;
+        if (in_array('universe', $parameters)) {
+            return new Universe($parameters['universe']->toArray());
+        }
+
+        if (in_array('series', $parameters)) {
+            return $parameters['series']->universe;
+        }
+
+        if (in_array('season', $parameters)) {
+            return $parameters['season']->universe;
         }
         return null;
     }

@@ -29,12 +29,12 @@ class Season extends Model
 
     public function fullName(): Attribute
     {
-        return Attribute::get(fn() => "$this->year {$this->series->name}");
+        return Attribute::get(fn () => "$this->year {$this->series->name}");
     }
 
     public function universe(): Attribute
     {
-        return Attribute::get(fn() => $this->series->universe);
+        return Attribute::get(fn () => $this->series->universe);
     }
 
     public function series(): BelongsTo
@@ -79,7 +79,7 @@ class Season extends Model
 
     public function pickedNumbers(): array
     {
-        return $this->drivers()->get()->map(fn(Racer $driver) => $driver->number)->toArray();
+        return $this->drivers()->get()->map(fn (Racer $driver) => $driver->number)->toArray();
     }
 
     public function availableDrivers(): Collection

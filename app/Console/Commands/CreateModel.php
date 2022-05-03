@@ -22,16 +22,6 @@ class CreateModel extends Command
     protected $description = 'Create a model with standard flags for this project (-cfmrR)';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -41,7 +31,7 @@ class CreateModel extends Command
         $name = $this->argument('name');
 
         Artisan::call("make:model {$name} -cfmr");
-        $this->info("Model and associated files created");
+        $this->info('Model and associated files created');
 
         Artisan::call("make:request {$name}CreateRequest");
         $this->info('Create request created');

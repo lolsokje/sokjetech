@@ -181,9 +181,10 @@ it('shows the correct team on the show page', function () {
     $this->actingAs($user)
         ->get(route('universes.teams.show', [$universe, $team]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Teams/Show')
-            ->where('team.full_name', $team->full_name)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Teams/Show')
+                ->where('team.full_name', $team->full_name)
         );
 });
 
@@ -196,8 +197,9 @@ it('shows all teams in the selected universe on the index page', function () {
     $this->actingAs($user)
         ->get(route('universes.teams.index', [$universe]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Teams/Index')
-            ->has('universe.teams', 5)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Teams/Index')
+                ->has('universe.teams', 5)
         );
 });

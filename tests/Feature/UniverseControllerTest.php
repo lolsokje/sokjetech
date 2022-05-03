@@ -122,8 +122,9 @@ it('only shows public and their own universes to authenticated users', function 
     $this->actingAs($user);
 
     $this->get(route('universes.index'))
-        ->assertInertia(fn(Assert $page) => $page
-            ->has('universes', 2)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->has('universes', 2)
         );
 });
 
@@ -133,6 +134,6 @@ it('only shows public universes to unauthenticated users', function () {
     Universe::factory()->auth()->create();
 
     $this->get(route('universes.index'))
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->has('universes', 1));
 });

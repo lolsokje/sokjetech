@@ -18,7 +18,7 @@ class StintRngValid implements Rule
     {
         $stints = collect($value);
 
-        return !$stints->some(fn($stint) => $stint['min_rng'] >= $stint['max_rng']);
+        return ! $stints->some(fn ($stint) => $stint['min_rng'] >= $stint['max_rng']);
     }
 
     /**

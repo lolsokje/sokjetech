@@ -22,7 +22,7 @@ class AuthController extends Controller
         $discordUser = Socialite::driver('discord')->user();
 
         $user = User::updateOrCreate([
-            'discord_id' => $discordUser->getId()
+            'discord_id' => $discordUser->getId(),
         ], [
             'username' => $discordUser->getName(),
             'avatar' => $this->getAvatar($discordUser),

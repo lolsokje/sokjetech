@@ -20,7 +20,9 @@ class Entrant extends Model
     public function styleString(): Attribute
     {
         return Attribute::get(function () {
-            return "background-color:$this->primary_colour;color:$this->secondary_colour;text-align:center;font-weight:bold";
+            $primary = $this->primary_colour;
+            $secondary = $this->secondary_colour;
+            return "background-color:$primary;color:$secondary;text-align:center;font-weight:bold";
         });
     }
 

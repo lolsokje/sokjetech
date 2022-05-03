@@ -172,9 +172,10 @@ it('only shows available drivers on the lineup create page', function () {
     $this->actingAs($user)
         ->get(route('seasons.racers.create', [$season, $entrants[1]]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Racers/Create')
-            ->has('drivers', 2)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Racers/Create')
+                ->has('drivers', 2)
         );
 });
 

@@ -152,8 +152,9 @@ it('shows all drivers in the selected universe on the index page', function () {
 
     $this->actingAs($universe->user)
         ->get(route('universes.drivers.index', [$universe]))
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Drivers/Index')
-            ->has('universe.drivers', 5)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Drivers/Index')
+                ->has('universe.drivers', 5)
         );
 });

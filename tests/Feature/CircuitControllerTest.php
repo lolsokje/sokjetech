@@ -100,9 +100,10 @@ it('shows all circuits created by a user on the index page', function () {
 
     $this->actingAs($user)
         ->get(route('circuits.index'))
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Circuits/Index')
-            ->has('circuits.data', 5) // circuits.data since circuits are paginated
-            ->has('filters')
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Circuits/Index')
+                ->has('circuits.data', 5) // circuits.data since circuits are paginated
+                ->has('filters')
         );
 });

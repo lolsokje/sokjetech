@@ -149,8 +149,9 @@ it('shows all series in the selected universe on the index page', function () {
     $this->actingAs($universe->user)
         ->get(route('universes.series.index', [$universe]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Series/Index')
-            ->has('universe.series', 3)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Series/Index')
+                ->has('universe.series', 3)
         );
 });

@@ -23,7 +23,7 @@ class RaceController extends Controller
     public function index(Season $season): Response
     {
         return Inertia::render('Races/Index', [
-            'season' => $season->load(['races' => fn(HasMany $query) => $query->orderBy('order')]),
+            'season' => $season->load(['races' => fn (HasMany $query) => $query->orderBy('order')]),
         ]);
     }
 
@@ -88,7 +88,7 @@ class RaceController extends Controller
         $this->authorize('update', $season->universe);
 
         return Inertia::render('Races/Reorder', [
-            'season' => $season->load(['races' => fn(HasMany $query) => $query->orderBy('order')]),
+            'season' => $season->load(['races' => fn (HasMany $query) => $query->orderBy('order')]),
         ]);
     }
 

@@ -170,8 +170,9 @@ it('shows all seasons for the selected series on the index page', function () {
     $this->actingAs($user)
         ->get(route('series.seasons.index', [$series]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Seasons/Index')
-            ->has('series.seasons', 5)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Seasons/Index')
+                ->has('series.seasons', 5)
         );
 });

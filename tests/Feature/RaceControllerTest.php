@@ -206,9 +206,10 @@ test('a universe owner can view the race reorder page', function () {
     $this->actingAs($user)
         ->get(route('seasons.races.reorder', [$season]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Races/Reorder')
-            ->has('season.races', 5)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Races/Reorder')
+                ->has('season.races', 5)
         );
 });
 
@@ -254,9 +255,10 @@ it('shows all races in the selected season on the index page', function () {
     $this->actingAs($user)
         ->get(route('seasons.races.index', [$season]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Races/Index')
-            ->has('season.races', 5)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Races/Index')
+                ->has('season.races', 5)
         );
 });
 
@@ -270,9 +272,10 @@ it('shows the correct race on the show page', function () {
     $this->actingAs($user)
         ->get(route('seasons.races.show', [$season, $race]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->where('season.year', $season->year)
-            ->where('race.name', $race->name)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->where('season.year', $season->year)
+                ->where('race.name', $race->name)
         );
 });
 

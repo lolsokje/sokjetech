@@ -13,10 +13,11 @@ test('a universe owner can view the driver reliability page', function () {
     $this->actingAs($user)
         ->get(route('seasons.development.reliability.drivers', [$season]))
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
-            ->component('Development/Reliability/Drivers')
-            ->has('season')
-            ->has('drivers', 4)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Development/Reliability/Drivers')
+                ->has('season')
+                ->has('drivers', 4)
         );
 });
 

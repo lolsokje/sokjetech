@@ -30,7 +30,7 @@ class RacerCreateRequest extends FormRequest
         $parameters = $this->route()->parameters;
 
         return [
-            'drivers' => ['required', 'array', new UniqueNumbersInRequest, new UniqueDriversInRequest],
+            'drivers' => ['required', 'array', new UniqueNumbersInRequest(), new UniqueDriversInRequest()],
             'drivers.*.driver_id' => ['required', 'exists:drivers,id', new UniqueActiveDriversInSeason($parameters)],
             'drivers.*.number' => ['required', 'integer', new UniqueNumbersInSeason($parameters)],
         ];

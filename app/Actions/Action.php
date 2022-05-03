@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-interface ActionInterface
+interface Action
 {
     public function handle(): void;
 }

@@ -20,7 +20,7 @@ class EngineController extends Controller
     public function index(Series $series): Response
     {
         return Inertia::render('Engines/Index', [
-            'series' => $series->load(['engines' => fn(HasMany $query) => $query->orderBy('name')]),
+            'series' => $series->load(['engines' => fn (HasMany $query) => $query->orderBy('name')]),
         ]);
     }
 
