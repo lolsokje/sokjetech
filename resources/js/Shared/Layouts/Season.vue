@@ -71,7 +71,7 @@
 							</InertiaLink>
 						</li>
 						<li class="nav-item">
-							<InertiaLink href="#" class="nav-link">
+							<InertiaLink :href="route('seasons.configuration.qualifying', [season])" class="nav-link">
 								Qualifying
 							</InertiaLink>
 						</li>
