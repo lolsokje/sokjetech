@@ -17,6 +17,8 @@ class CreateSeasonsTable extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->foreignId('series_id')->constrained();
             $table->integer('year');
+            $table->unsignedBigInteger('format_id')->nullable();
+            $table->string('format_type')->nullable();
             $table->timestamps();
         });
     }

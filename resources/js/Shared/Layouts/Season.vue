@@ -6,6 +6,7 @@
 				<slot/>
 			</div>
 			<div class="w-25 ms-5 mt-5 bg-dark p-4">
+				<p class="mb-0 ps-3">Basic setup</p>
 				<ul class="nav flex-column">
 					<li class="nav-item">
 						<InertiaLink :href="route('seasons.races.index', [season])" class="nav-link">Races</InertiaLink>
@@ -58,6 +59,20 @@
 							<InertiaLink :href="route('seasons.development.reliability.teams', [season])"
 										 class="nav-link">
 								Teams
+							</InertiaLink>
+						</li>
+					</ul>
+
+					<p class="mt-3 mb-0 ps-3">Configuration</p>
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<InertiaLink href="#" class="nav-link">
+								Points
+							</InertiaLink>
+						</li>
+						<li class="nav-item">
+							<InertiaLink :href="route('seasons.configuration.qualifying', [season])" class="nav-link">
+								Qualifying
 							</InertiaLink>
 						</li>
 					</ul>

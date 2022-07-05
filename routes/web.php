@@ -14,8 +14,10 @@ use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
+use App\Http\Controllers\ShowQualifyingSettingsPage;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
+use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
@@ -56,6 +58,10 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
     Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
+
+    Route::get('configuration/qualifying', ShowQualifyingSettingsPage::class)->name('configuration.qualifying');
+    Route::post('configuration/qualifying', StoreQualifyingSettingsController::class)
+        ->name('configuration.qualifying.store');
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
         Route::get('drivers', ShowDriverDevelopmentPageController::class)->name('drivers');

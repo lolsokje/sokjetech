@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(!$this->app->isProduction());
 
         Gate::define('owns-universe', function (?User $user, ?Universe $universe = null) {
-            return $universe?->user_id === $user?->id;
+            return (int)$universe?->user_id === (int)$user?->id;
         });
     }
 }
