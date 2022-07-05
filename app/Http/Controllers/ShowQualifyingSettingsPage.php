@@ -11,8 +11,8 @@ class ShowQualifyingSettingsPage extends Controller
     public function __invoke(Season $season)
     {
         return Inertia::render('Seasons/Configuration/Qualifying', [
-            'season' => $season,
-            'formats' => QualifyingFormat::cases(),
+            'season' => $season->load('qualifyingFormat'),
+            'formats' => QualifyingFormat::labels(),
         ]);
     }
 }
