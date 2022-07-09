@@ -6,9 +6,15 @@ trait Snowflake
 {
     public function getSnowflakeCasts(): array
     {
-        return [
-            'id' => 'string',
-        ];
+        $casts = ['id' => 'string'];
+
+        foreach (array_keys($this->attributes) as $attribute) {
+            if (str_contains($attribute, '_id')) {
+                $casts[$attribute] = 'string';
+            }
+        }
+
+        return $casts;
     }
 
     public function getIncrementing(): bool
@@ -20,12 +26,8 @@ trait Snowflake
     {
         $class = static::class;
 
-        foreach (class_uses_recursive($class) as $trait) {
-            $method = 'get' . class_basename($trait) . 'Casts';
-
-            if (method_exists($class, $method)) {
-                $this->casts = array_merge($this->casts, $this->{$method}());
-            }
+        if (method_exists($class, 'getSnowflakeCasts')) {
+            $this->casts = array_merge($this->casts, $this->getSnowflakeCasts());
         }
 
         return parent::getCasts();
