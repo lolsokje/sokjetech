@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\StorePointsSystem;
+use App\Actions\Races\Configuration\StorePointsSystem;
 use App\Http\Requests\PointSystemConfigurationRequest;
 use App\Models\Season;
 use Symfony\Component\HttpFoundation\RedirectResponse;

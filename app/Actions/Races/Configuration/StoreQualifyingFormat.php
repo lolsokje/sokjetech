@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Races\Configuration;
 
 use App\Enums\QualifyingFormat;
 use App\Http\Requests\QualifyingConfigurationRequest;
 use App\Models\Season;
 
-class SetQualifyingFormat implements Action
+class StoreQualifyingFormat
 {
     public function __construct(protected Season $season, protected QualifyingConfigurationRequest $request)
     {

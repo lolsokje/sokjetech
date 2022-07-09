@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Actions\Stints;
+namespace App\Actions\Races\Stints;
 
-use App\Actions\Action;
-
-class UpdateStintsAction extends StintAction implements Action
+class UpdateStintsAction extends BaseStintAction
 {
     public function handle(): void
     {
@@ -13,7 +11,7 @@ class UpdateStintsAction extends StintAction implements Action
             return;
         }
 
-        $stints = $this->getStintsOrder($this->stints);
+        $stints = $this->getStintsOrder();
 
         $this->race->stints()->delete();
         $stints->each(fn (array $stint) => $this->race->stints()->create($stint));

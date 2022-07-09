@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Races\Configuration;
 
 use App\Http\Requests\PointSystemConfigurationRequest;
 use App\Models\PointDistribution;

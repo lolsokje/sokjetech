@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\StintRngValid;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Collection;
 
 class RaceCreateRequest extends FormRequest
 {
@@ -15,6 +16,19 @@ class RaceCreateRequest extends FormRequest
     public function authorize(): bool
     {
         return auth()->check();
+    }
+
+    public function raceData(): array
+    {
+        $data = $this->validated();
+        unset($data['stints']);
+
+        return $data;
+    }
+
+    public function stints(): Collection
+    {
+        return collect($this->safe(['stints'])['stints']);
     }
 
     /**

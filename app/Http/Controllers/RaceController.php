@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Stints\CreateStintsAction;
-use App\Actions\Stints\UpdateStintsAction;
+use App\Actions\Races\Stints\StoreStintsAction;
+use App\Actions\Races\Stints\UpdateStintsAction;
+use App\Actions\Races\StoreRaceAction;
+use App\Actions\Races\UpdateRaceOrderAction;
 use App\Http\Requests\RaceCreateRequest;
 use App\Models\Race;
 use App\Models\Season;
@@ -41,13 +43,9 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $lastRace = $season->races()->latest('order')->first();
-        $order = $lastRace ? $lastRace->order + 1 : 1;
+        $race = (new StoreRaceAction($request, $season))->handle();
 
-        $data = array_merge(['order' => $order], $request->safe()->except('stints'));
-        $race = $season->races()->create($data);
-
-        (new CreateStintsAction($race, $request->safe()->only('stints')['stints']))->handle();
+        (new StoreStintsAction($race, $request->stints()))->handle();
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race created');
@@ -76,9 +74,9 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $race->update($request->safe()->except('stints'));
+        $race->update($request->raceData());
 
-        (new UpdateStintsAction($race, $request->safe(['stints'])['stints']))->handle();
+        (new UpdateStintsAction($race, $request->stints()))->handle();
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race updated');
@@ -99,11 +97,7 @@ class RaceController extends Controller
 
         $races = collect($request->get('races'));
 
-        $races->each(function (array $race) {
-            $dbRace = Race::find($race['id']);
-            $dbRace->order = $race['order'];
-            $dbRace->save();
-        });
+        (new UpdateRaceOrderAction($races))->handle();
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Races reordered');
