@@ -24,9 +24,7 @@ trait Snowflake
             $method = 'get' . class_basename($trait) . 'Casts';
 
             if (method_exists($class, $method)) {
-                $this->casts = array_unique(
-                    array_merge($this->casts, $this->{$method}())
-                );
+                $this->casts = array_merge($this->casts, $this->{$method}());
             }
         }
 

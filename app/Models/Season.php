@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 
@@ -30,12 +32,12 @@ class Season extends Model
 
     public function fullName(): Attribute
     {
-        return Attribute::get(fn () => "$this->year {$this->series->name}");
+        return Attribute::get(fn() => "$this->year {$this->series->name}");
     }
 
     public function universe(): Attribute
     {
-        return Attribute::get(fn () => $this->series->universe);
+        return Attribute::get(fn() => $this->series->universe);
     }
 
     public function series(): BelongsTo
@@ -80,15 +82,16 @@ class Season extends Model
 
     public function pickedNumbers(): array
     {
-        return $this->drivers()->get()->map(fn (Racer $driver) => $driver->number)->toArray();
+        return $this->drivers()->get()->map(fn(Racer $driver) => $driver->number)->toArray();
     }
 
     public function availableDrivers(): Collection
     {
         return $this->universe->drivers()
-            ->whereNotIn('id', $this->drivers()
-                ->where('active', true)
-                ->pluck('driver_id'))
+            ->whereNotIn('id',
+                $this->drivers()
+                    ->where('active', true)
+                    ->pluck('driver_id'))
             ->orderBy('first_name')
             ->get();
     }
@@ -96,5 +99,25 @@ class Season extends Model
     public function qualifyingFormat(): MorphTo
     {
         return $this->morphTo('format');
+    }
+
+    public function pointSystem(): HasOne
+    {
+        return $this->hasOne(PointSystem::class);
+    }
+
+    public function pointDistribution(): HasManyThrough
+    {
+        return $this->hasManyThrough(PointDistribution::class, PointSystem::class);
+    }
+
+    public function points(): array
+    {
+        $points = $this->pointDistribution()->get();
+
+        return $points->map(fn(PointDistribution $point) => [
+            'position' => $point->position,
+            'points' => $point->points
+        ])->toArray();
     }
 }

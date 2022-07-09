@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Actions\StorePointsSystem;
+use App\Http\Requests\PointSystemConfigurationRequest;
+use App\Models\Season;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+class StorePointsConfigurationController extends Controller
+{
+    public function __invoke(PointSystemConfigurationRequest $request, Season $season): RedirectResponse
+    {
+        $this->authorize('update', $season->universe);
+        
+        (new StorePointsSystem($request, $season))->handle();
+
+        return to_route('seasons.configuration.points', [$season]);
+    }
+}
