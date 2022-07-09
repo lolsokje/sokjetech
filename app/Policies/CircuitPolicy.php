@@ -10,16 +10,8 @@ class CircuitPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can alter (update or delete) the model.
-     *
-     * @param  User  $user
-     * @param  Circuit  $circuit
-     *
-     * @return bool
-     */
     public function alter(User $user, Circuit $circuit): bool
     {
-        return $user->id === $circuit->user_id;
+        return (int)$user->id === (int)$circuit->user_id;
     }
 }
