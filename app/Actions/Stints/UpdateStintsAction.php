@@ -8,8 +8,8 @@ class UpdateStintsAction extends StintAction implements Action
 {
     public function handle(): void
     {
-        // TODO further checks to see if stints can be updated
-        if ($this->race->completed) {
+        // stints can be updated up until the race has been started
+        if ($this->race->started) {
             return;
         }
 

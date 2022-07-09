@@ -74,12 +74,13 @@ return [
     'exclude' => [
         'app/Providers',
         'app/Enums', // Enums aren't fully supported by PHPCS and will cause incorrect issues
+        'app/Exceptions/Handler.php',
     ],
 
     'add' => [
         Classes::class => [
             ForbiddenFinalClasses::class,
-        ]
+        ],
     ],
 
     'remove' => [
@@ -117,7 +118,7 @@ return [
                 'app/Policies',
                 'app/Rules',
             ],
-        ]
+        ],
     ],
 
     /*

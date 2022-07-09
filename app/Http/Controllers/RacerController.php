@@ -52,7 +52,7 @@ class RacerController extends Controller
 
         $drivers = $request->validated()['drivers'];
 
-        $entrant->allRacers()->each(fn(Racer $driver) => $driver->update(['active' => false]));
+        $entrant->allRacers()->each(fn (Racer $driver) => $driver->update(['active' => false]));
 
         foreach ($drivers as $driver) {
             $entrant->allRacers()->updateOrCreate(

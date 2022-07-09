@@ -19,6 +19,7 @@ class CreateRacesTable extends Migration
             $table->foreignId('circuit_id')->constrained();
             $table->string('name');
             $table->unsignedInteger('order')->nullable();
+            $table->boolean('started')->default(false);
             $table->boolean('completed')->default(false);
             $table->timestamps();
         });

@@ -54,7 +54,6 @@ class UniverseController extends Controller
     {
         $this->authorize('view', $universe);
 
-        // TODO decide what to show on universe index page
         return redirect(route('universes.series.index', [$universe]));
     }
 

@@ -12,6 +12,6 @@ class CircuitPolicy
 
     public function alter(User $user, Circuit $circuit): bool
     {
-        return (int)$user->id === (int)$circuit->user_id;
+        return (int) $user->id === (int) $circuit->user_id;
     }
 }

@@ -47,7 +47,6 @@ class SeriesController extends Controller
     {
         $this->authorize('view', $universe);
 
-        // TODO decide what to show on series index page
         return redirect(route('series.seasons.index', [$series]));
     }
 

@@ -32,13 +32,12 @@ class HandleInertiaRequests extends Middleware
         $universe = $this->getUniverseFromRequest($request);
 
         return array_merge(parent::share($request), [
-            'auth.user' => fn() => $request->user()
+            'auth.user' => fn () => $request->user()
                 ? $request->user()->only('username', 'avatar')
                 : null,
             'flash' => [
-                'notice' => fn() => $request->session()->get('notice'),
+                'notice' => fn () => $request->session()->get('notice'),
             ],
-//            'notice' => $request->session()->get('notice'),
             'can' => [
                 'edit' => Gate::check('owns-universe', $universe),
             ],

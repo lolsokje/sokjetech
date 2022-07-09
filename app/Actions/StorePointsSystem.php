@@ -14,7 +14,9 @@ class StorePointsSystem
 
     public function handle(): void
     {
-        $this->season->pointDistribution()->each(fn(PointDistribution $pointDistribution) => $pointDistribution->delete());
+        $this->season->pointDistribution()->each(function (PointDistribution $pointDistribution) {
+            $pointDistribution->delete();
+        });
         $this->season->pointSystem()->delete();
 
         $validated = $this->request->validated();

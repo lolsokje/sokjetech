@@ -24,7 +24,7 @@ class PointSystemConfigurationRequest extends FormRequest
     {
         $points = collect($this->validated('points'));
 
-        return $points->map(fn(array $pointDistribution) => new PointsData($pointDistribution));
+        return $points->map(fn (array $pointDistribution) => new PointsData($pointDistribution));
     }
 
     public function authorize(): bool
@@ -46,18 +46,18 @@ class PointSystemConfigurationRequest extends FormRequest
                 'required_if:fastest_lap_point_awarded,true',
                 new Enum(FastestLapDetermination::class),
             ],
-            'fastest_lap_min_rng' => [
-                'integer',
-                'min:0',
-                'nullable',
-                'required_if:fastest_lap_determination,separate_stint'
-            ],
-            'fastest_lap_max_rng' => [
-                'integer',
-                'min:0',
-                'nullable',
-                'required_if:fastest_lap_determination,separate_stint'
-            ],
+            'fastest_lap_min_rng' => $this->getFastestLapRngRules(),
+            'fastest_lap_max_rng' => $this->getFastestLapRngRules(),
+        ];
+    }
+
+    private function getFastestLapRngRules(): array
+    {
+        return [
+            'integer',
+            'min:0',
+            'nullable',
+            'required_if:fastest_lap_determination,separate_stint',
         ];
     }
 }

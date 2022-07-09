@@ -21,7 +21,7 @@ class EntrantController extends Controller
     {
         return Inertia::render('Entrants/Index', [
             'season' => $season->load([
-                'entrants' => fn(HasMany $query) => $query->orderBy('full_name')->with('engine'),
+                'entrants' => fn (HasMany $query) => $query->orderBy('full_name')->with('engine'),
             ]),
         ]);
     }
