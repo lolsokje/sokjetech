@@ -14,9 +14,11 @@ use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
+use App\Http\Controllers\ShowPointsConfigurationController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
+use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
@@ -59,9 +61,13 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
     Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
 
-    Route::get('configuration/qualifying', ShowQualifyingSettingsPage::class)->name('configuration.qualifying');
-    Route::post('configuration/qualifying', StoreQualifyingSettingsController::class)
-        ->name('configuration.qualifying.store');
+    Route::group(['prefix' => 'configuration', 'as' => 'configuration.'], function () {
+        Route::get('qualifying', ShowQualifyingSettingsPage::class)->name('qualifying');
+        Route::post('qualifying', StoreQualifyingSettingsController::class)->name('qualifying.store');
+
+        Route::get('points', ShowPointsConfigurationController::class)->name('points');
+        Route::post('points', StorePointsConfigurationController::class)->name('points.store');
+    });
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
         Route::get('drivers', ShowDriverDevelopmentPageController::class)->name('drivers');
