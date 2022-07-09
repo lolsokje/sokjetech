@@ -40,7 +40,8 @@ class EngineSeasonController extends Controller
 
         $season->engines()->create($request->validated());
 
-        return to_route('seasons.engines.index', $season);
+        return to_route('seasons.engines.index', $season)
+            ->with('notice', 'Engine added to season');
     }
 
     public function edit(Season $season, EngineSeason $engine): Response
@@ -60,6 +61,7 @@ class EngineSeasonController extends Controller
 
         $engine->update($request->validated());
 
-        return to_route('seasons.engines.index', [$season]);
+        return to_route('seasons.engines.index', [$season])
+            ->with('notice', 'Engine updated within season');
     }
 }

@@ -12,9 +12,10 @@ class StorePointsConfigurationController extends Controller
     public function __invoke(PointSystemConfigurationRequest $request, Season $season): RedirectResponse
     {
         $this->authorize('update', $season->universe);
-        
+
         (new StorePointsSystem($request, $season))->handle();
 
-        return to_route('seasons.configuration.points', [$season]);
+        return to_route('seasons.configuration.points', [$season])
+            ->with('notice', 'Points configuration stored');
     }
 }

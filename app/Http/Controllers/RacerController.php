@@ -52,7 +52,7 @@ class RacerController extends Controller
 
         $drivers = $request->validated()['drivers'];
 
-        $entrant->allRacers()->each(fn (Racer $driver) => $driver->update(['active' => false]));
+        $entrant->allRacers()->each(fn(Racer $driver) => $driver->update(['active' => false]));
 
         foreach ($drivers as $driver) {
             $entrant->allRacers()->updateOrCreate(
@@ -65,7 +65,8 @@ class RacerController extends Controller
             );
         }
 
-        return redirect(route('seasons.racers.index', [$season]));
+        return redirect(route('seasons.racers.index', [$season]))
+            ->with('notice', 'Driver added to team and season');
     }
 
     public function show(Season $season, Racer $racer): Response
@@ -88,6 +89,7 @@ class RacerController extends Controller
 
         $racer->update($request->validated());
 
-        return redirect(route('seasons.racers.index', [$season]));
+        return redirect(route('seasons.racers.index', [$season]))
+            ->with('notice', 'Driver updated');
     }
 }

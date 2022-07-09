@@ -23,7 +23,7 @@ class HandleInertiaRequests extends Middleware
      *
      * @see https://inertiajs.com/shared-data
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return array
      */
@@ -32,10 +32,13 @@ class HandleInertiaRequests extends Middleware
         $universe = $this->getUniverseFromRequest($request);
 
         return array_merge(parent::share($request), [
-            'auth.user' => fn () => $request->user()
+            'auth.user' => fn() => $request->user()
                 ? $request->user()->only('username', 'avatar')
                 : null,
-            'notice' => $request->session()->get('notice'),
+            'flash' => [
+                'notice' => fn() => $request->session()->get('notice'),
+            ],
+//            'notice' => $request->session()->get('notice'),
             'can' => [
                 'edit' => Gate::check('owns-universe', $universe),
             ],

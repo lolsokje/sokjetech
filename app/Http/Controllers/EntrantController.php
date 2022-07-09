@@ -21,7 +21,7 @@ class EntrantController extends Controller
     {
         return Inertia::render('Entrants/Index', [
             'season' => $season->load([
-                'entrants' => fn (HasMany $query) => $query->orderBy('full_name')->with('engine'),
+                'entrants' => fn(HasMany $query) => $query->orderBy('full_name')->with('engine'),
             ]),
         ]);
     }
@@ -43,7 +43,8 @@ class EntrantController extends Controller
 
         $season->entrants()->create($request->validated());
 
-        return redirect(route('seasons.entrants.index', [$season]));
+        return redirect(route('seasons.entrants.index', [$season]))
+            ->with('notice', 'Entrant added to season');
     }
 
     public function edit(Season $season, Entrant $entrant): Response
@@ -64,6 +65,7 @@ class EntrantController extends Controller
 
         $entrant->update($request->validated());
 
-        return redirect(route('seasons.entrants.index', [$season]));
+        return redirect(route('seasons.entrants.index', [$season]))
+            ->with('notice', 'Entrant updated');
     }
 }
