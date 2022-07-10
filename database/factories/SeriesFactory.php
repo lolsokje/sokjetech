@@ -15,7 +15,7 @@ class SeriesFactory extends Factory
     public function definition(): array
     {
         return [
-            'universe_id' => Universe::factory()->create()->id,
+            'universe_id' => Universe::factory(),
             'name' => $this->faker->name(),
         ];
     }

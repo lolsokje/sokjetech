@@ -1,0 +1,112 @@
+[
+  {
+    "circuit_name": "Bahrain International Circuit",
+    "country": "BH",
+    "race_name": "2022 Bahrain Grand Prix"
+  },
+  {
+    "circuit_name": "Jeddah Corniche Circuit",
+    "country": "SA",
+    "race_name": "2022 Saudi Arabian Grand Prix"
+  },
+  {
+    "circuit_name": "Albert Park Circuit",
+    "country": "AU",
+    "race_name": "2022 Australian Grand Prix"
+  },
+  {
+    "circuit_name": "Autodromo Internazionale Enzo e Dino Ferrari",
+    "country": "SM",
+    "race_name": "2022 Emilia Romagna Grand Prix"
+  },
+  {
+    "circuit_name": "Miami International Autodrome",
+    "country": "US",
+    "race_name": "2022 Miami Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit de Barcelona-Catalunya",
+    "country": "ES",
+    "race_name": "2022 Spanish Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit de Monaco",
+    "country": "MC",
+    "race_name": "2022 Monaco Grand Prix"
+  },
+  {
+    "circuit_name": "Baku City Circuit",
+    "country": "AZ",
+    "race_name": "2022 Azerbaijan Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit Gilles Villeneuve",
+    "country": "CA",
+    "race_name": "2022 Canadian Grand Prix"
+  },
+  {
+    "circuit_name": "Silverstone Circuit",
+    "country": "GB",
+    "race_name": "2022 British Grand Prix"
+  },
+  {
+    "circuit_name": "Red Bull Ring",
+    "country": "AT",
+    "race_name": "2022 Austrian Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit Paul Ricard",
+    "country": "FR",
+    "race_name": "2022 French Grand Prix"
+  },
+  {
+    "circuit_name": "Hungaroring",
+    "country": "HU",
+    "race_name": "2022 Hungarian Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit de Spa-Francorchamps",
+    "country": "BE",
+    "race_name": "2022 Belgian Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit Zandvoort",
+    "country": "NL",
+    "race_name": "2022 Dutch Grand Prix"
+  },
+  {
+    "circuit_name": "Monza Circuit",
+    "country": "IT",
+    "race_name": "2022 Italian Grand Prix"
+  },
+  {
+    "circuit_name": "Marina Bay Street Circuit",
+    "country": "SG",
+    "race_name": "2022 Singapore Grand Prix"
+  },
+  {
+    "circuit_name": "Suzuka International Racing Course",
+    "country": "JP",
+    "race_name": "2022 Japanese Grand Prix"
+  },
+  {
+    "circuit_name": "Circuit of the Americas",
+    "country": "US",
+    "race_name": "2022 United States Grand Prix"
+  },
+  {
+    "circuit_name": "Autoódromo Hermanos Rodríguez",
+    "country": "MX",
+    "race_name": "2022 Mexican Grand Prix"
+  },
+  {
+    "circuit_name": "Interlagos Circuit",
+    "country": "BR",
+    "race_name": "2022 Brazilian Grand Prix"
+  },
+  {
+    "circuit_name": "Yas Marina Circuit",
+    "country": "AE",
+    "race_name": "2022 Abu Dhabi Grand Prix"
+  }
+]

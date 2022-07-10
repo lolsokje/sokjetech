@@ -58,7 +58,7 @@ return [
     |
     */
 
-    'ide' => null,
+    'ide' => 'phpstorm',
 
     /*
     |--------------------------------------------------------------------------
@@ -74,6 +74,7 @@ return [
     'exclude' => [
         'app/Providers',
         'app/Enums', // Enums aren't fully supported by PHPCS and will cause incorrect issues
+        'app/Console',
         'app/Exceptions/Handler.php',
     ],
 
