@@ -17,7 +17,7 @@ class UpdateTeamRatingsController extends Controller
 
         $teams->each(function ($team) {
             Entrant::query()
-                ->where('id', $team['id'])
+                ->find($team['id'])
                 ->update(['rating' => $team['new']]);
         });
 

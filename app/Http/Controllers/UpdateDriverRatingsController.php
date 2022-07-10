@@ -17,7 +17,7 @@ class UpdateDriverRatingsController extends Controller
 
         $drivers->each(function ($driver) {
             Racer::query()
-                ->where('id', $driver['id'])
+                ->find($driver['id'])
                 ->update(['rating' => $driver['new']]);
         });
 

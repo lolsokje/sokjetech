@@ -16,7 +16,7 @@ class UpdateEngineRatingsController extends Controller
 
         $engines->each(function ($engine) {
             EngineSeason::query()
-                ->where('id', $engine['id'])
+                ->find($engine['id'])
                 ->update(['rating' => $engine['new']]);
         });
 
