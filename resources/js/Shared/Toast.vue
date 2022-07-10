@@ -1,11 +1,15 @@
 <template>
-  <!--  <div v-if="notice" class="alert alert-success fade show position-absolute top-0 start-50 translate-middle-x mt-4">-->
-  <!--    {{ notice }}-->
-  <!--  </div>-->
   <div class="position-fixed top-0 end-0 p-3 text-white" style="z-index: 11" v-show="notice">
     <div class="toast p-2 bg-success" role="alert">
       <div class="toast-body bg-success">
         {{ notice }}
+      </div>
+    </div>
+  </div>
+  <div class="position-fixed top-0 end-0 p-3 text-white" style="z-index: 11" v-show="error">
+    <div class="toast p-2 bg-danger" role="alert">
+      <div class="toast-body bg-danger">
+        {{ error }}
       </div>
     </div>
   </div>
@@ -24,6 +28,7 @@ onMounted(() => {
   toasts.forEach(toast => toast.show());
 });
 const notice = computed(() => usePage().props.value.flash.notice);
+const error = computed(() => usePage().props.value.flash.error);
 </script>
 
 <style scoped>

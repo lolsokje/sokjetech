@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'flash' => [
                 'notice' => fn () => $request->session()->get('notice'),
+                'error' => fn () => $request->session()->get('error'),
             ],
             'can' => [
                 'edit' => Gate::check('owns-universe', $universe),
