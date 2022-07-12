@@ -1,16 +1,16 @@
 <template>
-	<div class="wrapper d-flex">
-		<Nav :class="state.sidebarActive"/>
+    <div class="wrapper d-flex">
+        <Nav :class="state.sidebarActive"/>
 
-		<div id="content" class="p-5">
-			<Breadcrumbs @toggleVisible="toggleSidebar"/>
-			<Toast/>
+        <div id="content" class="p-5">
+            <Breadcrumbs @toggleVisible="toggleSidebar"/>
+            <Toast/>
 
-			<main>
-				<slot/>
-			</main>
-		</div>
-	</div>
+            <main>
+                <slot/>
+            </main>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -20,11 +20,11 @@ import { reactive } from 'vue';
 import Toast from '../Toast';
 
 const state = reactive({
-	sidebarActive: '',
+    sidebarActive: localStorage.getItem('sidebar_visible') === 'false' ? 'inactive' : '',
 });
 
 async function toggleSidebar (visible) {
-	state.sidebarActive = visible ? '' : 'inactive';
+    state.sidebarActive = visible ? '' : 'inactive';
 }
 </script>
 
