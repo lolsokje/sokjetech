@@ -20,12 +20,14 @@ class RaceController extends Controller
     public function __construct()
     {
         $this->middleware(['auth'])->only('create', 'edit', 'reorder');
+        $this->middleware(['season_started'])->except('index', 'show');
     }
 
     public function index(Season $season): Response
     {
         return Inertia::render('Races/Index', [
             'season' => $season->load(['races' => fn (HasMany $query) => $query->orderBy('order')]),
+            'next_race_id' => $season->nextRace()?->id,
         ]);
     }
 

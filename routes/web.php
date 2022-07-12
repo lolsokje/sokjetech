@@ -18,6 +18,7 @@ use App\Http\Controllers\ShowPointsConfigurationController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
+use App\Http\Controllers\StartSeasonController;
 use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\TeamController;
@@ -51,6 +52,8 @@ Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
 });
 
 Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
+    Route::put('start', StartSeasonController::class)->name('start');
+
     Route::get('races/reorder', [RaceController::class, 'reorder'])->name('races.reorder');
     Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
     Route::resource('races', RaceController::class)->except('destroy');

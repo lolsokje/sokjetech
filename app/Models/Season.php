@@ -19,6 +19,8 @@ class Season extends Model
 
     protected $casts = [
         'year' => 'integer',
+        'started' => 'boolean',
+        'completed' => 'boolean',
     ];
 
     protected $appends = [
@@ -48,6 +50,14 @@ class Season extends Model
     public function races(): HasMany
     {
         return $this->hasMany(Race::class);
+    }
+
+    public function nextRace(): ?Race
+    {
+        return Race::query()
+            ->where('completed', false)
+            ->where('season_id', $this->id)
+            ->first();
     }
 
     public function teams(): HasMany
