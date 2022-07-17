@@ -12,6 +12,7 @@
         :canRunQualifying="can.edit"
         :results="qualifyingResults"
         :sessionDetails="race.details"
+        :completed="race.qualifying_completed"
         @runPerformed="storeQualifyingResult"
         @completeQualifying="completeQualifying"
     />
@@ -80,7 +81,7 @@ const storeQualifyingResult = async (data) => {
         driver.position = index + 1;
     });
 
-    Inertia.post(route('weekend.qualifying.results.store', [ props.race ]), { drivers, details }, {
+    Inertia.post(route('weekend.qualifying.results.store', [ props.race ]), {drivers, details}, {
         onError: () => showError.value = true,
         onSuccess: () => showError.value = false,
         preserveState: true,
@@ -96,5 +97,5 @@ const completeQualifying = () => {
 <script>
 import RaceWeekend from '@/Shared/Layouts/RaceWeekend';
 
-export default { layout: RaceWeekend };
+export default {layout: RaceWeekend};
 </script>

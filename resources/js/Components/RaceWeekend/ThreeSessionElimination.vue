@@ -88,6 +88,10 @@ const props = defineProps({
         type: Object,
         required: false,
     },
+    completed: {
+        type: Boolean,
+        required: false,
+    },
 });
 
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
@@ -157,7 +161,7 @@ const isDriverBelowSessionCutoff = (position) => {
 const canPerformRun = computed(() => store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session);
 const canContinueToNextSession = computed(() => store.getCurrentSessionNumber() < totalSessions);
 const canViewPreviousSession = computed(() => store.getCurrentSessionIndex() > 0);
-const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === 3 && store.getCurrentSessionRunCount() === 3);
+const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === 3 && store.getCurrentSessionRunCount() === 3 && !props.completed);
 
 onMounted(() => {
     store.setDrivers(props.drivers);
