@@ -19,7 +19,9 @@
                         </InertiaLink>
                     </li>
                     <li class="nav-item" v-if="race.qualifying_completed">
-                        <a href="#" class="nav-link">Starting grid</a>
+                        <InertiaLink :href="route('weekend.grid', [race])" class="nav-link">
+                            Starting grid
+                        </InertiaLink>
                     </li>
                     <li class="nav-item" v-if="race.qualifying_completed">
                         <a href="#" class="nav-link">Race</a>

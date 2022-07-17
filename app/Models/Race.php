@@ -20,6 +20,11 @@ class Race extends Model
         'details' => 'json',
     ];
 
+    public function universe(): Universe
+    {
+        return $this->season->universe;
+    }
+
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);

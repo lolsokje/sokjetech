@@ -19,6 +19,7 @@ use App\Http\Controllers\ShowPointsConfigurationController;
 use App\Http\Controllers\ShowQualifyingPageController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
 use App\Http\Controllers\ShowRaceWeekendIntroPageController;
+use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\StartSeasonController;
@@ -99,6 +100,7 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 Route::group(['prefix' => 'races/{race}/weekend', 'as' => 'weekend.'], function () {
     Route::get('intro', ShowRaceWeekendIntroPageController::class)->name('intro');
     Route::get('qualifying', ShowQualifyingPageController::class)->name('qualifying');
+    Route::get('grid', ShowStartingGridController::class)->name('grid');
 
     Route::post('qualifying/results', StoreQualifyingResultsController::class)->name('qualifying.results.store');
     Route::post('qualifying/complete', CompleteQualifyingController::class)->name('qualifying.complete');
