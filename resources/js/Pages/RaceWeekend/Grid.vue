@@ -3,7 +3,7 @@
 
     <h3>{{ race.name }} Starting Grid</h3>
 
-    <table class="table table-bordered table-dark table-narrow">
+    <table class="table table-bordered table-dark table-narrow" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
@@ -23,12 +23,14 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     race: {

@@ -8,7 +8,7 @@
         <label class="form-check-label" for="edit-mode">Edit mode?</label>
     </template>
 
-    <table class="table table-bordered table-dark">
+    <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">#</th>
@@ -48,11 +48,13 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import BackLink from '@/Shared/BackLink';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     season: {

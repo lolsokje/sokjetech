@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <table class="table table-bordered table-dark">
+    <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
@@ -54,6 +54,7 @@
         </template>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
@@ -66,6 +67,7 @@ import {
     sortDriversByTotal,
 } from '@/Composables/useRunQualifying';
 import { threeSessionEliminationStore as store } from '@/Stores/threeSessionEliminationStore';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     formatDetails: {

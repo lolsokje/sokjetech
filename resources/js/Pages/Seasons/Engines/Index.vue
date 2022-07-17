@@ -7,7 +7,7 @@
         Add engine to season
     </InertiaLink>
 
-    <table class="table table-bordered table-dark table-narrow">
+    <table class="table table-bordered table-dark table-narrow" id="screenshot-target">
         <thead>
         <tr>
             <th>Engine</th>
@@ -38,10 +38,12 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
 import BackLink from '@/Shared/BackLink';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     season: {

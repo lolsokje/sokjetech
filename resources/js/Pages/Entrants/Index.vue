@@ -7,7 +7,7 @@
         Add entrant
     </InertiaLink>
 
-    <table class="table table-bordered table-dark">
+    <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
         <tr>
             <th>Full name</th>
@@ -42,10 +42,12 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
 import BackLink from '@/Shared/BackLink';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 defineProps({
     season: {

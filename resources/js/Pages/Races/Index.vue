@@ -13,7 +13,7 @@
         Reorder races
     </InertiaLink>
 
-    <table class="table table-bordered table-dark">
+    <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">#</th>
@@ -40,10 +40,12 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
 import BackLink from '@/Shared/BackLink';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     season: {
