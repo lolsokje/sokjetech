@@ -10,7 +10,8 @@
                     Perform Run
                 </button>
             </div>
-            <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession" class="btn btn-secondary">
+            <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession"
+                    class="btn btn-secondary">
                 Next session
             </button>
             <button @click.prevent="emit('completeQualifying')" class="btn btn-success" v-if="canCompleteQualifying">
@@ -19,11 +20,11 @@
         </div>
     </div>
 
-    <table class="table table-dark">
+    <table class="table table-bordered table-dark">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
-            <th style="max-width: 5px"></th>
+            <th class="colour-accent"></th>
             <th>Driver</th>
             <th class="text-center">#</th>
             <th>Team</th>
@@ -37,13 +38,13 @@
         <template v-for="(driver, position) in drivers" :key="driver.id">
             <tr v-if="canDriverParticipateInCurrentSession(position)">
                 <td class="text-center" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
-                    P{{ position + 1 }}
+                    {{ position + 1 }}
                 </td>
-                <td style="max-width: 5px" :style="`background-color: ${driver.primary_colour}`"></td>
-                <td>{{ driver.full_name }}</td>
-                <td class="text-center px-3" :style="driver.style_string">{{ driver.number }}</td>
-                <td>{{ driver.team_name }}</td>
-                <td class="text-center ps-0">{{ driver.total_rating }}</td>
+                <td class="colour-accent" :style="`background-color: ${driver.primary_colour}`"></td>
+                <td class="padded-left">{{ driver.full_name }}</td>
+                <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+                <td class="padded-left">{{ driver.team_name }}</td>
+                <td class="text-center">{{ driver.total_rating }}</td>
                 <td v-for="i in 3" :key="i" class="text-center">
                     {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
                 </td>

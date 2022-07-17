@@ -3,11 +3,11 @@
 
     <h3>{{ race.name }} Starting Grid</h3>
 
-    <table class="table table-dark table-narrow">
+    <table class="table table-bordered table-dark table-narrow">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
-            <th style="max-width: 5px"></th>
+            <th class="colour-accent"></th>
             <th>Driver</th>
             <th class="text-center">#</th>
             <th>Team</th>
@@ -15,11 +15,11 @@
         </thead>
         <tbody>
         <tr v-for="driver in drivers" :key="driver.id">
-            <td class="text-center">{{ driver.position }}</td>
-            <td style="max-width: 5px" :style="`background-color: ${driver.background_colour}`"></td>
-            <td>{{ driver.full_name }}</td>
-            <td :style="driver.style_string" class="text-center">{{ driver.number }}</td>
-            <td>{{ driver.team_name }}</td>
+            <td class="small-centered">{{ driver.position }}</td>
+            <td class="colour-accent" :style="`background-color: ${driver.background_colour}`"></td>
+            <td class="padded-left">{{ driver.full_name }}</td>
+            <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team_name }}</td>
         </tr>
         </tbody>
     </table>
@@ -47,5 +47,5 @@ onMounted(() => sortDriversByPosition(props.drivers));
 <script>
 import RaceWeekend from '@/Shared/Layouts/RaceWeekend';
 
-export default { layout: RaceWeekend };
+export default {layout: RaceWeekend};
 </script>
