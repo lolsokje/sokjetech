@@ -34,7 +34,7 @@
                 <InertiaLink v-if="canEditRace(race)" :href="route('seasons.races.edit', [season, race])">
                     edit
                 </InertiaLink>
-                <a v-else-if="isNextRace(race)" href="#">start</a>
+                <InertiaLink v-else-if="isNextRace(race)" :href="route('weekend.intro', [race])">start</InertiaLink>
                 <a v-if="race.completed" href="#">results</a>
             </td>
         </tr>

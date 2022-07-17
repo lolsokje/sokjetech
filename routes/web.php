@@ -15,11 +15,14 @@ use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
 use App\Http\Controllers\ShowPointsConfigurationController;
+use App\Http\Controllers\ShowQualifyingPageController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
+use App\Http\Controllers\ShowRaceWeekendIntroPageController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\StartSeasonController;
 use App\Http\Controllers\StorePointsConfigurationController;
+use App\Http\Controllers\StoreQualifyingResultsController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
@@ -90,4 +93,11 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
             Route::post('teams', UpdateTeamReliabilityController::class)->name('teams.store');
         });
     });
+});
+
+Route::group(['prefix' => 'races/{race}/weekend', 'as' => 'weekend.'], function () {
+    Route::get('intro', ShowRaceWeekendIntroPageController::class)->name('intro');
+    Route::get('qualifying', ShowQualifyingPageController::class)->name('qualifying');
+
+    Route::post('qualifying/results', StoreQualifyingResultsController::class)->name('qualifying.results.store');
 });

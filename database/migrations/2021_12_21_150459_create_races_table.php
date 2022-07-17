@@ -21,6 +21,7 @@ class CreateRacesTable extends Migration
             $table->unsignedInteger('order')->nullable();
             $table->boolean('started')->default(false);
             $table->boolean('completed')->default(false);
+            $table->json('details')->nullable(); // a column to keep track of things like current qualifying session/run, etc
             $table->timestamps();
         });
     }

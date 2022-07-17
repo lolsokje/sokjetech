@@ -15,6 +15,7 @@ class Race extends Model
     protected $casts = [
         'order' => 'integer',
         'completed' => 'boolean',
+        'details' => 'json',
     ];
 
     public function season(): BelongsTo
@@ -30,5 +31,10 @@ class Race extends Model
     public function stints(): HasMany
     {
         return $this->hasMany(Stint::class);
+    }
+
+    public function qualifyingResults(): HasMany
+    {
+        return $this->hasMany(QualifyingResult::class);
     }
 }

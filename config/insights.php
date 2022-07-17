@@ -109,7 +109,7 @@ return [
         LineLengthSniff::class => [
             'lineLimit' => 120,
             'absoluteLineLimit' => 120,
-            'ignoreComments' => false,
+            'ignoreComments' => true,
         ],
         UnusedParameterSniff::class => [
             // these files come with default unused parameters you can't remove, so ignore them
@@ -118,6 +118,7 @@ return [
                 'app/Exceptions/Handler.php',
                 'app/Policies',
                 'app/Rules',
+                'app/Http/Resources',
             ],
         ],
     ],
