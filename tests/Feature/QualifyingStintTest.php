@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\QualifyingFormats\ThreeSessionElimination;
-use App\Models\Race;
-use App\Models\Racer;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -125,23 +122,6 @@ test('the driver position is correctly determined', function () {
         assertEquals($key + 1, $result->position);
     }
 });
-
-function prepareSeason(): array
-{
-    $user = User::factory()->create();
-    $season = createSeasonForUser($user);
-    $drivers = Racer::factory(5)->for($season)->create();
-    $race = Race::factory()->for($season)->create();
-    $format = ThreeSessionElimination::factory()->create();
-
-    $season->qualifyingFormat()->associate($format);
-
-    return [
-        $user,
-        $drivers,
-        $race,
-    ];
-}
 
 function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCount = 3): array
 {

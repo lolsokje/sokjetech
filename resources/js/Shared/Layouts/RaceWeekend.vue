@@ -18,10 +18,13 @@
                             Qualifying
                         </InertiaLink>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="race.qualifying_completed">
+                        <a href="#" class="nav-link">Starting grid</a>
+                    </li>
+                    <li class="nav-item" v-if="race.qualifying_completed">
                         <a href="#" class="nav-link">Race</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="race.completed">
                         <a href="#" class="nav-link">Debrief</a>
                     </li>
                 </ul>

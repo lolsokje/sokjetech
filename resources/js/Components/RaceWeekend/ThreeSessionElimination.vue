@@ -13,6 +13,9 @@
             <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession" class="btn btn-secondary">
                 Next session
             </button>
+            <button @click.prevent="emit('completeQualifying')" class="btn btn-success" v-if="canCompleteQualifying">
+                Complete qualifying
+            </button>
         </div>
     </div>
 
@@ -86,7 +89,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits([ 'runPerformed' ]);
+const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
 
 const totalSessions = 3;
 
@@ -153,6 +156,7 @@ const isDriverBelowSessionCutoff = (position) => {
 const canPerformRun = computed(() => store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session);
 const canContinueToNextSession = computed(() => store.getCurrentSessionNumber() < totalSessions);
 const canViewPreviousSession = computed(() => store.getCurrentSessionIndex() > 0);
+const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === 3 && store.getCurrentSessionRunCount() === 3);
 
 onMounted(() => {
     store.setDrivers(props.drivers);

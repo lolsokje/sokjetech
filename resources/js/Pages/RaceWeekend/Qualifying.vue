@@ -13,6 +13,7 @@
         :results="qualifyingResults"
         :sessionDetails="race.details"
         @runPerformed="storeQualifyingResult"
+        @completeQualifying="completeQualifying"
     />
 </template>
 
@@ -85,6 +86,10 @@ const storeQualifyingResult = async (data) => {
         preserveState: true,
         preserveScroll: true,
     });
+};
+
+const completeQualifying = () => {
+    Inertia.post(route('weekend.qualifying.complete', [ props.race ]));
 };
 </script>
 

@@ -14,6 +14,8 @@ class Race extends Model
 
     protected $casts = [
         'order' => 'integer',
+        'qualifying_completed' => 'boolean',
+        'started' => 'boolean',
         'completed' => 'boolean',
         'details' => 'json',
     ];

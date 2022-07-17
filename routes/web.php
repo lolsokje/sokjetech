@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
+use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
@@ -100,4 +101,5 @@ Route::group(['prefix' => 'races/{race}/weekend', 'as' => 'weekend.'], function 
     Route::get('qualifying', ShowQualifyingPageController::class)->name('qualifying');
 
     Route::post('qualifying/results', StoreQualifyingResultsController::class)->name('qualifying.results.store');
+    Route::post('qualifying/complete', CompleteQualifyingController::class)->name('qualifying.complete');
 });
