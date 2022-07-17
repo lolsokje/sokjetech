@@ -15,9 +15,13 @@ class ShowQualifyingPageController extends Controller
         $this->authorize('view', $race->season->universe);
 
         $race->load([
-            'season.activeRacers.driver',
-            'season.activeRacers.entrant.engine',
-            'season.qualifyingFormat',
+            'season' => [
+                'activeRacers' => [
+                    'driver',
+                    'entrant' => ['engine'],
+                ],
+                'qualifyingFormat',
+            ],
             'qualifyingResults',
         ]);
 

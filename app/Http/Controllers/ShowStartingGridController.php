@@ -18,12 +18,15 @@ class ShowStartingGridController extends Controller
             return to_route('weekend.intro', [$race]);
         }
 
-        $race->load(
+        $race->load([
             'season',
-            'qualifyingResults.racer',
-            'qualifyingResults.racer.driver',
-            'qualifyingResults.racer.entrant'
-        );
+            'qualifyingResults' => [
+                'racer' => [
+                    'driver',
+                    'entrant',
+                ],
+            ],
+        ]);
 
         $drivers = StartingGridResource::collection($race->qualifyingResults);
 
