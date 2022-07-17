@@ -25,7 +25,7 @@
         <tbody>
         <tr v-for="race in season.races" :key="race.id">
             <td class="small-centered">{{ race.order }}</td>
-            <td>{{ race.name }}</td>
+            <td class="padded-left">{{ race.name }}</td>
             <td class="big-centered">
                 <fa v-if="race.completed" icon="check"/>
                 <fa v-else icon="times"/>
@@ -80,5 +80,5 @@ const isNextRace = (race) => {
 <script>
 import Season from '@/Shared/Layouts/Season';
 
-export default { layout: Season };
+export default {layout: Season};
 </script>
