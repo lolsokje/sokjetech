@@ -13,7 +13,7 @@ class CompleteQualifyingController extends Controller
 
         $race->update(['qualifying_completed' => true]);
 
-        return to_route('weekend.intro', $race)
+        return to_route('weekend.grid', $race)
             ->with('notice', 'Qualifying completed');
     }
 }

@@ -13,7 +13,7 @@ test('a universe owner can mark a qualifying session as completed', function () 
 
     actingAs($user)
         ->post(route('weekend.qualifying.complete', [$race]))
-        ->assertRedirect();
+        ->assertRedirect(route('weekend.grid', [$race]));
 
     assertTrue($race->fresh()->qualifying_completed);
 });
