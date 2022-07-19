@@ -32,4 +32,6 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
+        SNOWFLAKE_DATA_CENTER: 1
+        SNOWFLAKE_WORKER_NODE: 1
       run: vendor/bin/pest
