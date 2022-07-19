@@ -20,10 +20,8 @@ jobs:
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Install Node Modules
-      run: npm install
-    - name: Build Node Modules
-      run: npm ci --legacy-peer-deps
+    - name: Install and build Node Modules
+    - run: npm ci --legacy-peer-deps && npm run build
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
