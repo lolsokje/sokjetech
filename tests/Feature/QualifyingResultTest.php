@@ -2,21 +2,22 @@
 
 use App\Models\User;
 use Illuminate\Support\Collection;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertIsInt;
+use function PHPUnit\Framework\assertTrue;
 
 it('stores qualifying results in the database', function () {
     [$user, $drivers, $race] = prepareSeason();
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers, 1, 1))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     assertDatabaseCount('qualifying_results', 5);
     assertCount(5, $race->qualifyingResults);
@@ -27,13 +28,13 @@ it('overwrites existing qualifying results for the same race', function () {
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers, 1, 1))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     assertDatabaseCount('qualifying_results', 5);
     assertCount(5, $race->qualifyingResults);
 
     postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers, 1, 2))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     assertDatabaseCount('qualifying_results', 5);
     assertCount(5, $race->qualifyingResults);
@@ -44,7 +45,7 @@ test('a stored qualifying result stint has the correct format', function () {
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers, 1, 1))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     $firstResult = $race->qualifyingResults()->first();
     $runs = $firstResult->runs;
@@ -58,7 +59,7 @@ test('a stored qualifying result stint has the correct format', function () {
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers, 1, 2))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     $firstResult = $race->fresh()->qualifyingResults()->first();
     $runs = $firstResult->runs;
@@ -72,7 +73,7 @@ test('a stored qualifying result stint has the correct format', function () {
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers, 2, 2))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     $firstResult = $race->fresh()->qualifyingResults()->first();
     $runs = $firstResult->runs;
@@ -103,7 +104,7 @@ test('only universe owners can store qualifying results', function () {
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     assertDatabaseCount('qualifying_results', 5);
     assertCount(5, $race->fresh()->qualifyingResults);
@@ -114,13 +115,25 @@ test('the driver position is correctly determined', function () {
 
     actingAs($user)
         ->postJson(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers))
-        ->assertRedirect(route('weekend.qualifying', [$race]));
+        ->assertOk();
 
     $results = $race->fresh()->qualifyingResults;
 
     foreach ($results as $key => $result) {
         assertEquals($key + 1, $result->position);
     }
+});
+
+it('marks qualifying as started once the first runs are stored', function () {
+    [$user, $drivers, $race] = prepareSeason();
+
+    assertFalse($race->qualifying_started);
+
+    actingAs($user)
+        ->post(route('weekend.qualifying.results.store', [$race]), getDriverRuns($drivers))
+        ->assertOk();
+
+    assertTrue($race->fresh()->qualifying_started);
 });
 
 function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCount = 3): array
@@ -137,6 +150,7 @@ function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCou
         }
         $runs[] = [
             'id' => $driver->id,
+            'entrant_id' => $driver->entrant->id,
             'position' => $key + 1,
             'runs' => $driverRuns,
         ];
