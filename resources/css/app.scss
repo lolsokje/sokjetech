@@ -79,6 +79,13 @@ a {
       vertical-align: middle;
     }
 
+    &.medium-centered {
+      width: 145px;
+      max-width: 145px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
     &.big-centered {
       width: 200px;
       max-width: 200px;
@@ -95,11 +102,24 @@ a {
   th {
     background-color: $darker;
     padding: 1rem;
+    border-width: 0;
   }
 
   tbody {
     tr, td {
       padding: 0.5rem 0;
+    }
+
+    tr {
+      td {
+        &:not(:first-child) {
+          border-left: 0 solid;
+        }
+
+        &:not(:last-child) {
+          border-right: 0 solid;
+        }
+      }
     }
 
     tr:hover {
