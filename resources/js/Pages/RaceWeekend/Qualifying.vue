@@ -2,7 +2,7 @@
     <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
 
     <div class="alert bg-danger text-white container w-50" v-if="showError">
-        Something went wrong saving your runs. Please refresh the database and try again.
+        Something went wrong saving your runs. Please refresh the page and try again.
     </div>
 
     <component
@@ -13,6 +13,7 @@
         :results="qualifyingResults"
         :sessionDetails="race.details"
         :completed="race.qualifying_completed"
+        :showError="showError"
         @runPerformed="storeQualifyingResult"
         @completeQualifying="completeQualifying"
     />
@@ -26,6 +27,7 @@ import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimin
 import SingleSession from '@/Components/RaceWeekend/SingleSession';
 import { Inertia } from '@inertiajs/inertia';
 import { sortDriversByTotal } from '@/Composables/useRunQualifying';
+import axios from 'axios';
 
 const props = defineProps({
     race: {
@@ -64,13 +66,17 @@ onMounted(() => {
     sortedDrivers.value = props.drivers;
 });
 
-const storeQualifyingResult = async (data) => {
+const storeQualifyingResult = (data) => {
     const details = data.details;
     const drivers = [];
 
     data.results.forEach(result => {
         drivers.push({
             id: result.id,
+            entrant_id: result.entrant_id,
+            driver_rating: result.driver_rating,
+            team_rating: result.team_rating,
+            engine_rating: result.engine_rating,
             runs: result.runs,
         });
     });
@@ -81,12 +87,8 @@ const storeQualifyingResult = async (data) => {
         driver.position = index + 1;
     });
 
-    Inertia.post(route('weekend.qualifying.results.store', [ props.race ]), {drivers, details}, {
-        onError: () => showError.value = true,
-        onSuccess: () => showError.value = false,
-        preserveState: true,
-        preserveScroll: true,
-    });
+    axios.post(route('weekend.qualifying.results.store', [ props.race ]), { drivers, details })
+        .catch(() => showError.value = true);
 };
 
 const completeQualifying = () => {
@@ -97,5 +99,5 @@ const completeQualifying = () => {
 <script>
 import RaceWeekend from '@/Shared/Layouts/RaceWeekend';
 
-export default {layout: RaceWeekend};
+export default { layout: RaceWeekend };
 </script>

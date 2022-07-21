@@ -94,6 +94,7 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    showError: Boolean,
 });
 
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
@@ -160,8 +161,9 @@ const isDriverBelowSessionCutoff = (position) => {
     return position > maxDriversInNextSession;
 };
 
-const canPerformRun = computed(() => store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session);
-const canContinueToNextSession = computed(() => store.getCurrentSessionNumber() < totalSessions);
+const hasError = computed(() => props.showError === true);
+const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session) && !hasError.value);
+const canContinueToNextSession = computed(() => (store.getCurrentSessionNumber() < totalSessions) && !hasError.value);
 const canViewPreviousSession = computed(() => store.getCurrentSessionIndex() > 0);
 const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === 3 && store.getCurrentSessionRunCount() === 3 && !props.completed);
 

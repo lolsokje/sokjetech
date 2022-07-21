@@ -14,11 +14,22 @@ class StoreQualifyingResultsAction
 
     public function handle(): void
     {
-        $this->race->update(['details' => $this->details]);
+        $this->updateRaceDetails();
 
         foreach ($this->drivers as $driver) {
             $this->updateOrCreateQualifyingResult($driver);
         }
+    }
+
+    private function updateRaceDetails(): void
+    {
+        $updateArray = ['details' => $this->details];
+
+        if (!$this->race->qualifying_started) {
+            $updateArray['qualifying_started'] = true;
+        }
+
+        $this->race->update($updateArray);
     }
 
     private function updateOrCreateQualifyingResult(array $driver): void
@@ -32,6 +43,10 @@ class StoreQualifyingResultsAction
                 'position' => $driver['position'],
                 'runs' => $driver['runs'],
                 'season_id' => $this->race->season_id,
+                'entrant_id' => $driver['entrant_id'],
+                'driver_rating' => $driver['driver_rating'],
+                'team_rating' => $driver['team_rating'],
+                'engine_rating' => $driver['engine_rating'],
             ],
         );
     }

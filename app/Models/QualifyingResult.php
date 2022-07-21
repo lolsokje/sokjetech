@@ -32,4 +32,9 @@ class QualifyingResult extends Model
     {
         return $this->belongsTo(Racer::class);
     }
+
+    public function entrant(): BelongsTo
+    {
+        return $this->belongsTo(Entrant::class);
+    }
 }

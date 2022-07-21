@@ -151,6 +151,9 @@ function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCou
         $runs[] = [
             'id' => $driver->id,
             'entrant_id' => $driver->entrant->id,
+            'driver_rating' => $driver->rating,
+            'team_rating' => $driver->entrant->rating,
+            'engine_rating' => $driver->entrant->engine->rating,
             'position' => $key + 1,
             'runs' => $driverRuns,
         ];

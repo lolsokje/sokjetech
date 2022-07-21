@@ -17,6 +17,10 @@ return new class extends Migration {
             $table->foreignId('race_id')->constrained();
             $table->foreignId('season_id')->constrained();
             $table->foreignId('racer_id')->constrained();
+            $table->foreignId('entrant_id')->constrained();
+            $table->unsignedInteger('driver_rating')->nullable();
+            $table->unsignedInteger('team_rating')->nullable();
+            $table->unsignedInteger('engine_rating')->nullable();
             $table->unsignedInteger('position');
             $table->json('runs');
             $table->timestamps();
