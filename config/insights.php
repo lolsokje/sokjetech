@@ -15,6 +15,7 @@ use PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff;
 use SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff;
+use SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff;
 use SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\AlphabeticallySortedUsesSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff;
@@ -118,6 +119,12 @@ return [
                 'app/Exceptions/Handler.php',
                 'app/Policies',
                 'app/Rules',
+                'app/Http/Resources',
+            ],
+        ],
+        FunctionLengthSniff::class => [
+            // not much sense checking function length in resources, where the majority of lines are return-array related
+            'exclude' => [
                 'app/Http/Resources',
             ],
         ],
