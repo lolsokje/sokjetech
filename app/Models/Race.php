@@ -14,6 +14,7 @@ class Race extends Model
 
     protected $casts = [
         'order' => 'integer',
+        'qualifying_started' => 'boolean',
         'qualifying_completed' => 'boolean',
         'started' => 'boolean',
         'completed' => 'boolean',
@@ -43,5 +44,10 @@ class Race extends Model
     public function qualifyingResults(): HasMany
     {
         return $this->hasMany(QualifyingResult::class);
+    }
+
+    public function raceResults(): HasMany
+    {
+        return $this->hasMany(RaceResult::class);
     }
 }

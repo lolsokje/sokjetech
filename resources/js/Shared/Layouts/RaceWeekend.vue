@@ -24,10 +24,14 @@
                         </InertiaLink>
                     </li>
                     <li class="nav-item" v-if="race.qualifying_completed">
-                        <a href="#" class="nav-link">Race</a>
+                        <InertiaLink :href="route('weekend.race', [race])" class="nav-link">
+                            Race
+                        </InertiaLink>
                     </li>
                     <li class="nav-item" v-if="race.completed">
-                        <a href="#" class="nav-link">Debrief</a>
+                        <InertiaLink :href="route('weekend.results', [race])" class="nav-link">
+                            Results
+                        </InertiaLink>
                     </li>
                 </ul>
             </div>

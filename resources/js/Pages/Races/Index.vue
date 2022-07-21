@@ -35,7 +35,7 @@
                     edit
                 </InertiaLink>
                 <InertiaLink v-else-if="isNextRace(race)" :href="route('weekend.intro', [race])">start</InertiaLink>
-                <a v-if="race.completed" href="#">results</a>
+                <InertiaLink v-if="race.completed" :href="route('weekend.results', [race])">results</InertiaLink>
             </td>
         </tr>
         </tbody>
@@ -82,5 +82,5 @@ const isNextRace = (race) => {
 <script>
 import Season from '@/Shared/Layouts/Season';
 
-export default {layout: Season};
+export default { layout: Season };
 </script>

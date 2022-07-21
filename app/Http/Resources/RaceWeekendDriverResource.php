@@ -9,24 +9,25 @@ class RaceWeekendDriverResource extends JsonResource
 {
     public function toArray($request): array
     {
-        $racer = $this;
-        $driver = $racer->driver;
-        $entrant = $racer->entrant;
+        $driver = $this->driver;
+        $entrant = $this->entrant;
 
         [$driverRating, $teamRating, $engineRating, $totalRating] = $this->getRatings($entrant);
 
         return [
-            'id' => $racer->id,
+            'id' => $this->id,
+            'entrant_id' => $entrant->id,
             'full_name' => $driver->full_name,
-            'number' => $racer->number,
+            'number' => $this->number,
             'team_name' => $entrant->full_name,
+            'short_team_name' => $entrant->short_name,
             'style_string' => $entrant->style_string,
             'driver_rating' => $driverRating,
             'team_rating' => $teamRating,
             'engine_rating' => $engineRating,
             'total_rating' => $totalRating,
             'team_reliability' => $entrant->reliability,
-            'engine_reliability' => $entrant->engine->rating,
+            'engine_reliability' => $entrant->engine->reliability,
             'primary_colour' => $entrant->primary_colour,
             'secondary_colour' => $entrant->secondary_colour,
         ];

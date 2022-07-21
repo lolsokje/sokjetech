@@ -31,6 +31,9 @@ class RaceFactory extends Factory
             'circuit_id' => Circuit::factory()->for($user)->create(),
             'name' => "$season->year {$this->faker->country()} Grand Prix",
             'order' => 1,
+            'qualifying_started' => false,
+            'qualifying_completed' => false,
+            'started' => false,
             'completed' => false,
         ];
     }

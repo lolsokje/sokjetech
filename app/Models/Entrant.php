@@ -50,4 +50,14 @@ class Entrant extends Model
     {
         return $this->hasMany(Racer::class);
     }
+
+    public function qualifyingResults(): HasMany
+    {
+        return $this->hasMany(QualifyingResult::class);
+    }
+
+    public function raceResults(): HasMany
+    {
+        return $this->hasMany(RaceResult::class);
+    }
 }

@@ -35,4 +35,9 @@ class Racer extends Model
     {
         return $this->hasMany(QualifyingResult::class);
     }
+
+    public function raceResults(): HasMany
+    {
+        return $this->hasMany(RaceResult::class);
+    }
 }
