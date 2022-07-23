@@ -31,6 +31,8 @@ class StoreRaceResultsAction
                     'team_rating' => $driver['team_rating'],
                     'engine_rating' => $driver['engine_rating'],
                     'dnf' => $driver['dnf'],
+                    'fastest_lap_roll' => $driver['fastest_lap_roll'] ?? null,
+                    'fastest_lap' => $driver['fastest_lap'] ?? false,
                 ],
             );
         });

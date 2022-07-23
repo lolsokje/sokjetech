@@ -14,6 +14,7 @@ class ShowRaceResultPageController extends Controller
         $this->authorize('view', $race->universe());
 
         $race->load([
+            'season' => ['pointSystem'],
             'raceResults' => [
                 'racer' => [
                     'driver',

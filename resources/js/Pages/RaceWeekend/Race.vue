@@ -11,6 +11,11 @@
             <button v-if="canPerformStint" class="btn btn-primary" @click.prevent="performNextStint()">
                 Run next stint
             </button>
+            <button class="btn btn-primary"
+                    v-if="raceCompleted && awardFastestLapPoint && fastestLapIsSeparateStint && !fastestLapRunCompleted"
+                    @click.prevent="fastestLapRoll()">
+                Fastest lap roll
+            </button>
             <button v-if="canCompleteRace" class="btn btn-success" @click.prevent="completeRace()">
                 Complete race
             </button>
@@ -32,6 +37,7 @@
             <th class="text-center">BON</th>
             <th class="text-center" v-for="stint in race.stints" :key="stint.order">{{ stint.order }}</th>
             <th class="text-center">TOT</th>
+            <th class="text-center" v-if="awardFastestLapPoint">FL</th>
         </tr>
         </thead>
         <tbody>
@@ -54,6 +60,9 @@
             <td class="text-center text-uppercase" :class="getTotalDisplayClasses(driver)">
                 {{ getTotalDisplayValue(driver) }}
             </td>
+            <td class="text-center" v-if="awardFastestLapPoint" :class="getFastestLapClass(driver)">
+                {{ driver.fastest_lap_roll }}
+            </td>
         </tr>
         </tbody>
     </table>
@@ -70,6 +79,7 @@ const props = defineProps({
     race: Object,
     drivers: Array,
     raceResults: Array,
+    fastestLap: Object,
 });
 
 const showError = ref(false);
@@ -77,6 +87,12 @@ const currentStint = ref(0);
 
 const bonusDecrementBy = 3;
 const driverCount = props.drivers.length;
+
+const awardFastestLapPoint = props.fastestLap.awarded;
+const fastestLapIsSeparateStint = props.fastestLap.type === 'separate_stint';
+const fastestLapMinRng = props.fastestLap.min_rng;
+const fastestLapMaxRng = props.fastestLap.max_rng;
+const fastestLapRunCompleted = ref(!(awardFastestLapPoint && fastestLapIsSeparateStint));
 
 const teamDnfReasons = [
     'suspension',
@@ -130,9 +146,14 @@ const performNextStint = () => {
     });
 
     sortDrivers();
-    currentStint.value++;
+
+    if (awardFastestLapPoint && !fastestLapIsSeparateStint && currentStint.value === props.race.stints.length - 1) {
+        getFastestLap();
+    }
 
     storeRaceResults();
+
+    currentStint.value++;
 };
 
 const storeRaceResults = () => {
@@ -149,6 +170,8 @@ const storeRaceResults = () => {
             team_rating: driver.team_rating,
             engine_rating: driver.engine_rating,
             dnf: driver.dnf,
+            fastest_lap_roll: driver.fastest_lap_roll,
+            fastest_lap: driver.fastest_lap,
         });
     });
 
@@ -158,6 +181,44 @@ const storeRaceResults = () => {
 
 const completeRace = () => {
     Inertia.post(route('weekend.race.complete', [ props.race ]));
+};
+
+const fastestLapRoll = () => {
+    props.drivers.forEach(driver => {
+        if (driver.dnf) {
+            return driver.fastest_lap_roll = null;
+        }
+
+        return driver.fastest_lap_roll = getRoll(fastestLapMinRng, fastestLapMaxRng);
+    });
+
+    getFastestLap();
+
+    fastestLapRunCompleted.value = true;
+
+    if (fastestLapIsSeparateStint) {
+        storeRaceResults();
+    }
+};
+
+const getFastestLap = () => {
+    const drivers = props.drivers.slice();
+    if (!fastestLapIsSeparateStint) {
+        const currentStintIndex = currentStint.value;
+        drivers.forEach(driver => driver.fastest_lap_roll = driver.stints[currentStintIndex]);
+    }
+
+    drivers.sort((driverOne, driverTwo) => driverTwo.fastest_lap_roll - driverOne.fastest_lap_roll);
+
+    const highestRoll = drivers[0].fastest_lap_roll;
+
+    if (drivers[1].fastest_lap_roll < highestRoll) {
+        props.drivers.find(d => d.id === drivers[0].id).fastest_lap = true;
+    }
+};
+
+const getFastestLapClass = (driver) => {
+    return driver.fastest_lap ? 'bg-purple' : '';
 };
 
 const getDnfRoll = (driver) => {
@@ -196,6 +257,8 @@ const mergeRaceResults = () => {
         driver.position_change = getPositionChange(driver);
         driver.bonus = result.starting_bonus ?? getStartingBonus(driver);
         driver.dnf = result.dnf;
+        driver.fastest_lap_roll = result.fastest_lap_roll ?? null;
+        driver.fastest_lap = result.fastest_lap ?? false;
         driver.total = getTotal(driver);
 
         if (driver.stints.length > stintCount) {
@@ -261,7 +324,7 @@ const sortDrivers = () => {
 };
 
 const raceCompleted = computed(() => currentStint.value === props.race.stints.length);
-const canCompleteRace = computed(() => raceCompleted.value && !props.race.completed);
+const canCompleteRace = computed(() => raceCompleted.value && !props.race.completed && fastestLapRunCompleted.value === true);
 const canPerformStint = computed(() => !raceCompleted.value && showError.value === false);
 
 onMounted(() => {
@@ -272,6 +335,8 @@ onMounted(() => {
     } else {
         sortDrivers();
     }
+
+    fastestLapRunCompleted.value = props.raceResults.length && props.raceResults?.some(r => r.fastest_lap);
 });
 </script>
 

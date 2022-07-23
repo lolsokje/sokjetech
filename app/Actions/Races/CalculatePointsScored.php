@@ -11,9 +11,9 @@ class CalculatePointsScored
     protected PointSystem $pointSystem;
     protected array $points;
     protected bool $polePositionPointAwarded;
-    protected ?int $fastestLapPointAwarded;
-    protected bool $fastestLapPointAmount;
-    protected ?int $polePositionPointsAmount;
+    protected bool $fastestLapPointAwarded;
+    protected int $fastestLapPointAmount;
+    protected int $polePositionPointsAmount;
 
     public function __construct(protected Race $race)
     {

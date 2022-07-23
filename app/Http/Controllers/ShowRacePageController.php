@@ -14,6 +14,25 @@ class ShowRacePageController extends Controller
     {
         $this->authorize('view', $race->universe());
 
+        $this->eagerLoadRace($race);
+
+        $drivers = RaceWeekendDriverResource::collection($race->season->activeRacers);
+        $pointSystem = $race->season->pointSystem;
+        return Inertia::render('RaceWeekend/Race', [
+            'race' => $race->load('season'),
+            'drivers' => $drivers->toArray(request()),
+            'raceResults' => RaceResultResource::collection($race->raceResults)->toArray(request()),
+            'fastestLap' => [
+                'awarded' => $pointSystem->fastest_lap_point_awarded,
+                'type' => $pointSystem->fastest_lap_determination,
+                'min_rng' => $pointSystem->fastest_lap_min_rng,
+                'max_rng' => $pointSystem->fastest_lap_max_rng,
+            ],
+        ]);
+    }
+
+    private function eagerLoadRace(Race $race): void
+    {
         $race->load([
             'stints',
             'season' => [
@@ -21,15 +40,9 @@ class ShowRacePageController extends Controller
                     'driver',
                     'entrant' => ['engine'],
                 ],
+                'pointSystem',
             ],
             'raceResults',
-        ]);
-
-        $drivers = RaceWeekendDriverResource::collection($race->season->activeRacers);
-        return Inertia::render('RaceWeekend/Race', [
-            'race' => $race->load('season'),
-            'drivers' => $drivers->toArray(request()),
-            'raceResults' => RaceResultResource::collection($race->raceResults)->toArray(request()),
         ]);
     }
 }

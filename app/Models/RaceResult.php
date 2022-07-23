@@ -16,6 +16,7 @@ class RaceResult extends Model
 
     protected $casts = [
         'stints' => 'json',
+        'fastest_lap' => 'boolean',
     ];
 
     public function race(): BelongsTo

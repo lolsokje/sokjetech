@@ -18,6 +18,8 @@ class RaceResultResource extends JsonResource
             'starting_bonus' => $this->starting_bonus,
             'stints' => $this->stints ?? [],
             'dnf' => $this->dnf,
+            'fastest_lap_roll' => $this->fastest_lap_roll,
+            'fastest_lap' => $this->fastest_lap,
         ];
     }
 }

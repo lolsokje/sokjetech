@@ -119,6 +119,10 @@ a {
         &:not(:last-child) {
           border-right: 0 solid;
         }
+
+        &.bg-purple {
+          background-color: purple !important;
+        }
       }
     }
 

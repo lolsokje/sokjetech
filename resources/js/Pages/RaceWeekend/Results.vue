@@ -3,6 +3,12 @@
 
     <h3>Results</h3>
 
+    <p>
+        <span class="fst-italic">italic = pole position</span>
+        <template v-if="race.season.point_system.fastest_lap_point_awarded">
+            , <span class="text-decoration-underline">underlined = fastest lap</span>
+        </template>
+    </p>
     <table class="table table-dark table-bordered">
         <thead>
         <tr>
@@ -23,7 +29,7 @@
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="text-center text-uppercase" :class="getResultDisplayClasses(driver.dnf)">
+            <td class="text-center text-uppercase" :class="getResultDisplayClasses(driver)">
                 {{ driver.dnf ? driver.dnf : driver.points }}
             </td>
         </tr>
@@ -41,8 +47,22 @@ const props = defineProps({
     drivers: Array,
 });
 
-const getResultDisplayClasses = (dnf) => {
-    return dnf ? 'bg-danger' : '';
+const getResultDisplayClasses = (driver) => {
+    const classes = [];
+
+    if (driver.dnf) {
+        classes.push('bg-danger');
+    }
+
+    if (driver.starting_position === 1) {
+        classes.push('fst-italic');
+    }
+
+    if (driver.fastest_lap) {
+        classes.push('text-decoration-underline');
+    }
+
+    return classes.join(' ');
 };
 
 onMounted(() => sortDriversByPosition(props.drivers));
