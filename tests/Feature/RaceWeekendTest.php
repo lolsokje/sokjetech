@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
@@ -37,7 +36,7 @@ test('the starting grid page can only be viewed once qualifying has been complet
     [$user, $drivers, $race] = prepareSeason();
 
     get(route('weekend.grid', [$race]))
-        ->assertRedirect(route('weekend.intro', [$race]));
+        ->assertRedirect(route('weekend.qualifying', [$race]));
 
     $race->update(['qualifying_completed' => true]);
 
