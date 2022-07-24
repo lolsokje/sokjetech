@@ -14,7 +14,7 @@
                     class="btn btn-secondary">
                 Next session
             </button>
-            <button @click.prevent="emit('completeQualifying')" class="btn btn-success" v-if="canCompleteQualifying">
+            <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
                 Complete qualifying
             </button>
         </div>
@@ -143,6 +143,11 @@ const viewNextSession = () => {
     } else {
         sortDriversByTotal(store.getDrivers());
     }
+};
+
+const completeQualifying = () => {
+    emit('completeQualifying');
+    store.resetQualifying();
 };
 
 const canDriverParticipateInCurrentSession = (position) => {

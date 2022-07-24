@@ -78,4 +78,13 @@ export let threeSessionEliminationStore = reactive({
     setMaxRng (value) {
         this.maxRng = value;
     },
+
+    resetQualifying () {
+        this.setCurrentSession(0);
+        this.completedRunsPerSession = {
+            0: 0,
+            1: 0,
+            2: 0,
+        };
+    },
 });
