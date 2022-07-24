@@ -15,6 +15,7 @@ use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
+use App\Http\Controllers\ShowDriverStandingsController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
 use App\Http\Controllers\ShowPointsConfigurationController;
 use App\Http\Controllers\ShowQualifyingPageController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\ShowRaceWeekendIntroPageController;
 use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
+use App\Http\Controllers\ShowTeamStandingsController;
 use App\Http\Controllers\StartSeasonController;
 use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingResultsController;
@@ -98,6 +100,11 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
             Route::get('teams', ShowTeamReliabilityController::class)->name('teams');
             Route::post('teams', UpdateTeamReliabilityController::class)->name('teams.store');
         });
+    });
+
+    Route::group(['prefix' => 'standings', 'as' => 'standings.'], function () {
+        Route::get('drivers', ShowDriverStandingsController::class)->name('drivers');
+        Route::get('teams', ShowTeamStandingsController::class)->name('teams');
     });
 });
 

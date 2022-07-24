@@ -120,16 +120,39 @@ a {
           border-right: 0 solid;
         }
 
+        tr:hover {
+          td {
+            background-color: $lighter;
+            border-color: $dark;
+          }
+        }
+
         &.bg-purple {
           background-color: purple !important;
         }
-      }
-    }
 
-    tr:hover {
-      td {
-        background-color: $lighter;
-        border-color: $dark;
+        &.position-first {
+          background-color: #FFD966;
+          color: $dark;
+        }
+
+        &.position-second {
+          background-color: #BFBFBF;
+          color: $dark;
+        }
+
+        &.position-third {
+          background-color: #BF8F00;
+        }
+
+        &.position-points {
+          background-color: #92D050;
+          color: $dark;
+        }
+
+        &.position-other {
+          background-color: #2B3DCE;
+        }
       }
     }
 
