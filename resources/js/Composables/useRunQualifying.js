@@ -47,6 +47,10 @@ export function fillDriverRuns (drivers, currentSession, results) {
     if (results.length) {
         results.forEach(result => {
             const driver = drivers.find(d => d.id === result.driver_id);
+            if (!driver) {
+                return;
+            }
+            
             driver.runs = result.runs;
             driver.position = result.position;
             driver.driver_rating = result.driver_rating;
