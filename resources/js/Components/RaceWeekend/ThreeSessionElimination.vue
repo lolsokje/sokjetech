@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, onBeforeUnmount, onMounted } from 'vue';
 import {
     calculateSessionBestAndTotal,
     fillDriverRuns,
@@ -147,7 +147,6 @@ const viewNextSession = () => {
 
 const completeQualifying = () => {
     emit('completeQualifying');
-    store.resetQualifying();
 };
 
 const canDriverParticipateInCurrentSession = (position) => {
@@ -184,6 +183,10 @@ onMounted(() => {
     store.setMaxRng(props.formatDetails.max_rng);
 
     fillDriverRuns(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
+});
+
+onBeforeUnmount(() => {
+    store.resetQualifyingSessionStats();
 });
 </script>
 

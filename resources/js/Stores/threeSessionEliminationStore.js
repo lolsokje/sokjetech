@@ -79,7 +79,7 @@ export let threeSessionEliminationStore = reactive({
         this.maxRng = value;
     },
 
-    resetQualifying () {
+    resetQualifyingSessionStats () {
         this.setCurrentSession(0);
         this.completedRunsPerSession = {
             0: 0,
