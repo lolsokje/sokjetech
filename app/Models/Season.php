@@ -139,4 +139,23 @@ class Season extends Model
     {
         return $this->hasMany(RaceResult::class);
     }
+
+    public function poles(): HasMany
+    {
+        return $this->hasMany(QualifyingResult::class)->with([
+            'racer' => [
+                'driver',
+            ],
+        ])->where('position', 1);
+    }
+
+    public function winners(): HasMany
+    {
+        return $this->hasMany(RaceResult::class)->with([
+            'racer' => [
+                'driver',
+                'entrant',
+            ],
+        ])->where('position', 1);
+    }
 }

@@ -6,6 +6,16 @@
     <InertiaLink v-if="canAddRace()" :href="route('seasons.races.create', [season])" class="btn btn-primary my-3">
         Add race
     </InertiaLink>
+
+    <div class="mb-3">
+        <div>
+            <div class="form-check-inline">
+                <input id="edit-mode" v-model="spoilerFree" class="form-check-inline" type="checkbox">
+                <label class="form-check-label" for="edit-mode">Hide results</label>
+            </div>
+        </div>
+    </div>
+
     <InertiaLink
         v-if="canReorderRaces()" :href="route('seasons.races.reorder', [season])"
         class="btn btn-primary my-3 ms-3"
@@ -18,7 +28,11 @@
         <tr>
             <th class="text-center">#</th>
             <th>Name</th>
-            <th class="text-center">Completed</th>
+            <template v-if="!spoilerFree">
+                <th>Pole</th>
+                <th>Winning driver</th>
+                <th colspan="2">Winning team</th>
+            </template>
             <th></th>
         </tr>
         </thead>
@@ -26,10 +40,25 @@
         <tr v-for="race in season.races" :key="race.id">
             <td class="small-centered">{{ race.order }}</td>
             <td class="padded-left">{{ race.name }}</td>
-            <td class="big-centered">
-                <fa v-if="race.completed" icon="check"/>
-                <fa v-else icon="times"/>
-            </td>
+            <template v-if="!spoilerFree">
+                <td class="padded-left">
+                    <template v-if="race.qualifying_completed">
+                        {{ race.pole?.full_name }}
+                    </template>
+                </td>
+                <td class="padded-left">
+                    <template v-if="race.completed">
+                        {{ race.winner?.full_name }}
+                    </template>
+                </td>
+                <td class="colour-accent"
+                    :style="race.completed ? `background-color: ${race.winner?.background_colour}` : ''"></td>
+                <td class="padded-left">
+                    <template v-if="race.completed">
+                        {{ race.winner?.team_name }}
+                    </template>
+                </td>
+            </template>
             <td class="small-centered">
                 <InertiaLink :href="getRaceLink(race)">{{ getRaceLinkText(race) }}</InertiaLink>
             </td>
@@ -42,12 +71,17 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import { onMounted, ref, watch } from 'vue';
+
+const spoilerFree = ref(true);
 
 const props = defineProps({
     season: {
         type: Object,
         required: true,
     },
+    poles: Array,
+    winners: Array,
     next_race_id: {
         type: String,
         required: false,
@@ -159,6 +193,33 @@ const getRaceLinkText = (race) => {
         return canRunRace ? 'continue' : 'view';
     }
 };
+
+const attachPoleAndWinner = (race) => {
+    const pole = props.poles.find(pole => pole.race_id === race.id);
+    const winner = props.winners.find(winner => winner.race_id === race.id);
+
+    if (pole) {
+        race.pole = pole;
+    }
+
+    if (winner) {
+        race.winner = winner;
+    }
+};
+
+watch(spoilerFree, (value) => {
+    localStorage.setItem('spoiler_free', value.toString());
+});
+
+onMounted(() => {
+    props.season.races.forEach(race => {
+        attachPoleAndWinner(race);
+    });
+
+    if (localStorage.getItem('spoiler_free')) {
+        spoilerFree.value = localStorage.getItem('spoiler_free') === 'true';
+    }
+});
 </script>
 
 <script>
