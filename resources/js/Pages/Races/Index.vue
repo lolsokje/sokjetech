@@ -143,6 +143,10 @@ const getCurrentRaceStage = (race) => {
 };
 
 const getRaceLink = (race) => {
+    if (canRunRaces() && !props.season.started) {
+        return route('seasons.races.edit', [ props.season, race ]);
+    }
+
     const currentStage = getCurrentRaceStage(race);
     if (currentStage === stages.RESULTS) {
         return route('weekend.results', [ race ]);
@@ -171,8 +175,13 @@ const getRaceLink = (race) => {
 };
 
 const getRaceLinkText = (race) => {
-    const currentStage = getCurrentRaceStage(race);
     const canRunRace = canRunRaces();
+    if (canRunRace && !props.season.started) {
+        return 'edit';
+    }
+
+    const currentStage = getCurrentRaceStage(race);
+
     if (currentStage === stages.RESULTS) {
         return 'results';
     }
