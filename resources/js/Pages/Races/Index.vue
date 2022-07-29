@@ -31,11 +31,7 @@
                 <fa v-else icon="times"/>
             </td>
             <td class="small-centered">
-                <InertiaLink v-if="canEditRace(race)" :href="route('seasons.races.edit', [season, race])">
-                    edit
-                </InertiaLink>
-                <InertiaLink v-else-if="isNextRace(race)" :href="route('weekend.intro', [race])">start</InertiaLink>
-                <InertiaLink v-if="race.completed" :href="route('weekend.results', [race])">results</InertiaLink>
+                <InertiaLink :href="getRaceLink(race)">{{ getRaceLinkText(race) }}</InertiaLink>
             </td>
         </tr>
         </tbody>
@@ -62,6 +58,18 @@ const props = defineProps({
     },
 });
 
+const stages = {
+    INTRO: 'intro',
+    QUALIFYING: 'qualifying',
+    GRID: 'grid',
+    RACE: 'race',
+    RESULTS: 'results',
+};
+
+const canRunRaces = () => {
+    return props.can.edit;
+};
+
 const canAddRace = () => {
     return props.can.edit && !props.season.started;
 };
@@ -76,6 +84,80 @@ const canEditRace = (race) => {
 
 const isNextRace = (race) => {
     return race.id === props.next_race_id;
+};
+
+const getCurrentRaceStage = (race) => {
+    if (race.completed) {
+        return stages.RESULTS;
+    }
+
+    if (!race.qualifying_started) {
+        return stages.INTRO;
+    }
+
+    if (race.qualifying_started && !race.qualifying_completed) {
+        return stages.QUALIFYING;
+    }
+
+    if (race.qualifying_completed && !race.started) {
+        return stages.GRID;
+    }
+
+    if (race.started && !race.completed) {
+        return stages.RACE;
+    }
+};
+
+const getRaceLink = (race) => {
+    const currentStage = getCurrentRaceStage(race);
+    if (currentStage === stages.RESULTS) {
+        return route('weekend.results', [ race ]);
+    }
+
+    if (!isNextRace(race)) {
+        return null;
+    }
+
+    if (currentStage === stages.INTRO) {
+        return route('weekend.intro', [ race ]);
+    }
+
+    if (currentStage === stages.QUALIFYING) {
+        return route('weekend.qualifying', [ race ]);
+    }
+
+    if (currentStage === stages.GRID) {
+        return route('weekend.grid', [ race ]);
+    }
+
+    if (currentStage === stages.RACE) {
+        return route('weekend.race', [ race ]);
+    }
+    return route('weekend.results', [ race ]);
+};
+
+const getRaceLinkText = (race) => {
+    const currentStage = getCurrentRaceStage(race);
+    const canRunRace = canRunRaces();
+    if (currentStage === stages.RESULTS) {
+        return 'results';
+    }
+
+    if (!isNextRace(race)) {
+        return null;
+    }
+
+    if (currentStage === stages.INTRO) {
+        return canRunRace ? 'start' : 'preview';
+    }
+
+    if (currentStage === stages.GRID) {
+        return 'grid';
+    }
+
+    if (currentStage === stages.QUALIFYING || currentStage === stages.RACE) {
+        return canRunRace ? 'continue' : 'view';
+    }
 };
 </script>
 
