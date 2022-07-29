@@ -9,13 +9,13 @@
                 <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun">
                     Perform Run
                 </button>
+                <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
+                    Complete qualifying
+                </button>
             </div>
             <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession"
                     class="btn btn-secondary">
                 Next session
-            </button>
-            <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
-                Complete qualifying
             </button>
         </div>
     </div>

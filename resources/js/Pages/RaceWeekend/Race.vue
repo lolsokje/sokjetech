@@ -7,13 +7,11 @@
 
     <div class="d-flex mb-3">
         <h3>Race</h3>
-        <div class="ms-auto">
+        <div class="ms-auto" v-if="can.edit">
             <button v-if="canPerformStint" class="btn btn-primary" @click.prevent="performNextStint()">
                 Run next stint
             </button>
-            <button class="btn btn-primary"
-                    v-if="raceCompleted && awardFastestLapPoint && fastestLapIsSeparateStint && !fastestLapRunCompleted"
-                    @click.prevent="fastestLapRoll()">
+            <button class="btn btn-primary" v-if="canPerformFastestLap" @click.prevent="fastestLapRoll()">
                 Fastest lap roll
             </button>
             <button v-if="canCompleteRace" class="btn btn-success" @click.prevent="completeRace()">
@@ -80,6 +78,7 @@ const props = defineProps({
     drivers: Array,
     raceResults: Array,
     fastestLap: Object,
+    can: Object,
 });
 
 const showError = ref(false);
@@ -323,9 +322,14 @@ const sortDrivers = () => {
     });
 };
 
-const raceCompleted = computed(() => currentStint.value === props.race.stints.length);
-const canCompleteRace = computed(() => raceCompleted.value && !props.race.completed && fastestLapRunCompleted.value === true);
-const canPerformStint = computed(() => !raceCompleted.value && showError.value === false);
+const allStintsCompleted = computed(() => currentStint.value === props.race.stints.length);
+const canCompleteRace = computed(() => allStintsCompleted.value && !props.race.completed && fastestLapRunCompleted.value === true);
+const canPerformStint = computed(() => !allStintsCompleted.value && showError.value === false);
+const canPerformFastestLap = computed(() => {
+    const fastestLapRunPerformed = fastestLapRunCompleted.value === true;
+
+    return allStintsCompleted.value === true && awardFastestLapPoint && fastestLapIsSeparateStint && !fastestLapRunPerformed;
+});
 
 onMounted(() => {
     mergeRaceResults();
