@@ -13,7 +13,7 @@ class ShowDriverReliabilityController extends Controller
         $this->authorize('update', $season->universe);
 
         return Inertia::render('Development/Reliability/Drivers', [
-            'season' => $season,
+            'season' => $season->append('has_active_race'),
             'drivers' => $season->activeRacers()->with(['driver', 'entrant'])->get(),
         ]);
     }

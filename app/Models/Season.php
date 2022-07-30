@@ -140,6 +140,13 @@ class Season extends Model
         return $this->hasMany(RaceResult::class);
     }
 
+    public function hasActiveRace(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->races()->where('qualifying_started', true)->where('completed', false)->count() > 0;
+        });
+    }
+
     public function poles(): HasMany
     {
         return $this->hasMany(QualifyingResult::class)->with([

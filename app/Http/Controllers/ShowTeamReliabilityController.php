@@ -13,7 +13,7 @@ class ShowTeamReliabilityController extends Controller
         $this->authorize('update', $season->universe);
 
         return Inertia::render('Development/Reliability/Teams', [
-            'season' => $season,
+            'season' => $season->append('has_active_race'),
             'teams' => $season->entrants()->with('team')->get(),
         ]);
     }

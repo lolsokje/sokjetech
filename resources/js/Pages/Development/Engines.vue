@@ -3,7 +3,10 @@
 
     <h2>Engine development</h2>
 
-    <template v-if="engines.length">
+    <div class="alert alert-warning w-50" v-if="season.has_active_race">
+        There's currently a race in progress, all development is disabled until the race is completed
+    </div>
+    <template v-else-if="engines.length">
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
 
         <div class="row row-cols-lg-auto mb-3">
@@ -171,5 +174,5 @@ onMounted(() => {
 <script>
 import Season from '@/Shared/Layouts/Season';
 
-export default {layout: Season};
+export default { layout: Season };
 </script>
