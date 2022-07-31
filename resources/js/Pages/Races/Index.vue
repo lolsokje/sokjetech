@@ -7,6 +7,13 @@
         Add race
     </InertiaLink>
 
+    <InertiaLink
+        v-if="canReorderRaces()" :href="route('seasons.races.reorder', [season])"
+        class="btn btn-primary my-3 ms-3"
+    >
+        Reorder races
+    </InertiaLink>
+
     <div class="mb-3">
         <div>
             <div class="form-check-inline">
@@ -15,13 +22,6 @@
             </div>
         </div>
     </div>
-
-    <InertiaLink
-        v-if="canReorderRaces()" :href="route('seasons.races.reorder', [season])"
-        class="btn btn-primary my-3 ms-3"
-    >
-        Reorder races
-    </InertiaLink>
 
     <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
