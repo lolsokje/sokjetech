@@ -33,6 +33,7 @@ function prepareSeason(): array
     $format = ThreeSessionElimination::factory()->create();
 
     $season->qualifyingFormat()->associate($format);
+    $season->update(['started' => true]);
 
     return [
         $user,

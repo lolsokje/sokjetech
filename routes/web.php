@@ -108,7 +108,11 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     });
 });
 
-Route::group(['prefix' => 'races/{race}/weekend', 'as' => 'weekend.'], function () {
+Route::group([
+    'prefix' => 'races/{race}/weekend',
+    'as' => 'weekend.',
+    'middleware' => 'season_in_progress',
+], function () {
     Route::get('intro', ShowRaceWeekendIntroPageController::class)->name('intro');
     Route::get('qualifying', ShowQualifyingPageController::class)->name('qualifying');
     Route::get('grid', ShowStartingGridController::class)->name('grid');

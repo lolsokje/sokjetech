@@ -9,21 +9,17 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class RaceInProgress
+class SeasonInProgress
 {
     public function handle(Request $request, Closure $next): RedirectResponse|JsonResponse|Response
     {
         /** @var Season $season */
-        $season = $request->route('season');
+        $season = $request->route('race')->season;
 
-        if (!$season->hasActiveRace) {
+        if ($season->started) {
             return $next($request);
         }
-
         return to_route('seasons.races.index', [$season])
-            ->with(
-                'error',
-                "There's currently a race in progress, editing and development disabled until the race is done",
-            );
+            ->with('error', 'Season not started yet');
     }
 }
