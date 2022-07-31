@@ -1,7 +1,5 @@
 <template>
-    <div class="alert alert-warning w-50" v-if="season.has_active_race">
-        There's currently a race in progress, all development is disabled until the race is completed
-    </div>
+    <ActiveRaceWarning v-if="season.has_active_race"/>
     <template v-else-if="teams.length">
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
         <div class="row row-cols-lg-auto mb-3">
@@ -89,6 +87,7 @@ import { computed, onMounted, reactive } from 'vue';
 import CopyScreenshotButton from '../Shared/CopyScreenshotButton';
 import Development from '../Utilities/Development';
 import DevelopmentTeam from '../Utilities/DevelopmentTeam';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 
 const props = defineProps({
     season: {

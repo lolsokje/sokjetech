@@ -12,6 +12,7 @@ class UpdateDriverRatingsController extends Controller
     public function __invoke(DriverRatingUpdateRequest $request, Season $season): RedirectResponse
     {
         $this->authorize('update', $season->universe);
+        $this->middleware(['race_in_progress']);
 
         $drivers = collect($request->get('drivers'));
 

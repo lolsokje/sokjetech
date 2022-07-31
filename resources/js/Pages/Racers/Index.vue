@@ -3,10 +3,12 @@
 
     <h3>Drivers</h3>
 
-    <template v-if="can.edit">
+    <template v-if="can.edit && !hasActiveRace">
         <input id="edit-mode" v-model="editMode" class="mb-3 form-check-inline" type="checkbox">
         <label class="form-check-label" for="edit-mode">Edit mode?</label>
     </template>
+
+    <ActiveRaceWarning v-if="hasActiveRace"/>
 
     <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
@@ -36,7 +38,7 @@
             </td>
             <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
-            <td v-if="canEdit" class="small-centered">
+            <td v-if="canEdit && !hasActiveRace" class="small-centered">
                 <InertiaLink :href="route('seasons.entrants.edit', [season, driver.entrant])">
                     entrant
                 </InertiaLink>
@@ -55,6 +57,7 @@
 import { onMounted, ref, watch } from 'vue';
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 
 const props = defineProps({
     season: {
@@ -71,6 +74,7 @@ const props = defineProps({
     },
 });
 
+const hasActiveRace = props.season.has_active_race;
 const drivers = ref([]);
 const editMode = ref(false);
 const canEdit = ref(props.can.edit && editMode);
@@ -109,5 +113,5 @@ watch(editMode, () => {
 <script>
 import Season from '@/Shared/Layouts/Season';
 
-export default {layout: Season};
+export default { layout: Season };
 </script>

@@ -3,9 +3,11 @@
 
     <h3>Engines</h3>
 
-    <InertiaLink v-if="can.edit" :href="route('seasons.engines.create', [season])" class="btn btn-primary my-3">
+    <InertiaLink v-if="canEdit" :href="route('seasons.engines.create', [season])" class="btn btn-primary my-3">
         Add engine to season
     </InertiaLink>
+
+    <ActiveRaceWarning v-if="hasActiveRace"/>
 
     <table class="table table-bordered table-dark table-narrow" id="screenshot-target">
         <thead>
@@ -15,7 +17,7 @@
             <th>Re-badged from</th>
             <th class="text-center">Rating</th>
             <th class="text-center">Reliability</th>
-            <th v-if="can.edit"></th>
+            <th v-if="canEdit"></th>
         </tr>
         </thead>
         <tbody>
@@ -32,7 +34,7 @@
             </td>
             <td class="text-center">{{ engine.rating }}</td>
             <td class="text-center">{{ engine.reliability }}</td>
-            <td v-if="can.edit" class="small-centered">
+            <td v-if="canEdit" class="small-centered">
                 <InertiaLink :href="route('seasons.engines.edit', [season, engine])">edit</InertiaLink>
             </td>
         </tr>
@@ -44,6 +46,7 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 
 const props = defineProps({
     season: {
@@ -59,11 +62,13 @@ const props = defineProps({
         required: true,
     },
 });
+
+const hasActiveRace = props.season.has_active_race;
+const canEdit = props.can.edit && !hasActiveRace;
 </script>
 
 <script>
 import Season from '@/Shared/Layouts/Season';
 
-export default {layout: Season};
+export default { layout: Season };
 </script>
-

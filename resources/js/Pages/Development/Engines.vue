@@ -3,9 +3,7 @@
 
     <h2>Engine development</h2>
 
-    <div class="alert alert-warning w-50" v-if="season.has_active_race">
-        There's currently a race in progress, all development is disabled until the race is completed
-    </div>
+    <ActiveRaceWarning v-if="season.has_active_race"/>
     <template v-else-if="engines.length">
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
 
@@ -99,6 +97,7 @@ import Development from '@/Utilities/Development';
 import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 
 const props = defineProps({
     season: {

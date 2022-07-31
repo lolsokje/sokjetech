@@ -7,6 +7,8 @@
         Add entrant
     </InertiaLink>
 
+    <ActiveRaceWarning v-if="hasActiveRace"/>
+
     <table class="table table-bordered table-dark" id="screenshot-target">
         <thead>
         <tr>
@@ -15,7 +17,7 @@
             <th>Team principal</th>
             <th>Engine supplier</th>
             <th class="text-center">Country</th>
-            <th colspan="2" v-if="can.edit"></th>
+            <th colspan="2" v-if="canEdit"></th>
         </tr>
         </thead>
         <tbody>
@@ -31,7 +33,7 @@
 				</span>
             </td>
             <td class="small-centered">{{ entrant.country }}</td>
-            <template v-if="can.edit">
+            <template v-if="canEdit">
                 <td class="small-centered">
                     <InertiaLink :href="route('seasons.entrants.edit', [season, entrant])">edit</InertiaLink>
                 </td>
@@ -48,8 +50,9 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 
-defineProps({
+const props = defineProps({
     season: {
         type: Object,
         required: true,
@@ -59,10 +62,13 @@ defineProps({
         required: true,
     },
 });
+
+const hasActiveRace = props.season.has_active_race;
+const canEdit = props.can.edit && !hasActiveRace;
 </script>
 
 <script>
 import Season from '@/Shared/Layouts/Season';
 
-export default {layout: Season};
+export default { layout: Season };
 </script>
