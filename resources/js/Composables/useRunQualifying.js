@@ -50,7 +50,7 @@ export function fillDriverRuns (drivers, currentSession, results) {
             if (!driver) {
                 return;
             }
-            
+
             driver.runs = result.runs;
             driver.position = result.position;
             driver.driver_rating = result.driver_rating;

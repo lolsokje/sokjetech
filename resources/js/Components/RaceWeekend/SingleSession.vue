@@ -1,8 +1,103 @@
 <template>
-    <h3>Single session qualifying</h3>
+    <h3>Qualifying</h3>
+
+    <div class="d-flex my-3" v-if="canRunQualifying">
+        <div class="ms-auto">
+            <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun">
+                Perform run
+            </button>
+            <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
+                Complete qualifying
+            </button>
+        </div>
+    </div>
+
+    <table class="table table-dark table-bordered">
+        <thead>
+        <tr>
+            <th class="text-center">Pos</th>
+            <th class="colour-accent"></th>
+            <th>Driver</th>
+            <th class="text-center">#</th>
+            <th>Team</th>
+            <th class="text-center">Rating</th>
+            <th v-for="i in formatDetails.runs_per_session" :key="i" class="text-center">{{ i }}</th>
+            <th class="text-center">Best</th>
+            <th class="text-center">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(driver, position) in drivers" :key="driver.id">
+            <td class="text-center">
+                {{ position + 1 }}
+            </td>
+            <td class="colour-accent" :style="`background-color: ${driver.primary_colour}`"></td>
+            <td class="padded-left">{{ driver.full_name }}</td>
+            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team_name }}</td>
+            <td class="text-center">{{ driver.total_rating }}</td>
+            <td v-for="i in formatDetails.runs_per_session" :key="i" class="text-center">
+                {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
+            </td>
+            <td class="text-center">{{ driver.best_stint }}</td>
+            <td class="text-center">{{ driver.total }}</td>
+        </tr>
+        </tbody>
+    </table>
 </template>
 
-<script setup></script>
+<script setup>
+import { singleSessionStore as store } from '@/Stores/singleSessionStore';
+import { fillDriverRuns, performQualifyingRun } from '@/Composables/useRunQualifying';
+import { computed, onBeforeUnmount, onMounted } from 'vue';
+
+const props = defineProps({
+    formatDetails: Object,
+    drivers: Array,
+    canRunQualifying: Boolean,
+    results: Object,
+    sessionDetails: Object,
+    completed: Boolean,
+    showError: Boolean,
+});
+
+const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
+
+const performRun = () => {
+    performQualifyingRun(store);
+    store.incrementCurrentRun();
+
+    emit('runPerformed', {
+        results: store.getDrivers(),
+        details: {
+            completed_runs: store.getCurrentRun(),
+        },
+    });
+};
+
+const completeQualifying = () => {
+    emit('completeQualifying');
+};
+
+const hasError = computed(() => props.showError === true);
+const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session) && !hasError.value);
+const canCompleteQualifying = computed(() => store.getCurrentSessionRunCount() === props.formatDetails.runs_per_session && !props.completed);
+
+onMounted(() => {
+    store.setDrivers(props.drivers);
+
+    store.setMinRng(props.formatDetails.min_rng);
+    store.setMaxRng(props.formatDetails.max_rng);
+
+    if (props.sessionDetails) {
+        store.setCurrentRun(props.sessionDetails.completed_runs);
+    }
+
+    fillDriverRuns(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
+});
+
+onBeforeUnmount(() => store.resetQualifyingSessionStats());
+</script>
 
 <script>
 export default { name: 'SingleSession' };
