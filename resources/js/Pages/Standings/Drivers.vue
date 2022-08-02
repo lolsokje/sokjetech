@@ -45,6 +45,7 @@
 import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { getResultClasses, sortResults } from '@/Composables/useResultPage';
+import { getDriverPoints } from '@/Composables/useChampionshipStandings';
 
 const props = defineProps({
     season: Object,
@@ -56,11 +57,7 @@ const getResultDisplayClasses = (result) => {
 };
 
 onMounted(() => {
-    props.drivers.forEach(driver => {
-        let points = 0;
-        Object.values(driver.results).forEach(result => points += result.points);
-        driver.points = points;
-    });
+    getDriverPoints(props.drivers);
 
     sortResults(props.drivers);
 });

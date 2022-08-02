@@ -31,5 +31,5 @@ export function getResultClasses (result) {
 }
 
 export function sortResults (entities) {
-    entities.sort((teamOne, teamTwo) => teamTwo.points - teamOne.points);
+    entities.sort((entityOne, entityTwo) => entityTwo.points - entityOne.points);
 }
