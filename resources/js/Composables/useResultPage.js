@@ -29,7 +29,3 @@ export function getResultClasses (result) {
 
     return classes.join(' ');
 }
-
-export function sortResults (entities) {
-    entities.sort((entityOne, entityTwo) => entityTwo.points - entityOne.points);
-}

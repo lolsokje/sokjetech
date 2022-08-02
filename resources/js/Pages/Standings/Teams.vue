@@ -48,8 +48,8 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
-import { getResultClasses, sortResults } from '@/Composables/useResultPage';
-import { getTeamPoints } from '@/Composables/useChampionshipStandings';
+import { getResultClasses } from '@/Composables/useResultPage';
+import { getTeamPoints, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({

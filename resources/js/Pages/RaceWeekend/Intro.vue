@@ -94,8 +94,7 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
-import { sortResults } from '@/Composables/useResultPage';
-import { getDriverPoints, getTeamPoints, getTopPerformers } from '@/Composables/useChampionshipStandings';
+import { getDriverPoints, getTeamPoints, getTopPerformers, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
