@@ -46,7 +46,7 @@
                 {{ getPositionChange(driver) }}
             </td>
             <td class="colour-accent"></td>
-            <td class="colour-accent" :style="`background-color: ${driver.primary_colour}`"></td>
+            <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.short_team_name }}</td>
@@ -72,6 +72,7 @@ import { computed, onMounted, ref } from 'vue';
 import { getRoll, sortDriversByPosition } from '@/Composables/useRunQualifying';
 import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     race: Object,

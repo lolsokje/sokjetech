@@ -30,8 +30,7 @@
                     <td class="text-center align-middle" :rowspan="team.driver_count">
                         {{ index + 1 }}
                     </td>
-                    <td class="colour-accent align-middle" :style="`background-color: ${team.background_colour}`"
-                        :rowspan="team.driver_count"></td>
+                    <BackgroundColourCell :backgroundColour="team.background_colour" :rowspan="team.driver_count"/>
                     <td class="padded-left align-middle" :rowspan="team.driver_count">{{ team.team_name }}</td>
                     <td class="text-center align-middle" :rowspan="team.driver_count">{{ team.points }}</td>
                 </template>
@@ -51,6 +50,7 @@ import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { getResultClasses, sortResults } from '@/Composables/useResultPage';
 import { getTeamPoints } from '@/Composables/useChampionshipStandings';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     season: Object,

@@ -27,7 +27,7 @@
         <tbody>
         <tr v-for="(driver, index) in drivers" :key="driver.id">
             <td class="text-center">{{ index + 1 }}</td>
-            <td class="colour-accent" :style="`background-color: ${driver.background_colour}`"></td>
+            <BackgroundColourCell :backgroundColour="driver.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="text-center" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
@@ -46,6 +46,7 @@ import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { getResultClasses, sortResults } from '@/Composables/useResultPage';
 import { getDriverPoints } from '@/Composables/useChampionshipStandings';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     season: Object,

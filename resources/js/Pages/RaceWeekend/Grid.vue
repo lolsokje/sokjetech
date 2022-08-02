@@ -16,7 +16,7 @@
         <tbody>
         <tr v-for="driver in drivers" :key="driver.id">
             <td class="small-centered">{{ driver.position }}</td>
-            <td class="colour-accent" :style="`background-color: ${driver.background_colour}`"></td>
+            <BackgroundColourCell :backgroundColour="driver.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
@@ -31,6 +31,7 @@ import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     race: {
@@ -49,5 +50,5 @@ onMounted(() => sortDriversByPosition(props.drivers));
 <script>
 import RaceWeekend from '@/Shared/Layouts/RaceWeekend';
 
-export default {layout: RaceWeekend};
+export default { layout: RaceWeekend };
 </script>

@@ -56,7 +56,7 @@
                 <tbody>
                 <tr v-for="(driver, index) in driverStandings" :key="index">
                     <td class="text-center">{{ index + 1 }}</td>
-                    <td class="colour-accent" :style="`background-color: ${driver.background_colour}`"></td>
+                    <BackgroundColourCell :backgroundColour="driver.background_colour"/>
                     <td class="padded-left">{{ driver.full_name }}</td>
                     <td class="text-center" :style="driver.style_string">{{ driver.number }}</td>
                     <td class="padded-left">{{ driver.team_name }}</td>
@@ -80,7 +80,7 @@
                 <tbody>
                 <tr v-for="(team, index) in teamStandings" :key="index">
                     <td class="text-center">{{ index + 1 }}</td>
-                    <td class="colour-accent" :style="`background-color: ${team.background_colour}`"></td>
+                    <BackgroundColourCell :backgroundColour="team.background_colour"/>
                     <td class="padded-left">{{ team.full_name }}</td>
                     <td class="padded-left">{{ team.team_principal }}</td>
                     <td class="text-center">{{ team.points }}</td>
@@ -96,6 +96,7 @@ import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { sortResults } from '@/Composables/useResultPage';
 import { getDriverPoints, getTeamPoints, getTopPerformers } from '@/Composables/useChampionshipStandings';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     race: {

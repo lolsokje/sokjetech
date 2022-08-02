@@ -50,7 +50,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="team in form.teams" :key="team.id">
-                    <td class="colour-accent" :style="`background-color: ${team.primary_colour}`"></td>
+                    <BackgroundColourCell :backgroundColour="team.primary_colour"/>
                     <td class="padded-left align-middle">{{ team.name }}</td>
                     <td class="small-centered">{{ team.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">
@@ -88,6 +88,7 @@ import CopyScreenshotButton from '../Shared/CopyScreenshotButton';
 import Development from '../Utilities/Development';
 import DevelopmentTeam from '../Utilities/DevelopmentTeam';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     season: {

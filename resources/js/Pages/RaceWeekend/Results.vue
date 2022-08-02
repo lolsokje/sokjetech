@@ -25,7 +25,7 @@
         <tr v-for="driver in drivers" :key="driver.id">
             <td class="small-centered">{{ driver.position }}</td>
             <td class="colour-accent"></td>
-            <td class="colour-accent" :style="`background-color: ${driver.background_colour}`"></td>
+            <BackgroundColourCell :backgroundColour="driver.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
@@ -41,6 +41,7 @@
 import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     race: Object,

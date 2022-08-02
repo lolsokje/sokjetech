@@ -40,7 +40,7 @@
                 <td class="text-center" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
                     {{ position + 1 }}
                 </td>
-                <td class="colour-accent" :style="`background-color: ${driver.primary_colour}`"></td>
+                <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
                 <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
                 <td class="padded-left">{{ driver.team_name }}</td>
@@ -68,6 +68,7 @@ import {
 } from '@/Composables/useRunQualifying';
 import { threeSessionEliminationStore as store } from '@/Stores/threeSessionEliminationStore';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     formatDetails: {
