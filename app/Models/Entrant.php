@@ -22,7 +22,7 @@ class Entrant extends Model
         return Attribute::get(function () {
             $primary = $this->primary_colour;
             $secondary = $this->secondary_colour;
-            return "background-color:$primary;color:$secondary;text-align:center;font-weight:bold";
+            return "background-color:$primary;color:$secondary;font-weight:bold";
         });
     }
 
@@ -49,5 +49,15 @@ class Entrant extends Model
     public function allRacers(): HasMany
     {
         return $this->hasMany(Racer::class);
+    }
+
+    public function qualifyingResults(): HasMany
+    {
+        return $this->hasMany(QualifyingResult::class);
+    }
+
+    public function raceResults(): HasMany
+    {
+        return $this->hasMany(RaceResult::class);
     }
 }

@@ -13,7 +13,7 @@ class ShowEngineDevelopmentPageController extends Controller
         $this->authorize('update', $season->universe);
 
         return Inertia::render('Development/Engines', [
-            'season' => $season,
+            'season' => $season->append('has_active_race'),
             'engines' => $season->engines,
         ]);
     }

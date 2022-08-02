@@ -12,12 +12,13 @@ class UpdateDriverRatingsController extends Controller
     public function __invoke(DriverRatingUpdateRequest $request, Season $season): RedirectResponse
     {
         $this->authorize('update', $season->universe);
+        $this->middleware(['race_in_progress']);
 
         $drivers = collect($request->get('drivers'));
 
         $drivers->each(function ($driver) {
             Racer::query()
-                ->where('id', $driver['id'])
+                ->find($driver['id'])
                 ->update(['rating' => $driver['new']]);
         });
 

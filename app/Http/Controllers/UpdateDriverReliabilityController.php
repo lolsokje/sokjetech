@@ -12,6 +12,7 @@ class UpdateDriverReliabilityController extends Controller
     public function __invoke(DriverReliabilityUpdateRequest $request, Season $season): RedirectResponse
     {
         $this->authorize('update', $season->universe);
+        $this->middleware(['race_in_progress']);
 
         $drivers = collect($request->get('drivers'));
 

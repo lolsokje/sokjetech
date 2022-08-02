@@ -23,7 +23,7 @@ class Team extends Model
         return Attribute::get(function () {
             $primary = $this->primary_colour;
             $secondary = $this->secondary_colour;
-            return "background-color:$primary;color:$secondary;text-align:center;font-weight:bold";
+            return "background-color:$primary;color:$secondary;font-weight:bold";
         });
     }
 

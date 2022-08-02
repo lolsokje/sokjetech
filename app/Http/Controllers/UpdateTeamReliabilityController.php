@@ -12,6 +12,7 @@ class UpdateTeamReliabilityController extends Controller
     public function __invoke(TeamReliabilityUpdateRequest $request, Season $season): RedirectResponse
     {
         $this->authorize('update', $season->universe);
+        $this->middleware(['race_in_progress']);
 
         $teams = collect($request->get('teams'));
 

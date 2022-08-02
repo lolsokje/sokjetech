@@ -1,0 +1,92 @@
+[
+  {
+    "full_name": "Alfa Romeo F1 Team",
+    "short_name": "Alfa Romeo",
+    "team_principal": "Fred Vasseur",
+    "primary_colour": "#B12039",
+    "secondary_colour": "#FFFFFF",
+    "country": "CH",
+    "engine": "Ferrari"
+  },
+  {
+    "full_name": "Scuderia AlphaTauri",
+    "short_name": "AlphaTauri",
+    "team_principal": "Franz Tost",
+    "primary_colour": "#4E7C9B",
+    "secondary_colour": "#FFFFFF",
+    "country": "IT",
+    "engine": "Honda"
+  },
+  {
+    "full_name": "BWT Alpine F1 Team",
+    "short_name": "Alpine",
+    "team_principal": "Otmar Szafnauer",
+    "primary_colour": "#2293D1",
+    "secondary_colour": "#FFFFFF",
+    "country": "FR",
+    "engine": "Renault"
+  },
+  {
+    "full_name": "Aston Martin Aramco Cognizant F1 Team",
+    "short_name": "Aston Martin",
+    "team_principal": "Mike Krack",
+    "primary_colour": "#2D826D",
+    "secondary_colour": "#FFF029",
+    "country": "GB",
+    "engine": "Mercedes"
+  },
+  {
+    "full_name": "Scuderia Ferrari",
+    "short_name": "Ferrari",
+    "team_principal": "Mattia Binotto",
+    "primary_colour": "#ED1C24",
+    "secondary_colour": "#FFFFFF",
+    "country": "IT",
+    "engine": "Ferrari"
+  },
+  {
+    "full_name": "Haas F1 Team",
+    "short_name": "Haas",
+    "team_principal": "Günther Steiner",
+    "primary_colour": "#B6BABD",
+    "secondary_colour": "#FFFFFF",
+    "country": "US",
+    "engine": "Ferrari"
+  },
+  {
+    "full_name": "McLaren F1 Team",
+    "short_name": "McLaren",
+    "team_principal": "Zak Brown",
+    "primary_colour": "#F58020",
+    "secondary_colour": "#1E5BC6",
+    "country": "GB",
+    "engine": "Mercedes"
+  },
+  {
+    "full_name": "Mercedes-AMG Petronas F1 Team",
+    "short_name": "Mercedes",
+    "team_principal": "Toto Wolff",
+    "primary_colour": "#6CD3BF",
+    "secondary_colour": "#FFFFFF",
+    "country": "DE",
+    "engine": "Mercedes"
+  },
+  {
+    "full_name": "Oracle Red Bull Racing",
+    "short_name": "Red Bull Racing",
+    "team_principal": "Christian Horner",
+    "primary_colour": "#1E5BC6",
+    "secondary_colour": "#FFFFFF",
+    "country": "AT",
+    "engine": "Honda"
+  },
+  {
+    "full_name": "Williams Racing",
+    "short_name": "Williams",
+    "team_principal": "Jost Capito",
+    "primary_colour": "#37BEDD",
+    "secondary_colour": "#FFFFFF",
+    "country": "GB",
+    "engine": "Mercedes"
+  }
+]

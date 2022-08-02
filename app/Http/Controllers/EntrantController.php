@@ -15,6 +15,7 @@ class EntrantController extends Controller
     public function __construct()
     {
         $this->middleware(['auth'])->only('create', 'edit');
+        $this->middleware(['race_in_progress'])->except('index');
     }
 
     public function index(Season $season): Response
@@ -22,7 +23,7 @@ class EntrantController extends Controller
         return Inertia::render('Entrants/Index', [
             'season' => $season->load([
                 'entrants' => fn (HasMany $query) => $query->orderBy('full_name')->with('engine'),
-            ]),
+            ])->append('has_active_race'),
         ]);
     }
 

@@ -12,12 +12,13 @@ class UpdateTeamRatingsController extends Controller
     public function __invoke(TeamRatingUpdateRequest $request, Season $season): RedirectResponse
     {
         $this->authorize('update', $season->universe);
+        $this->middleware(['race_in_progress']);
 
         $teams = collect($request->get('teams'));
 
         $teams->each(function ($team) {
             Entrant::query()
-                ->where('id', $team['id'])
+                ->find($team['id'])
                 ->update(['rating' => $team['new']]);
         });
 

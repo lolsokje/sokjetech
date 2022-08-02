@@ -25,8 +25,8 @@ class CreateEntrantsTable extends Migration
             $table->string('secondary_colour');
             $table->string('country');
             $table->boolean('active')->default(true);
-            $table->unsignedInteger('rating')->nullable()->default(null);
-            $table->unsignedInteger('reliability')->nullable()->default(null);
+            $table->unsignedInteger('rating')->nullable()->default(0);
+            $table->unsignedInteger('reliability')->nullable()->default(0);
             $table->timestamps();
         });
     }

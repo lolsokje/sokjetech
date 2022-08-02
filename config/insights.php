@@ -15,6 +15,7 @@ use PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff;
 use SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff;
+use SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff;
 use SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\AlphabeticallySortedUsesSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff;
@@ -58,7 +59,7 @@ return [
     |
     */
 
-    'ide' => null,
+    'ide' => 'phpstorm',
 
     /*
     |--------------------------------------------------------------------------
@@ -74,6 +75,7 @@ return [
     'exclude' => [
         'app/Providers',
         'app/Enums', // Enums aren't fully supported by PHPCS and will cause incorrect issues
+        'app/Console',
         'app/Exceptions/Handler.php',
     ],
 
@@ -108,7 +110,7 @@ return [
         LineLengthSniff::class => [
             'lineLimit' => 120,
             'absoluteLineLimit' => 120,
-            'ignoreComments' => false,
+            'ignoreComments' => true,
         ],
         UnusedParameterSniff::class => [
             // these files come with default unused parameters you can't remove, so ignore them
@@ -117,6 +119,13 @@ return [
                 'app/Exceptions/Handler.php',
                 'app/Policies',
                 'app/Rules',
+                'app/Http/Resources',
+            ],
+        ],
+        FunctionLengthSniff::class => [
+            // not much sense checking function length in resources, where the majority of lines are return-array related
+            'exclude' => [
+                'app/Http/Resources',
             ],
         ],
     ],

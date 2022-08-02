@@ -19,8 +19,11 @@ class CreateRacesTable extends Migration
             $table->foreignId('circuit_id')->constrained();
             $table->string('name');
             $table->unsignedInteger('order')->nullable();
+            $table->boolean('qualifying_started')->default(false);
+            $table->boolean('qualifying_completed')->default(false);
             $table->boolean('started')->default(false);
             $table->boolean('completed')->default(false);
+            $table->json('details')->nullable(); // a column to keep track of things like current qualifying session/run, etc
             $table->timestamps();
         });
     }

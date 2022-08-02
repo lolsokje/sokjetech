@@ -7,6 +7,8 @@ use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
+use function Pest\Laravel\actingAs;
+
 test('a universe owner can create races', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
@@ -277,6 +279,83 @@ it('shows the correct race on the show page', function () {
                 ->where('season.year', $season->year)
                 ->where('race.name', $race->name)
         );
+});
+
+test('a universe owner cannot view the race create page for a started season', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+
+    actingAs($user)
+        ->get(route('seasons.races.create', [$season]))
+        ->assertRedirect()
+        ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
+});
+
+test('a race cannot be added to a started season', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+
+    actingAs($user)
+        ->post(route('seasons.races.store', [$season]), getRaceCreationData($season))
+        ->assertRedirect()
+        ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
+});
+
+test('a universe owner can not view the race update page for a started season', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+    $race = Race::factory()->for($season)->create();
+
+    actingAs($user)
+        ->get(route('seasons.races.edit', [$season, $race]))
+        ->assertRedirect()
+        ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
+});
+
+test('a race cannot be updated for a started season', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+    $race = Race::factory()->for($season)->create();
+
+    actingAs($user)
+        ->put(route('seasons.races.update', [$season, $race]), [
+            'circuit_id' => $race->circuit_id,
+            'name' => 'new name',
+            'stints' => [
+                ['min_rng' => 0, 'max_rng' => 30],
+            ],
+        ])
+        ->assertRedirect()
+        ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
+});
+
+test('a universe owner cannot view the reorder race page for a started season', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+
+    Race::factory(2)->for($season)->create();
+
+    actingAs($user)
+        ->get(route('seasons.races.reorder', [$season]))
+        ->assertRedirect()
+        ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
+});
+
+test('races cannot be reordered after a season has been started', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+    Race::factory(2)->for($season)->create();
+
+    actingAs($user)
+        ->put(route('seasons.races.order', [$season]))
+        ->assertRedirect()
+        ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
 });
 
 function getRaceCreationData(Season $season, ?User $user = null): array

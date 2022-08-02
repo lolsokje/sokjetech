@@ -18,7 +18,7 @@ class UniverseFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'visibility' => UniverseVisibility::PUBLIC,
-            'user_id' => User::factory()->create()->id,
+            'user_id' => User::factory(),
         ];
     }
 

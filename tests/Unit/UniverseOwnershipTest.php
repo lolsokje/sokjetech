@@ -22,7 +22,7 @@ it('correctly determines universe ownership', function () {
     $trueRequests = [
         get(route('universes.series.index', [$season->universe])),
         get(route('series.seasons.index', [$season->series])),
-        followingRedirects()->get(route('series.seasons.show', [$season->series, $season]))
+        followingRedirects()->get(route('series.seasons.show', [$season->series, $season])),
     ];
 
     foreach ($falseRequests as $request) {

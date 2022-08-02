@@ -14,8 +14,17 @@ class Race extends Model
 
     protected $casts = [
         'order' => 'integer',
+        'qualifying_started' => 'boolean',
+        'qualifying_completed' => 'boolean',
+        'started' => 'boolean',
         'completed' => 'boolean',
+        'details' => 'json',
     ];
+
+    public function universe(): Universe
+    {
+        return $this->season->universe;
+    }
 
     public function season(): BelongsTo
     {
@@ -30,5 +39,15 @@ class Race extends Model
     public function stints(): HasMany
     {
         return $this->hasMany(Stint::class);
+    }
+
+    public function qualifyingResults(): HasMany
+    {
+        return $this->hasMany(QualifyingResult::class);
+    }
+
+    public function raceResults(): HasMany
+    {
+        return $this->hasMany(RaceResult::class);
     }
 }

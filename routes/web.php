@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
+use App\Http\Controllers\CompleteQualifyingController;
+use App\Http\Controllers\CompleteRaceController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
@@ -13,13 +15,23 @@ use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
+use App\Http\Controllers\ShowDriverStandingsController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
 use App\Http\Controllers\ShowPointsConfigurationController;
+use App\Http\Controllers\ShowQualifyingPageController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
+use App\Http\Controllers\ShowRacePageController;
+use App\Http\Controllers\ShowRaceResultPageController;
+use App\Http\Controllers\ShowRaceWeekendIntroPageController;
+use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
+use App\Http\Controllers\ShowTeamStandingsController;
+use App\Http\Controllers\StartSeasonController;
 use App\Http\Controllers\StorePointsConfigurationController;
+use App\Http\Controllers\StoreQualifyingResultsController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
+use App\Http\Controllers\StoreRaceResultsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
@@ -51,6 +63,8 @@ Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
 });
 
 Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
+    Route::put('start', StartSeasonController::class)->name('start');
+
     Route::get('races/reorder', [RaceController::class, 'reorder'])->name('races.reorder');
     Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
     Route::resource('races', RaceController::class)->except('destroy');
@@ -87,4 +101,26 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
             Route::post('teams', UpdateTeamReliabilityController::class)->name('teams.store');
         });
     });
+
+    Route::group(['prefix' => 'standings', 'as' => 'standings.'], function () {
+        Route::get('drivers', ShowDriverStandingsController::class)->name('drivers');
+        Route::get('teams', ShowTeamStandingsController::class)->name('teams');
+    });
+});
+
+Route::group([
+    'prefix' => 'races/{race}/weekend',
+    'as' => 'weekend.',
+    'middleware' => 'season_in_progress',
+], function () {
+    Route::get('intro', ShowRaceWeekendIntroPageController::class)->name('intro');
+    Route::get('qualifying', ShowQualifyingPageController::class)->name('qualifying');
+    Route::get('grid', ShowStartingGridController::class)->name('grid');
+    Route::get('race', ShowRacePageController::class)->name('race');
+    Route::get('results', ShowRaceResultPageController::class)->name('results');
+
+    Route::post('qualifying/results', StoreQualifyingResultsController::class)->name('qualifying.results.store');
+    Route::post('qualifying/complete', CompleteQualifyingController::class)->name('qualifying.complete');
+    Route::post('race/results', StoreRaceResultsController::class)->name('race.store');
+    Route::post('race/complete', CompleteRaceController::class)->name('race.complete');
 });

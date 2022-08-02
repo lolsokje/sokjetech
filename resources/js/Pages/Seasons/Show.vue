@@ -1,15 +1,17 @@
 <template>
-	<BackLink :backTo="route('series.seasons.index', [season.series])" label="season overview"/>
+  <h1>{{ season.name }}</h1>
+
+  <BackLink :backTo="route('series.seasons.index', [season.series])" label="season overview"/>
 </template>
 
 <script setup>
 import BackLink from '@/Shared/BackLink';
 
 defineProps({
-	season: {
-		type: Object,
-		required: true,
-	},
+  season: {
+    type: Object,
+    required: true,
+  },
 });
 </script>
 

@@ -14,12 +14,13 @@ class EngineSeasonController extends Controller
     public function __construct()
     {
         $this->middleware(['auth'])->only('create', 'edit');
+        $this->middleware(['race_in_progress'])->except('index');
     }
 
     public function index(Season $season): Response
     {
         return Inertia::render('Seasons/Engines/Index', [
-            'season' => $season,
+            'season' => $season->append('has_active_race'),
             'engines' => $season->engines->load('baseEngine'),
         ]);
     }

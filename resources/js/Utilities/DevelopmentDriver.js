@@ -4,6 +4,7 @@ export default class DevelopmentDriver {
         this.number = driver.number;
         this.team_name = driver.entrant.full_name;
         this.team_style = driver.entrant.style_string;
+        this.primary_colour = driver.entrant.primary_colour;
         this.full_name = driver.driver.full_name;
         this.rating = isReliability ? driver.reliability : driver.rating;
         this.min = 0;

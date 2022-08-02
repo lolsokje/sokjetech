@@ -7,6 +7,8 @@ use App\Actions\Races\Stints\UpdateStintsAction;
 use App\Actions\Races\StoreRaceAction;
 use App\Actions\Races\UpdateRaceOrderAction;
 use App\Http\Requests\RaceCreateRequest;
+use App\Http\Resources\RaceOverviewPoleResource;
+use App\Http\Resources\RaceOverviewWinnerResource;
 use App\Models\Race;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,12 +22,22 @@ class RaceController extends Controller
     public function __construct()
     {
         $this->middleware(['auth'])->only('create', 'edit', 'reorder');
+        $this->middleware(['season_started'])->except('index', 'show');
     }
 
     public function index(Season $season): Response
     {
+        $season->load([
+            'poles',
+            'winners',
+            'races' => fn (HasMany $query) => $query->orderBy('order'),
+        ]);
+
         return Inertia::render('Races/Index', [
-            'season' => $season->load(['races' => fn (HasMany $query) => $query->orderBy('order')]),
+            'season' => $season,
+            'poles' => RaceOverviewPoleResource::collection($season->poles)->toArray(request()),
+            'winners' => RaceOverviewWinnerResource::collection($season->winners)->toArray(request()),
+            'next_race_id' => $season->nextRace()?->id,
         ]);
     }
 

@@ -22,7 +22,7 @@ test('a universe owner can view the point configuration page', function () {
         ->get(route('seasons.configuration.points', [$season]))
         ->assertOk()
         ->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Seasons/Configuration/Points')
                 ->has('season')
         );
@@ -98,6 +98,16 @@ test('the existing point system will be removed when updating', function () {
     assertDatabaseCount('point_distributions', 10);
     assertNotNull($season->pointSystem);
     assertCount(10, $season->pointDistribution);
+});
+
+test('a point system cannot be saved when a season has started', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+
+    actingAs($user)
+        ->post(route('seasons.configuration.points.store', [$season]), getPointSystemData())
+        ->assertRedirect();
 });
 
 function getPointSystemData(?array $override = []): array

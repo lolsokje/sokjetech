@@ -19,6 +19,8 @@ class CreateSeasonsTable extends Migration
             $table->integer('year');
             $table->unsignedBigInteger('format_id')->nullable();
             $table->string('format_type')->nullable();
+            $table->boolean('started')->default(false);
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
     }

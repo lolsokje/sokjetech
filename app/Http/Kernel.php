@@ -64,5 +64,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'season_started' => \App\Http\Middleware\DisallowModifyingStartedSeason::class,
+        'race_in_progress' => \App\Http\Middleware\RaceInProgress::class,
+        'season_in_progress' => \App\Http\Middleware\SeasonInProgress::class,
     ];
 }

@@ -11,12 +11,13 @@ class UpdateEngineRatingsController extends Controller
     public function __invoke(EngineRatingUpdateRequest $request, Season $season)
     {
         $this->authorize('update', $season->universe);
+        $this->middleware(['race_in_progress']);
 
         $engines = collect($request->get('engines'));
 
         $engines->each(function ($engine) {
             EngineSeason::query()
-                ->where('id', $engine['id'])
+                ->find($engine['id'])
                 ->update(['rating' => $engine['new']]);
         });
 
