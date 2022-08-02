@@ -29,7 +29,7 @@
             <th class="text-center">#</th>
             <th>Team</th>
             <th class="text-center">Rating</th>
-            <th v-for="i in 3" :key="i" class="text-center">Run {{ i }}</th>
+            <th v-for="i in runsPerSession" :key="i" class="text-center">{{ i }}</th>
             <th class="text-center">Best</th>
             <th class="text-center">Total</th>
         </tr>
@@ -45,7 +45,7 @@
                 <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
                 <td class="padded-left">{{ driver.team_name }}</td>
                 <td class="text-center">{{ driver.total_rating }}</td>
-                <td v-for="i in 3" :key="i" class="text-center">
+                <td v-for="i in runsPerSession" :key="i" class="text-center">
                     {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
                 </td>
                 <td class="text-center">{{ driver.best_stint }}</td>
@@ -101,6 +101,7 @@ const props = defineProps({
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
 
 const totalSessions = 3;
+const runsPerSession = props.formatDetails.runs_per_session;
 
 const maxDrivers = {
     1: props.formatDetails.q2_driver_count,
@@ -167,10 +168,10 @@ const isDriverBelowSessionCutoff = (position) => {
 };
 
 const hasError = computed(() => props.showError === true);
-const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session) && !hasError.value);
+const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < runsPerSession) && !hasError.value);
 const canContinueToNextSession = computed(() => (store.getCurrentSessionNumber() < totalSessions) && !hasError.value);
 const canViewPreviousSession = computed(() => store.getCurrentSessionIndex() > 0);
-const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === 3 && store.getCurrentSessionRunCount() === 3 && !props.completed);
+const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === totalSessions && store.getCurrentSessionRunCount() === runsPerSession && !props.completed);
 
 onMounted(() => {
     store.setDrivers(props.drivers);
