@@ -11,7 +11,16 @@
             <th>TEAM</th>
             <th class="text-center">PTS</th>
             <th class="text-center"></th>
-            <th v-for="race in season.races" :key="race.order" class="text-center">{{ race.order }}</th>
+            <th v-for="race in season.races" :key="race.order" class="text-center">
+                <template v-if="race.completed">
+                    <InertiaLink :href="route('weekend.results', [race])">
+                        {{ race.order }}
+                    </InertiaLink>
+                </template>
+                <template v-else>
+                    {{ race.order }}
+                </template>
+            </th>
         </tr>
         </thead>
         <tbody>
