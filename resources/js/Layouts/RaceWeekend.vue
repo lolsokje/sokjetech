@@ -3,7 +3,7 @@
         <div class="pb-3">
             <TabLinks :links="links"/>
         </div>
-        
+
         <div class="w-100 bg-dark p-4">
             <h1>{{ race.name }}</h1>
             <slot/>
@@ -13,7 +13,6 @@
 
 <script setup>
 import Base from '@/Layouts/Base';
-import { defineProps } from 'vue';
 import TabLinks from '@/Components/TabLinks';
 import { TabLink } from '@/Utilities/TabLink';
 
