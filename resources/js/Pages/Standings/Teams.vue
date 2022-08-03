@@ -11,6 +11,7 @@
             <th>TEAM</th>
             <th class="text-center">PTS</th>
             <th class="text-center"></th>
+            <th class="colour-accent"></th>
             <th v-for="race in season.races" :key="race.order" class="text-center">
                 <template v-if="race.completed">
                     <InertiaLink :href="route('weekend.results', [race])">
@@ -35,6 +36,7 @@
                     <td class="text-center align-middle" :rowspan="team.driver_count">{{ team.points }}</td>
                 </template>
                 <td class="text-center" :style="team.style_string">{{ driver.number }}</td>
+                <td class="colour-accent"></td>
                 <td v-for="race in season.races" :key="race.order" class="text-center"
                     :class="getResultDisplayClasses(driver.results[race.order])">
                     {{ driver.results[race.order]?.position }}
