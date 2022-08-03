@@ -2,8 +2,9 @@ import { createApp, h } from 'vue';
 import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';
 import 'bootstrap';
 import route from 'ziggy';
-import Default from './Shared/Layouts/Default';
+import Default from './Layouts/Default';
 import FontAwesomeIcon from './Utilities/FontAwesome';
+import { InertiaProgress } from '@inertiajs/progress';
 
 createInertiaApp({
     resolve: name => {
@@ -24,3 +25,5 @@ createInertiaApp({
             .mount(el);
     },
 });
+
+InertiaProgress.init();

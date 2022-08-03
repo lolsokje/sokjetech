@@ -70,7 +70,7 @@ onMounted(() => sortDriversByPosition(props.drivers));
 </script>
 
 <script>
-import RaceWeekend from '@/Shared/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend';
 
 export default { layout: RaceWeekend };
 </script>

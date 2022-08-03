@@ -4,15 +4,15 @@
 
 <script setup>
 defineProps({
-	universe: {
-		type: Object,
-		required: true,
-	},
+    universe: {
+        type: Object,
+        required: true,
+    },
 });
 </script>
 
 <script>
-import Universe from '@/Shared/Layouts/Universe';
+import Universe from '@/Layouts/Universe';
 
 export default { layout: Universe };
 </script>

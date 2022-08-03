@@ -47,7 +47,7 @@ defineProps({
 </script>
 
 <script>
-import Universe from '@/Shared/Layouts/Universe';
+import Universe from '@/Layouts/Universe';
 
-export default {layout: Universe};
+export default { layout: Universe };
 </script>

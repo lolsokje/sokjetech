@@ -65,7 +65,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '@/Shared/Layouts/Season';
+import Season from '@/Layouts/Season';
 
 export default { layout: Season };
 </script>
