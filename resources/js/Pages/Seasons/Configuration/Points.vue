@@ -12,7 +12,8 @@
 
         <div class="mb-3 w-25">
             <label for="amount_of_point_scorers" class="form-label">Amount of point scorers</label>
-            <input type="number" id="amount_of_point_scorers" v-model="amountOfPointScorers" class="form-control" @change="setPointScorerInputs" required :disabled="hasSeasonStarted()">
+            <input type="number" id="amount_of_point_scorers" v-model="amountOfPointScorers" class="form-control"
+                   @change="setPointScorerInputs" required :disabled="hasSeasonStarted()">
         </div>
 
         <div class="row">
@@ -28,19 +29,23 @@
                 <h3>Extra points</h3>
                 <div class="row mb-3">
                     <div>
-                        <input type="checkbox" class="form-check-input me-1" v-model="form.fastest_lap_point_awarded" id="point_for_fastest_lap" :disabled="hasSeasonStarted()">
+                        <input type="checkbox" class="form-check-input me-1" v-model="form.fastest_lap_point_awarded"
+                               id="point_for_fastest_lap" :disabled="hasSeasonStarted()">
                         <label for="point_for_fastest_lap" class="form-check-label">Point for fastest lap</label>
                     </div>
 
                     <div v-if="form.fastest_lap_point_awarded">
                         <div class="my-3">
                             <label for="fastest_lap_points" class="form-label">Fastest lap points</label>
-                            <input type="number" class="form-control" v-model="form.fastest_lap_point_amount" :required="form.fastest_lap_point_awarded" :disabled="hasSeasonStarted()">
+                            <input type="number" class="form-control" v-model="form.fastest_lap_point_amount"
+                                   :required="form.fastest_lap_point_awarded" :disabled="hasSeasonStarted()">
                         </div>
 
                         <div class="my-3">
                             <label for="fastestLapDetermination" class="form-label">Fastest lap determination</label>
-                            <select id="fastestLapDetermination" class="form-control" v-model="form.fastest_lap_determination" :required="form.fastest_lap_point_awarded" :disabled="hasSeasonStarted()">
+                            <select id="fastestLapDetermination" class="form-control"
+                                    v-model="form.fastest_lap_determination" :required="form.fastest_lap_point_awarded"
+                                    :disabled="hasSeasonStarted()">
                                 <option value="">Pick an option</option>
                                 <option :value="FastestLapDetermination.BEST_LAST_STINT">Best last stint RNG</option>
                                 <option :value="FastestLapDetermination.SEPARATE_STINT">Separate stint</option>
@@ -50,12 +55,14 @@
                         <div class="row" v-if="fastestLapIsSeparateStint">
                             <div class="col-6">
                                 <label for="fastest_lap_min_rng" class="form-label">Fastest lap min RNG</label>
-                                <input type="number" class="form-control" v-model="form.fastest_lap_min_rng" :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()">
+                                <input type="number" class="form-control" v-model="form.fastest_lap_min_rng"
+                                       :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()">
                             </div>
 
                             <div class="col-6">
                                 <label for="fastest_lap_max_rng" class="form-label">Fastest lap max RNG</label>
-                                <input type="number" class="form-control" v-model="form.fastest_lap_max_rng" :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()">
+                                <input type="number" class="form-control" v-model="form.fastest_lap_max_rng"
+                                       :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()">
                             </div>
                         </div>
                     </div>
@@ -65,7 +72,8 @@
 
                 <div class="row mb-3">
                     <div>
-                        <input type="checkbox" class="form-check-input me-1" v-model="form.pole_position_point_awarded" id="point_for_pole_position" :disabled="hasSeasonStarted()">
+                        <input type="checkbox" class="form-check-input me-1" v-model="form.pole_position_point_awarded"
+                               id="point_for_pole_position" :disabled="hasSeasonStarted()">
                         <label for="point_for_pole_position" class="form-check-label">Point for pole position</label>
                     </div>
 
@@ -73,7 +81,8 @@
                         <div class="my-3">
                             <label for="amount_of_points_for_pole" class="form-label">Amount of points for pole
                                 position</label>
-                            <input type="number" class="form-control" v-model="form.pole_position_point_amount" :required="form.pole_position_point_awarded" :disabled="hasSeasonStarted()">
+                            <input type="number" class="form-control" v-model="form.pole_position_point_amount"
+                                   :required="form.pole_position_point_awarded" :disabled="hasSeasonStarted()">
                         </div>
                     </div>
                 </div>
@@ -155,8 +164,7 @@ const hasSeasonStarted = () => {
 </script>
 
 <script>
-import Season from '@/Shared/Layouts/Season';
+import Season from '@/Layouts/Season';
 
 export default { layout: Season };
 </script>
-

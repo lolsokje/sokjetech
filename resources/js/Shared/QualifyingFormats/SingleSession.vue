@@ -10,12 +10,14 @@
 
         <div class="col-4">
             <label for="min_rng" class="form-label">Min RNG per run</label>
-            <input type="number" class="form-control" id="min_rng" v-model="formatDetails.min_rng" required :disabled="seasonStarted">
+            <input type="number" class="form-control" id="min_rng" v-model="formatDetails.min_rng" required
+                   :disabled="seasonStarted">
         </div>
 
         <div class="col-4">
             <label for="max_rng" class="form-label">Max RNG per run</label>
-            <input type="number" class="form-control" id="max_rng" v-model="formatDetails.max_rng" required :disabled="seasonStarted">
+            <input type="number" class="form-control" id="max_rng" v-model="formatDetails.max_rng" required
+                   :disabled="seasonStarted">
         </div>
     </div>
 </template>
@@ -57,7 +59,7 @@ watch(formatDetails, () => {
 </script>
 
 <script>
-import Season from '@/Shared/Layouts/Season';
+import Season from '@/Layouts/Season';
 
 export default { layout: Season };
 </script>

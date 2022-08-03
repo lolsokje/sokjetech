@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import Base from '@/Shared/Layouts/Base';
+import Base from '@/Layouts/Base';
 import { defineProps } from 'vue';
 
 defineProps({

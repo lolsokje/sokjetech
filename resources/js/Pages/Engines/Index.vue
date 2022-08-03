@@ -41,7 +41,7 @@ defineProps({
 </script>
 
 <script>
-import Series from '@/Shared/Layouts/Series';
+import Series from '@/Layouts/Series';
 
-export default {layout: Series};
+export default { layout: Series };
 </script>

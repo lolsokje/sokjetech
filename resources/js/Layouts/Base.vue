@@ -14,10 +14,10 @@
 </template>
 
 <script setup>
-import Nav from '../Nav';
-import Breadcrumbs from '../Breadcrumbs';
+import Nav from '../Shared/Nav';
+import Breadcrumbs from '../Shared/Breadcrumbs';
 import { reactive } from 'vue';
-import Toast from '../Toast';
+import Toast from '../Shared/Toast';
 
 const state = reactive({
     sidebarActive: localStorage.getItem('sidebar_visible') === 'false' ? 'inactive' : '',
