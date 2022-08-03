@@ -11,21 +11,36 @@ a {
   text-decoration: none;
 }
 
-.sidebar {
-  min-width: 300px;
-  max-width: 300px;
-  background-color: $dark;
-  min-height: 100vh;
-  transition: all 0.3s;
-
-  .nav-item {
-    &:hover {
-      background-color: $darker;
+ul.navbar-nav {
+  li {
+    a, button.btn-link {
+      font-size: 1.25rem;
     }
   }
+}
 
-  &.inactive {
-    margin-left: -300px;
+ul.nav li:first-of-type {
+}
+
+ul.nav.pills {
+  .nav-item {
+    &:first-of-type {
+      border-radius: $navbar-border-radius 0 0 $navbar-border-radius;
+    }
+
+    &:last-of-type {
+      border-radius: 0 $navbar-border-radius $navbar-border-radius 0;
+    }
+
+    &:not(:last-of-type) {
+      border-right: 3px solid $darker;
+    }
+
+    background-color: $dark;
+
+    .nav-link {
+      padding: 1.5rem;
+    }
   }
 }
 
@@ -36,20 +51,6 @@ a {
 
 .btn-link {
   text-decoration: none;
-}
-
-.nav-item.has-sub {
-  .collapsable {
-    display: none;
-  }
-
-  &.open {
-    background-color: $darker;
-
-    .collapsable {
-      display: block;
-    }
-  }
 }
 
 .form-narrow {

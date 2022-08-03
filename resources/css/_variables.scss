@@ -1,8 +1,29 @@
-$dark: #1F1F27;
+// --- DEFAULT
 $darker: #15151E;
+$default: #24242C;
 $lighter: #31313C;
 $primary: #F8B739;
+
+// --- Cobalt2 VS Code theme inspired
+//$darker: #022C43;
+//$default: #053F5E;
+//$lighter: #115173;
+//$primary: #FFD700;
+
+// --- UPC Direct Dark
+//$darker: #002B36;
+//$default: #073642;
+//$lighter: #586E75;
+//$primary: #F8B739;
+
+//$darker: #002B36;
+//$default: #073642;
+//$lighter: #586E75;
+//$primary: #F8B739;
+
+
 $color: #C1C1C1;
+$dark: $default;
 
 $pagination-bg: $darker;
 $pagination-border-color: $lighter;
@@ -14,3 +35,5 @@ $pagination-hover-bg: $lighter;
 $pagination-hover-border-color: $lighter;
 
 $pagination-focus-bg: $lighter;
+
+$navbar-border-radius: 0.75rem;

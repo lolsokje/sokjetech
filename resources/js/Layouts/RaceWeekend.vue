@@ -1,40 +1,12 @@
 <template>
     <Base>
-        <div class="wrapper d-flex">
-            <div class="w-100 mt-5 bg-dark p-4">
-                <h1>{{ race.name }}</h1>
-                <slot/>
-            </div>
-            <div class="w-25 ms-5 mt-5 bg-dark p-4">
-                <p class="mb-0 ps-3">Pages</p>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <InertiaLink :href="route('weekend.intro', [race])" class="nav-link">
-                            Intro
-                        </InertiaLink>
-                    </li>
-                    <li class="nav-item">
-                        <InertiaLink :href="route('weekend.qualifying', [race])" class="nav-link">
-                            Qualifying
-                        </InertiaLink>
-                    </li>
-                    <li class="nav-item" v-if="race.qualifying_completed">
-                        <InertiaLink :href="route('weekend.grid', [race])" class="nav-link">
-                            Starting grid
-                        </InertiaLink>
-                    </li>
-                    <li class="nav-item" v-if="race.qualifying_completed">
-                        <InertiaLink :href="route('weekend.race', [race])" class="nav-link">
-                            Race
-                        </InertiaLink>
-                    </li>
-                    <li class="nav-item" v-if="race.completed">
-                        <InertiaLink :href="route('weekend.results', [race])" class="nav-link">
-                            Results
-                        </InertiaLink>
-                    </li>
-                </ul>
-            </div>
+        <div class="pb-3">
+            <TabLinks :links="links"/>
+        </div>
+        
+        <div class="w-100 bg-dark p-4">
+            <h1>{{ race.name }}</h1>
+            <slot/>
         </div>
     </Base>
 </template>
@@ -42,13 +14,23 @@
 <script setup>
 import Base from '@/Layouts/Base';
 import { defineProps } from 'vue';
+import TabLinks from '@/Components/TabLinks';
+import { TabLink } from '@/Utilities/TabLink';
 
-defineProps({
+const props = defineProps({
     race: {
         type: Object,
         required: true,
     },
 });
+
+const links = [
+    new TabLink('weekend.intro', 'Intro', [ props.race ]),
+    new TabLink('weekend.qualifying', 'Qualifying', [ props.race ]),
+    new TabLink('weekend.grid', 'Grid', [ props.race ]),
+    new TabLink('weekend.race', 'Race', [ props.race ]),
+    new TabLink('weekend.results', 'Results', [ props.race ]),
+];
 </script>
 
 <script>

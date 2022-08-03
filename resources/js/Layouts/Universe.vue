@@ -1,42 +1,33 @@
 <template>
-	<Base>
-		<div class="wrapper d-flex">
-			<div class="w-100 mt-5 bg-dark p-4">
-				<h1>{{ universe.name }}</h1>
-				<slot/>
-			</div>
-			<div class="w-25 ms-5 mt-5 bg-dark p-4">
-				<ul class="nav flex-column">
-					<li class="nav-item">
-						<InertiaLink :href="route('universes.series.index', [universe])" class="nav-link">
-							Series
-						</InertiaLink>
-					</li>
-					<li class="nav-item">
-						<InertiaLink :href="route('universes.teams.index', [universe])" class="nav-link">
-							Teams
-						</InertiaLink>
-					</li>
-					<li class="nav-item">
-						<InertiaLink :href="route('universes.drivers.index', [universe])" class="nav-link" href="#">
-							Drivers
-						</InertiaLink>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</Base>
+    <Base>
+        <div class="pb-3">
+            <TabLinks :links="links"/>
+        </div>
+
+        <div class="w-100 bg-dark p-4">
+            <h1>{{ universe.name }}</h1>
+            <slot/>
+        </div>
+    </Base>
 </template>
 
 <script setup>
 import Base from './Base';
+import { TabLink } from '@/Utilities/TabLink';
+import TabLinks from '@/Components/TabLinks';
 
 const props = defineProps({
-	universe: {
-		type: Object,
-		required: true,
-	},
+    universe: {
+        type: Object,
+        required: true,
+    },
 });
+
+const links = [
+    new TabLink('universes.series.index', 'Series', [ props.universe ]),
+    new TabLink('universes.teams.index', 'Teams', [ props.universe ]),
+    new TabLink('universes.drivers.index', 'Drivers', [ props.universe ]),
+];
 </script>
 
 <script>

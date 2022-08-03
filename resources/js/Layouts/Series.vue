@@ -1,37 +1,32 @@
 <template>
-	<Base>
-		<div class="wrapper d-flex">
-			<div class="w-100 mt-5 bg-dark p-4">
-				<h1>{{ series.name }}</h1>
-				<slot/>
-			</div>
-			<div class="w-25 ms-5 mt-5 bg-dark p-4">
-				<ul class="nav flex-column">
-					<li class="nav-item">
-						<InertiaLink :href="route('series.engines.index', [series])" class="nav-link">
-							Engines
-						</InertiaLink>
-					</li>
-					<li class="nav-item">
-						<InertiaLink :href="route('series.seasons.index', [series])" class="nav-link">
-							Seasons
-						</InertiaLink>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</Base>
+    <Base>
+        <div class="pb-3">
+            <TabLinks :links="links"/>
+        </div>
+
+        <div class="w-100 bg-dark p-4">
+            <h1>{{ series.name }}</h1>
+            <slot/>
+        </div>
+    </Base>
 </template>
 
 <script setup>
 import Base from './Base';
+import TabLinks from '@/Components/TabLinks';
+import { TabLink } from '@/Utilities/TabLink';
 
 const props = defineProps({
-	series: {
-		type: Object,
-		required: true,
-	},
+    series: {
+        type: Object,
+        required: true,
+    },
 });
+
+const links = [
+    new TabLink('series.seasons.index', 'Seasons', [ props.series ]),
+    new TabLink('series.engines.index', 'Engines', [ props.series ]),
+];
 </script>
 
 <script>
