@@ -26,7 +26,7 @@ const sortResults = (entities) => {
 };
 
 const calculateTieBreaker = (entityOne, entityTwo) => {
-    // will probably break with team tie breakers
+    // will probably break with team tiebreakers
     const resultsTallyOne = getResultsTallyPerPosition(entityOne);
     const resultsTallyTwo = getResultsTallyPerPosition(entityTwo);
     let result = 0;
@@ -76,7 +76,14 @@ const getResultsTallyPerPosition = (entity) => {
     const results = [];
 
     Object.values(entity.results).forEach(result => {
-        if (!result.dnf) {
+        if (result.dnf) {
+            // hacky way of getting DNFs to sort at the bottom
+            if (!results[999999]) {
+                results[999999] = 1;
+            } else {
+                results[999999]++;
+            }
+        } else {
             const position = result.position;
 
             if (!results[position]) {
