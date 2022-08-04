@@ -3,7 +3,7 @@
 
     <h3>Driver Standings</h3>
 
-    <table class="table table-dark table-bordered">
+    <table class="table">
         <thead>
         <tr>
             <th class="text-center">POS</th>

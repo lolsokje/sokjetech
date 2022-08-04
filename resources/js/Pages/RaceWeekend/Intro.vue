@@ -5,7 +5,7 @@
 
     <h4>Stints</h4>
 
-    <table class="table table-dark table-bordered">
+    <table class="table">
         <thead>
         <tr>
             <th class="text-center"></th>
@@ -42,7 +42,7 @@
     <div class="row mt-3">
         <div class="col-6">
             <h5>Driver standings</h5>
-            <table class="table table-dark table-bordered">
+            <table class="table">
                 <thead>
                 <tr>
                     <th class="text-center"></th>
@@ -67,7 +67,7 @@
         </div>
         <div class="col-6">
             <h5>Team standings</h5>
-            <table class="table table-dark table-bordered">
+            <table class="table">
                 <thead>
                 <tr>
                     <th></th>

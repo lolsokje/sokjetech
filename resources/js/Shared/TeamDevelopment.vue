@@ -36,7 +36,7 @@
         </div>
 
         <form @submit.prevent="store">
-            <table id="screenshot-target" class="table table-bordered table-dark">
+            <table id="screenshot-target" class="table">
                 <thead>
                 <tr>
                     <th class="colour-accent"></th>

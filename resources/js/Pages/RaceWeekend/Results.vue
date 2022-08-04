@@ -9,7 +9,7 @@
             , <span class="text-decoration-underline">underlined = fastest lap</span>
         </template>
     </p>
-    <table class="table table-dark table-bordered">
+    <table class="table">
         <thead>
         <tr>
             <th class="text-center">POS</th>

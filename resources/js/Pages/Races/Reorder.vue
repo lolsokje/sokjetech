@@ -6,7 +6,7 @@
             <fa icon="info-circle"/>
             <i class="ms-2">drag and drop to reorder races</i>
         </p>
-        <table class="table table-bordered table-dark">
+        <table class="table">
             <thead>
             <tr>
                 <th class="text-center">#</th>

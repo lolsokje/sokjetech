@@ -1,7 +1,9 @@
+@import "bootstrap/scss/functions";
+
 // --- DEFAULT
 $darker: #15151E;
 $default: #24242C;
-$lighter: #31313C;
+$lighter: #3A3A41;
 $primary: #F8B739;
 
 // --- Cobalt2 VS Code theme inspired
@@ -16,24 +18,41 @@ $primary: #F8B739;
 //$lighter: #586E75;
 //$primary: #F8B739;
 
-//$darker: #002B36;
-//$default: #073642;
-//$lighter: #586E75;
-//$primary: #F8B739;
-
-
-$color: #C1C1C1;
+// General colour styles
+$body-color: #C1C1C1;
 $dark: $default;
+$body-bg: $darker;
 
-$pagination-bg: $darker;
+// Table styles
+$border-color: $lighter;
+$bg-table-header: $body-bg;
+$table-color: #FFFFFF;
+
+// Form control styles
+$input-border-color: $lighter;
+
+// Pagination styles
+$pagination-bg: $body-bg;
 $pagination-border-color: $lighter;
-
 $pagination-disabled-bg: $dark;
 $pagination-disabled-border-color: $lighter;
-
 $pagination-hover-bg: $lighter;
 $pagination-hover-border-color: $lighter;
-
 $pagination-focus-bg: $lighter;
 
+// Navbar styles
 $navbar-border-radius: 0.75rem;
+
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+
+$custom-colors: (
+        'nav-item': $dark,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+$utilities-colors: map-merge($utilities-colors, $theme-colors-rgb);
+$utilities-text-colors: map-loop($utilities-colors, rgba-css-var, "$key", "text");
+$utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");

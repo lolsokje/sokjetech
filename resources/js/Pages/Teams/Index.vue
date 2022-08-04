@@ -7,7 +7,7 @@
         Add team
     </InertiaLink>
 
-    <table class="table table-bordered table-dark">
+    <table class="table">
         <thead>
         <tr>
             <th>Full name</th>

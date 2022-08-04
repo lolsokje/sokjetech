@@ -7,7 +7,7 @@
         Add driver
     </InertiaLink>
 
-    <table class="table table-bordered table-dark">
+    <table class="table">
         <thead>
         <tr>
             <th>Driver name</th>

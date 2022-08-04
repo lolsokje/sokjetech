@@ -15,7 +15,7 @@
 
         <button class="btn btn-primary my-3" @click.prevent="addStint">Add stint</button>
 
-        <table class="table table-bordered table-dark">
+        <table class="table">
             <thead>
             <tr class="text-center">
                 <th>Stint</th>

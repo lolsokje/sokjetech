@@ -1,11 +1,5 @@
 @import 'variables';
-
 @import 'bootstrap';
-
-body {
-  background-color: $darker;
-  color: $color;
-}
 
 a {
   text-decoration: none;
@@ -19,9 +13,6 @@ ul.navbar-nav {
   }
 }
 
-ul.nav li:first-of-type {
-}
-
 ul.nav.pills {
   .nav-item {
     &:first-of-type {
@@ -33,10 +24,8 @@ ul.nav.pills {
     }
 
     &:not(:last-of-type) {
-      border-right: 3px solid $darker;
+      border-right: 3px solid $body-bg;
     }
-
-    background-color: $dark;
 
     .nav-link {
       padding: 1.5rem;
@@ -61,13 +50,30 @@ ul.nav.pills {
   width: 50%;
 }
 
-.table-dark {
+.table {
+  border-top-color: $bg-table-header;
+
   & > :not(:first-child) {
     border-top: none;
   }
 
+  tbody {
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-right-width: 1px;
+    border-right-style: solid;
+  }
+
+  thead {
+    border-left: 1px solid $body-bg;
+    border-right: 1px solid $body-bg;
+  }
+
   th {
     font-size: 1.1rem;
+    background-color: $bg-table-header;
+    border-color: $bg-table-header;
+    padding: 1rem;
   }
 
   td {
@@ -100,12 +106,6 @@ ul.nav.pills {
     width: 8px;
   }
 
-  th {
-    background-color: $darker;
-    padding: 1rem;
-    border-width: 0;
-  }
-
   tbody {
     tr, td {
       padding: 0.5rem 0;
@@ -119,13 +119,6 @@ ul.nav.pills {
 
         &:not(:last-child) {
           border-right: 0 solid;
-        }
-
-        tr:hover {
-          td {
-            background-color: $lighter;
-            border-color: $dark;
-          }
         }
 
         &.bg-purple {

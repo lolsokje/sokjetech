@@ -10,7 +10,7 @@
 
     <ActiveRaceWarning v-if="hasActiveRace"/>
 
-    <table class="table table-bordered table-dark" id="screenshot-target">
+    <table class="table" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">#</th>

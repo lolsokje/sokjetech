@@ -6,7 +6,7 @@
     <template v-if="circuits.data.length">
         <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
 
-        <table class="table table-bordered table-dark">
+        <table class="table">
             <thead>
             <tr>
                 <th role="button" @click="sort('name')">
@@ -80,6 +80,6 @@ watch(params, () => {
         }
     });
 
-    Inertia.get(route('circuits.index'), requestParams, {replace: true, preserveState: true});
+    Inertia.get(route('circuits.index'), requestParams, { replace: true, preserveState: true });
 });
 </script>
