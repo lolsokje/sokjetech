@@ -189,7 +189,7 @@ const fastestLapRoll = () => {
             return driver.fastest_lap_roll = null;
         }
 
-        return driver.fastest_lap_roll = getRoll(fastestLapMinRng, fastestLapMaxRng);
+        return driver.fastest_lap_roll = driver.driver_rating + getRoll(fastestLapMinRng, fastestLapMaxRng);
     });
 
     getFastestLap();
@@ -205,7 +205,7 @@ const getFastestLap = () => {
     const drivers = props.drivers.slice();
     if (!fastestLapIsSeparateStint) {
         const currentStintIndex = currentStint.value;
-        drivers.forEach(driver => driver.fastest_lap_roll = driver.stints[currentStintIndex]);
+        drivers.forEach(driver => driver.fastest_lap_roll = driver.driver_rating + driver.stints[currentStintIndex]);
     }
 
     drivers.sort((driverOne, driverTwo) => driverTwo.fastest_lap_roll - driverOne.fastest_lap_roll);
