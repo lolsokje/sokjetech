@@ -1,3 +1,5 @@
+import { getRoll } from '@/Composables/useRunQualifying';
+
 class Development {
     performDev (items) {
         if (this.areDevRangesValid(items)) {
@@ -13,7 +15,7 @@ class Development {
         const min = item.min;
         const max = item.max;
 
-        const dev = Math.round(Math.random() * (max - min) + min);
+        const dev = getRoll(min, max);
         item.dev = dev;
         item.new = item.rating + dev;
     }
