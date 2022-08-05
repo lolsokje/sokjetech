@@ -17,6 +17,7 @@ use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowDriverStandingsController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
+use App\Http\Controllers\ShowEngineReliabilityController;
 use App\Http\Controllers\ShowPointsConfigurationController;
 use App\Http\Controllers\ShowQualifyingPageController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
@@ -37,6 +38,7 @@ use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
 use App\Http\Controllers\UpdateDriverReliabilityController;
 use App\Http\Controllers\UpdateEngineRatingsController;
+use App\Http\Controllers\UpdateEngineReliabilityController;
 use App\Http\Controllers\UpdateTeamRatingsController;
 use App\Http\Controllers\UpdateTeamReliabilityController;
 use Illuminate\Support\Facades\Route;
@@ -99,6 +101,9 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
             Route::get('teams', ShowTeamReliabilityController::class)->name('teams');
             Route::post('teams', UpdateTeamReliabilityController::class)->name('teams.store');
+
+            Route::get('engines', ShowEngineReliabilityController::class)->name('engines');
+            Route::post('engines', UpdateEngineReliabilityController::class)->name('engines.store');
         });
     });
 

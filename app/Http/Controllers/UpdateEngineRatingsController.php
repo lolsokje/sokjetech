@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Ratings\UpdateEngineRatings;
 use App\Http\Requests\EngineRatingUpdateRequest;
-use App\Models\EngineSeason;
 use App\Models\Season;
 
 class UpdateEngineRatingsController extends Controller
@@ -13,13 +13,7 @@ class UpdateEngineRatingsController extends Controller
         $this->authorize('update', $season->universe);
         $this->middleware(['race_in_progress']);
 
-        $engines = collect($request->get('engines'));
-
-        $engines->each(function ($engine) {
-            EngineSeason::query()
-                ->find($engine['id'])
-                ->update(['rating' => $engine['new']]);
-        });
+        (new UpdateEngineRatings($request->validated('engines')))->handle();
 
         return redirect(route('seasons.development.engines', [$season]))
             ->with('notice', 'Engine ratings updated successfully');

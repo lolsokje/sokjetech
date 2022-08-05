@@ -73,6 +73,7 @@ if (reliabilityLink.show) {
     reliabilityLink.addChildren(
         new TabLink('seasons.development.reliability.drivers', 'Drivers', [ props.season ]),
         new TabLink('seasons.development.reliability.teams', 'Teams', [ props.season ]),
+        new TabLink('seasons.development.reliability.engines', 'Engines', [ props.season ]),
     );
 }
 

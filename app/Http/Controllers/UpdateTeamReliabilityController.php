@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Ratings\UpdateTeamRatings;
 use App\Http\Requests\TeamReliabilityUpdateRequest;
-use App\Models\Entrant;
 use App\Models\Season;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -14,13 +14,7 @@ class UpdateTeamReliabilityController extends Controller
         $this->authorize('update', $season->universe);
         $this->middleware(['race_in_progress']);
 
-        $teams = collect($request->get('teams'));
-
-        $teams->each(function ($team) {
-            Entrant::query()
-                ->where('id', $team['id'])
-                ->update(['reliability' => $team['new']]);
-        });
+        (new UpdateTeamRatings($request->validated('teams'), 'reliability'))->handle();
 
         return redirect(route('seasons.development.reliability.teams', [$season]))
             ->with('notice', 'Team reliabilities updated successfully');
