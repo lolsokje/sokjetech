@@ -28,6 +28,7 @@ import SingleSession from '@/Components/RaceWeekend/SingleSession';
 import { Inertia } from '@inertiajs/inertia';
 import { sortDriversByTotal } from '@/Composables/useRunQualifying';
 import axios from 'axios';
+import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 
 const props = defineProps({
     race: {
@@ -92,6 +93,7 @@ const storeQualifyingResult = (data) => {
 };
 
 const completeQualifying = () => {
+    raceWeekendStore.completeQualifying();
     Inertia.post(route('weekend.qualifying.complete', [ props.race ]));
 };
 </script>

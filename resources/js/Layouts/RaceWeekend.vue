@@ -14,7 +14,8 @@
 <script setup>
 import Base from '@/Layouts/Base';
 import TabLinks from '@/Components/TabLinks';
-import { TabLink } from '@/Utilities/TabLink';
+import { computed, onMounted } from 'vue';
+import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 
 const props = defineProps({
     race: {
@@ -23,13 +24,12 @@ const props = defineProps({
     },
 });
 
-const links = [
-    new TabLink('weekend.intro', 'Intro', [ props.race ]),
-    new TabLink('weekend.qualifying', 'Qualifying', [ props.race ]),
-    new TabLink('weekend.grid', 'Grid', [ props.race ]),
-    new TabLink('weekend.race', 'Race', [ props.race ]),
-    new TabLink('weekend.results', 'Results', [ props.race ]),
-];
+onMounted(() => {
+    raceWeekendStore.initialiseLinks(props.race);
+    links.value = raceWeekendStore.getLinks();
+});
+
+const links = computed(() => raceWeekendStore.getLinks());
 </script>
 
 <script>

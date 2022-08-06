@@ -73,6 +73,7 @@ import { getRoll, sortDriversByPosition } from '@/Composables/useRunQualifying';
 import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 
 const props = defineProps({
     race: Object,
@@ -180,6 +181,7 @@ const storeRaceResults = () => {
 };
 
 const completeRace = () => {
+    raceWeekendStore.completeRace();
     Inertia.post(route('weekend.race.complete', [ props.race ]));
 };
 
