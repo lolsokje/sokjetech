@@ -20,7 +20,9 @@
         <tr v-for="driver in universe.drivers" :key="driver.id">
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="padded-left">{{ driver.readable_dob }}</td>
-            <td class="small-centered">{{ driver.country }}</td>
+            <td class="small-centered">
+                <CountryFlag :country="driver.country"/>
+            </td>
             <td class="small-centered">
                 <InertiaLink v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">
                     edit

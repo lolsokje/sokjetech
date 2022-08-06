@@ -11,7 +11,7 @@ class ShowTeamStandingsController extends Controller
     public function __invoke(Season $season)
     {
         $season->load([
-            'races',
+            'races' => ['circuit'],
             'entrants' => [
                 'allRacers',
                 'raceResults' => [

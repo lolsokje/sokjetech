@@ -30,6 +30,7 @@
         "@inertiajs/inertia": "^0.10.1",
         "@inertiajs/inertia-vue3": "^0.5.2",
         "@inertiajs/progress": "^0.2.7",
-        "vue": "^3.2.22"
+        "vue": "^3.2.22",
+        "vue-country-flag-next": "^2.3.2"
     }
 }

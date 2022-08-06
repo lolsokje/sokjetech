@@ -23,7 +23,9 @@
             <tbody>
             <tr v-for="circuit in circuits.data" v-bind:key="circuit.id">
                 <td class="padded-left">{{ circuit.name }}</td>
-                <td class="small-centered">{{ circuit.country }}</td>
+                <td class="small-centered">
+                    <CountryFlag :country="circuit.country"/>
+                </td>
                 <td class="small-centered">
                     <InertiaLink :href="route('circuits.edit', circuit)">edit</InertiaLink>
                 </td>

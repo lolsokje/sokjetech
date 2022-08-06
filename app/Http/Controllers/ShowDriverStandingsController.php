@@ -12,7 +12,7 @@ class ShowDriverStandingsController extends Controller
     public function __invoke(Season $season): Response
     {
         $season->load([
-            'races',
+            'races' => ['circuit'],
             'drivers' => [
                 'driver',
                 'entrant',

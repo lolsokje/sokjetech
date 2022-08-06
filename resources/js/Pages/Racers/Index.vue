@@ -17,7 +17,8 @@
             <th class="colour-accent"></th>
             <th>Driver</th>
             <th v-if="canEdit">Manage</th>
-            <th class="text-center">#</th>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
             <th>Team name</th>
             <th v-if="canEdit">Manage</th>
             <th class="text-center">Team</th>
@@ -35,6 +36,9 @@
                 <InertiaLink :href="route('seasons.racers.create', [season, driver.entrant])">
                     driver
                 </InertiaLink>
+            </td>
+            <td class="text-center">
+                <CountryFlag :country="driver.country"/>
             </td>
             <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
@@ -91,6 +95,7 @@ onMounted(() => {
             team_name: entrant.full_name,
             team_rating: entrant.rating,
             driver_name: racer.driver.full_name,
+            country: racer.driver.country,
             number: racer.number,
             driver_rating: racer.rating,
             engine_rating: engineRating,

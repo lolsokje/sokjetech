@@ -5,6 +5,7 @@ import route from 'ziggy';
 import Default from './Layouts/Default';
 import FontAwesomeIcon from './Utilities/FontAwesome';
 import { InertiaProgress } from '@inertiajs/progress';
+import CountryFlagEsm from 'vue-country-flag-next';
 
 createInertiaApp({
     resolve: name => {
@@ -22,6 +23,7 @@ createInertiaApp({
             .mixin({ methods: { route } })
             .component('fa', FontAwesomeIcon)
             .component('InertiaLink', Link)
+            .component('CountryFlag', CountryFlagEsm)
             .mount(el);
     },
 });

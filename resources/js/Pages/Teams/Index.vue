@@ -22,7 +22,9 @@
             <td :style="team.style_string" class="padded-left">{{ team.full_name }}</td>
             <td class="padded-left">{{ team.short_name }}</td>
             <td class="padded-left">{{ team.team_principal }}</td>
-            <td class="small-centered">{{ team.country }}</td>
+            <td class="small-centered">
+                <CountryFlag :country="team.country"/>
+            </td>
             <td class="small-centered">
                 <InertiaLink v-if="can.edit" :href="route('universes.teams.edit', [universe, team])">edit</InertiaLink>
             </td>

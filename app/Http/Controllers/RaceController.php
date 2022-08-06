@@ -30,7 +30,7 @@ class RaceController extends Controller
         $season->load([
             'poles',
             'winners',
-            'races' => fn (HasMany $query) => $query->orderBy('order'),
+            'races' => fn (HasMany $query) => $query->with('circuit')->orderBy('order'),
         ]);
 
         return Inertia::render('Races/Index', [

@@ -74,10 +74,19 @@ ul.nav.pills {
     background-color: $bg-table-header;
     border-color: $bg-table-header;
     padding: 1rem;
+    vertical-align: middle;
   }
 
   td {
     font-size: 1.1rem;
+    vertical-align: middle;
+
+    &.smallest-centered {
+      width: 80px;
+      max-width: 80px;
+      text-align: center;
+      vertical-align: middle;
+    }
 
     &.small-centered {
       width: 90px;

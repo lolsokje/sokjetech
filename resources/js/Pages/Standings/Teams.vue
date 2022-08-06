@@ -15,11 +15,11 @@
             <th v-for="race in season.races" :key="race.order" class="text-center">
                 <template v-if="race.completed">
                     <InertiaLink :href="route('weekend.results', [race])">
-                        {{ race.order }}
+                        <CountryFlag :country="race.circuit.country"/>
                     </InertiaLink>
                 </template>
                 <template v-else>
-                    {{ race.order }}
+                    <CountryFlag :country="race.circuit.country"/>
                 </template>
             </th>
         </tr>
@@ -37,7 +37,7 @@
                 </template>
                 <td class="text-center" :style="team.style_string">{{ driver.number }}</td>
                 <td class="colour-accent"></td>
-                <td v-for="race in season.races" :key="race.order" class="text-center"
+                <td v-for="race in season.races" :key="race.order" class="smallest-centered"
                     :class="getResultDisplayClasses(driver.results[race.order])">
                     {{ driver.results[race.order]?.position }}
                 </td>

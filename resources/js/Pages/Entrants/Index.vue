@@ -16,7 +16,7 @@
             <th>Short name</th>
             <th>Team principal</th>
             <th>Engine supplier</th>
-            <th class="text-center">Country</th>
+            <th class="text-center"></th>
             <th colspan="2" v-if="canEdit"></th>
         </tr>
         </thead>
@@ -32,7 +32,9 @@
 					{{ entrant.engine.name }}
 				</span>
             </td>
-            <td class="small-centered">{{ entrant.country }}</td>
+            <td class="small-centered">
+                <CountryFlag :country="entrant.country"/>
+            </td>
             <template v-if="canEdit">
                 <td class="small-centered">
                     <InertiaLink :href="route('seasons.entrants.edit', [season, entrant])">edit</InertiaLink>

@@ -27,6 +27,7 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
+            <th></th>
             <th>Name</th>
             <template v-if="!spoilerFree">
                 <th colspan="2">Pole</th>
@@ -44,6 +45,9 @@
         <tbody>
         <tr v-for="race in season.races" :key="race.id">
             <td class="small-centered">{{ race.order }}</td>
+            <td class="small-centered">
+                <CountryFlag :country="race.circuit.country"/>
+            </td>
             <td class="padded-left">{{ race.name }}</td>
             <template v-if="!spoilerFree && race.completed">
                 <td class="small-centered" :style="race.pole.style_string">{{ race.pole.number }}</td>
@@ -229,6 +233,8 @@ onMounted(() => {
     props.season.races.forEach(race => {
         attachPoleAndWinner(race);
     });
+
+    props.season.races.sort((raceOne, raceTwo) => raceOne.order - raceTwo.order);
 
     if (localStorage.getItem('spoiler_free')) {
         spoilerFree.value = localStorage.getItem('spoiler_free') === 'true';
