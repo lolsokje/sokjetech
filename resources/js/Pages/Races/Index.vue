@@ -29,9 +29,14 @@
             <th class="text-center">#</th>
             <th>Name</th>
             <template v-if="!spoilerFree">
-                <th>Pole</th>
-                <th>Winning driver</th>
+                <th colspan="2">Pole</th>
+                <th colspan="2">Winning driver</th>
                 <th colspan="2">Winning team</th>
+            </template>
+            <template v-else>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
             </template>
             <th></th>
         </tr>
@@ -40,24 +45,23 @@
         <tr v-for="race in season.races" :key="race.id">
             <td class="small-centered">{{ race.order }}</td>
             <td class="padded-left">{{ race.name }}</td>
-            <template v-if="!spoilerFree">
+            <template v-if="!spoilerFree && race.completed">
+                <td class="small-centered" :style="race.pole.style_string">{{ race.pole.number }}</td>
                 <td class="padded-left">
-                    <template v-if="race.qualifying_completed">
-                        {{ race.pole?.full_name }}
-                    </template>
+                    {{ race.pole.full_name }}
                 </td>
-                <td class="padded-left">
-                    <template v-if="race.completed">
-                        {{ race.winner?.full_name }}
-                    </template>
-                </td>
-                <td class="colour-accent"
-                    :style="race.completed ? `background-color: ${race.winner?.background_colour}` : ''"></td>
-                <td class="padded-left">
-                    <template v-if="race.completed">
-                        {{ race.winner?.team_name }}
-                    </template>
-                </td>
+                <td class="small-centered" :style="race.winner.style_string">{{ race.winner.number }}</td>
+                <td class="padded-left">{{ race.winner.full_name }}</td>
+                <BackgroundColourCell :backgroundColour="race.winner.background_colour"/>
+                <td class="padded-left">{{ race.winner?.team_name }}</td>
+            </template>
+            <template v-else>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </template>
             <td class="small-centered">
                 <InertiaLink :href="getRaceLink(race)">{{ getRaceLinkText(race) }}</InertiaLink>
@@ -71,6 +75,7 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 import { onMounted, ref, watch } from 'vue';
 
 const spoilerFree = ref(true);

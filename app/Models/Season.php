@@ -152,6 +152,7 @@ class Season extends Model
         return $this->hasMany(QualifyingResult::class)->with([
             'racer' => [
                 'driver',
+                'entrant',
             ],
         ])->where('position', 1);
     }

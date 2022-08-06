@@ -13,6 +13,8 @@ class RaceOverviewPoleResource extends JsonResource
         return [
             'race_id' => (string) $this->race_id,
             'full_name' => $driver->fullName,
+            'number' => $racer->number,
+            'style_string' => $racer->entrant->style_string,
         ];
     }
 }

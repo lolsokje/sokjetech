@@ -15,8 +15,10 @@ class RaceOverviewWinnerResource extends JsonResource
         return [
             'race_id' => (string) $this->race_id,
             'full_name' => $driver->fullName,
+            'number' => $racer->number,
             'team_name' => $entrant->short_name,
             'background_colour' => $entrant->primary_colour,
+            'style_string' => $entrant->style_string,
         ];
     }
 }
