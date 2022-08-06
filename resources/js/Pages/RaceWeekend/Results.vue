@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [race.season])" label="races overview"/>
+    <BackLink :backTo="route('seasons.races.index', [race.season])" label="calendar"/>
 
     <h3>Results</h3>
 
