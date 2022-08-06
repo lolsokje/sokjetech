@@ -10,6 +10,7 @@
     <table class="table">
         <thead>
         <tr>
+            <th class="colour-accent"></th>
             <th>Full name</th>
             <th>Short name</th>
             <th>Team principal</th>
@@ -19,7 +20,8 @@
         </thead>
         <tbody>
         <tr v-for="team in universe.teams" :key="team.id">
-            <td :style="team.style_string" class="padded-left">{{ team.full_name }}</td>
+            <BackgroundColourCell :backgroundColour="team.primary_colour"/>
+            <td class="padded-left">{{ team.full_name }}</td>
             <td class="padded-left">{{ team.short_name }}</td>
             <td class="padded-left">{{ team.team_principal }}</td>
             <td class="small-centered">
@@ -35,6 +37,7 @@
 
 <script setup>
 import BackLink from '@/Shared/BackLink';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 defineProps({
     universe: {

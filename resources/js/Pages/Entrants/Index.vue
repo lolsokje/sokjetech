@@ -12,6 +12,7 @@
     <table class="table" id="screenshot-target">
         <thead>
         <tr>
+            <th class="colour-accent"></th>
             <th>Full name</th>
             <th>Short name</th>
             <th>Team principal</th>
@@ -22,9 +23,8 @@
         </thead>
         <tbody>
         <tr v-for="entrant in season.entrants" :key="entrant.id">
-            <td :style="entrant.style_string" class="padded-left">
-                {{ entrant.full_name }}
-            </td>
+            <BackgroundColourCell :backgroundColour="entrant.primary_colour"/>
+            <td class="padded-left">{{ entrant.full_name }}</td>
             <td class="padded-left">{{ entrant.short_name }}</td>
             <td class="padded-left">{{ entrant.team_principal }}</td>
             <td class="padded-left">
@@ -53,6 +53,7 @@
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     season: {
