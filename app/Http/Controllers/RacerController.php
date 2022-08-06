@@ -66,7 +66,7 @@ class RacerController extends Controller
             );
         }
 
-        return redirect(route('seasons.racers.index', [$season]))
+        return redirect(route('seasons.racers.create', [$season, $entrant]))
             ->with('notice', 'Driver added to team and season');
     }
 

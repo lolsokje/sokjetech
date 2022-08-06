@@ -26,7 +26,7 @@ test('a universe owner can add drivers to entrants', function () {
                 ],
             ],
         ])
-        ->assertRedirect(route('seasons.racers.index', [$season]));
+        ->assertRedirect(route('seasons.racers.create', [$season, $entrant]));
 
     $this->assertDatabaseCount('racers', 2);
     $this->assertCount(2, $entrant->allRacers);
@@ -109,10 +109,10 @@ test('a driver already added to an entrant can be saved again with the same driv
                     'driver_id' => $drivers[1]->id,
                     'number' => 3,
                 ],
-            ]
+            ],
         ])
         ->assertSessionHasNoErrors()
-        ->assertRedirect(route('seasons.racers.index', [$season]));
+        ->assertRedirect(route('seasons.racers.create', [$season, $entrant]));
 });
 
 test('a driver can only be active for one team in a season', function () {
@@ -122,7 +122,7 @@ test('a driver can only be active for one team in a season', function () {
     $entrants = Entrant::factory(2)->for($season)->create();
     Racer::factory()->for($season)->create([
         'driver_id' => $driver->id,
-        'entrant_id' => $entrants[0]->id
+        'entrant_id' => $entrants[0]->id,
     ]);
 
     $this->actingAs($user)
@@ -166,7 +166,7 @@ it('only shows available drivers on the lineup create page', function () {
     $entrants = Entrant::factory(2)->for($season)->create();
     Racer::factory()->for($season)->create([
         'driver_id' => $drivers[0]->id,
-        'entrant_id' => $entrants[0]->id
+        'entrant_id' => $entrants[0]->id,
     ]);
 
     $this->actingAs($user)
@@ -175,7 +175,7 @@ it('only shows available drivers on the lineup create page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Racers/Create')
-                ->has('drivers', 2)
+                ->has('drivers', 2),
         );
 });
 
@@ -238,7 +238,7 @@ test('a universe owner can remove drivers from entrants', function () {
                 ],
             ],
         ])
-        ->assertRedirect(route('seasons.racers.index', [$season]));
+        ->assertRedirect(route('seasons.racers.create', [$season, $entrant]));
 
     $this->assertCount(2, $entrant->allRacers);
     $this->assertCount(1, $entrant->activeRacers);
