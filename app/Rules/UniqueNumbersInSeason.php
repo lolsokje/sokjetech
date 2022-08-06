@@ -22,8 +22,8 @@ class UniqueNumbersInSeason implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      *
      * @return bool
      */
@@ -35,7 +35,7 @@ class UniqueNumbersInSeason implements Rule
             ->where('season_id', $this->season->id)
             ->where('number', $value)
             ->where('active', 1)
-            ->where('entrant_id', '!=', $this->entrant->id)
+            ->where('entrant_id', '!=', (int) $this->entrant->id)
             ->count();
 
         return $count === 0;
