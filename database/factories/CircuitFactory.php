@@ -17,7 +17,7 @@ class CircuitFactory extends Factory
         return [
             'name' => $this->faker->city(),
             'country' => $this->faker->countryCode(),
-            'user_id' => User::factory()->create()->id,
+            'user_id' => User::factory(),
         ];
     }
 }

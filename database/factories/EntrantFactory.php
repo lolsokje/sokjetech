@@ -18,9 +18,9 @@ class EntrantFactory extends Factory
     {
         $team = Team::factory()->create();
         return [
-            'season_id' => Season::factory()->create(),
+            'season_id' => Season::factory(),
             'team_id' => $team->id,
-            'engine_id' => EngineSeason::factory()->create(),
+            'engine_id' => EngineSeason::factory(),
             'full_name' => $team->full_name,
             'short_name' => $team->short_name,
             'team_principal' => $team->team_principal,

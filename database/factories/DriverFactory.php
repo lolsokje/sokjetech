@@ -15,7 +15,7 @@ class DriverFactory extends Factory
     public function definition(): array
     {
         return [
-            'universe_id' => Universe::factory()->create(),
+            'universe_id' => Universe::factory(),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'dob' => $this->faker->date(),

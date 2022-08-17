@@ -15,7 +15,7 @@ class EngineFactory extends Factory
     public function definition(): array
     {
         return [
-            'series_id' => Series::factory()->create()->id,
+            'series_id' => Series::factory(),
             'name' => $this->faker->name(),
         ];
     }

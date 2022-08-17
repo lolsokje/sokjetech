@@ -12,7 +12,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SeasonSetupCopy\Points;
+use App\Http\Controllers\SeasonSetupCopy\Qualifying;
+use App\Http\Controllers\SeasonSetupCopy\Races;
+use App\Http\Controllers\SeasonSetupCopy\Teams;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\ShowCopySeasonSettingsPageController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowDriverStandingsController;
@@ -76,6 +81,14 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
     Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
+
+    Route::group(['prefix' => 'settings/copy', 'as' => 'settings.copy.'], function () {
+        Route::get('', ShowCopySeasonSettingsPageController::class)->name('index');
+        Route::post('teams', Teams::class)->name('teams');
+        Route::post('races', Races::class)->name('races');
+        Route::post('qualifying', Qualifying::class)->name('qualifying');
+        Route::post('points', Points::class)->name('points');
+    });
 
     Route::group(['prefix' => 'configuration', 'as' => 'configuration.'], function () {
         Route::get('qualifying', ShowQualifyingSettingsPage::class)->name('qualifying');
