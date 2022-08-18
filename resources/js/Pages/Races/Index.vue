@@ -50,13 +50,13 @@
             </td>
             <td class="padded-left">{{ race.name }}</td>
             <template v-if="!spoilerFree && race.completed">
-                <td class="small-centered" :style="race.pole.style_string">{{ race.pole.number }}</td>
+                <td class="small-centered" :style="race.pole?.style_string">{{ race.pole?.number }}</td>
                 <td class="padded-left">
-                    {{ race.pole.full_name }}
+                    {{ race.pole?.full_name }}
                 </td>
-                <td class="small-centered" :style="race.winner.style_string">{{ race.winner.number }}</td>
-                <td class="padded-left">{{ race.winner.full_name }}</td>
-                <BackgroundColourCell :backgroundColour="race.winner.background_colour"/>
+                <td class="small-centered" :style="race.winner?.style_string">{{ race.winner?.number }}</td>
+                <td class="padded-left">{{ race.winner?.full_name }}</td>
+                <BackgroundColourCell :backgroundColour="race.winner?.background_colour"/>
                 <td class="padded-left">{{ race.winner?.team_name }}</td>
             </template>
             <template v-else>
@@ -216,13 +216,8 @@ const attachPoleAndWinner = (race) => {
     const pole = props.poles.find(pole => pole.race_id === race.id);
     const winner = props.winners.find(winner => winner.race_id === race.id);
 
-    if (pole) {
-        race.pole = pole;
-    }
-
-    if (winner) {
-        race.winner = winner;
-    }
+    race.pole = pole;
+    race.winner = winner;
 };
 
 watch(spoilerFree, (value) => {
