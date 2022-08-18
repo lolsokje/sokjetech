@@ -14,7 +14,7 @@ class DisallowModifyingStartedSeason
     {
         $season = $request->route('season');
 
-        if ($season->started) {
+        if ($season->started || $season->completed) {
             return back()
                 ->with('error', 'The season has started and can therefore no longer be modified');
         }

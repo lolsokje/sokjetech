@@ -74,7 +74,7 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
     Route::get('races/reorder', [RaceController::class, 'reorder'])->name('races.reorder');
     Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
-    Route::resource('races', RaceController::class)->except('destroy');
+    Route::resource('races', RaceController::class);
 
     Route::resource('engines', EngineSeasonController::class)->except('destroy', 'show');
     Route::resource('entrants', EntrantController::class)->except('destroy', 'show');

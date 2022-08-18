@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Races\DeleteRace;
 use App\Actions\Races\Stints\StoreStintsAction;
 use App\Actions\Races\Stints\UpdateStintsAction;
 use App\Actions\Races\StoreRaceAction;
@@ -12,6 +13,7 @@ use App\Http\Resources\RaceOverviewWinnerResource;
 use App\Models\Race;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -92,6 +94,15 @@ class RaceController extends Controller
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race updated');
+    }
+
+    public function destroy(Season $season, Race $race): JsonResponse
+    {
+        $this->authorize('update', $season->universe);
+
+        (new DeleteRace($season, $race))->handle();
+
+        return response()->json([], JsonResponse::HTTP_NO_CONTENT);
     }
 
     public function reorder(Season $season): Response

@@ -6,8 +6,11 @@ use App\Models\Season;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
-
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\delete;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
 
 test('a universe owner can create races', function () {
     $user = User::factory()->create();
@@ -211,7 +214,7 @@ test('a universe owner can view the race reorder page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Races/Reorder')
-                ->has('season.races', 5)
+                ->has('season.races', 5),
         );
 });
 
@@ -260,7 +263,7 @@ it('shows all races in the selected season on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Races/Index')
-                ->has('season.races', 5)
+                ->has('season.races', 5),
         );
 });
 
@@ -277,7 +280,7 @@ it('shows the correct race on the show page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->where('season.year', $season->year)
-                ->where('race.name', $race->name)
+                ->where('race.name', $race->name),
         );
 });
 
@@ -356,6 +359,78 @@ test('races cannot be reordered after a season has been started', function () {
         ->put(route('seasons.races.order', [$season]))
         ->assertRedirect()
         ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
+});
+
+test('a universe owner can delete a race from a non-started season', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), fn (Season $season) => Race::factory(5)->for($season)->create());
+
+    actingAs($user)
+        ->delete(route('seasons.races.destroy', [$season, $season->races->first()]))
+        ->assertNoContent();
+
+    assertCount(4, $season->races()->get());
+    assertDatabaseCount('races', 4);
+});
+
+test('unauthorized users cannot delete races', function () {
+    $season = Season::factory()->create();
+    Race::factory(5)->for($season)->create();
+
+    $route = route('seasons.races.destroy', [$season, $season->races->first()]);
+
+    delete($route)
+        ->assertForbidden();
+
+    actingAs(User::factory()->create())
+        ->delete($route)
+        ->assertForbidden();
+
+    assertCount(5, $season->races()->get());
+    assertDatabaseCount('races', 5);
+});
+
+it('does not delete races from in-progress seasons', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), function (Season $season) {
+        Race::factory(5)->for($season)->create();
+        $season->update(['started' => true]);
+    });
+
+    actingAs($user)
+        ->delete(route('seasons.races.destroy', [$season, $season->races->first()]))
+        ->assertRedirect(route('index'));
+
+    assertCount(5, $season->races()->get());
+    assertDatabaseCount('races', 5);
+});
+
+it('does not delete races from completed seasons', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), function (Season $season) {
+        Race::factory(5)->for($season)->create();
+        $season->update(['completed' => true]);
+    });
+
+    actingAs($user)
+        ->delete(route('seasons.races.destroy', [$season, $season->races->first()]))
+        ->assertRedirect(route('index'));
+
+    assertCount(5, $season->races()->get());
+    assertDatabaseCount('races', 5);
+});
+
+it('reorders remaining races', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), fn (Season $season) => Race::factory(5)->for($season)->create());
+
+    actingAs($user)
+        ->delete(route('seasons.races.destroy', [$season, $season->races->first()]))
+        ->assertNoContent();
+
+    foreach ($season->races()->orderBy('order')->get() as $key => $race) {
+        assertEquals($key + 1, $race->order);
+    }
 });
 
 function getRaceCreationData(Season $season, ?User $user = null): array

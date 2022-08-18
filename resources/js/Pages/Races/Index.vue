@@ -54,11 +54,11 @@
                 <th colspan="2"></th>
                 <th colspan="2"></th>
             </template>
-            <th></th>
+            <th :colspan="season.started ? 1 : 2"></th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="race in season.races" :key="race.id">
+        <tr v-for="race in races" :key="race.id">
             <td class="small-centered">{{ race.order }}</td>
             <td class="small-centered">
                 <CountryFlag :country="race.circuit.country"/>
@@ -85,6 +85,11 @@
             <td class="small-centered">
                 <InertiaLink :href="getRaceLink(race)">{{ getRaceLinkText(race) }}</InertiaLink>
             </td>
+            <td class="small-centered" v-if="!season.started">
+                <button class="btn btn-link" @click.prevent="deleteRace(race)">
+                    delete
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -97,6 +102,7 @@ import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
 import { computed, onMounted, ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
+import axios from 'axios';
 
 const props = defineProps({
     season: {
@@ -117,6 +123,7 @@ const props = defineProps({
 
 const canEdit = props.can.edit;
 const spoilerFree = ref(true);
+const races = ref(props.season.races);
 
 const stages = {
     INTRO: 'intro',
@@ -124,6 +131,22 @@ const stages = {
     GRID: 'grid',
     RACE: 'race',
     RESULTS: 'results',
+};
+
+const deleteRace = async (race) => {
+    if (!confirm("Are you sure you want to delete this race from the calendar?")) {
+        return;
+    }
+
+    await axios.delete(route('seasons.races.destroy', [ props.season, race ]))
+        .catch();
+
+    resetRacesAfterDeletion(race);
+};
+
+const resetRacesAfterDeletion = (race) => {
+    races.value = races.value.filter(r => r.id !== race.id);
+    races.value.forEach((race, index) => race.order = index + 1);
 };
 
 const canRunRaces = () => {
