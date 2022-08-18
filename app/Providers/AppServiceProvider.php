@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Season;
 use App\Models\Universe;
 use App\Models\User;
 use Gate;
@@ -42,7 +43,11 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(!$this->app->isProduction());
 
         Gate::define('owns-universe', function (?User $user, ?Universe $universe = null) {
-            return (int)$universe?->user_id === (int)$user?->id;
+            return (int) $universe?->user_id === (int) $user?->id;
+        });
+
+        Gate::define('can-copy-settings', function (?User $user, ?Season $season) {
+            return !$season->started && !$season->completed;
         });
     }
 }
