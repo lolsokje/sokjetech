@@ -11,6 +11,8 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\post;
 use function Pest\Laravel\withoutExceptionHandling;
 use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNull;
 
 const RACE_COUNT = 3;
 
@@ -146,6 +148,37 @@ it('does not copy stints when not instructed to do so', function () {
 
     foreach ($newSeason->races->load('stints') as $race) {
         assertCount(0, $race->stints);
+    }
+});
+
+it('does not copy race status', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    prepareSeasonRaces($season);
+
+    $firstRace = $season->races->first();
+    $firstRace->update([
+        'qualifying_started' => true,
+        'qualifying_completed' => true,
+        'started' => true,
+        'completed' => true,
+        'details' => ['test_key' => 'test_value'],
+    ]);
+
+    $newSeason = createSeasonForUser($user);
+
+    actingAs($user)
+        ->post(route('seasons.settings.copy.races', [$newSeason]), [
+            'season_id' => $season->id,
+        ])
+        ->assertCreated();
+
+    foreach ($newSeason->fresh()->races as $race) {
+        assertFalse($race->qualifying_started);
+        assertFalse($race->qualifying_completed);
+        assertFalse($race->started);
+        assertFalse($race->completed);
+        assertNull($race->details);
     }
 });
 

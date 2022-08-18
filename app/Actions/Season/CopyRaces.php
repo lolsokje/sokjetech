@@ -33,7 +33,13 @@ class CopyRaces extends BaseCopyAction
     private function copyRaces(): void
     {
         foreach ($this->oldSeason->races as $oldRace) {
-            $newRace = $oldRace->replicate();
+            $newRace = $oldRace->replicate([
+                'qualifying_started',
+                'qualifying_completed',
+                'started',
+                'completed',
+                'details',
+            ]);
             $newRace->season()->associate($this->newSeason);
             $newRace->save();
 
