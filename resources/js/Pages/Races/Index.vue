@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <BackLink :backTo="route('series.seasons.index', [season.series])" label="series overview"/>
+    <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>
 
     <h3>Races</h3>
 
