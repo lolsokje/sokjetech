@@ -24,3 +24,13 @@ test('an unauthorized user cannot view the copy season setup page', function () 
         ->get(route('seasons.settings.copy.index', [$season]))
         ->assertForbidden();
 });
+
+test('a universe owner cannot view the copy season setup page on a started season', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $season->update(['started' => true]);
+
+    actingAs($user)
+        ->get(route('seasons.settings.copy.index', [$season]))
+        ->assertRedirect(route('seasons.races.index', [$season]));
+});
