@@ -20,7 +20,9 @@ class SeasonController extends Controller
     public function index(Series $series): Response
     {
         return Inertia::render('Seasons/Index', [
-            'series' => $series->load(['seasons' => fn (HasMany $query) => $query->orderBy('year')]),
+            'series' => $series->load([
+                'seasons' => fn (HasMany $query) => $query->orderBy('year')->with('series'),
+            ]),
         ]);
     }
 
@@ -35,9 +37,7 @@ class SeasonController extends Controller
 
     public function store(SeasonCreateRequest $request, Series $series): RedirectResponse
     {
-        $this->authorize('update', $series->universe);
-
-        $series->seasons()->create($request->validated());
+        $series->seasons()->create($request->data());
 
         return redirect(route('series.seasons.index', [$series]))
             ->with('notice', 'Season created');

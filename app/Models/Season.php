@@ -25,16 +25,11 @@ class Season extends Model
 
     protected $appends = [
         'full_name',
-        'universe',
-    ];
-
-    protected $with = [
-        'series',
     ];
 
     public function fullName(): Attribute
     {
-        return Attribute::get(fn () => "$this->year {$this->series->name}");
+        return Attribute::get(fn () => "$this->year $this->name");
     }
 
     public function universe(): Attribute

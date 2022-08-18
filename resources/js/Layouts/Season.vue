@@ -5,7 +5,7 @@
         </div>
 
         <div class="w-100 bg-dark p-4">
-            <h1>{{ season.full_name }} season</h1>
+            <h1>{{ season.full_name }}</h1>
             <slot/>
         </div>
     </Base>

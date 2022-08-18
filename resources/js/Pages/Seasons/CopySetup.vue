@@ -65,9 +65,9 @@ import axios from 'axios';
 
 const props = defineProps({
     season: Object,
-    seasons: Array,
 });
 
+const seasons = props.season.series.seasons;
 const availableSeasons = ref([]);
 const selectedSeason = ref("");
 const totalItems = ref(0);
@@ -86,7 +86,6 @@ const state = reactive({
 
 const canCopy = computed(() => Object.values(state).some(item => item.checked));
 const isCopying = computed(() => Object.values(state).some(item => item.copying));
-const completedPercentage = computed(() => (completedItems.value / totalItems.value) * 100);
 
 const startCopying = async () => {
     const items = Object.values(state).filter(item => item.checked);
@@ -117,7 +116,7 @@ const startCopying = async () => {
 };
 
 onMounted(() => {
-    availableSeasons.value = props.seasons.filter(season => season.id !== props.season.id);
+    availableSeasons.value = seasons.filter(season => season.id !== props.season.id);
 });
 </script>
 

@@ -13,14 +13,6 @@ class Series extends Model
 {
     use HasFactory, Snowflake;
 
-    protected $appends = [
-        'user',
-    ];
-
-    protected $with = [
-        'universe',
-    ];
-
     public function universe(): BelongsTo
     {
         return $this->belongsTo(Universe::class);
