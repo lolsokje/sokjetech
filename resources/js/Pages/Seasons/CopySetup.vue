@@ -20,16 +20,6 @@
             </select>
         </div>
 
-        <div class="progress w-25" v-if="isCopying">
-            <div class="progress-bar"
-                 role="progressbar"
-                 :style="`width: ${completedPercentage}%`"
-                 aria-valuenow="25"
-                 aria-valuemin="0"
-                 aria-valuemax="100"
-            ></div>
-        </div>
-
         <template v-if="selectedSeason">
             <div class="mb-5" v-for="(item, index) in state" :key="index">
                 <input type="checkbox"
@@ -38,6 +28,7 @@
                        :id="index"
                        :disabled="isCopying"
                 >
+                <fa icon="check" class="me-3" v-if="item.completed"/>
                 <label :for="index" class="form-label">{{ item.label }}</label>
 
                 <div v-if="item.dependency">
@@ -47,8 +38,11 @@
                            :id="item.dependency.name"
                            :disabled="!item.checked || isCopying"
                     >
+                    <fa icon="check" class="me-3" v-if="item.dependency.checked && item.completed"/>
                     <label :for="item.dependency.name">{{ item.dependency.label }}</label>
                 </div>
+
+                <p class="text-danger" v-if="item.fail">{{ item.error }}</p>
             </div>
         </template>
 
@@ -75,7 +69,7 @@ const props = defineProps({
 });
 
 const availableSeasons = ref([]);
-const selectedSeason = ref("25653579062841344");
+const selectedSeason = ref("");
 const totalItems = ref(0);
 const completedItems = ref(0);
 
@@ -83,11 +77,10 @@ const state = reactive({
     copyEntrants: new CopySeasonSetupItem(
         'Copy teams, drivers and engines?',
         'teams',
-        new CopySeasonSetupItemDependency('copyRatings', 'Copy ratings (including reliability)?'),
-        true,
+        new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
     ),
-    copyRaces: new CopySeasonSetupItem('Copy races?', 'races', new CopySeasonSetupItemDependency('copyStints', 'Copy race stints?')),
-    copyQualifyingFormat: new CopySeasonSetupItem('Copy qualifying format?', 'format'),
+    copyRaces: new CopySeasonSetupItem('Copy races?', 'races', new CopySeasonSetupItemDependency('copy_stints', 'Copy race stints?')),
+    copyQualifyingFormat: new CopySeasonSetupItem('Copy qualifying format?', 'qualifying'),
     copyPointSystem: new CopySeasonSetupItem('Copy point system?', 'points'),
 });
 
@@ -101,10 +94,24 @@ const startCopying = async () => {
     completedItems.value = 0;
 
     for (const item of items) {
+        item.completed = false;
         item.copying = true;
-        await axios.post(route('seasons.settings.copy.teams', [ props.season ]));
+
+        const data = {
+            season_id: selectedSeason.value,
+        };
+
+        if (item.dependency && item.dependency.checked) {
+            data[item.dependency.name] = true;
+        }
+
+        await axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+            .catch((error) => {
+                item.fail = true;
+                item.error = error.response.data.message;
+            });
         item.copying = false;
-        item.complete = true;
+        item.completed = true;
         completedItems.value++;
     }
 };
