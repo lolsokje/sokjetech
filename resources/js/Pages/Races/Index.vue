@@ -1,4 +1,19 @@
 <template>
+    <div class="my-4" v-if="canEdit && !season.started">
+        <div class="d-flex">
+            <button class="btn btn-success" @click.prevent="confirmSeasonStart()" :disabled="!canStart">
+                Start season
+            </button>
+            <InertiaLink :href="route('seasons.settings.copy.index', [season])" class="btn btn-primary ms-3">
+                Copy season setup
+            </InertiaLink>
+        </div>
+        <div class="text-danger mt-2" v-if="!canStart">
+            You need to configure the qualifying format, points system and add at least one race before you can
+            start the season
+        </div>
+    </div>
+
     <BackLink :backTo="route('series.seasons.index', [season.series])" label="series overview"/>
 
     <h3>Races</h3>
@@ -80,9 +95,8 @@
 import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import { onMounted, ref, watch } from 'vue';
-
-const spoilerFree = ref(true);
+import { computed, onMounted, ref, watch } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
     season: {
@@ -101,6 +115,9 @@ const props = defineProps({
     },
 });
 
+const canEdit = props.can.edit;
+const spoilerFree = ref(true);
+
 const stages = {
     INTRO: 'intro',
     QUALIFYING: 'qualifying',
@@ -110,11 +127,11 @@ const stages = {
 };
 
 const canRunRaces = () => {
-    return props.can.edit;
+    return canEdit;
 };
 
 const canAddRace = () => {
-    return props.can.edit && !props.season.started;
+    return canEdit && !props.season.started;
 };
 
 const canReorderRaces = () => {
@@ -219,6 +236,16 @@ const attachPoleAndWinner = (race) => {
     race.pole = pole;
     race.winner = winner;
 };
+
+const confirmSeasonStart = () => {
+    if (!confirm('Are you sure you want to start the season? You will no longer be able to modify the calendar, qualifying format and point system')) {
+        return;
+    }
+
+    Inertia.put(route('seasons.start', [ props.season ]));
+};
+
+const canStart = computed(() => props.season.can_start && canEdit);
 
 watch(spoilerFree, (value) => {
     localStorage.setItem('spoiler_free', value.toString());
