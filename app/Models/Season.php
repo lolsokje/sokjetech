@@ -125,6 +125,16 @@ class Season extends Model
         ])->toArray();
     }
 
+    public function reliabilityConfiguration(): HasOne
+    {
+        return $this->hasOne(ReliabilityConfiguration::class);
+    }
+
+    public function reliabilityReasons(): HasMany
+    {
+        return $this->hasMany(ReliabilityReason::class);
+    }
+
     public function qualifyingResults(): HasMany
     {
         return $this->hasMany(QualifyingResult::class);

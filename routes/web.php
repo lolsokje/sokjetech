@@ -29,6 +29,7 @@ use App\Http\Controllers\ShowQualifyingSettingsPage;
 use App\Http\Controllers\ShowRacePageController;
 use App\Http\Controllers\ShowRaceResultPageController;
 use App\Http\Controllers\ShowRaceWeekendIntroPageController;
+use App\Http\Controllers\ShowReliabilityConfigurationController;
 use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingResultsController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\StoreRaceResultsController;
+use App\Http\Controllers\StoreReliabilityConfigurationController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
@@ -96,6 +98,9 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
         Route::get('points', ShowPointsConfigurationController::class)->name('points');
         Route::post('points', StorePointsConfigurationController::class)->name('points.store');
+
+        Route::get('reliability', ShowReliabilityConfigurationController::class)->name('reliability');
+        Route::post('reliability', StoreReliabilityConfigurationController::class)->name('reliability.store');
     });
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
