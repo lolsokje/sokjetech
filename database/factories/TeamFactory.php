@@ -10,7 +10,7 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            'universe_id' => Universe::factory()->create(),
+            'universe_id' => Universe::factory(),
             'full_name' => $this->faker->userName(),
             'short_name' => $this->faker->firstName(),
             'team_principal' => $this->faker->name(),

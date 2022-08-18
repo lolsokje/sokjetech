@@ -140,6 +140,16 @@ class Season extends Model
         return $this->hasMany(RaceResult::class);
     }
 
+    public function canStart(): Attribute
+    {
+        return Attribute::get(function () {
+            return !$this->started &&
+                $this->qualifyingFormat !== null &&
+                $this->pointSystem !== null &&
+                count($this->races) !== 0;
+        });
+    }
+
     public function hasActiveRace(): Attribute
     {
         return Attribute::get(function () {

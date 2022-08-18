@@ -17,9 +17,9 @@ class RacerFactory extends Factory
     public function definition(): array
     {
         return [
-            'season_id' => Season::factory()->create(),
+            'season_id' => Season::factory(),
             'driver_id' => Driver::factory(),
-            'entrant_id' => Entrant::factory()->create(),
+            'entrant_id' => Entrant::factory(),
             'number' => $this->faker->numberBetween(2, 999),
             'rating' => $this->faker->numberBetween(20, 40),
             'reliability' => $this->faker->numberBetween(90, 100),

@@ -6,10 +6,20 @@
 
         <div class="w-100 bg-dark p-4">
             <h1>{{ season.full_name }} season</h1>
-            <button v-if="!season.started && can.edit" class="btn btn-success"
-                    @click.prevent="confirmSeasonStart()">
-                Start season
-            </button>
+            <div class="mb-3" v-if="canEdit && !season.started">
+                <div class="d-flex">
+                    <button class="btn btn-success" @click.prevent="confirmSeasonStart()" :disabled="!canStart">
+                        Start season
+                    </button>
+                    <InertiaLink :href="route('seasons.settings.copy.index', [season])" class="btn btn-primary ms-3">
+                        Copy season setup
+                    </InertiaLink>
+                </div>
+                <div class="text-danger mt-2" v-if="!canStart">
+                    You need to configure the qualifying format, points system and add at least one race before you can
+                    start the season
+                </div>
+            </div>
             <slot/>
         </div>
     </Base>
@@ -20,6 +30,7 @@ import Base from './Base';
 import { Inertia } from '@inertiajs/inertia';
 import TabLinks from '@/Components/TabLinks';
 import { TabLink } from '@/Utilities/TabLink';
+import { computed } from 'vue';
 
 const props = defineProps({
     season: {
@@ -40,7 +51,9 @@ const confirmSeasonStart = () => {
     Inertia.put(route('seasons.start', [ props.season ]));
 };
 
-const showLink = props.can.edit;
+const canEdit = props.can.edit;
+const showLink = canEdit;
+const canStart = computed(() => props.season.can_start && canEdit);
 
 const standingsLink = new TabLink(null, 'Standings');
 
