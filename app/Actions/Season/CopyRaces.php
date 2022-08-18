@@ -41,6 +41,7 @@ class CopyRaces extends BaseCopyAction
                 'details',
             ]);
             $newRace->season()->associate($this->newSeason);
+            $newRace->name = $this->getRaceName($oldRace);
             $newRace->save();
 
             if ($this->request->copyStints()) {
@@ -64,5 +65,10 @@ class CopyRaces extends BaseCopyAction
         if ($this->oldSeason->races->count() === 0) {
             throw new InvalidSeasonRequirements('No races added to the selected season');
         }
+    }
+
+    private function getRaceName(Race $oldRace): string
+    {
+        return str_replace($this->oldSeason->year, $this->newSeason->year, $oldRace->name);
     }
 }

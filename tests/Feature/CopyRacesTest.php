@@ -11,6 +11,7 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\post;
 use function Pest\Laravel\withoutExceptionHandling;
 use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
 
@@ -180,6 +181,28 @@ it('does not copy race status', function () {
         assertFalse($race->completed);
         assertNull($race->details);
     }
+});
+
+it("updates a races' name if it includes the season year", function () {
+    $user = User::factory()->create();
+    $oldSeason = tap(createSeasonForUser($user), fn (Season $season) => $season->update(['year' => 2021]));;
+    $oldSeason->update(['year' => 2021]);
+    prepareSeasonRaces($oldSeason);
+
+    $newSeason = tap(createSeasonForUser($user), fn (Season $season) => $season->update(['year' => 2022]));
+
+    $firstRaceOldSeason = $oldSeason->races->first();
+    $firstRaceOldSeason->update([
+        'name' => "$oldSeason->year Test Grand Prix",
+    ]);
+
+    actingAs($user)
+        ->post(route('seasons.settings.copy.races', [$newSeason]), [
+            'season_id' => $oldSeason->id,
+        ])
+        ->assertCreated();
+
+    assertEquals("$newSeason->year Test Grand Prix", $newSeason->fresh()->races->first()->name);
 });
 
 function prepareSeasonRaces(Season $season): void
