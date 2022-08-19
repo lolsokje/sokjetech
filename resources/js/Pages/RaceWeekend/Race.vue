@@ -81,6 +81,8 @@ const props = defineProps({
     raceResults: Array,
     fastestLap: Object,
     can: Object,
+    reliability_configuration: Object,
+    reliability_reasons: Object,
 });
 
 const showError = ref(false);
@@ -95,16 +97,12 @@ const fastestLapMinRng = props.fastestLap.min_rng;
 const fastestLapMaxRng = props.fastestLap.max_rng;
 const fastestLapRunCompleted = ref(!(awardFastestLapPoint && fastestLapIsSeparateStint));
 
-const teamDnfReasons = [
-    'suspension',
-    'crash',
-    'spin',
-];
-
-const engineDnfReasons = [
-    'oil leak',
-    'gearbox',
-];
+const reliabilityMinRng = props.reliability_configuration.min_rng;
+const reliabilityMaxRng = props.reliability_configuration.max_rng;
+const dnfReasons = props.reliability_reasons;
+const teamDnfReasons = dnfReasons.team;
+const engineDnfReasons = dnfReasons.engine;
+const driverDnfReasons = dnfReasons.driver;
 
 const performNextStint = () => {
     const currentStintIndex = currentStint.value;
@@ -228,8 +226,9 @@ const getDnfRoll = (driver) => {
         return driver.dnf;
     }
 
-    const teamRoll = getRoll(1, 100);
-    const engineRoll = getRoll(1, 100);
+    const teamRoll = getRoll(reliabilityMinRng, reliabilityMaxRng);
+    const engineRoll = getRoll(reliabilityMinRng, reliabilityMaxRng);
+    const driverRoll = getRoll(reliabilityMinRng, reliabilityMaxRng);
 
     if (teamRoll > driver.team_reliability) {
         return driver.dnf = getDnfReason(teamDnfReasons);
@@ -237,6 +236,10 @@ const getDnfRoll = (driver) => {
 
     if (engineRoll > driver.engine_reliability) {
         return driver.dnf = getDnfReason(engineDnfReasons);
+    }
+
+    if (driverRoll > driver.driver_reliability) {
+        return driver.dnf = getDnfReason(driverDnfReasons);
     }
     return false;
 };

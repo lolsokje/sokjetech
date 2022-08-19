@@ -11,6 +11,12 @@ class ReliabilityConfiguration extends Model
 {
     use HasFactory, Snowflake;
 
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);

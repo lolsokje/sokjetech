@@ -2,6 +2,7 @@
 
 namespace App\Actions\Races\Configuration;
 
+use App\Enums\ReliabilityReasonTypes;
 use App\Http\Requests\StoreReliabilityConfigurationRequest;
 use App\Models\ReliabilityReason;
 use App\Models\Season;
@@ -43,7 +44,7 @@ class StoreReliabilityConfiguration
     {
         foreach ($reasons as $reason) {
             $this->season->reliabilityReasons()->create([
-                'type' => $type,
+                'type' => ReliabilityReasonTypes::fromString($type),
                 'reason' => $reason,
             ]);
         }

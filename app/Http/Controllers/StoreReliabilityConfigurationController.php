@@ -12,6 +12,7 @@ class StoreReliabilityConfigurationController extends Controller
     {
         (new StoreReliabilityConfiguration($request, $season))->handle();
 
-        return to_route('seasons.configuration.reliability', [$season]);
+        return to_route('seasons.configuration.reliability', [$season])
+            ->with('notice', 'Reliability configuration saved');
     }
 }
