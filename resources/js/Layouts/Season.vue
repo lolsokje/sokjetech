@@ -37,7 +37,7 @@ standingsLink.addChildren(
     new TabLink('seasons.standings.teams', 'Teams', [ props.season ]),
 );
 
-const seasonSetupLink = new TabLink(null, 'Season setup');
+const seasonSetupLink = new TabLink(null, 'Entries');
 
 seasonSetupLink.addChildren(
     new TabLink('seasons.entrants.index', 'Teams', [ props.season ]),
