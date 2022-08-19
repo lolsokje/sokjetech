@@ -80,8 +80,8 @@ const props = defineProps({
 const reasons = props.reasons;
 
 const form = useForm({
-    min_rng: props.configuration.min_rng ?? 0,
-    max_rng: props.configuration.max_rng ?? 0,
+    min_rng: props.configuration?.min_rng ?? 0,
+    max_rng: props.configuration?.max_rng ?? 0,
     reasons: {
         engine: "Power Unit",
         team: "Suspension",

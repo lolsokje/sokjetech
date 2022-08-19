@@ -15,6 +15,7 @@ use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeasonSetupCopy\Points;
 use App\Http\Controllers\SeasonSetupCopy\Qualifying;
 use App\Http\Controllers\SeasonSetupCopy\Races;
+use App\Http\Controllers\SeasonSetupCopy\Reliability;
 use App\Http\Controllers\SeasonSetupCopy\Teams;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowCopySeasonSettingsPageController;
@@ -90,6 +91,7 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
         Route::post('races', Races::class)->name('races');
         Route::post('qualifying', Qualifying::class)->name('qualifying');
         Route::post('points', Points::class)->name('points');
+        Route::post('reliability', Reliability::class)->name('reliability');
     });
 
     Route::group(['prefix' => 'configuration', 'as' => 'configuration.'], function () {

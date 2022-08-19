@@ -151,6 +151,7 @@ class Season extends Model
             return !$this->started &&
                 $this->qualifyingFormat !== null &&
                 $this->pointSystem !== null &&
+                $this->reliabilityConfiguration !== null &&
                 count($this->races) !== 0;
         });
     }
