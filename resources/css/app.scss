@@ -42,6 +42,13 @@ ul.nav.pills {
   text-decoration: none;
 }
 
+.form-control {
+  &:disabled {
+    background-color: $darker;
+    cursor: not-allowed;
+  }
+}
+
 .form-narrow {
   width: 50%;
 }
