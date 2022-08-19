@@ -1,9 +1,17 @@
 <?php
 
+use App\Models\PointSystem;
+use App\Models\QualifyingFormats\SingleSession;
+use App\Models\Race;
+use App\Models\ReliabilityConfiguration;
 use App\Models\Season;
 use App\Models\Series;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\put;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertTrue;
 
 test('a universe owner can create seasons', function () {
     $user = User::factory()->create();
@@ -145,19 +153,19 @@ test('a year has to be unique within a series', function () {
 
     $this->actingAs($user)
         ->post(route('series.seasons.store', [$series]), [
-            'year' => 2021
+            'year' => 2021,
         ])
         ->assertSessionHasErrors(['year' => 'The year must be unique in this series']);
 });
 
-test('a seasoncan be updated while retaining the same year', function () {
+test('a season can be updated while retaining the same year', function () {
     $user = User::factory()->create();
     $series = createSeriesForUser($user);
     $season = Season::factory()->for($series)->create(['year' => 2021]);
 
     $this->actingAs($user)
         ->put(route('series.seasons.update', [$series, $season]), [
-            'year' => 2021
+            'year' => 2021,
         ])
         ->assertRedirect(route('series.seasons.index', [$series]));
 });
@@ -173,6 +181,75 @@ it('shows all seasons for the selected series on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Seasons/Index')
-                ->has('series.seasons', 5)
+                ->has('series.seasons', 5),
         );
 });
+
+test('a universe owner can mark a season as started', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    prepareSeasonForStart($season);
+
+    actingAs($user)
+        ->put(route('seasons.start', [$season]))
+        ->assertRedirect(route('seasons.races.index', [$season]));
+
+    assertTrue($season->fresh()->started);
+});
+
+test('unauthorised users cannot mark a season as started', function () {
+    $season = Season::factory()->create();
+
+    put(route('seasons.start', [$season]))
+        ->assertForbidden();
+
+    actingAs(User::factory()->create())
+        ->put(route('seasons.start', [$season]))
+        ->assertForbidden();
+
+    assertFalse($season->fresh()->started);
+});
+
+test('a season cannot be started if it is missing dependencies', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+
+    $route = route('seasons.start', [$season]);
+
+    actingAs($user)
+        ->put($route)
+        ->assertSessionHas('error');
+
+    $format = SingleSession::factory()->create();
+    $format->season()->save($season);
+    put($route)
+        ->assertSessionHas('error');
+
+    PointSystem::factory()->for($season)->create();
+    put($route)
+        ->assertSessionHas('error');
+
+    ReliabilityConfiguration::factory()->for($season)->create();
+    put($route)
+        ->assertSessionHas('error');
+
+    assertFalse($season->fresh()->can_start);
+    assertFalse($season->fresh()->started);
+
+    Race::factory()->for($season)->create();
+    assertTrue($season->fresh()->can_start);
+
+    put($route)
+        ->assertSessionMissing('error');
+
+    assertTrue($season->fresh()->started);
+});
+
+function prepareSeasonForStart(Season $season): void
+{
+    $format = SingleSession::factory()->create();
+    $format->season()->save($season);
+    PointSystem::factory()->for($season)->create();
+    ReliabilityConfiguration::factory()->for($season)->create();
+    Race::factory()->for($season)->create();
+}

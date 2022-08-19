@@ -9,9 +9,16 @@ class StartSeasonController extends Controller
 {
     public function __invoke(Season $season): RedirectResponse
     {
+        $this->authorize('update', $season->universe);
+
+        if (!$season->can_start) {
+            return to_route('seasons.races.index', [$season])
+                ->with('error', 'Missing requirements before the season can be started');
+        }
+
         $season->update(['started' => true]);
 
-        return redirect(route('seasons.races.index', [$season]))
+        return to_route('seasons.races.index', [$season])
             ->with('notice', 'Season has been started');
     }
 }
