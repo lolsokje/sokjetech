@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DnfReasonResource;
 use App\Http\Resources\RaceResultResource;
 use App\Http\Resources\RaceWeekendDriverResource;
 use App\Models\Race;
@@ -33,6 +34,8 @@ class ShowRacePageController extends Controller
                 'min_rng' => $pointSystem->fastest_lap_min_rng,
                 'max_rng' => $pointSystem->fastest_lap_max_rng,
             ],
+            'reliability_configuration' => $race->season->reliabilityConfiguration,
+            'reliability_reasons' => DnfReasonResource::make($race->season->reliabilityReasons)->toArray(request()),
         ]);
     }
 
@@ -46,6 +49,8 @@ class ShowRacePageController extends Controller
                     'entrant' => ['engine'],
                 ],
                 'pointSystem',
+                'reliabilityConfiguration',
+                'reliabilityReasons',
             ],
             'raceResults',
         ]);

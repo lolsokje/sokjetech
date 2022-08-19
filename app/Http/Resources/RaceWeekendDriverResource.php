@@ -28,6 +28,7 @@ class RaceWeekendDriverResource extends JsonResource
             'total_rating' => $totalRating,
             'team_reliability' => $entrant->reliability,
             'engine_reliability' => $entrant->engine->reliability,
+            'driver_reliability' => $this->reliability,
             'primary_colour' => $entrant->primary_colour,
             'secondary_colour' => $entrant->secondary_colour,
         ];

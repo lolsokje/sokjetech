@@ -15,6 +15,7 @@ use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeasonSetupCopy\Points;
 use App\Http\Controllers\SeasonSetupCopy\Qualifying;
 use App\Http\Controllers\SeasonSetupCopy\Races;
+use App\Http\Controllers\SeasonSetupCopy\Reliability;
 use App\Http\Controllers\SeasonSetupCopy\Teams;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowCopySeasonSettingsPageController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\ShowQualifyingSettingsPage;
 use App\Http\Controllers\ShowRacePageController;
 use App\Http\Controllers\ShowRaceResultPageController;
 use App\Http\Controllers\ShowRaceWeekendIntroPageController;
+use App\Http\Controllers\ShowReliabilityConfigurationController;
 use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
@@ -38,6 +40,7 @@ use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingResultsController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\StoreRaceResultsController;
+use App\Http\Controllers\StoreReliabilityConfigurationController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
@@ -88,6 +91,7 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
         Route::post('races', Races::class)->name('races');
         Route::post('qualifying', Qualifying::class)->name('qualifying');
         Route::post('points', Points::class)->name('points');
+        Route::post('reliability', Reliability::class)->name('reliability');
     });
 
     Route::group(['prefix' => 'configuration', 'as' => 'configuration.'], function () {
@@ -96,6 +100,9 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
         Route::get('points', ShowPointsConfigurationController::class)->name('points');
         Route::post('points', StorePointsConfigurationController::class)->name('points.store');
+
+        Route::get('reliability', ShowReliabilityConfigurationController::class)->name('reliability');
+        Route::post('reliability', StoreReliabilityConfigurationController::class)->name('reliability.store');
     });
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {

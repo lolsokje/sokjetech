@@ -71,6 +71,7 @@ if (configurationLink.show) {
     configurationLink.addChildren(
         new TabLink('seasons.configuration.points', 'Points', [ props.season ]),
         new TabLink('seasons.configuration.qualifying', 'Qualifying', [ props.season ]),
+        new TabLink('seasons.configuration.reliability', 'Reliability', [ props.season ]),
     );
 }
 
