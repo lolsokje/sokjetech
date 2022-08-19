@@ -18,7 +18,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="stint in race.stints" :key="stint.order">
+        <tr v-for="stint in stints" :key="stint.order">
             <td class="text-center">{{ stint.order }}</td>
             <td class="text-center">
                 <fa :icon="getIcon(stint.use_driver_rating)"/>
@@ -102,6 +102,7 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    stints: Array,
     driverStandings: Array,
     teamStandings: Array,
 });

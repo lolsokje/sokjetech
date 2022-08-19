@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DriverStandingsResource;
+use App\Http\Resources\GeneralSeasonResource;
 use App\Models\Season;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,7 +22,8 @@ class ShowDriverStandingsController extends Controller
         ]);
 
         return Inertia::render('Standings/Drivers', [
-            'season' => $season,
+            'season' => GeneralSeasonResource::make($season)->toArray(request()),
+            'races' => $season->races,
             'drivers' => DriverStandingsResource::collection($season->drivers)->toArray(request()),
         ]);
     }

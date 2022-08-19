@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DriverStandingsResource;
+use App\Http\Resources\GeneralRaceResource;
 use App\Http\Resources\TeamStandingsResource;
 use App\Models\Race;
 use Inertia\Inertia;
@@ -18,7 +19,8 @@ class ShowRaceWeekendIntroPageController extends Controller
         $teamStandings = TeamStandingsResource::collection($race->season->entrants)->toArray(request());
 
         return Inertia::render('RaceWeekend/Intro', [
-            'race' => $race,
+            'race' => GeneralRaceResource::make($race)->toArray(request()),
+            'stints' => $race->stints,
             'teamStandings' => $this->getTeamResultsUntilSelectedRace($race, $teamStandings),
             'driverStandings' => $this->getDriverResultsUntilSelectedRace($race, $driverStandings),
         ]);

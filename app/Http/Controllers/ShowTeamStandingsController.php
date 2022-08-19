@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GeneralSeasonResource;
 use App\Http\Resources\TeamStandingsResource;
 use App\Models\Season;
 use Inertia\Inertia;
@@ -24,7 +25,8 @@ class ShowTeamStandingsController extends Controller
         ]);
 
         return Inertia::render('Standings/Teams', [
-            'season' => $season,
+            'season' => GeneralSeasonResource::make($season)->toArray(request()),
+            'races' => $season->races,
             'teams' => TeamStandingsResource::collection($season->entrants)->toArray(request()),
         ]);
     }

@@ -12,7 +12,7 @@
             <th class="text-center">#</th>
             <th>TEAM</th>
             <th class="text-center">PTS</th>
-            <th class="text-center" v-for="race in season.races" :key="race.order">
+            <th class="text-center" v-for="race in races" :key="race.order">
                 <template v-if="race.completed">
                     <InertiaLink :href="route('weekend.results', [race])">
                         <CountryFlag :country="race.circuit.country"/>
@@ -32,8 +32,9 @@
             <td class="text-center" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
             <td class="text-center">{{ driver.points }}</td>
-            <td class="smallest-centered" v-for="race in season.races" :key="race.order"
-                :class="getResultDisplayClasses(driver.results[race.order])">
+            <td class="smallest-centered" v-for="race in races" :key="race.order"
+                :class="getResultDisplayClasses(driver.results[race.order])"
+            >
                 {{ driver.results[race.order]?.position }}
             </td>
         </tr>
@@ -50,6 +51,7 @@ import BackgroundColourCell from '@/Components/BackgroundColourCell';
 
 const props = defineProps({
     season: Object,
+    races: Array,
     drivers: Array,
 });
 
