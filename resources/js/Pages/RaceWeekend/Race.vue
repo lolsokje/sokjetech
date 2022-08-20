@@ -237,15 +237,15 @@ const getDnfRoll = (driver) => {
     const engineRoll = getRoll(reliabilityMinRng, reliabilityMaxRng);
     const driverRoll = getRoll(reliabilityMinRng, reliabilityMaxRng);
 
-    if (teamRoll > driver.team_reliability) {
+    if (teamRoll > driver.team_reliability && driver.team_reliability > 0) {
         return driver.dnf = getDnfReason(teamDnfReasons);
     }
 
-    if (engineRoll > driver.engine_reliability) {
+    if (engineRoll > driver.engine_reliability && driver.engine_reliability > 0) {
         return driver.dnf = getDnfReason(engineDnfReasons);
     }
 
-    if (driverRoll > driver.driver_reliability) {
+    if (driverRoll > driver.driver_reliability && driver.driver_reliability > 0) {
         return driver.dnf = getDnfReason(driverDnfReasons);
     }
     return false;
