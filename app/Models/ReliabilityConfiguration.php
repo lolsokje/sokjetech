@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ReliabilityConfiguration extends Model
+class ReliabilityConfiguration extends SnowflakeModel
 {
-    use HasFactory, Snowflake;
+    use HasFactory;
 
     protected $hidden = [
         'id',

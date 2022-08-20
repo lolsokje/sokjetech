@@ -4,16 +4,14 @@ namespace App\Models;
 
 use App\Builders\UniverseBuilder;
 use App\Enums\UniverseVisibility;
-use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class Universe extends Model
+class Universe extends SnowflakeModel
 {
-    use HasFactory, Snowflake;
+    use HasFactory;
 
     protected $casts = [
         'visibility' => UniverseVisibility::class,

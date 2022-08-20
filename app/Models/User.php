@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends AuthenticatableSnowflake
 {
-    use HasFactory, Notifiable, Snowflake;
+    use HasFactory, Notifiable;
 
     protected $casts = [
         'id' => 'integer',

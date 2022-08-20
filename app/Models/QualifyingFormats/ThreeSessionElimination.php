@@ -3,14 +3,13 @@
 namespace App\Models\QualifyingFormats;
 
 use App\Models\Season;
-use App\Traits\Snowflake;
+use App\Models\SnowflakeModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class ThreeSessionElimination extends Model
+class ThreeSessionElimination extends SnowflakeModel
 {
-    use HasFactory, Snowflake;
+    use HasFactory;
 
     public function season(): MorphMany
     {

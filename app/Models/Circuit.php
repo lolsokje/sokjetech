@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\Snowflake;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Circuit extends Model
+class Circuit extends SnowflakeModel
 {
-    use HasFactory, Snowflake;
+    use HasFactory;
 
     public function user(): BelongsTo
     {
@@ -25,8 +23,8 @@ class Circuit extends Model
 
     public function scopeSearch(Builder $query, ?string $search = ''): Builder
     {
-        return $query->where('name', 'LIKE', '%'.$search.'%')
-            ->orWhere('country', 'LIKE', '%'.$search.'%');
+        return $query->where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('country', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeSort(Builder $query, ?string $field, ?string $direction): Builder
