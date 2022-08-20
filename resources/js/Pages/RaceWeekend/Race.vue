@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <table class="table">
+    <table class="table" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">POS</th>
@@ -64,6 +64,7 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
@@ -74,6 +75,7 @@ import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     race: Object,

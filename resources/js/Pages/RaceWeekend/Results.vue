@@ -3,38 +3,41 @@
 
     <h3>Results</h3>
 
-    <p>
-        <span class="fst-italic">italic = pole position</span>
-        <template v-if="race.season.point_system.fastest_lap_point_awarded">
-            , <span class="text-decoration-underline">underlined = fastest lap</span>
-        </template>
-    </p>
-    <table class="table">
-        <thead>
-        <tr>
-            <th class="text-center">POS</th>
-            <th class="colour-accent"></th>
-            <th class="colour-accent"></th>
-            <th class="padded-left">DRIVER</th>
-            <th></th>
-            <th class="padded-left">TEAM</th>
-            <th class="text-center">RESULT</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="driver in drivers" :key="driver.id">
-            <td class="small-centered">{{ driver.position }}</td>
-            <td class="colour-accent"></td>
-            <BackgroundColourCell :backgroundColour="driver.background_colour"/>
-            <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="text-center text-uppercase" :class="getResultDisplayClasses(driver)">
-                {{ driver.dnf ? driver.dnf : driver.points }}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="screenshot-target">
+        <p>
+            <span class="fst-italic">italic = pole position</span>
+            <template v-if="race.season.point_system.fastest_lap_point_awarded">
+                , <span class="text-decoration-underline">underlined = fastest lap</span>
+            </template>
+        </p>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center">POS</th>
+                <th class="colour-accent"></th>
+                <th class="colour-accent"></th>
+                <th class="padded-left">DRIVER</th>
+                <th></th>
+                <th class="padded-left">TEAM</th>
+                <th class="text-center">RESULT</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="driver in drivers" :key="driver.id">
+                <td class="small-centered">{{ driver.position }}</td>
+                <td class="colour-accent"></td>
+                <BackgroundColourCell :backgroundColour="driver.background_colour"/>
+                <td class="padded-left">{{ driver.full_name }}</td>
+                <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+                <td class="padded-left">{{ driver.team_name }}</td>
+                <td class="text-center text-uppercase" :class="getResultDisplayClasses(driver)">
+                    {{ driver.dnf ? driver.dnf : driver.points }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
@@ -42,6 +45,7 @@ import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     race: Object,

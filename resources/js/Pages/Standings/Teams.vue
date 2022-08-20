@@ -3,7 +3,7 @@
 
     <h3>Team standings</h3>
 
-    <table class="table">
+    <table class="table" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">POS</th>
@@ -46,6 +46,7 @@
         </template>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
@@ -54,6 +55,7 @@ import { onMounted } from 'vue';
 import { getResultClasses } from '@/Composables/useResultPage';
 import { getTeamPoints, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     season: Object,
