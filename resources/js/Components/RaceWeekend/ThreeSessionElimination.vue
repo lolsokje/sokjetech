@@ -14,7 +14,8 @@
                 </button>
             </div>
             <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession"
-                    class="btn btn-secondary">
+                    class="btn btn-secondary"
+            >
                 Next session
             </button>
         </div>
@@ -37,19 +38,23 @@
         <tbody>
         <template v-for="(driver, position) in drivers" :key="driver.id">
             <tr v-if="canDriverParticipateInCurrentSession(position)">
-                <td class="text-center" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
+                <td class="small-centered" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
                     {{ position + 1 }}
                 </td>
                 <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
                 <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
                 <td class="padded-left">{{ driver.team_name }}</td>
-                <td class="text-center">{{ driver.total_rating }}</td>
-                <td v-for="i in runsPerSession" :key="i" class="text-center">
+                <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
+                <td v-for="i in runsPerSession"
+                    :key="i"
+                    class="small-centered"
+                    :class="{ 'bg-accent-even': isEven(i) }"
+                >
                     {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
                 </td>
-                <td class="text-center">{{ driver.best_stint }}</td>
-                <td class="text-center">{{ driver.total }}</td>
+                <td class="small-centered">{{ driver.best_stint }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.total }}</td>
             </tr>
         </template>
         </tbody>
@@ -69,6 +74,7 @@ import {
 import { threeSessionEliminationStore as store } from '@/Stores/threeSessionEliminationStore';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import { isEven } from '@/Utilities/IsEven';
 
 const props = defineProps({
     formatDetails: {

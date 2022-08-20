@@ -28,19 +28,23 @@
         </thead>
         <tbody>
         <tr v-for="(driver, position) in drivers" :key="driver.id">
-            <td class="text-center">
+            <td class="small-centered">
                 {{ position + 1 }}
             </td>
             <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="text-center">{{ driver.total_rating }}</td>
-            <td v-for="i in formatDetails.runs_per_session" :key="i" class="text-center">
+            <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
+            <td v-for="i in formatDetails.runs_per_session"
+                :key="i"
+                class="small-centered"
+                :class="{ 'bg-accent-even': isEven(i) }"
+            >
                 {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
             </td>
-            <td class="text-center">{{ driver.best_stint }}</td>
-            <td class="text-center">{{ driver.total }}</td>
+            <td class="small-centered">{{ driver.best_stint }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.total }}</td>
         </tr>
         </tbody>
     </table>
@@ -51,6 +55,7 @@ import { singleSessionStore as store } from '@/Stores/singleSessionStore';
 import { fillDriverRuns, performQualifyingRun } from '@/Composables/useRunQualifying';
 import { computed, onBeforeUnmount, onMounted } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import { isEven } from '@/Utilities/IsEven';
 
 const props = defineProps({
     formatDetails: Object,

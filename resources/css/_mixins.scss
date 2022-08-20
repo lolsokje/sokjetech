@@ -1,0 +1,6 @@
+@mixin centered-width-table-column($width) {
+  width: $width;
+  max-width: $width;
+  text-align: center;
+  vertical-align: middle;
+}

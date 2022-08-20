@@ -50,15 +50,19 @@
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.short_team_name }}</td>
-            <td class="small-centered">{{ driver.total_rating }}</td>
-            <td class="small-centered">{{ driver.bonus }}</td>
-            <td class="small-centered" v-for="(stint, index) in race.stints" :key="stint.order">
+            <td class="small-centered bg-accent-even">{{ driver.total_rating }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.bonus }}</td>
+            <td class="small-centered"
+                v-for="(stint, index) in race.stints"
+                :key="stint.order"
+                :class="{ 'bg-accent-even': isEven(index) }"
+            >
                 {{ driver.stints ? driver.stints[index] : '' }}
             </td>
-            <td class="text-center text-uppercase" :class="getTotalDisplayClasses(driver)">
+            <td class="biggest-centered text-uppercase" :class="getTotalDisplayClasses(driver)">
                 {{ getTotalDisplayValue(driver) }}
             </td>
-            <td class="text-center" v-if="awardFastestLapPoint" :class="getFastestLapClass(driver)">
+            <td class="small-centered" v-if="awardFastestLapPoint" :class="getFastestLapClass(driver)">
                 {{ driver.fastest_lap_roll }}
             </td>
         </tr>
@@ -76,6 +80,7 @@ import { Inertia } from '@inertiajs/inertia';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import { isEven } from '@/Utilities/IsEven';
 
 const props = defineProps({
     race: Object,
