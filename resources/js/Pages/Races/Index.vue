@@ -54,7 +54,7 @@
                 <th colspan="2"></th>
                 <th colspan="2"></th>
             </template>
-            <th :colspan="season.started ? 1 : 2"></th>
+            <th :colspan="!season.started && canEdit ? 2 : 1"></th>
         </tr>
         </thead>
         <tbody>
@@ -85,7 +85,7 @@
             <td class="small-centered">
                 <InertiaLink :href="getRaceLink(race)">{{ getRaceLinkText(race) }}</InertiaLink>
             </td>
-            <td class="small-centered" v-if="!season.started">
+            <td class="small-centered" v-if="!season.started && canEdit">
                 <button class="btn btn-link" @click.prevent="deleteRace(race)">
                     delete
                 </button>
@@ -239,7 +239,7 @@ const getRaceLinkText = (race) => {
         return null;
     }
 
-    if (currentStage === stages.INTRO) {
+    if (props.season.started && currentStage === stages.INTRO) {
         return canRunRace ? 'start' : 'preview';
     }
 
