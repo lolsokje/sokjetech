@@ -87,7 +87,7 @@ const canEdit = ref(props.can.edit && editMode);
 onMounted(() => {
     props.racers.forEach((racer) => {
         const entrant = racer.entrant;
-        const engineRating = entrant.engine.rating;
+        const engineRating = entrant.engine?.rating ?? 0;
         const totalRating = racer.rating + entrant.rating + engineRating;
 
         drivers.value.push({

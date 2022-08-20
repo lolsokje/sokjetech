@@ -27,7 +27,7 @@ class RaceWeekendDriverResource extends JsonResource
             'engine_rating' => $engineRating,
             'total_rating' => $totalRating,
             'team_reliability' => $entrant->reliability,
-            'engine_reliability' => $entrant->engine->reliability,
+            'engine_reliability' => $entrant->engine?->reliability ?? 0,
             'driver_reliability' => $this->reliability,
             'primary_colour' => $entrant->primary_colour,
             'secondary_colour' => $entrant->secondary_colour,
@@ -38,7 +38,7 @@ class RaceWeekendDriverResource extends JsonResource
     {
         $driverRating = $this->rating;
         $teamRating = $entrant->rating;
-        $engineRating = $entrant->engine->rating;
+        $engineRating = $entrant->engine?->rating ?? 0;
         $totalRating = $driverRating + $teamRating + $engineRating;
 
         return [$driverRating, $teamRating, $engineRating, $totalRating];
