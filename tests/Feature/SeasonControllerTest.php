@@ -245,6 +245,62 @@ test('a season cannot be started if it is missing dependencies', function () {
     assertTrue($season->fresh()->started);
 });
 
+test('a universe owner can mark a season as completed', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), function (Season $season) {
+        $season->update(['started' => true]);
+    });
+
+    actingAs($user)
+        ->put(route('seasons.complete', [$season]))
+        ->assertRedirect(route('seasons.races.index', [$season]));
+
+    assertTrue($season->fresh()->completed);
+});
+
+test('unauthorised users cannot mark a season as completed', function () {
+    $season = tap(Season::factory()->create(), function (Season $season) {
+        $season->update(['started' => true]);
+    });
+
+    put(route('seasons.complete', [$season]))
+        ->assertForbidden();
+
+    actingAs(User::factory()->create())
+        ->put(route('seasons.complete', [$season]))
+        ->assertForbidden();
+
+    assertFalse($season->fresh()->completed);
+});
+
+test('a season cannot be completed if it has not been started', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+
+    actingAs($user)
+        ->put(route('seasons.complete', [$season]))
+        ->assertSessionHas('error')
+        ->assertRedirect(route('seasons.races.index', [$season]));
+
+    assertFalse($season->fresh()->completed);
+});
+
+test('a season cannot be completed if it has unfinished races', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), function (Season $season) {
+        $season->update(['started' => true]);
+    });
+
+    Race::factory()->for($season)->create();
+
+    actingAs($user)
+        ->put(route('seasons.complete', [$season]))
+        ->assertSessionHas('error')
+        ->assertRedirect(route('seasons.races.index', [$season]));
+
+    assertFalse($season->fresh()->completed);
+});
+
 function prepareSeasonForStart(Season $season): void
 {
     $format = SingleSession::factory()->create();

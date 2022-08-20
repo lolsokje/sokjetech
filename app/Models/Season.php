@@ -154,6 +154,11 @@ class Season extends SnowflakeModel
         });
     }
 
+    public function canComplete(): Attribute
+    {
+        return Attribute::get(fn () => !$this->completed && $this->started && !$this->nextRace());
+    }
+
     public function hasActiveRace(): Attribute
     {
         return Attribute::get(function () {

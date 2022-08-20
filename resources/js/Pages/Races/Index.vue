@@ -13,6 +13,9 @@
             start the season
         </div>
     </div>
+    <div class="my-4" v-if="canComplete">
+        <button class="btn btn-success" @click.prevent="confirmSeasonComplete()">Complete season</button>
+    </div>
 
     <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>
 
@@ -268,7 +271,16 @@ const confirmSeasonStart = () => {
     Inertia.put(route('seasons.start', [ props.season ]));
 };
 
+const confirmSeasonComplete = () => {
+    if (!confirm("Are you sure you want to mark the current season as completed?")) {
+        return;
+    }
+
+    Inertia.put(route('seasons.complete', [ props.season ]));
+};
+
 const canStart = computed(() => props.season.can_start && canEdit);
+const canComplete = computed(() => props.season.can_complete && canEdit);
 
 watch(spoilerFree, (value) => {
     localStorage.setItem('spoiler_free', value.toString());

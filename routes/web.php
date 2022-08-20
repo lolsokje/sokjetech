@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteRaceController;
+use App\Http\Controllers\CompleteSeasonController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
@@ -74,6 +75,7 @@ Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
 
 Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::put('start', StartSeasonController::class)->name('start');
+    Route::put('complete', CompleteSeasonController::class)->name('complete');
 
     Route::get('races/reorder', [RaceController::class, 'reorder'])->name('races.reorder');
     Route::put('races/order', [RaceController::class, 'order'])->name('races.order');
