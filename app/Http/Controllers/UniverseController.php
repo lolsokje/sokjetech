@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetUniverses;
 use App\Enums\UniverseVisibility;
 use App\Http\Requests\UniverseCreateRequest;
+use App\Http\Requests\UniverseFilterRequest;
+use App\Http\Resources\UniverseResource;
 use App\Models\Universe;
-use Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,20 +20,14 @@ class UniverseController extends Controller
         $this->middleware(['auth'])->only('create', 'edit');
     }
 
-    public function index(): Response
+    public function index(UniverseFilterRequest $request): Response
     {
-        $universes = Universe::visible()->orderBy('name')->get();
+        $universes = (new GetUniverses($request))->handle();
 
         return Inertia::render('Universes/Index', [
-            'universes' => $universes->map(function (Universe $universe) {
-                return [
-                    'name' => $universe->name,
-                    'id' => $universe->id,
-                    'can' => [
-                        'edit' => Gate::check('owns-universe', $universe),
-                    ],
-                ];
-            }),
+            'links' => $universes->linkCollection(),
+            'universes' => UniverseResource::collection($universes)->toArray($request),
+            'filters' => $request->validated(),
         ]);
     }
 

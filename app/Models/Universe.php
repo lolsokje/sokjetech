@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Builders\UniverseBuilder;
 use App\Enums\UniverseVisibility;
 use App\Traits\Snowflake;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,17 +18,6 @@ class Universe extends Model
     protected $casts = [
         'visibility' => UniverseVisibility::class,
     ];
-
-    public function scopeVisible(Builder $query): Builder
-    {
-        if (auth()->check()) {
-            $query->where(function (Builder $query) {
-                $query->where('visibility', UniverseVisibility::AUTH)
-                    ->orWhere('user_id', auth()->user()->id);
-            });
-        }
-        return $query->orWhere('visibility', UniverseVisibility::PUBLIC);
-    }
 
     public function user(): BelongsTo
     {
@@ -53,5 +42,15 @@ class Universe extends Model
     public function engines(): HasManyThrough
     {
         return $this->hasManyThrough(Engine::class, Series::class);
+    }
+
+    public static function query(): UniverseBuilder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): UniverseBuilder
+    {
+        return new UniverseBuilder($query);
     }
 }

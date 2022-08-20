@@ -17,6 +17,12 @@ class User extends Authenticatable
         'id' => 'integer',
     ];
 
+    protected $hidden = [
+        'discord_id',
+        'created_at',
+        'updated_at',
+    ];
+
     public function circuits(): HasMany
     {
         return $this->hasMany(Circuit::class);

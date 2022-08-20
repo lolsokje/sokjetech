@@ -5,40 +5,73 @@
 
     <InertiaLink :href="route('universes.create')" class="btn btn-primary my-3" v-if="user">Add universe</InertiaLink>
 
-    <table v-if="universes.length" class="table table-bordered table-dark table-narrow">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="universe in universes" v-bind:key="universe.id">
-            <td class="padded-left">{{ universe.name }}</td>
-            <td class="small-centered">
-                <InertiaLink v-if="universe.can.edit" :href="route('universes.edit', universe)">edit</InertiaLink>
-            </td>
-            <td class="small-centered">
-                <InertiaLink :href="route('universes.show', universe)">view</InertiaLink>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <template v-if="universes.length">
+        <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
+
+        <div class="form-check-inline mb-3" v-if="user">
+            <input id="edit-mode" v-model="params.mine" class="form-check-inline" type="checkbox">
+            <label class="form-check-label" for="edit-mode">Show only my universes</label>
+        </div>
+
+        <table class="table table-bordered table-dark table-narrow">
+            <thead>
+            <tr>
+                <th role="button" @click="sort()">
+                    Name
+                    <OrderIcon :direction="params.direction"/>
+                </th>
+                <th>User</th>
+                <th colspan="2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="universe in universes" v-bind:key="universe.id">
+                <td class="padded-left">{{ universe.name }}</td>
+                <td class="padded-left">{{ universe.user.username }}</td>
+                <td class="small-centered">
+                    <InertiaLink v-if="universe.can?.edit" :href="route('universes.edit', universe)">edit</InertiaLink>
+                </td>
+                <td class="small-centered">
+                    <InertiaLink :href="route('universes.show', universe)">view</InertiaLink>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <Pagination :links="links"/>
+    </template>
     <p v-else>No universes added yet</p>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { usePage } from '@inertiajs/inertia-vue3';
 import BackLink from '@/Shared/BackLink';
+import Pagination from '@/Shared/Pagination';
+import { filter } from '@/Composables/useTableFiltering';
+import OrderIcon from '@/Shared/OrderIcon';
 
 const props = defineProps({
+    links: Array,
+    filters: Object,
     universes: {
-        type: Array,
+        type: Object,
         required: true,
     },
 });
 
+const sort = () => {
+    params.direction = params.direction === '' || params.direction === 'asc' ? 'desc' : 'asc';
+};
+
+const params = reactive({
+    search: props.filters.search ?? '',
+    direction: props.filters.direction ?? '',
+    mine: props.filters.mine ?? false,
+});
+
 const user = computed(() => usePage().props.value.auth.user);
+
+watch(params, () => {
+    filter(params, route('universes.index'));
+});
 </script>
