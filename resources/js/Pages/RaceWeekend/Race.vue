@@ -102,7 +102,7 @@ const awardFastestLapPoint = props.fastestLap.awarded;
 const fastestLapIsSeparateStint = props.fastestLap.type === 'separate_stint';
 const fastestLapMinRng = props.fastestLap.min_rng;
 const fastestLapMaxRng = props.fastestLap.max_rng;
-const fastestLapRunCompleted = ref(!(awardFastestLapPoint && fastestLapIsSeparateStint));
+const fastestLapRunCompleted = ref(false);
 
 const reliabilityMinRng = props.reliability_configuration.min_rng;
 const reliabilityMaxRng = props.reliability_configuration.max_rng;
@@ -336,7 +336,22 @@ const sortDrivers = () => {
 };
 
 const allStintsCompleted = computed(() => currentStint.value === props.race.stints.length);
-const canCompleteRace = computed(() => allStintsCompleted.value && !props.race.completed && fastestLapRunCompleted.value === true);
+const canCompleteRace = computed(() => {
+    if (!allStintsCompleted.value) {
+        return false;
+    }
+
+    if (props.race.completed) {
+        return false;
+    }
+
+    if (!awardFastestLapPoint) {
+        return true;
+    }
+
+    return fastestLapRunCompleted.value;
+});
+
 const canPerformStint = computed(() => !allStintsCompleted.value && showError.value === false);
 const canPerformFastestLap = computed(() => {
     const fastestLapRunPerformed = fastestLapRunCompleted.value === true;
