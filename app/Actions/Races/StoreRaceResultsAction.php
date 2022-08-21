@@ -14,13 +14,24 @@ class StoreRaceResultsAction
 
     public function handle(): void
     {
-        $drivers = $this->request->drivers();
+        $this->updateRaceDetails();
+        $this->updateRaceResults();
+    }
 
-        if (!$this->race->started) {
-            $this->race->update(['started' => true]);
+    private function updateRaceDetails(): void
+    {
+        $updateArray = ['race_details' => $this->request->details()];
+
+        if ($this->race->started) {
+            $updateArray['started'] = true;
         }
 
-        $drivers->each(function (array $driver) {
+        $this->race->update($updateArray);
+    }
+
+    private function updateRaceResults(): void
+    {
+        $this->request->drivers()->each(function (array $driver) {
             RaceResult::updateOrCreate(
                 ['race_id' => $this->race->id, 'racer_id' => $driver['id']],
                 [

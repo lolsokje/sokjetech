@@ -163,7 +163,8 @@ it('does not copy race status', function () {
         'qualifying_completed' => true,
         'started' => true,
         'completed' => true,
-        'details' => ['test_key' => 'test_value'],
+        'qualifying_details' => ['test_key' => 'test_value'],
+        'race_details' => ['test_key' => 'test_value'],
     ]);
 
     $newSeason = createSeasonForUser($user);
@@ -179,7 +180,8 @@ it('does not copy race status', function () {
         assertFalse($race->qualifying_completed);
         assertFalse($race->started);
         assertFalse($race->completed);
-        assertNull($race->details);
+        assertNull($race->qualifying_details);
+        assertNull($race->race_details);
     }
 });
 

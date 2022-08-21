@@ -12,6 +12,11 @@ class StoreRaceResultsRequest extends FormRequest
         return auth()->check();
     }
 
+    public function details(): array
+    {
+        return $this->validated('race_details');
+    }
+
     public function drivers(): Collection
     {
         return collect($this->validated('drivers'));
@@ -21,6 +26,7 @@ class StoreRaceResultsRequest extends FormRequest
     {
         return [
             'drivers' => ['required', 'array'],
+            'race_details' => ['required', 'array'],
         ];
     }
 }

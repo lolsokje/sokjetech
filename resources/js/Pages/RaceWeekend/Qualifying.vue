@@ -11,7 +11,7 @@
         :drivers="sortedDrivers"
         :canRunQualifying="can.edit"
         :results="qualifyingResults"
-        :sessionDetails="race.details"
+        :sessionDetails="race.qualifying_details"
         :completed="race.qualifying_completed"
         :showError="showError"
         @runPerformed="storeQualifyingResult"

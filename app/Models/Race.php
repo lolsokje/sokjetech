@@ -16,7 +16,8 @@ class Race extends SnowflakeModel
         'qualifying_completed' => 'boolean',
         'started' => 'boolean',
         'completed' => 'boolean',
-        'details' => 'json',
+        'qualifying_details' => 'json',
+        'race_details' => 'json',
     ];
 
     public function universe(): Universe

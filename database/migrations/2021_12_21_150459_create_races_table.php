@@ -23,7 +23,8 @@ class CreateRacesTable extends Migration
             $table->boolean('qualifying_completed')->default(false);
             $table->boolean('started')->default(false);
             $table->boolean('completed')->default(false);
-            $table->json('details')->nullable(); // a column to keep track of things like current qualifying session/run, etc
+            $table->json('qualifying_details')->nullable()->comment('a column to keep track of things like current qualifying session/run, etc');
+            $table->json('race_details')->nullable()->comment('a column to keep track of things like completed race stints, FL awarded, etc');
             $table->timestamps();
         });
     }

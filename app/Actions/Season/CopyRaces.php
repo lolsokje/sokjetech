@@ -38,7 +38,8 @@ class CopyRaces extends BaseCopyAction
                 'qualifying_completed',
                 'started',
                 'completed',
-                'details',
+                'qualifying_details',
+                'race_details',
             ]);
             $newRace->season()->associate($this->newSeason);
             $newRace->name = $this->getRaceName($oldRace);

@@ -14,16 +14,16 @@ class StoreQualifyingResultsAction
 
     public function handle(): void
     {
-        $this->updateRaceDetails();
+        $this->updateQualifyingDetails();
 
         foreach ($this->drivers as $driver) {
             $this->updateOrCreateQualifyingResult($driver);
         }
     }
 
-    private function updateRaceDetails(): void
+    private function updateQualifyingDetails(): void
     {
-        $updateArray = ['details' => $this->details];
+        $updateArray = ['qualifying_details' => $this->details];
 
         if (!$this->race->qualifying_started) {
             $updateArray['qualifying_started'] = true;
