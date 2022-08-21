@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\StoreEntrantRacers;
 use App\Http\Requests\RacerCreateRequest;
 use App\Models\Entrant;
 use App\Models\Racer;
@@ -51,20 +52,7 @@ class RacerController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $drivers = $request->validated()['drivers'];
-
-        $entrant->allRacers()->each(fn (Racer $driver) => $driver->update(['active' => false]));
-
-        foreach ($drivers as $driver) {
-            $entrant->allRacers()->updateOrCreate(
-                ['driver_id' => $driver['driver_id']],
-                [
-                    'season_id' => $season->id,
-                    'number' => $driver['number'],
-                    'active' => true,
-                ],
-            );
-        }
+        (new StoreEntrantRacers($request, $season, $entrant))->handle();
 
         return redirect(route('seasons.racers.create', [$season, $entrant]))
             ->with('notice', 'Driver added to team and season');
