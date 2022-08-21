@@ -5,9 +5,8 @@
 
     <InertiaLink :href="route('universes.create')" class="btn btn-primary my-3" v-if="user">Add universe</InertiaLink>
 
+    <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
     <template v-if="universes.length">
-        <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
-
         <div class="form-check-inline mb-3" v-if="user">
             <input id="edit-mode" v-model="params.mine" class="form-check-inline" type="checkbox">
             <label class="form-check-label" for="edit-mode">Show only my universes</label>

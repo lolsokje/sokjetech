@@ -8,6 +8,7 @@ use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses;
 use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenPrivateMethods;
 use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits;
 use NunoMaduro\PhpInsights\Domain\Metrics\Architecture\Classes;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff;
 use PhpCsFixer\Fixer\Comment\NoEmptyCommentFixer;
@@ -126,6 +127,13 @@ return [
             // not much sense checking function length in resources, where the majority of lines are return-array related
             'exclude' => [
                 'app/Http/Resources',
+            ],
+        ],
+        UselessOverridingMethodSniff::class => [
+            // Some models override the default query method to type hint them to custom model builders. PHPInsights sees these
+            // as useless overrides, when they're actually used for IDE type hinting and thus aren't useless
+            'exclude' => [
+                'app/Models',
             ],
         ],
     ],

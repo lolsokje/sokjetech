@@ -3,9 +3,9 @@
 
     <InertiaLink :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</InertiaLink>
 
+    <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
+    
     <template v-if="circuits.data.length">
-        <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
-
         <table class="table">
             <thead>
             <tr>

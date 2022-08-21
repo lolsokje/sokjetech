@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetCircuits;
 use App\Http\Requests\CircuitCreateRequest;
 use App\Http\Requests\CircuitFilterRequest;
 use App\Models\Circuit;
@@ -18,10 +19,7 @@ class CircuitController extends Controller
 
     public function index(CircuitFilterRequest $request): Response
     {
-        $circuits = auth()->user()->circuits()
-            ->search($request->get('search'))
-            ->sort($request->get('field'), $request->get('direction'))
-            ->paginate(15);
+        $circuits = (new GetCircuits($request))->handle();
 
         return Inertia::render('Circuits/Index', [
             'circuits' => $circuits,

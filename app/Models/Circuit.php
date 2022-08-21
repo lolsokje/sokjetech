@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Builders\CircuitBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Circuit extends SnowflakeModel
 {
     use HasFactory;
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
     public function user(): BelongsTo
     {
@@ -21,16 +26,13 @@ class Circuit extends SnowflakeModel
         return $this->hasMany(Race::class);
     }
 
-    public function scopeSearch(Builder $query, ?string $search = ''): Builder
+    public static function query(): CircuitBuilder
     {
-        return $query->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('country', 'LIKE', '%' . $search . '%');
+        return parent::query();
     }
 
-    public function scopeSort(Builder $query, ?string $field, ?string $direction): Builder
+    public function newEloquentBuilder($query): CircuitBuilder
     {
-        $field = $field ?? 'name';
-        $direction = $direction ?? 'asc';
-        return $query->orderBy($field, $direction);
+        return new CircuitBuilder($query);
     }
 }

@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UniverseBuilder extends Builder
 {
-    public function visible(): Builder
+    public function visible(): UniverseBuilder
     {
-        if (auth()->check()) {
-            $this->where(function (Builder $query) {
+        return $this->where(function (UniverseBuilder $query) {
+            if (auth()->check()) {
                 $query->where('visibility', UniverseVisibility::AUTH)
                     ->orWhere('user_id', auth()->user()->id);
-            });
-        }
-        return $this->orWhere('visibility', UniverseVisibility::PUBLIC);
+            }
+            return $query->orWhere('visibility', UniverseVisibility::PUBLIC);
+        });
     }
 
-    public function search(string $search): Builder
+    public function search(string $search): UniverseBuilder
     {
         return $this->where('name', 'LIKE', "%$search%");
     }
