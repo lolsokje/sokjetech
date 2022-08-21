@@ -4,16 +4,16 @@
     <InertiaLink :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</InertiaLink>
 
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
-    
+
     <template v-if="circuits.data.length">
         <table class="table">
             <thead>
             <tr>
-                <th role="button" @click="sort('name')">
+                <th role="button" @click="sort(params, 'name')">
                     <span>Name</span>
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
                 </th>
-                <th role="button" @click="sort('country')">
+                <th role="button" @click="sort(params, 'country')">
                     <span>Country</span>
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
                 </th>
@@ -39,9 +39,9 @@
 
 <script setup>
 import { reactive, watch } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
 import OrderIcon from '@/Shared/OrderIcon';
 import Pagination from '@/Shared/Pagination';
+import { filter, sort } from '@/Composables/useTableFiltering';
 
 const props = defineProps({
     circuits: {
@@ -60,28 +60,7 @@ const params = reactive({
     direction: props.filters.direction ?? '',
 });
 
-const defaults = {
-    search: '',
-    field: 'name',
-    direction: 'asc',
-};
-
-function sort (field) {
-    params.field = field;
-    params.direction = params.direction === 'desc' ? 'asc' : 'desc';
-}
-
 watch(params, () => {
-    let requestParams = params;
-
-    Object.entries(requestParams).forEach((entry) => {
-        const [ key, value ] = entry;
-
-        if (value === null || value === '') {
-            delete requestParams[key];
-        }
-    });
-
-    Inertia.get(route('circuits.index'), requestParams, { replace: true, preserveState: true });
+    filter(params, route('circuits.index'));
 });
 </script>
