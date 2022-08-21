@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\TeamBuilder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,5 +39,15 @@ class Team extends SnowflakeModel
     public function entrants(): HasMany
     {
         return $this->hasMany(Entrant::class);
+    }
+
+    public static function query(): TeamBuilder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): TeamBuilder
+    {
+        return new TeamBuilder($query);
     }
 }

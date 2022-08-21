@@ -38,7 +38,7 @@
         </table>
         <Pagination :links="links"/>
     </template>
-    <p v-else>No universes added yet</p>
+    <p v-else>No universes found</p>
 </template>
 
 <script setup>

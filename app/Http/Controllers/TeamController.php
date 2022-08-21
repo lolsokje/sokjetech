@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetTeams;
 use App\Http\Requests\TeamCreateRequest;
+use App\Http\Requests\TeamFilterRequest;
+use App\Http\Resources\TeamResource;
 use App\Models\Team;
 use App\Models\Universe;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,10 +19,15 @@ class TeamController extends Controller
         $this->middleware(['auth'])->only('create', 'edit');
     }
 
-    public function index(Universe $universe): Response
+    public function index(TeamFilterRequest $request, Universe $universe): Response
     {
+        $teams = (new GetTeams($request, $universe))->handle();
+
         return Inertia::render('Teams/Index', [
-            'universe' => $universe->load(['teams' => fn (HasMany $query) => $query->orderBy('full_name')]),
+            'universe' => $universe,
+            'links' => $teams->linkCollection(),
+            'teams' => TeamResource::collection($teams)->toArray($request),
+            'filters' => $request->validated(),
         ]);
     }
 

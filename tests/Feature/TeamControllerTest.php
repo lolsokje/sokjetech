@@ -184,7 +184,7 @@ it('shows the correct team on the show page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Teams/Show')
-                ->where('team.full_name', $team->full_name)
+                ->where('team.full_name', $team->full_name),
         );
 });
 
@@ -200,6 +200,6 @@ it('shows all teams in the selected universe on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Teams/Index')
-                ->has('universe.teams', 5)
+                ->has('teams', 5),
         );
 });

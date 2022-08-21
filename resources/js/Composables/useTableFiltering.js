@@ -1,5 +1,12 @@
 import { Inertia } from '@inertiajs/inertia';
 
+export const sort = (params, field = null) => {
+    if (field) {
+        params.field = field;
+    }
+    params.direction = params.direction === '' || params.direction === 'asc' ? 'desc' : 'asc';
+};
+
 export const filter = (params, route) => {
     let requestParams = params;
 
