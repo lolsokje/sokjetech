@@ -155,6 +155,6 @@ it('shows all drivers in the selected universe on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Drivers/Index')
-                ->has('universe.drivers', 5)
+                ->has('drivers', 5),
         );
 });

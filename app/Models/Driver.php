@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\DriverBuilder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,5 +51,15 @@ class Driver extends SnowflakeModel
     public function racers(): HasMany
     {
         return $this->hasMany(Racer::class);
+    }
+
+    public static function query(): DriverBuilder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): DriverBuilder
+    {
+        return new DriverBuilder($query);
     }
 }

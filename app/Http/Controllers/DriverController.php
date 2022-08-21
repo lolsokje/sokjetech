@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetDrivers;
 use App\Http\Requests\DriverCreateRequest;
+use App\Http\Requests\DriverFilterRequest;
+use App\Http\Resources\DriverResource;
 use App\Models\Driver;
 use App\Models\Universe;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,10 +19,14 @@ class DriverController extends Controller
         $this->middleware(['auth'])->only('create', 'edit');
     }
 
-    public function index(Universe $universe): Response
+    public function index(DriverFilterRequest $request, Universe $universe): Response
     {
+        $drivers = (new GetDrivers($request, $universe))->handle();
+
         return Inertia::render('Drivers/Index', [
-            'universe' => $universe->load(['drivers' => fn (HasMany $query) => $query->orderBy('last_name')]),
+            'universe' => $universe,
+            'drivers' => DriverResource::collection($drivers)->toArray($request),
+            'filters' => $request->validated(),
         ]);
     }
 
