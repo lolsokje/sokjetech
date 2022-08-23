@@ -44,7 +44,7 @@ class AuthController extends Controller
         return redirect(route('index'));
     }
 
-    private function getAvatar(SocialiteUser $user): string
+    private function getAvatar(SocialiteUser $user): ?string
     {
         // getAvatar() will always return a string, even if no avatar exists. The user array contains null if no avatar
         // is set by the user, so that value is checked before assigning the variable.
