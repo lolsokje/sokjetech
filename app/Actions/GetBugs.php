@@ -16,6 +16,7 @@ class GetBugs
     public function handle(): AbstractPaginator
     {
         return Bug::query()
+            ->with('reportedBy')
             ->sort($this->request->field(), $this->request->direction())
             ->when($this->request->validated('only'), function (BugBuilder $query, string $only) {
                 $query->only($only);
