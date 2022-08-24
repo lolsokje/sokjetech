@@ -11,26 +11,12 @@
                 </main>
             </div>
         </div>
-
-        <footer class="bg-dark text-center">
-            <span id="version" v-if="version"><small>V{{ version }}</small></span>
-        </footer>
     </div>
 </template>
 
 <script setup>
 import Toast from '../Shared/Toast';
-import Nav from '@/Shared/Nav';
-import { onMounted, ref } from 'vue';
-import axios from 'axios';
-
-const version = ref('');
-
-onMounted(async () => {
-    const response = await axios.get(route('version'));
-    version.value = response.data;
-});
-</script>
+import Nav from '@/Shared/Nav';</script>
 
 <script>
 export default { name: 'Base' };
