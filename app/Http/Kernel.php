@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'season_started' => \App\Http\Middleware\DisallowModifyingStartedSeason::class,
         'race_in_progress' => \App\Http\Middleware\RaceInProgress::class,
         'season_in_progress' => \App\Http\Middleware\SeasonInProgress::class,
+        'is_admin' => \App\Http\Middleware\IsAdminMiddleware::class,
     ];
 }

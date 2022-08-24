@@ -13,9 +13,14 @@
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
+                <template v-if="user">
+                    <li class="nav-item">
+                        <InertiaLink :href="route('bugs.index')" class="nav-link">Report bug</InertiaLink>
+                    </li>
+                </template>
                 <li class="nav-item">
                     <template v-if="user">
-                        <InertiaLink :href="route('auth.logout')" as="button" class="btn btn-link nav-link"
+                        <InertiaLink :href="route('auth.logout')" as="button" class="btn btn-link"
                                      method="POST"
                         >
                             Logout
