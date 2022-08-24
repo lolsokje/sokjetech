@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\UniverseVisibility;
+use App\Models\PointSystem;
 use App\Models\QualifyingFormats\ThreeSessionElimination;
 use App\Models\Race;
 use App\Models\Racer;
@@ -12,14 +14,18 @@ use Tests\TestCase;
 
 uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature', 'Unit');
 
-function createSeriesForUser(User $user): Series
+function createSeriesForUser(User $user, ?UniverseVisibility $visibility = UniverseVisibility::PUBLIC): Series
 {
-    return Series::factory()->for(Universe::factory()->for($user)->create())->create();
+    return Series::factory()
+        ->for(Universe::factory()->for($user)->create([
+            'visibility' => $visibility,
+        ]))
+        ->create();
 }
 
-function createSeasonForUser(User $user): Season
+function createSeasonForUser(User $user, ?UniverseVisibility $visibility = UniverseVisibility::PUBLIC): Season
 {
-    $series = createSeriesForUser($user);
+    $series = createSeriesForUser($user, $visibility);
 
     return Season::factory()->for($series)->create();
 }
@@ -34,6 +40,8 @@ function prepareSeason(): array
 
     $season->qualifyingFormat()->associate($format);
     $season->update(['started' => true]);
+
+    PointSystem::factory()->for($season)->create();
 
     return [
         $user,

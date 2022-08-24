@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\RaceBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,7 @@ class Race extends SnowflakeModel
         'qualifying_completed' => 'boolean',
         'started' => 'boolean',
         'completed' => 'boolean',
+        'completed_at' => 'datetime',
         'qualifying_details' => 'json',
         'race_details' => 'json',
     ];
@@ -48,5 +50,15 @@ class Race extends SnowflakeModel
     public function raceResults(): HasMany
     {
         return $this->hasMany(RaceResult::class);
+    }
+
+    public static function query(): RaceBuilder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): RaceBuilder
+    {
+        return new RaceBuilder($query);
     }
 }

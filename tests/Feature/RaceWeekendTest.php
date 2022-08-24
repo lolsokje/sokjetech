@@ -32,6 +32,41 @@ test('unauthorized users can not mark a qualifying session as completed', functi
     assertFalse($race->fresh()->qualifying_completed);
 });
 
+test('a universe owner can mark a race as completed', function () {
+    [$user, $drivers, $race] = prepareSeason();
+
+    $this->actingAs($user)
+        ->post(route('weekend.race.complete', [$race]))
+        ->assertRedirect(route('weekend.results', [$race]));
+
+    $this->assertTrue($race->fresh()->completed);
+});
+
+test('unauthorized users cannot mark a race as completed', function () {
+    [$user, $drivers, $race] = prepareSeason();
+
+    $this->post(route('weekend.race.complete', [$race]))
+        ->assertForbidden();
+
+    $this->assertFalse($race->fresh()->qualifying_completed);
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('weekend.race.complete', [$race]))
+        ->assertForbidden();
+
+    $this->assertFalse($race->fresh()->completed);
+});
+
+it('updates the completed_at column when completing a race', function () {
+    [$user, $drivers, $race] = prepareSeason();
+
+    $this->actingAs($user)
+        ->post(route('weekend.race.complete', [$race]))
+        ->assertRedirect(route('weekend.results', [$race]));
+
+    $this->assertNotNull($race->fresh()->completed_at);
+});
+
 test('the starting grid page can only be viewed once qualifying has been completed', function () {
     [$user, $drivers, $race] = prepareSeason();
 
