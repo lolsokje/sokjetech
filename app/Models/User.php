@@ -45,4 +45,9 @@ class User extends AuthenticatableSnowflake
     {
         return $this->hasManyThrough(Team::class, Universe::class);
     }
+
+    public function bugs(): HasMany
+    {
+        return $this->hasMany(Bug::class);
+    }
 }

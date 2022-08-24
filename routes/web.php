@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BugController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteRaceController;
@@ -61,6 +62,8 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logou
 Route::resource('circuits', CircuitController::class)->except('destroy');
 
 Route::resource('universes', UniverseController::class)->except('destroy');
+
+Route::resource('bugs', BugController::class);
 
 Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], function () {
     Route::resource('drivers', DriverController::class)->except('destroy');

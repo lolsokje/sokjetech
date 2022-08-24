@@ -1,0 +1,39 @@
+.status-new {
+  background-color: #C1C1C1 !important;
+  color: black;
+}
+
+.status-incomplete {
+  background-color: red !important;
+  color: white;
+}
+
+.status-confirmed {
+  background-color: #3b76fd !important;
+  color: white;
+}
+
+.status-fix-in-progress {
+  background-color: orange !important;
+  color: white;
+}
+
+.status-in-review {
+  background-color: orangered !important;
+  color: white;
+}
+
+.status-fixed-on-staging {
+  background-color: green !important;
+  color: white;
+}
+
+.status-fix-released {
+  background-color: darkgreen !important;
+  color: white;
+}
+
+.status-wont-fix {
+  background-color: black !important;
+  color: white;
+}
