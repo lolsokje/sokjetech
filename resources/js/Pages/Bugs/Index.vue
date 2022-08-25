@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { defineProps, reactive, watch } from 'vue';
+import { reactive, watch } from 'vue';
 import Pagination from '@/Shared/Pagination';
 import OrderIcon from '@/Shared/OrderIcon';
 import { getStatusClass } from '@/Composables/useStatusClasses';
