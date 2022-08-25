@@ -37,7 +37,10 @@ class BugController extends Controller
 
     public function store(BugStoreRequest $request)
     {
-        $request->user()->bugs()->create($request->validated());
+        $request->user()->bugs()->create(array_merge(
+            $request->validated(),
+            ['app_version' => config('app.version')],
+        ));
 
         return to_route('bugs.index')
             ->with('notice', 'Your bug has been reported');

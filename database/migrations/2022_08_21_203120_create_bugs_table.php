@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->longText('details');
             $table->string('status')->default(BugStatus::NEW->value);
             $table->longText('admin_remarks')->nullable();
+            $table->string('app_version', 10)->nullable();
             $table->timestamps();
         });
     }

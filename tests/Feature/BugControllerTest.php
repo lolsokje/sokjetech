@@ -10,6 +10,7 @@ use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 use function Pest\Laravel\put;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotNull;
 
 test('unauthenticated users cannot see the bug index page', function () {
     get(route('bugs.index'))
@@ -189,4 +190,16 @@ test('an admin can add remarks to a bug', function () {
         ->assertRedirect(route('bugs.edit', $bug));
 
     assertEquals('remark', $bug->fresh()->admin_remarks);
+});
+
+it('automatically stores the current app version when creating a bug', function () {
+    actingAs(User::factory()->create())
+        ->post(route('bugs.store'), [
+            'type' => 'Type',
+            'summary' => 'Summary',
+            'details' => 'Details',
+        ])
+        ->assertRedirect(route('bugs.index'));
+
+    assertNotNull(Bug::first()->app_version);
 });

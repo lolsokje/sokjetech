@@ -3,6 +3,9 @@
         Bug |
         <span class="badge badge-pill" :class="getStatusClass(bug.status)">{{ bug.status_text }}</span> |
         {{ bug.type }}
+        <template v-if="can.edit && bug.app_version">
+            | v{{ bug.app_version }}
+        </template>
     </h3>
     <h4 class="text-muted">{{ bug.summary }}</h4>
 
