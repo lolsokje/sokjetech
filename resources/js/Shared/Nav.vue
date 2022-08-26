@@ -17,6 +17,9 @@
                     <li class="nav-item">
                         <InertiaLink :href="route('bugs.index')" class="nav-link">Report bug</InertiaLink>
                     </li>
+                    <li class="nav-item">
+                        <InertiaLink :href="route('suggestions.index')" class="nav-link">Suggestions</InertiaLink>
+                    </li>
                 </template>
                 <li class="nav-item">
                     <template v-if="user">
