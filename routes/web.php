@@ -37,6 +37,7 @@ use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\ShowTeamStandingsController;
+use App\Http\Controllers\ShowTutorialPageController;
 use App\Http\Controllers\StartSeasonController;
 use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingResultsController;
@@ -59,6 +60,9 @@ Route::get('', [HomeController::class, 'index'])->name('index');
 Route::get('/auth/discord/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/discord/callback', [AuthController::class, 'callback'])->name('auth.callback');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')
+    ->where('page', '.*');
 
 Route::resource('circuits', CircuitController::class)->except('destroy');
 
