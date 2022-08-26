@@ -19,6 +19,8 @@ class SeriesController extends Controller
 
     public function index(Universe $universe): Response
     {
+        $this->authorize('view', $universe);
+
         return Inertia::render('Series/Index', [
             'universe' => $universe->load(['series' => fn (HasMany $query) => $query->orderBy('name')]),
         ]);
