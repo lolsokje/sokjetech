@@ -38,6 +38,7 @@ class CopyRaces extends BaseCopyAction
                 'qualifying_completed',
                 'started',
                 'completed',
+                'completed_at',
                 'qualifying_details',
                 'race_details',
             ]);
