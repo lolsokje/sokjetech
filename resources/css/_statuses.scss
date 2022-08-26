@@ -8,7 +8,8 @@
   color: white;
 }
 
-.status-confirmed {
+.status-confirmed,
+.status-will-implement {
   background-color: #3b76fd !important;
   color: white;
 }
@@ -23,17 +24,20 @@
   color: white;
 }
 
-.status-fixed-on-staging {
+.status-fixed-on-staging,
+.status-implemented-on-staging {
   background-color: green !important;
   color: white;
 }
 
-.status-fix-released {
+.status-fix-released,
+.status-implemented {
   background-color: darkgreen !important;
   color: white;
 }
 
-.status-wont-fix {
+.status-wont-fix,
+.status-wont-implement {
   background-color: black !important;
   color: white;
 }

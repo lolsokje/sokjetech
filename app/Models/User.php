@@ -50,4 +50,9 @@ class User extends AuthenticatableSnowflake
     {
         return $this->hasMany(Bug::class);
     }
+
+    public function suggestions(): HasMany
+    {
+        return $this->hasMany(Suggestion::class);
+    }
 }

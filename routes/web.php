@@ -43,6 +43,7 @@ use App\Http\Controllers\StoreQualifyingResultsController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
 use App\Http\Controllers\StoreRaceResultsController;
 use App\Http\Controllers\StoreReliabilityConfigurationController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
@@ -64,6 +65,7 @@ Route::resource('circuits', CircuitController::class)->except('destroy');
 Route::resource('universes', UniverseController::class)->except('destroy');
 
 Route::resource('bugs', BugController::class);
+Route::resource('suggestions', SuggestionController::class);
 
 Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], function () {
     Route::resource('drivers', DriverController::class)->except('destroy');
