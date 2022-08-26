@@ -7,7 +7,7 @@
         <div class="mb-3">
             <label for="type" class="form-label">Type</label>
             <select v-model="form.type" id="type" class="form-control" required>
-                <option v-for="(type, index) in types.sort()" :key="index" :value="type">
+                <option v-for="(type, index) in feedbackTypes()" :key="index" :value="type">
                     {{ type }}
                 </option>
                 <option value="other">Other</option>
@@ -35,21 +35,7 @@
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed } from 'vue';
 import Errors from '@/Shared/Errors';
-
-const types = [
-    'Circuits',
-    'Universes',
-    'Series',
-    'Seasons',
-    'Drivers',
-    'Teams',
-    'Engines',
-    'Rating development',
-    'Reliability development',
-    'Race weekend',
-    'Standings',
-    'Configuration',
-];
+import { feedbackTypes } from '@/Composables/useFeedbackTypes';
 
 const form = useForm({
     type: '',
