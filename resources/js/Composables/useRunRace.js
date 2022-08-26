@@ -61,16 +61,18 @@ export const fastestLapRoll = () => {
             return driver.fastest_lap_roll = null;
         }
 
-        return driver.fastest_lap_roll = driver.driver_rating + getRoll(raceStore.fastestLapMinRng, raceStore.fastestLapMaxRng);
+        if (!raceStore.fastestLapIsSeparateStint) {
+            return driver.fastest_lap_roll = driver.stints.at(-1);
+        } else {
+            return driver.fastest_lap_roll = driver.driver_rating + getRoll(raceStore.fastestLapMinRng, raceStore.fastestLapMaxRng);
+        }
     });
 
     getFastestLap();
 
     raceStore.completeFastestLapRun();
 
-    if (raceStore.fastestLapIsSeparateStint) {
-        storeRaceResults();
-    }
+    storeRaceResults();
 };
 
 export const completeRace = () => {
@@ -154,15 +156,13 @@ const getDnfRoll = (driver) => {
 
 const getFastestLap = () => {
     const drivers = raceStore.drivers.slice();
-    if (!raceStore.fastestLapIsSeparateStint) {
-        const currentStintIndex = raceStore.currentStint;
-        drivers.forEach(driver => driver.fastest_lap_roll = driver.driver_rating + driver.stints[currentStintIndex]);
-    }
 
     drivers.sort((driverOne, driverTwo) => driverTwo.fastest_lap_roll - driverOne.fastest_lap_roll);
 
+    // first item in array will be the fastest lap
     const highestRoll = drivers[0].fastest_lap_roll;
 
+    // if the second item in the array has a lower fastest_lap_roll, award the fastest lap to first driver
     if (drivers[1].fastest_lap_roll < highestRoll) {
         raceStore.drivers.find(d => d.id === drivers[0].id).fastest_lap = true;
     }

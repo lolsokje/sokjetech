@@ -84,7 +84,7 @@ export let raceStore = reactive({
     },
 
     shouldRollFastestLap () {
-        return this.fastestLapIsAwarded && this.fastestLapIsSeparateStint;
+        return this.fastestLapIsAwarded;
     },
 
     setFastestLapRunCompleted (completed) {
