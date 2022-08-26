@@ -3,16 +3,16 @@
 
     <InertiaLink :href="route('bugs.create')" class="btn btn-primary my-3">Report bug</InertiaLink>
 
-    <template v-if="bugs.length">
-        <div class="row mb-3">
-            <div class="col-6">
-                <select v-model="params.only" class="form-control">
-                    <option value="">Show only ...</option>
-                    <option value="open">Open bugs</option>
-                    <option value="closed">Closed bugs</option>
-                </select>
-            </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <select v-model="params.only" class="form-control">
+                <option value="">Show only ...</option>
+                <option value="open">Open bugs</option>
+                <option value="closed">Closed bugs</option>
+            </select>
         </div>
+    </div>
+    <template v-if="bugs.length">
         <table class="table">
             <thead>
             <tr>
