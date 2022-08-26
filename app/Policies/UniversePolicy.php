@@ -15,8 +15,8 @@ class UniversePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  User|null  $user
-     * @param  Universe  $universe
+     * @param User|null $user
+     * @param Universe $universe
      *
      * @return bool
      */
@@ -24,22 +24,18 @@ class UniversePolicy
     {
         $visibility = $universe->visibility;
 
-        if ($visibility === UniverseVisibility::PUBLIC) {
-            return true;
-        }
-
-        if ($visibility === UniverseVisibility::AUTH) {
-            return $user !== null;
-        }
-
-        return $visibility === UniverseVisibility::PRIVATE && $user && $user->id === $universe->user_id;
+        return match ($visibility) {
+            UniverseVisibility::PUBLIC => true,
+            UniverseVisibility::AUTH => $user !== null,
+            UniverseVisibility::PRIVATE => $user?->id === $universe->user_id,
+        };
     }
 
     /**
      * Determine whether the user can update the model.
      *
-     * @param  User  $user
-     * @param  Universe  $universe
+     * @param User $user
+     * @param Universe $universe
      *
      * @return bool
      */
