@@ -180,6 +180,7 @@ it('does not copy race status', function () {
         assertFalse($race->qualifying_completed);
         assertFalse($race->started);
         assertFalse($race->completed);
+        assertNull($race->completed_at);
         assertNull($race->qualifying_details);
         assertNull($race->race_details);
     }
