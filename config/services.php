@@ -36,7 +36,10 @@ return [
         'redirect' => '/auth/discord/callback',
         'admin_ids' => [
             '136818922006511616',
-        ]
+        ],
+        'staging_ids' => [
+            '136818922006511616',
+        ],
     ],
 
 ];
