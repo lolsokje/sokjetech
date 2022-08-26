@@ -19,6 +19,8 @@ class SeasonController extends Controller
 
     public function index(Series $series): Response
     {
+        $this->authorize('view', $series->universe);
+
         return Inertia::render('Seasons/Index', [
             'series' => $series->load([
                 'seasons' => fn (HasMany $query) => $query->orderBy('year')->with('series'),
