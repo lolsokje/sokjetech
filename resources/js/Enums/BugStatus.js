@@ -8,14 +8,3 @@ export const BugStatus = {
     FIX_RELEASED: 'Fix released',
     WONT_FIX: 'Won\'t fix',
 };
-
-export const labelMap = [
-    BugStatus.NEW,
-    BugStatus.INCOMPLETE,
-    BugStatus.CONFIRMED,
-    BugStatus.IN_PROGRESS,
-    BugStatus.IN_REVIEW,
-    BugStatus.FIXED_ON_STAGING,
-    BugStatus.FIX_RELEASED,
-    BugStatus.WONT_FIX,
-];

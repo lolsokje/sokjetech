@@ -21,7 +21,7 @@
         <div class="mb-3">
             <label for="status" class="form-label">Status</label>
             <select v-model="form.status" id="status" class="form-control" required>
-                <option v-for="(status, index) in labelMap" :key="index" :value="status.toLowerCase()">
+                <option v-for="(status, index) in BugStatus" :key="index" :value="status.toLowerCase()">
                     {{ status }}
                 </option>
             </select>
@@ -39,7 +39,7 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import { getStatusClass } from '@/Composables/useStatusClasses';
-import { labelMap } from '@/Enums/BugStatus';
+import { BugStatus } from '@/Enums/BugStatus';
 
 const props = defineProps({
     bug: Object,
