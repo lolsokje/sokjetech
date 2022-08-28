@@ -10,7 +10,8 @@
         <InertiaLink :href="route('tutorials', 'seasons')">season</InertiaLink>
         they participate in. Teams are universe-wide entities to allow them to participate in multiple series at the
         same time, such as Prema and ART throughout the FIA Feeder Series ladder, while still having a central entity to
-        track stats and results for.
+        track stats and results for. It also allows you to change a team's details season to season, while not affecting
+        the base team.
     </p>
 
     <TutorialPageList :pages="pages" title="Further reading:"/>

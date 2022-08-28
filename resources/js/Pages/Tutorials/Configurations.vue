@@ -54,7 +54,12 @@
     <p>
         There's three types of reliability in SokjeTech: engine, team and driver. Each of these three use the same RNG
         range defined in the settings, but you can define separate DNF reasons for each type. As of now they make no
-        functional difference and only serve a cosmetic purpose.
+        functional difference and only serve a cosmetic purpose. As for the actual reliability rolls, they're quite
+        simple; if the roll is higher than an engine's, team's or driver's reliability rating, they'll retire.
+    </p>
+
+    <p>
+        At this point there are no disqualifications
     </p>
 </template>
 
