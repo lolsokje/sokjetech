@@ -1,16 +1,12 @@
 <template>
-    <div class="min-vh-100 d-flex flex-column justify-content-between">
-        <div>
-            <Nav/>
+    <Nav/>
 
-            <div id="content" class="px-5 mb-3">
-                <Toast/>
+    <div id="content" class="px-5 mb-3">
+        <Toast/>
 
-                <main class="flex-shrink-0">
-                    <slot/>
-                </main>
-            </div>
-        </div>
+        <main>
+            <slot/>
+        </main>
     </div>
 </template>
 

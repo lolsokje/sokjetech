@@ -6,12 +6,15 @@ import Default from './Layouts/Default';
 import FontAwesomeIcon from './Utilities/FontAwesome';
 import { InertiaProgress } from '@inertiajs/progress';
 import CountryFlagEsm from 'vue-country-flag-next';
+import Tutorial from '@/Layouts/Tutorial';
 
 createInertiaApp({
     resolve: name => {
         let page = require(`./Pages/${name}`).default;
 
-        if (page.layout === undefined) {
+        if (page.__file.includes('Pages/Tutorials/')) {
+            page.layout = Tutorial;
+        } else if (page.layout === undefined) {
             page.layout = Default;
         }
 

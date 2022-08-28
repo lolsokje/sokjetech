@@ -11,6 +11,9 @@
                 <li class="nav-item">
                     <InertiaLink :href="route('universes.index')" class="nav-link">Universes</InertiaLink>
                 </li>
+                <li class="nav-item">
+                    <InertiaLink :href="route('tutorials')" class="nav-link">Tutorials</InertiaLink>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <template v-if="user">
