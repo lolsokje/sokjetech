@@ -12,7 +12,7 @@ createInertiaApp({
     resolve: name => {
         let page = require(`./Pages/${name}`).default;
 
-        if (page.__file.includes('Pages/Tutorials/')) {
+        if (name.includes('Pages/Tutorials/')) {
             page.layout = Tutorial;
         } else if (page.layout === undefined) {
             page.layout = Default;
