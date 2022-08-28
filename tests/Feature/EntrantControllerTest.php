@@ -2,6 +2,7 @@
 
 use App\Models\EngineSeason;
 use App\Models\Entrant;
+use App\Models\Racer;
 use App\Models\Season;
 use App\Models\Team;
 use App\Models\User;
@@ -46,7 +47,7 @@ test('a universe owner can update their entrants', function () {
     $this->actingAs($user)
         ->put(
             route('seasons.entrants.update', [$season, $entrant]),
-            getTeamCreationData($entrant->team, ['full_name' => 'New full name'])
+            getTeamCreationData($entrant->team, ['full_name' => 'New full name']),
         )
         ->assertRedirect(route('seasons.entrants.index', [$season]));
 
@@ -60,7 +61,7 @@ test('an unauthenticated user cant update entrants', function () {
     $this
         ->put(
             route('seasons.entrants.update', [$entrant->season, $entrant]),
-            getTeamCreationData($entrant->team, ['full_name' => 'New full name'])
+            getTeamCreationData($entrant->team, ['full_name' => 'New full name']),
         )
         ->assertForbidden();
 
@@ -74,7 +75,7 @@ test('an authenticated user cant update other users entrants', function () {
     $this->actingAs(User::factory()->create())
         ->put(
             route('seasons.entrants.update', [$entrant->season, $entrant]),
-            getTeamCreationData($entrant->team, ['full_name' => 'New full name'])
+            getTeamCreationData($entrant->team, ['full_name' => 'New full name']),
         )
         ->assertForbidden();
 
@@ -93,7 +94,7 @@ test('a universe owner can view the entrant create page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Entrants/Create')
-                ->has('teams', 2)
+                ->has('teams', 2),
         );
 });
 
@@ -126,7 +127,7 @@ test('a universe owner can view the entrant edit page', function () {
             fn (Assert $page) => $page
                 ->component('Entrants/Edit')
                 ->has('teams', 2)
-                ->where('entrant.full_name', $entrant->full_name)
+                ->where('entrant.full_name', $entrant->full_name),
         );
 });
 
@@ -156,8 +157,68 @@ it('shows all entrants for the selected season on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Entrants/Index')
-                ->has('season.entrants', 3)
+                ->has('season.entrants', 3),
         );
+});
+
+test('unauthorized users cannot delete a team', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), fn (Season $season) => $season->update(['started' => true]));
+    Entrant::factory(3)->for($season)->create();
+
+    $this->assertCount(3, $season->fresh()->entrants);
+
+    $this->delete(route('seasons.entrants.destroy', [$season, Entrant::first()]))
+        ->assertRedirect(route('index'));
+
+    $this->actingAs(User::factory()->create())
+        ->delete(route('seasons.entrants.destroy', [$season, Entrant::first()]))
+        ->assertRedirect(route('index'));
+
+    $this->assertCount(3, $season->fresh()->entrants);
+});
+
+test('a universe owner cannot delete a team when a season has been started', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), fn (Season $season) => $season->update(['started' => true]));
+    Entrant::factory(3)->for($season)->create();
+
+    $this->actingAs($user)
+        ->delete(route('seasons.entrants.destroy', [$season, Entrant::first()]))
+        ->assertRedirect();
+
+    $this->assertCount(3, $season->fresh()->entrants);
+});
+
+test('a universe owner can delete an entrant before the season has started', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    Entrant::factory(3)->for($season)->create();
+
+    $this->actingAs($user)
+        ->delete(route('seasons.entrants.destroy', [$season, Entrant::first()]))
+        ->assertRedirect(route('seasons.entrants.index', [$season]));
+
+    $this->assertCount(2, $season->fresh()->entrants);
+});
+
+it('deletes racers from a deleted entrant', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    Entrant::factory(3)->for($season)->create();
+
+    foreach ($season->entrants as $entrant) {
+        Racer::factory(2)->for($entrant)->create();
+    }
+
+    $this->assertDatabaseCount('racers', 6);
+
+    $this->actingAs($user)
+        ->delete(route('seasons.entrants.destroy', [$season, Entrant::first()]))
+        ->assertRedirect(route('seasons.entrants.index', [$season]));
+
+    $this->assertCount(2, $season->fresh()->entrants);
+    $this->assertDatabaseCount('racers', 4);
 });
 
 function getTeamCreationData(Team $team, ?array $merge = []): array
