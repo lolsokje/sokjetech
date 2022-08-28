@@ -19,6 +19,7 @@
             <th>Engine supplier</th>
             <th class="text-center"></th>
             <th colspan="2" v-if="canEdit"></th>
+            <th v-if="canDeleteTeam"></th>
         </tr>
         </thead>
         <tbody>
@@ -43,6 +44,11 @@
                     <InertiaLink :href="route('seasons.racers.create', [season, entrant])">drivers</InertiaLink>
                 </td>
             </template>
+            <td v-if="canDeleteTeam" class="small-centered">
+                <button class="btn btn-link" @click.prevent="deleteEntrant(entrant)">
+                    delete
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -54,6 +60,7 @@ import BackLink from '@/Shared/BackLink';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
     season: {
@@ -68,6 +75,15 @@ const props = defineProps({
 
 const hasActiveRace = props.season.has_active_race;
 const canEdit = props.can.edit && !hasActiveRace;
+const canDeleteTeam = props.can.edit && !props.season.started;
+
+const deleteEntrant = (entrant) => {
+    if (!confirm(`Are you sure you want to remove "${entrant.full_name}"? This will also delete any associated drivers`)) {
+        return;
+    }
+
+    Inertia.delete(route('seasons.entrants.destroy', [ props.season, entrant ]));
+};
 </script>
 
 <script>

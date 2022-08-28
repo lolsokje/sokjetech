@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\DeleteEntrant;
 use App\Http\Requests\EntrantCreateRequest;
 use App\Models\Entrant;
 use App\Models\Season;
@@ -16,6 +17,7 @@ class EntrantController extends Controller
     {
         $this->middleware(['auth'])->only('create', 'edit');
         $this->middleware(['race_in_progress'])->except('index');
+        $this->middleware('season_started')->only('destroy');
     }
 
     public function index(Season $season): Response
@@ -68,5 +70,13 @@ class EntrantController extends Controller
 
         return redirect(route('seasons.entrants.index', [$season]))
             ->with('notice', 'Entrant updated');
+    }
+
+    public function destroy(Season $season, Entrant $entrant): RedirectResponse
+    {
+        (new DeleteEntrant($entrant))->handle();
+
+        return to_route('seasons.entrants.index', $season)
+            ->with('notice', "\"$entrant->full_name\" deleted");
     }
 }
