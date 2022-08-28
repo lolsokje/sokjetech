@@ -2,6 +2,7 @@
     <h3>Calendar</h3>
 
     <BackLink :backTo="route('tutorials', 'seasons')" label="season tutorial page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
 
     <p>
         Each race on the calendar takes place at a
@@ -28,9 +29,20 @@
     </ul>
 
     <p>
-        Ticking the "use [xyz] boxes" can be a great way of introducing some bias in RNG rolls and making a
+        Ticking the "use [xyz] rating" boxes can be a great way of introducing some bias in RNG rolls and making a
         team's/driver's/engine's rating matter more during the race.
     </p>
+
+    <TutorialPageList :pages="pages" title="Further reading:"/>
 </template>
+
 <script setup>
-import BackLink from '@/Shared/BackLink';</script>
+import BackLink from '@/Shared/BackLink';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
+import TutorialPageList from '@/Components/TutorialPageList';
+
+const pages = [
+    new TutorialPageLink('circuits', 'Circuits'),
+    new TutorialPageLink('season/races', 'Simming races'),
+];
+</script>

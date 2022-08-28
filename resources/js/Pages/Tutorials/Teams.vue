@@ -2,6 +2,7 @@
     <h3>Teams</h3>
 
     <BackLink :backTo="route('tutorials', 'universes')" label="universe tutorial page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
 
     <p>
         Teams are core participants in your sims. A team can exist in multiple
@@ -20,9 +21,10 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
 
 const pages = [
-    { link: route('tutorials', 'drivers'), label: 'Drivers' },
-    { link: route('tutorials', 'entrants'), label: 'Entrants' },
+    new TutorialPageLink('drivers', 'Drivers'),
+    new TutorialPageLink('entrants', 'Entrants'),
 ];
 </script>

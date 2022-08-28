@@ -2,6 +2,7 @@
     <h3>Racers</h3>
 
     <BackLink :backTo="route('tutorials', 'seasons')" label="season tutorial page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
 
     <p>
         To differentiate between global "drivers" in a universe, and "drivers" in a season, I've decided to name drivers
@@ -26,7 +27,18 @@
         You can add an infinite amount of racers to an entrant, and can freely change an entrant's driver lineup
         throughout an active season.
     </p>
+
+    <TutorialPageList :pages="pages" title="Further reading:"/>
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';</script>
+import BackLink from '@/Shared/BackLink';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
+import TutorialPageList from '@/Components/TutorialPageList';
+
+const pages = [
+    new TutorialPageLink('drivers', 'Drivers'),
+    new TutorialPageLink('teams', 'Teams'),
+    new TutorialPageLink('season/entrants', 'Entrants'),
+];
+</script>

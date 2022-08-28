@@ -1,6 +1,8 @@
 <template>
     <h3>Universes</h3>
 
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
+
     <p>
         Universes are the core of SokjeTech sims, everything a sim needs will exist within one. While universes
         themselves are quite easy to understand (you can see a universe as being governed by the FIA), there's quite a
@@ -15,15 +17,17 @@
         make your universe public!
     </p>
 
-    <TutorialPageList :pages="pages" title="Other tutorials related to universes:"/>
+    <TutorialPageList :pages="pages" title="Further reading:"/>
 </template>
 
 <script setup>
 import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
+import BackLink from '@/Shared/BackLink';
 
 const pages = [
-    { link: route('tutorials', 'teams'), label: 'Teams' },
-    { link: route('tutorials', 'drivers'), label: 'Drivers' },
-    { link: route('tutorials', 'series'), label: 'Series' },
+    new TutorialPageLink('teams', 'Teams'),
+    new TutorialPageLink('drivers', 'Drivers'),
+    new TutorialPageLink('series', 'Series'),
 ];
 </script>

@@ -2,6 +2,7 @@
     <h3>Drivers</h3>
 
     <BackLink :backTo="route('tutorials', 'universes')" label="universe tutorial page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
 
     <p>
         Drivers are core participants in your sims. A driver can exist in multiple
@@ -19,9 +20,10 @@
 <script setup>
 import BackLink from '@/Shared/BackLink';
 import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
 
 const pages = [
-    { link: route('tutorials', 'teams'), label: 'Teams' },
-    { link: route('tutorials', 'racers'), label: 'Racers' },
+    new TutorialPageLink('teams', 'Teams'),
+    new TutorialPageLink('season/racers', 'Racers'),
 ];
 </script>

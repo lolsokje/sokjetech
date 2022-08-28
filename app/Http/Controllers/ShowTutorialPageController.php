@@ -7,7 +7,7 @@ use Inertia\Response;
 
 class ShowTutorialPageController extends Controller
 {
-    public function __invoke(?string $page = 'universes'): Response
+    public function __invoke(?string $page = 'index'): Response
     {
         $page = $this->parsePage($page);
 

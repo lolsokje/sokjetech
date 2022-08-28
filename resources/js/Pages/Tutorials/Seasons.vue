@@ -1,6 +1,9 @@
 <template>
     <h3>Seasons</h3>
 
+    <BackLink :backTo="route('tutorials', 'series')" label="series tutorial page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
+
     <p>
         Seasons are perhaps the most important part of SokjeTech, as they are where you actually build your sim. Within
         a season you'll define a
@@ -10,11 +13,23 @@
         and their
         <InertiaLink :href="route('tutorials', 'season/racers')">drivers</InertiaLink>
         and finally
-        <InertiaLink :href="route('tutorials', 'configurations')">configurations</InertiaLink>
+        <InertiaLink :href="route('tutorials', 'season/configurations')">configurations</InertiaLink>
         for things like the point system, qualifying format and reliability.
     </p>
+
+    <TutorialPageList :pages="pages" title="Further reading:"></TutorialPageList>
 </template>
 
 <script setup>
+import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
+import BackLink from '@/Shared/BackLink';
 
+const pages = [
+    new TutorialPageLink('season/entrants', 'Entrants'),
+    new TutorialPageLink('season/racers', 'Racers'),
+    new TutorialPageLink('season/calendar', 'Calendar'),
+    new TutorialPageLink('season/configurations', 'Configurations'),
+    new TutorialPageLink('season/development', 'Development'),
+];
 </script>

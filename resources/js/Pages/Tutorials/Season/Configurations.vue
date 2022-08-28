@@ -2,6 +2,7 @@
     <h3>Configuring a season</h3>
 
     <BackLink :backTo="route('tutorials', 'seasons')" label="season tutorials page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
 
     <p>
         Aside from setting up a calendar and your teams, a season requires you to set up at least three other things;
@@ -59,7 +60,7 @@
     </p>
 
     <p>
-        At this point there are no disqualifications
+        At this point there are no disqualifications.
     </p>
 </template>
 

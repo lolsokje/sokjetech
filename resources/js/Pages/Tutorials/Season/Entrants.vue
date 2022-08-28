@@ -2,6 +2,7 @@
     <h3>Entrants</h3>
 
     <BackLink :backTo="route('tutorials', 'seasons')" label="season tutorial page"/>
+    <BackLink :backTo="route('tutorials')" label="tutorial index page"/>
 
     <p>
         To differentiate between global "teams" in a universe, and "teams" in a season, I've decided to name teams
@@ -15,7 +16,19 @@
         <InertiaLink :href="route('tutorials', 'season/engines')">engines</InertiaLink>
         to the season, you can select one here as well.
     </p>
+
+    <TutorialPageList :pages="pages" title="Further reading:"/>
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';</script>
+import BackLink from '@/Shared/BackLink';
+import TutorialPageLink from '@/Utilities/TutorialPageLink';
+import TutorialPageList from '@/Components/TutorialPageList';
+
+const pages = [
+    new TutorialPageLink('teams', 'Teams'),
+    new TutorialPageLink('drivers', 'Drivers'),
+    new TutorialPageLink('season/racers', 'Racers'),
+    new TutorialPageLink('season/engines', 'Adding engines to a season'),
+];
+</script>
