@@ -5,7 +5,6 @@ use App\Models\PointSystem;
 use App\Models\Season;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\get;
@@ -24,7 +23,7 @@ test('a universe owner can view the point configuration page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Seasons/Configuration/Points')
-                ->has('season')
+                ->has('season'),
         );
 });
 
@@ -57,6 +56,24 @@ test('a universe owner can store a point system', function () {
     assertNotNull($season->pointSystem);
     assertCount(10, $season->pointDistribution);
 });
+
+it('does not allow negative points', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+
+    $this->actingAs($user)
+        ->post(route('seasons.configuration.points.store', [$season]), [
+            'points' => [
+                ['position' => 1, 'points' => -1],
+                ['position' => 2, 'points' => 1],
+            ],
+        ])
+        ->assertInvalid(['points' => 'The awarded points to a position can\'t be negative.']);
+
+    $this->assertNull($season->fresh()->pointSystem);
+    $this->assertCount(0, $season->fresh()->pointDistribution);
+});
+
 
 test('an unauthenticated user cannot store a point system', function () {
     $season = Season::factory()->create();

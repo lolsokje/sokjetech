@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\DataTransferObjects\PointsData;
 use App\Enums\FastestLapDetermination;
+use App\Rules\ValidPointsRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rules\Enum;
@@ -35,7 +36,7 @@ class PointSystemConfigurationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'points' => ['required', 'array'],
+            'points' => ['required', 'array', new ValidPointsRule()],
             'fastest_lap_point_awarded' => ['boolean', 'nullable'],
             'pole_position_point_awarded' => ['boolean', 'nullable'],
             'fastest_lap_point_amount' => ['integer', 'min:0', 'nullable'],
