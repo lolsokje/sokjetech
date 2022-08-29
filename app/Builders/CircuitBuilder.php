@@ -8,13 +8,15 @@ class CircuitBuilder extends Builder
 {
     public function owned(): CircuitBuilder
     {
-        return $this->where('user_id', auth()->user()?->id);
+        return $this->where('user_id', (int) auth()->user()?->id);
     }
 
     public function search(string $search): CircuitBuilder
     {
-        return $this->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('country', 'LIKE', '%' . $search . '%');
+        return $this->where(function (CircuitBuilder $query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('country', 'LIKE', '%' . $search . '%');
+        });
     }
 
     public function sort(?string $field, ?string $direction): CircuitBuilder

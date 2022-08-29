@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(!$this->app->isProduction());
 
         Gate::define('owns-universe', function (?User $user, ?Universe $universe = null) {
-            return (int) $universe?->user_id === (int) $user?->id || $user?->is_admin;
+            return (int) $universe?->user_id === (int) $user?->id || ($user && $user->is_admin);
         });
 
         Gate::define('can-copy-settings', function (?User $user, ?Season $season) {

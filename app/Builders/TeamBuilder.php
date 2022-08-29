@@ -9,7 +9,7 @@ class TeamBuilder extends Builder
 {
     public function forUniverse(Universe $universe): TeamBuilder
     {
-        return $this->where('universe_id', $universe->id);
+        return $this->where('universe_id', (int) $universe->id);
     }
 
     public function sort(?string $field, ?string $direction): TeamBuilder
@@ -21,8 +21,10 @@ class TeamBuilder extends Builder
     {
         $like = "%$search%";
 
-        return $this->where('full_name', 'LIKE', $like)
-            ->orWhere('short_name', 'LIKE', $like)
-            ->orWhere('team_principal', 'LIKE', $like);
+        return $this->where(function (TeamBuilder $query) use ($like) {
+            $query->where('full_name', 'LIKE', $like)
+                ->orWhere('short_name', 'LIKE', $like)
+                ->orWhere('team_principal', 'LIKE', $like);
+        });
     }
 }
