@@ -31,7 +31,7 @@ import TutorialPageList from '@/Components/TutorialPageList';
 import TutorialPageLink from '@/Utilities/TutorialPageLink';
 
 const pages = [
-    new TutorialPageLink('entrants', 'Entrants'),
+    new TutorialPageLink('season/entrants', 'Entrants'),
     new TutorialPageLink('engines', 'Engines (series)'),
 ];
 </script>

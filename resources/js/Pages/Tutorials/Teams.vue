@@ -25,6 +25,6 @@ import TutorialPageLink from '@/Utilities/TutorialPageLink';
 
 const pages = [
     new TutorialPageLink('drivers', 'Drivers'),
-    new TutorialPageLink('entrants', 'Entrants'),
+    new TutorialPageLink('season/entrants', 'Entrants'),
 ];
 </script>
