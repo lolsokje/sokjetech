@@ -1,6 +1,7 @@
 <template>
     <ActiveRaceWarning v-if="season.has_active_race"/>
     <template v-else-if="drivers.length">
+        <Errors :errors="form.errors"/>
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
         <div class="row row-cols-lg-auto mb-3">
             <div class="col-4">
@@ -93,6 +94,7 @@ import DevelopmentDriver from '../Utilities/DevelopmentDriver';
 import CopyScreenshotButton from './CopyScreenshotButton';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import Errors from '@/Shared/Errors';
 
 const props = defineProps({
     season: {

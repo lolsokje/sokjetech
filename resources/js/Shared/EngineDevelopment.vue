@@ -1,6 +1,7 @@
 <template>
     <ActiveRaceWarning v-if="season.has_active_race"/>
     <template v-else-if="engines.length">
+        <Errors :errors="form.errors"/>
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
 
         <div class="row row-cols-lg-auto mb-3">
@@ -56,11 +57,13 @@
                     <td class="small-centered">{{ engine.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.min" class="form-control" type="number"
-                               v-if="engine.individual_rating">
+                               v-if="engine.individual_rating"
+                        >
                     </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.max" class="form-control" type="number"
-                               v-if="engine.individual_rating">
+                               v-if="engine.individual_rating"
+                        >
                     </td>
                     <td class="small-centered">{{ engine.dev }}</td>
                     <td class="small-centered">
@@ -93,6 +96,7 @@ import Development from '@/Utilities/Development';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
+import Errors from '@/Shared/Errors';
 
 const props = defineProps({
     season: Object,
