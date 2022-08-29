@@ -29,6 +29,11 @@
                 </div>
             </div>
 
+            <p class="mb-2">
+                Rebadged engines without individual ratings will take the engine rating from their base engine, so no
+                min/max RNG inputs will be shown. You also won't be able to edit their ratings directly.
+            </p>
+
             <div>
                 <div class="form-check-inline">
                     <input type="checkbox" v-model="state.editRatings" class="form-check-inline" id="edit-ratings">
@@ -42,6 +47,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th class="text-center">Rebadged</th>
                     <th class="text-center">Individual rating</th>
                     <th class="text-center">Current</th>
                     <th v-if="inputsHidden" class="text-center">Min</th>
@@ -53,16 +59,21 @@
                 <tbody>
                 <tr v-for="engine in form.engines" :key="engine.id">
                     <td class="padded-left">{{ engine.name }}</td>
-                    <td class="big-centered">{{ engine.individual_rating ? 'Yes' : 'No' }}</td>
+                    <td class="big-centered">{{ engine.rebadge ? 'Yes' : 'No' }}</td>
+                    <td class="big-centered">
+                        <template v-if="engine.rebadge">
+                            {{ engine.individual_rating ? 'Yes' : 'No' }}
+                        </template>
+                    </td>
                     <td class="small-centered">{{ engine.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.min" class="form-control" type="number"
-                               v-if="engine.individual_rating"
+                               v-if="showEngineInput(engine)"
                         >
                     </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.max" class="form-control" type="number"
-                               v-if="engine.individual_rating"
+                               v-if="showEngineInput(engine)"
                         >
                     </td>
                     <td class="small-centered">{{ engine.dev }}</td>
@@ -71,7 +82,9 @@
                             {{ engine.new }}
                         </template>
                         <template v-else>
-                            <input type="number" class="form-control" v-model="engine.new">
+                            <template v-if="showEngineInput(engine)">
+                                <input type="number" class="form-control" v-model="engine.new">
+                            </template>
                         </template>
                     </td>
                 </tr>
@@ -155,6 +168,10 @@ function updateEnginesUsingParentRating () {
 function store () {
     Development.storeDev(form, props.formRoute, state);
 }
+
+const showEngineInput = (engine) => {
+    return !engine.rebadge || engine.rebadge && engine.individual_rating;
+};
 
 const devCompleted = computed(() => !state.completed);
 const inputsHidden = computed(() => !state.hideInputs);
