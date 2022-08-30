@@ -1,6 +1,9 @@
 <template>
     <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
 
+    <InertiaLink :href="route('weekend.qualifying', race)" class="btn btn-primary">
+        Go to qualifying
+    </InertiaLink>
     <div id="screenshot-target">
         <h3>Weekend intro</h3>
 

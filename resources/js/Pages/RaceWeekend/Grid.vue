@@ -1,7 +1,10 @@
 <template>
     <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
 
-    <h3>{{ race.name }} Starting Grid</h3>
+    <div class="d-flex col-6 mb-3">
+        <h3>{{ race.name }} Starting Grid</h3>
+        <InertiaLink :href="route('weekend.race', race)" class="btn btn-primary ms-auto">Go to race</InertiaLink>
+    </div>
 
     <table class="table table-bordered table-dark table-narrow" id="screenshot-target">
         <thead>
