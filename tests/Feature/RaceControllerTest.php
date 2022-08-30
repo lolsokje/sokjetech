@@ -433,6 +433,20 @@ it('reorders remaining races', function () {
     }
 });
 
+it('correctly determines the next race after reordering races', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), fn (Season $season) => Race::factory(2)->for($season)->create());
+
+    [$firstRace, $secondRace] = Race::all();
+
+    $this->assertEquals($firstRace->id, $season->nextRace()->id);
+
+    $secondRace->update(['order' => 1]);
+    $firstRace->update(['order' => 2]);
+
+    $this->assertEquals($secondRace->id, $season->nextRace()->id);
+});
+
 function getRaceCreationData(Season $season, ?User $user = null): array
 {
     if (!$user) {

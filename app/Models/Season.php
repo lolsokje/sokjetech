@@ -50,6 +50,7 @@ class Season extends SnowflakeModel
         return Race::query()
             ->where('completed', false)
             ->where('season_id', $this->id)
+            ->orderBy('order')
             ->first();
     }
 
