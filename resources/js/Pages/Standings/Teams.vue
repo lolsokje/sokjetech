@@ -28,14 +28,14 @@
         <template v-for="(team, index) in teams" :key="team.id">
             <tr v-for="(driver, driverIndex) in team.results" :key="driver.id">
                 <template v-if="isFirstResult(team, driverIndex)">
-                    <td class="text-center align-middle" :rowspan="team.driver_count">
+                    <td class="small-centered" :rowspan="team.driver_count">
                         {{ index + 1 }}
                     </td>
                     <BackgroundColourCell :backgroundColour="team.background_colour" :rowspan="team.driver_count"/>
-                    <td class="padded-left align-middle" :rowspan="team.driver_count">{{ team.team_name }}</td>
-                    <td class="text-center align-middle" :rowspan="team.driver_count">{{ team.points }}</td>
+                    <td class="padded-left" :rowspan="team.driver_count">{{ team.team_name }}</td>
+                    <td class="medium-centered" :rowspan="team.driver_count">{{ team.points }}</td>
                 </template>
-                <td class="text-center" :style="team.style_string">{{ driver.number }}</td>
+                <td class="small-centered" :style="team.style_string">{{ driver.number }}</td>
                 <td class="colour-accent"></td>
                 <td v-for="race in races" :key="race.order" class="smallest-centered"
                     :class="getResultDisplayClasses(driver.results[race.order])"

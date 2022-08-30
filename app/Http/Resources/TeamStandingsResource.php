@@ -17,7 +17,7 @@ class TeamStandingsResource extends JsonResource
             'team_principal' => $this->team_principal,
             'background_colour' => $this->primary_colour,
             'style_string' => $this->style_string,
-            'driver_count' => count($this->allRacers),
+            'driver_count' => count($this->racersWithParticipation),
             'results' => $results,
         ];
     }
@@ -26,7 +26,7 @@ class TeamStandingsResource extends JsonResource
     {
         $results = [];
 
-        foreach ($this->allRacers as $racer) {
+        foreach ($this->racersWithParticipation as $racer) {
             $results[$racer->id] = [
                 'number' => $racer->number,
                 'results' => [],

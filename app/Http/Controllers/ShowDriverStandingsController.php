@@ -14,7 +14,7 @@ class ShowDriverStandingsController extends Controller
     {
         $season->load([
             'races' => ['circuit'],
-            'drivers' => [
+            'driversWithParticipation' => [
                 'driver',
                 'entrant',
                 'raceResults' => ['race'],
@@ -24,7 +24,7 @@ class ShowDriverStandingsController extends Controller
         return Inertia::render('Standings/Drivers', [
             'season' => GeneralSeasonResource::make($season)->toArray(request()),
             'races' => $season->races,
-            'drivers' => DriverStandingsResource::collection($season->drivers)->toArray(request()),
+            'drivers' => DriverStandingsResource::collection($season->driversWithParticipation)->toArray(request()),
         ]);
     }
 }

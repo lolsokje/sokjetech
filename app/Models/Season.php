@@ -79,6 +79,11 @@ class Season extends SnowflakeModel
         return $this->hasMany(Racer::class);
     }
 
+    public function driversWithParticipation(): HasMany
+    {
+        return $this->drivers()->whereHas('raceResults');
+    }
+
     public function activeRacers(): HasMany
     {
         return $this->drivers()->where('active', true);
@@ -94,8 +99,7 @@ class Season extends SnowflakeModel
         return $this->universe->drivers()
             ->whereNotIn('id', $this->drivers()
                 ->where('active', true)
-                ->pluck('driver_id'))
-            ->orderBy('first_name')
+                ->get('driver_id'))
             ->get();
     }
 

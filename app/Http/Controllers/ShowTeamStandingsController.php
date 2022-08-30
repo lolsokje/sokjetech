@@ -14,7 +14,7 @@ class ShowTeamStandingsController extends Controller
         $season->load([
             'races' => ['circuit'],
             'entrants' => [
-                'allRacers',
+                'racersWithParticipation',
                 'raceResults' => [
                     'race',
                     'racer' => [
