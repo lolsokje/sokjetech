@@ -1,6 +1,5 @@
 <?php
 
-use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\Race;
 use App\Models\Season;
 use App\Models\Stint;
@@ -60,7 +59,6 @@ test('the source season needs to be owned by the universe owner', function () {
 })->throws(UnauthorizedException::class);
 
 test('a source season needs races before copying', function () {
-    withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $newSeason = createSeasonForUser($user);
@@ -68,11 +66,12 @@ test('a source season needs races before copying', function () {
     actingAs($user)
         ->post(route('seasons.settings.copy.races', [$newSeason]), [
             'season_id' => $season->id,
-        ]);
+        ])
+        ->assertJson(['error' => 'No races added to the selected season']);
 
     assertCount(0, $newSeason->fresh()->races);
     assertDatabaseCount('stints', 0);
-})->throws(InvalidSeasonRequirements::class);
+});
 
 it('clears existing races before copying new races', function () {
     $user = User::factory()->create();

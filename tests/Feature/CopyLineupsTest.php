@@ -1,6 +1,5 @@
 <?php
 
-use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\EngineSeason;
 use App\Models\Entrant;
 use App\Models\Racer;
@@ -52,8 +51,7 @@ test('the source season needs to be owned by the universe owner', function () {
         ]);
 })->throws(UnauthorizedException::class);
 
-test('a source season needs engines, teams and drivers before copying', function () {
-    withoutExceptionHandling();
+test('a source season needs teams and drivers before copying', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $newSeason = createSeasonForUser($user);
@@ -61,8 +59,9 @@ test('a source season needs engines, teams and drivers before copying', function
     actingAs($user)
         ->post(route('seasons.settings.copy.teams', [$newSeason]), [
             'season_id' => $season->id,
-        ]);
-})->throws(InvalidSeasonRequirements::class);
+        ])
+        ->assertJson(['error' => 'No entrants added to the selected season']);
+});
 
 it('clears existing engines, teams and drivers before copying', function () {
     $user = User::factory()->create();
@@ -217,7 +216,8 @@ it('copies engine, team and driver ratings when instructed to do so', function (
 function prepareSeasonLineups(Season $season): void
 {
     $engines = EngineSeason::factory(ENGINE_COUNT)->for($season)->create();
-    $engines->each(fn (EngineSeason $engine) => Entrant::factory(TEAM_COUNT)->for($season)->create(['engine_id' => $engine->id]));
+    $engines->each(fn (EngineSeason $engine,
+    ) => Entrant::factory(TEAM_COUNT)->for($season)->create(['engine_id' => $engine->id]));
     $entrants = $season->entrants;
     $entrants->each(fn (Entrant $entrant) => Racer::factory(DRIVER_COUNT)->for($entrant)->for($season)->create());
 }

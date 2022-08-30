@@ -105,14 +105,16 @@ const startCopying = async () => {
             data[item.dependency.name] = true;
         }
 
-        await axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+        axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+            .then(() => {
+                item.completed = true;
+                completedItems.value++;
+            })
             .catch((error) => {
                 item.fail = true;
-                item.error = error.response.data.message;
-            });
-        item.copying = false;
-        item.completed = true;
-        completedItems.value++;
+                item.error = error.response.data.error;
+            })
+            .finally(() => item.copying = false);
     }
 };
 

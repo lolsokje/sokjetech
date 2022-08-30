@@ -20,6 +20,9 @@ class CopyLineups extends BaseCopyAction
         $this->columnsNotToCopy = $copyRatings ? null : ['rating', 'reliability'];
     }
 
+    /**
+     * @throws InvalidSeasonRequirements
+     */
     public function handle(): void
     {
         $this->validateSeasonOwnership($this->oldSeason);
@@ -67,17 +70,13 @@ class CopyLineups extends BaseCopyAction
         $this->newSeason->engines()->delete();
     }
 
-    private function getNewEngineToAssignToNewEntrant(Entrant $oldEntrant): EngineSeason
+    private function getNewEngineToAssignToNewEntrant(Entrant $oldEntrant): ?EngineSeason
     {
-        return $this->newSeason->engines->firstWhere('base_engine_id', $oldEntrant->engine->base_engine_id);
+        return $this->newSeason->engines->firstWhere('base_engine_id', $oldEntrant->engine?->base_engine_id);
     }
 
     private function validateSeasonRequirementsMet(): void
     {
-        if ($this->oldSeason->engines->count() === 0) {
-            throw new InvalidSeasonRequirements('No engines added to the selected season');
-        }
-
         if ($this->oldSeason->entrants->count() === 0) {
             throw new InvalidSeasonRequirements('No entrants added to the selected season');
         }
