@@ -57,8 +57,10 @@ const props = defineProps({
     drivers: Array,
 });
 
+const lastPointPayingPosition = props.season.last_point_paying_position;
+
 const getResultDisplayClasses = (result) => {
-    return getResultClasses(result);
+    return getResultClasses(result, lastPointPayingPosition);
 };
 
 onMounted(() => {

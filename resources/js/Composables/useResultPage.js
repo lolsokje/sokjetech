@@ -1,4 +1,4 @@
-export function getResultClasses (result) {
+export function getResultClasses (result, lastPointPayingPosition = 10) {
     if (result === undefined) {
         return '';
     }
@@ -13,7 +13,7 @@ export function getResultClasses (result) {
         classes.push('position-second');
     } else if (result.position === 3) {
         classes.push('position-third');
-    } else if (result.position >= 4 && result.position <= 10) {
+    } else if (result.position >= 4 && result.position <= lastPointPayingPosition) {
         classes.push('position-points');
     } else {
         classes.push('position-other');

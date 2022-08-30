@@ -63,6 +63,8 @@ const props = defineProps({
     teams: Array,
 });
 
+const lastPointPayingPosition = props.season.last_point_paying_position;
+
 const isFirstResult = (team, resultId) => {
     const results = team.results;
     const firstResultId = Object.keys(results)[0];
@@ -71,7 +73,7 @@ const isFirstResult = (team, resultId) => {
 };
 
 const getResultDisplayClasses = (result) => {
-    return getResultClasses(result);
+    return getResultClasses(result, lastPointPayingPosition);
 };
 
 onMounted(() => {

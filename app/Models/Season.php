@@ -190,4 +190,9 @@ class Season extends SnowflakeModel
             ],
         ])->where('position', 1);
     }
+
+    public function lastPointPayingPosition(): ?int
+    {
+        return $this->pointDistribution->sortByDesc('position')->first()?->position;
+    }
 }
