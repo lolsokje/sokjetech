@@ -76,7 +76,7 @@ ul.nav.pills {
   th {
     font-size: 1.1rem;
     background-color: $bg-table-header;
-    border-color: $bg-table-header;
+    border: 1px solid $bg-table-header;
     padding: 1rem;
     vertical-align: middle;
   }
@@ -84,6 +84,7 @@ ul.nav.pills {
   td {
     font-size: 1.1rem;
     vertical-align: middle;
+    background-color: $dark;
 
     &.smallest-centered {
       @include centered-width-table-column(80px);
@@ -119,11 +120,11 @@ ul.nav.pills {
     tr {
       td {
         &:not(:first-child) {
-          border-left: 0 solid;
+          border-left: 1px solid $dark;
         }
 
         &:not(:last-child) {
-          border-right: 0 solid;
+          border-right: 1px solid $dark;
         }
 
         &.bg-purple {
