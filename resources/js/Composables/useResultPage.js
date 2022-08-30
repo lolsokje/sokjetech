@@ -6,7 +6,7 @@ export function getResultClasses (result, lastPointPayingPosition = 10) {
     const classes = [];
 
     if (result.dnf) {
-        classes.push('bg-danger');
+        classes.push('position-dnf');
     } else if (result.position === 1) {
         classes.push('position-first');
     } else if (result.position === 2) {

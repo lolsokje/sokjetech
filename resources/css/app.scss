@@ -142,7 +142,8 @@ ul.nav.pills {
         }
 
         &.position-third {
-          background-color: #BF8F00;
+          background-color: #C8980A;
+          color: $dark;
         }
 
         &.position-points {
@@ -151,7 +152,13 @@ ul.nav.pills {
         }
 
         &.position-other {
-          background-color: #2B3DCE;
+          background-color: #5B9BD5;
+          color: $dark;
+        }
+
+        &.position-dnf {
+          background-color: $danger;
+          color: $black;
         }
 
         &.bg-accent-odd {
