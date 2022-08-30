@@ -105,7 +105,7 @@ onMounted(() => {
     });
 
     drivers.value.sort((a, b) => {
-        return a.total_rating < b.total_rating;
+        return b.total_rating - a.total_rating;
     });
 
     editMode.value = localStorage.getItem('racers_edit_mode') === 'true';

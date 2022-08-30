@@ -2,7 +2,7 @@ const ASCENDING = 'asc';
 const DESCENDING = 'desc';
 
 export function getRoll (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export function getBestRun (runs) {
