@@ -17,6 +17,7 @@ class SeasonCreateRequest extends FormRequest
     {
         return [
             'year' => ['required', 'integer', new YearUniqueInSeries($this->route()->parameters())],
+            'name' => ['required', 'max:255'],
         ];
     }
 

@@ -20,6 +20,7 @@ test('a universe owner can create seasons', function () {
     $this->actingAs($user)
         ->post(route('series.seasons.store', [$series]), [
             'year' => 2021,
+            'name' => 'Test',
         ])
         ->assertRedirect(route('series.seasons.index', [$series]));
 
@@ -61,28 +62,34 @@ test('a universe owner can update their seasons', function () {
     $this->actingAs($user)
         ->put(route('series.seasons.update', [$series, $season]), [
             'year' => 2022,
+            'name' => 'Test',
         ])
         ->assertRedirect(route('series.seasons.index', [$series]));
 
     $this->assertEquals(2022, $season->fresh()->year);
+    $this->assertEquals('Test', $season->fresh()->name);
 });
 
 test('an unauthenticated user can\'t update seasons', function () {
     $season = Season::factory()->create();
     $year = $season->year;
+    $name = $season->name;
 
     $this->put(route('series.seasons.update', [$season->series, $season]), [
         'year' => 2022,
+        'name' => 'Test',
     ])
         ->assertForbidden();
 
     $this->assertEquals($year, $season->fresh()->year);
+    $this->assertEquals($name, $season->fresh()->name);
 });
 
 test('an authenticated user can\'t update another user\'s seasons', function () {
     $user = User::factory()->create();
     $season = Season::factory()->create();
     $year = $season->year;
+    $name = $season->name;
 
     $this->actingAs($user)
         ->put(route('series.seasons.update', [$season->series, $season]), [
@@ -91,6 +98,7 @@ test('an authenticated user can\'t update another user\'s seasons', function () 
         ->assertForbidden();
 
     $this->assertEquals($year, $season->fresh()->year);
+    $this->assertEquals($name, $season->fresh()->name);
 });
 
 test('a universe owner can view the season create page', function () {
@@ -166,6 +174,7 @@ test('a season can be updated while retaining the same year', function () {
     $this->actingAs($user)
         ->put(route('series.seasons.update', [$series, $season]), [
             'year' => 2021,
+            'name' => 'Test',
         ])
         ->assertRedirect(route('series.seasons.index', [$series]));
 });

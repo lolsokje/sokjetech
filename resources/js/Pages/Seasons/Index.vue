@@ -10,13 +10,13 @@
     <table class="table table-bordered table-dark table-narrow">
         <thead>
         <tr>
-            <th>Year</th>
+            <th>Season</th>
             <th colspan="2"></th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="season in series.seasons" :key="season.id">
-            <td class="padded-left">{{ season.year }}</td>
+            <td class="padded-left">{{ season.full_name }}</td>
             <td class="small-centered">
                 <InertiaLink v-if="can.edit" :href="route('series.seasons.edit', [series, season])">edit</InertiaLink>
             </td>

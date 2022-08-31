@@ -41,7 +41,7 @@ ul.nav.pills {
 
 .form-control {
   &:disabled {
-    background-color: $darker;
+    background-color: lighten(#24242c, 10%);
     cursor: not-allowed;
   }
 }
