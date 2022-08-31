@@ -34,7 +34,7 @@
             </thead>
             <tbody>
             <tr v-for="team in teams" :key="team.id">
-                <BackgroundColourCell :backgroundColour="team.primary_colour"/>
+                <BackgroundColourCell :backgroundColour="team.accent_colour"/>
                 <td class="padded-left">{{ team.full_name }}</td>
                 <td class="padded-left">{{ team.short_name }}</td>
                 <td class="padded-left">{{ team.team_principal }}</td>

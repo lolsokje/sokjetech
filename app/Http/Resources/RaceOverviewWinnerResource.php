@@ -17,7 +17,7 @@ class RaceOverviewWinnerResource extends JsonResource
             'full_name' => $driver->fullName,
             'number' => $racer->number,
             'team_name' => $entrant->short_name,
-            'background_colour' => $entrant->primary_colour,
+            'background_colour' => $entrant->accent_colour,
             'style_string' => $entrant->style_string,
         ];
     }

@@ -58,7 +58,7 @@
                 {{ getPositionChange(driver) }}
             </td>
             <td class="colour-accent"></td>
-            <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.short_team_name }}</td>

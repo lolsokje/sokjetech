@@ -26,6 +26,7 @@ class EntrantFactory extends Factory
             'team_principal' => $team->team_principal,
             'primary_colour' => $team->primary_colour,
             'secondary_colour' => $team->secondary_colour,
+            'accent_colour' => $team->accent_colour,
             'country' => $team->country,
             'active' => true,
             'rating' => $this->faker->numberBetween(20, 40),

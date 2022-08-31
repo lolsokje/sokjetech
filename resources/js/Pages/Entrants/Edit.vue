@@ -33,11 +33,14 @@
                     <label class="form-label" for="secondary_colour">Secondary colour</label>
                     <ColourPicker v-model="form.secondary_colour" id="secondary_colour" required/>
                 </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="accent_colour">Accent colour</label>
+                    <ColourPicker v-model="form.accent_colour" id="accent_colour" required/>
+                </div>
             </div>
 
-            <TeamNamePreview :background-colour="form.primary_colour" :name="form.full_name"
-                             :text-colour="form.secondary_colour"
-            />
+            <TeamNamePreview :team="form"/>
 
             <div v-if="engines.length" class="my-3">
                 <SearchableDropdown :items="engines" :selected-item="selectedEngine" label="Engine supplier"
@@ -88,6 +91,7 @@ const form = useForm({
     team_principal: props.entrant.team_principal,
     primary_colour: props.entrant.primary_colour,
     secondary_colour: props.entrant.secondary_colour,
+    accent_colour: props.entrant.accent_colour,
     country: props.entrant.country,
     engine_id: props.entrant.engine_id,
 });

@@ -3,7 +3,7 @@ export default class DevelopmentTeam {
         this.id = team.id;
         this.name = team.team.full_name;
         this.style = team.style_string;
-        this.primary_colour = team.primary_colour;
+        this.accent_colour = team.accent_colour;
         this.rating = isReliability ? team.reliability : team.rating;
         this.min = 0;
         this.max = 0;

@@ -16,6 +16,7 @@ test('a universe owner can create teams', function () {
             'team_principal' => 'Mattio Binotto',
             'primary_colour' => '#FF0000',
             'secondary_colour' => '#FFFFFF',
+            'accent_colour' => '#FF0000',
             'country' => 'IT',
         ])
         ->assertRedirect(route('universes.teams.index', [$universe]));
@@ -52,6 +53,7 @@ test('an authenticated user can\'t create teams in another user\'s universe', fu
             'team_principal' => 'Mattio Binotto',
             'primary_colour' => '#FF0000',
             'secondary_colour' => '#FFFFFF',
+            'accent_colour' => '#FF0000',
             'country' => 'IT',
         ])
         ->assertForbidden();
@@ -72,6 +74,7 @@ test('a universe owner can update their teams', function () {
             'team_principal' => $team->team_principal,
             'primary_colour' => $team->primary_colour,
             'secondary_colour' => $team->secondary_colour,
+            'accent_colour' => $team->accent_colour,
             'country' => $team->country,
         ])
         ->assertRedirect(route('universes.teams.index', [$universe]));
@@ -111,6 +114,7 @@ test('an authenticatead user can\'t update another user\'s teams', function () {
             'team_principal' => $team->team_principal,
             'primary_colour' => $team->primary_colour,
             'secondary_colour' => $team->secondary_colour,
+            'accent_colour' => $team->accent_colour,
             'country' => $team->country,
         ])
         ->assertForbidden();

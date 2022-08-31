@@ -35,7 +35,7 @@
             <td class="small-centered">
                 {{ position + 1 }}
             </td>
-            <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>

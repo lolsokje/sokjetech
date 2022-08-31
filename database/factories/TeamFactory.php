@@ -16,6 +16,7 @@ class TeamFactory extends Factory
             'team_principal' => $this->faker->name(),
             'primary_colour' => $this->faker->hexColor(),
             'secondary_colour' => $this->faker->hexColor(),
+            'accent_colour' => $this->faker->hexColor(),
             'country' => $this->faker->countryCode(),
         ];
     }

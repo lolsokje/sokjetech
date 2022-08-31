@@ -24,7 +24,7 @@
         </thead>
         <tbody>
         <tr v-for="entrant in season.entrants" :key="entrant.id">
-            <BackgroundColourCell :backgroundColour="entrant.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="entrant.accent_colour"/>
             <td class="padded-left">{{ entrant.full_name }}</td>
             <td class="padded-left">{{ entrant.short_name }}</td>
             <td class="padded-left">{{ entrant.team_principal }}</td>

@@ -15,7 +15,7 @@ class RaceResultPageResource extends JsonResource
         return [
             'starting_position' => $this->starting_position,
             'position' => $this->position,
-            'background_colour' => $entrant->primary_colour,
+            'background_colour' => $entrant->accent_colour,
             'style_string' => $entrant->style_string,
             'full_name' => $driver->full_name,
             'number' => $racer->number,

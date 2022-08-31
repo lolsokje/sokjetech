@@ -15,7 +15,7 @@ class TeamStandingsResource extends JsonResource
             'full_name' => $this->full_name,
             'team_name' => $this->short_name,
             'team_principal' => $this->team_principal,
-            'background_colour' => $this->primary_colour,
+            'background_colour' => $this->accent_colour,
             'style_string' => $this->style_string,
             'driver_count' => count($this->racersWithParticipation),
             'results' => $results,

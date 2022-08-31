@@ -53,7 +53,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="driver in form.drivers" :key="driver.id">
-                    <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+                    <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
                     <td class="padded-left align-middle">{{ driver.full_name }}</td>
                     <td :style="driver.team_style" class="small-centered">{{ driver.number }}</td>
                     <td class="padded-left align-middle">{{ driver.team_name }}</td>

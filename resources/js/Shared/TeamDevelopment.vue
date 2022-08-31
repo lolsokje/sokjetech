@@ -51,7 +51,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="team in form.teams" :key="team.id">
-                    <BackgroundColourCell :backgroundColour="team.primary_colour"/>
+                    <BackgroundColourCell :backgroundColour="team.accent_colour"/>
                     <td class="padded-left align-middle">{{ team.name }}</td>
                     <td class="small-centered">{{ team.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">

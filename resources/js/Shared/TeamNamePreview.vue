@@ -1,35 +1,47 @@
 <template>
-	<div class="col-6 mt-4">
-		<label class="form-label">Preview</label>
-		<div :style="style" class="team-name-preview">
-			{{ name }}
-		</div>
-	</div>
+    <div class="mt-4">
+        <label class="form-label">Preview</label>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="colour-accent"></th>
+                <th>Full name</th>
+                <th>Short name</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <BackgroundColourCell :backgroundColour="team.accent_colour"/>
+                <td class="padded-left">{{ team.full_name }}</td>
+                <td class="padded-left">{{ team.short_name }}</td>
+                <td class="small-centered">
+                    <CountryFlag :country="team.country"/>
+                </td>
+                <td class="small-centered" :style="style">{{ number }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import { getRoll } from '@/Composables/useRunQualifying';
 
 const props = defineProps({
-	name: {
-		type: String,
-		required: true,
-	},
-	backgroundColour: {
-		type: String,
-		required: true,
-	},
-	textColour: {
-		type: String,
-		required: true,
-	},
+    team: Object,
 });
 
+const number = getRoll(0, 999);
+
 const style = computed(() => {
-	return {
-		backgroundColor: props.backgroundColour,
-		color: props.textColour,
-	};
+    return {
+        backgroundColor: props.team.primary_colour,
+        color: props.team.secondary_colour,
+    };
 });
 </script>
 

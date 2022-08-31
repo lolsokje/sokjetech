@@ -30,7 +30,7 @@
         <tbody>
         <tr v-for="(driver, key) in drivers" :key="driver.id">
             <td class="small-centered">{{ key + 1 }}</td>
-            <BackgroundColourCell :backgroundColour="driver.entrant.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="driver.entrant.accent_colour"/>
             <td class="padded-left">{{ driver.driver_name }}</td>
             <td v-if="canEdit" class="small-centered">
                 <InertiaLink :href="route('seasons.racers.create', [season, driver.entrant])">

@@ -14,7 +14,7 @@ class TeamResource extends JsonResource
             'short_name' => $this->resource->short_name,
             'team_principal' => $this->resource->team_principal,
             'country' => $this->resource->country,
-            'primary_colour' => $this->resource->primary_colour,
+            'accent_colour' => $this->resource->accent_colour,
         ];
     }
 }
