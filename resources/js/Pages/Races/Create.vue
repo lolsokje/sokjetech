@@ -37,8 +37,12 @@
                 <td><input v-model="stint.use_team_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_driver_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_engine_rating" type="checkbox"></td>
-                <td class="big-centered"><span v-if="form.stints.length > 1" class="text-primary" role="button"
-                                               @click="deleteStint(stint.number)">delete stint</span></td>
+                <td class="big-centered">
+                    <span v-if="form.stints.length > 1" class="text-primary" role="button"
+                          @click="deleteStint(stint.order)"
+                    >delete stint
+                    </span>
+                </td>
             </tr>
             </tbody>
         </table>
