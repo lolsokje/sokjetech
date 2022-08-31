@@ -23,7 +23,15 @@ class RacerCreateRequest extends FormRequest
         return [
             'drivers' => ['required', 'array', new UniqueNumbersInRequest(), new UniqueDriversInRequest()],
             'drivers.*.driver_id' => ['required', 'exists:drivers,id', new UniqueActiveDriversInSeason($parameters)],
-            'drivers.*.number' => ['required', 'integer', new UniqueNumbersInSeason($parameters)],
+            'drivers.*.number' => ['required', 'integer', new UniqueNumbersInSeason($parameters), 'min:0', 'max:9999'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'drivers.*.number.min' => 'Driver numbers must not be less than 0',
+            'drivers.*.number.max' => 'Driver numbers must not be greater than 9999',
         ];
     }
 
