@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <table class="table">
+    <table class="table" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
@@ -52,6 +52,7 @@
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
@@ -60,6 +61,7 @@ import { fillDriverRuns, performQualifyingRun } from '@/Composables/useRunQualif
 import { computed, onBeforeUnmount, onMounted } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell';
 import { isEven } from '@/Utilities/IsEven';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
 
 const props = defineProps({
     formatDetails: Object,
