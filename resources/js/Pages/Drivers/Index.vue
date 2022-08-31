@@ -39,6 +39,7 @@
             </tr>
             </tbody>
         </table>
+        <Pagination :links="links"/>
     </template>
     <p v-else>No drivers found </p>
 </template>
@@ -48,12 +49,14 @@ import BackLink from '@/Shared/BackLink';
 import { reactive, watch } from 'vue';
 import { filter, sort } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon';
+import Pagination from '@/Shared/Pagination';
 
 const props = defineProps({
     universe: Object,
     drivers: Object,
     filters: Object,
     can: Object,
+    links: Array,
 });
 
 const params = reactive({

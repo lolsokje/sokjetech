@@ -25,6 +25,7 @@ class DriverController extends Controller
 
         return Inertia::render('Drivers/Index', [
             'universe' => $universe,
+            'links' => $drivers->linkCollection(),
             'drivers' => DriverResource::collection($drivers)->toArray($request),
             'filters' => $request->validated(),
         ]);
