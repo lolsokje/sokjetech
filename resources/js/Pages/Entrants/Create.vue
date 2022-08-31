@@ -1,7 +1,8 @@
 <template>
     <form class="form-narrow" @submit.prevent="form.post(route('seasons.entrants.store', [season]))">
         <SearchableDropdown :items="teams" label="Select a base team" text-key="full_name" value-key="id"
-                            @selected="setBaseTeam"/>
+                            @selected="setBaseTeam"
+        />
 
         <template v-if="form.team_id !== ''">
             <div class="mb-3">
@@ -24,19 +25,18 @@
             <div class="row mb-3">
                 <div class="col-3">
                     <label class="form-label" for="primary_colour">Primary colour</label>
-                    <input id="primary_colour" v-model="form.primary_colour" class="form-control w-50 h-75" required
-                           type="color">
+                    <ColourPicker v-model="form.primary_colour" id="primary_colour" required/>
                 </div>
 
                 <div class="col-3">
                     <label class="form-label" for="secondary_colour">Secondary colour</label>
-                    <input id="secondary_colour" v-model="form.secondary_colour" class="form-control w-50 h-75" required
-                           type="color">
+                    <ColourPicker v-model="form.secondary_colour" id="secondary_colour" required/>
                 </div>
             </div>
 
             <TeamNamePreview :background-colour="form.primary_colour" :name="form.full_name"
-                             :text-colour="form.secondary_colour"/>
+                             :text-colour="form.secondary_colour"
+            />
 
             <div v-if="engines.length" class="my-3">
                 <SearchableDropdown :items="engines" label="Engine supplier" @selected="setEngineSupplier"/>
@@ -52,6 +52,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import SearchableDropdown from '@/Shared/SearchableDropdown';
 import CountrySelect from '@/Shared/CountrySelect';
 import TeamNamePreview from '@/Shared/TeamNamePreview';
+import ColourPicker from '@/Components/ColourPicker';
 
 const props = defineProps({
     season: {

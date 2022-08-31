@@ -24,19 +24,18 @@
         <div class="row mb-3">
             <div class="col-3">
                 <label class="form-label" for="primary_colour">Primary colour</label>
-                <input id="primary_colour" v-model="form.primary_colour" class="form-control w-50 h-75" required
-                       type="color">
+                <ColourPicker v-model="form.primary_colour" id="primary_colour" required/>
             </div>
 
             <div class="col-3">
                 <label class="form-label" for="secondary_colour">Secondary colour</label>
-                <input id="secondary_colour" v-model="form.secondary_colour" class="form-control w-50 h-75" required
-                       type="color">
+                <ColourPicker v-model="form.secondary_colour" id="secondary_colour" required/>
             </div>
         </div>
 
         <TeamNamePreview :name="form.full_name" :background-colour="form.primary_colour"
-                         :text-colour="form.secondary_colour"/>
+                         :text-colour="form.secondary_colour"
+        />
 
         <button class="btn btn-primary mt-3" type="submit">Save team</button>
     </form>
@@ -48,6 +47,7 @@ import CountrySelect from '@/Shared/CountrySelect';
 import Errors from '@/Shared/Errors';
 import BackLink from '@/Shared/BackLink';
 import TeamNamePreview from '@/Shared/TeamNamePreview';
+import ColourPicker from '@/Components/ColourPicker';
 
 defineProps({
     universe: {
