@@ -6,7 +6,7 @@
 
         <div class="mb-3">
             <label class="form-label" for="name">Name</label>
-            <input id="name" v-model="form.name" class="form-control" type="text">
+            <input id="name" v-model="form.name" class="form-control" type="text" :placeholder="placeholder">
         </div>
 
         <SearchableDropdown
@@ -57,6 +57,8 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import SearchableDropdown from '@/Shared/SearchableDropdown';
 import Errors from '@/Shared/Errors';
 import BackLink from '@/Shared/BackLink';
+import { onMounted } from 'vue';
+import { defaultStint } from '@/Composables/useDefaultStint';
 
 const props = defineProps({
     season: {
@@ -107,6 +109,12 @@ function deleteStint (order) {
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 }
+
+onMounted(() => {
+    if (form.stints.length === 0) {
+        form.stints.push(defaultStint);
+    }
+});
 </script>
 
 <script>

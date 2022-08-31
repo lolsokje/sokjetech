@@ -56,6 +56,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import Errors from '@/Shared/Errors';
 import SearchableDropdown from '@/Shared/SearchableDropdown';
 import BackLink from '@/Shared/BackLink';
+import { defaultStint } from '@/Composables/useDefaultStint';
 
 const props = defineProps({
     season: {
@@ -73,17 +74,7 @@ const placeholder = `${props.season.year} Example Grand Prix`;
 const form = useForm({
     name: '',
     circuit_id: '',
-    stints: [
-        {
-            order: 1,
-            min_rng: 0,
-            max_rng: 30,
-            reliability: true,
-            use_team_rating: true,
-            use_driver_rating: true,
-            use_engine_rating: true,
-        },
-    ],
+    stints: [ defaultStint ],
 });
 
 function addStint () {
