@@ -8,13 +8,25 @@
     <div class="d-flex mb-3">
         <h3>Race</h3>
         <div class="ms-auto" v-if="can.edit">
-            <button v-if="canPerformStint" class="btn btn-primary" @click.prevent="performNextStint()">
+            <button v-if="canPerformStint"
+                    class="btn btn-primary"
+                    @click.prevent="performNextStint()"
+                    :disabled="raceStore.saving"
+            >
                 Run next stint
             </button>
-            <button class="btn btn-primary" v-if="canPerformFastestLap" @click.prevent="fastestLapRoll()">
+            <button class="btn btn-primary"
+                    v-if="canPerformFastestLap"
+                    @click.prevent="fastestLapRoll()"
+                    :disabled="raceStore.saving"
+            >
                 Fastest lap roll
             </button>
-            <button v-if="canCompleteRace" class="btn btn-success" @click.prevent="completeRace()">
+            <button v-if="canCompleteRace"
+                    class="btn btn-success"
+                    @click.prevent="completeRace()"
+                    :disabled="raceStore.saving"
+            >
                 Complete race
             </button>
         </div>

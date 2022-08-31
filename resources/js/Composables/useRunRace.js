@@ -169,6 +169,7 @@ const getFastestLap = () => {
 };
 
 const storeRaceResults = () => {
+    raceStore.saving = true;
     const drivers = [];
 
     raceStore.drivers.forEach(driver => {
@@ -193,5 +194,6 @@ const storeRaceResults = () => {
     };
 
     axios.post(route('weekend.race.store', [ raceStore.raceId ]), { drivers, race_details: raceDetails })
-        .catch(() => raceStore.setShowError(true));
+        .catch(() => raceStore.setShowError(true))
+        .finally(() => raceStore.saving = false);
 };

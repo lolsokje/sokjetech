@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 
 export let raceStore = reactive({
+    saving: false,
     error: false,
 
     raceId: 0,

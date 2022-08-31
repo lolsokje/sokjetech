@@ -1,20 +1,24 @@
 <template>
     <h3>Qualifying - Q{{ store.getCurrentSessionIndex() + 1 }}</h3>
     <div class="d-flex my-3">
-        <button class="btn btn-info" @click="viewPreviousSession()" v-if="canViewPreviousSession">
+        <button class="btn btn-info" @click="viewPreviousSession()" v-if="canViewPreviousSession" :disabled="saving">
             Previous session
         </button>
         <div class="ms-auto">
             <div v-if="canRunQualifying">
-                <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun">
+                <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun" :disabled="saving">
                     Perform Run
                 </button>
-                <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
+                <button @click.prevent="completeQualifying()"
+                        class="btn btn-success"
+                        v-if="canCompleteQualifying"
+                        :disabled="saving"
+                >
                     Complete qualifying
                 </button>
             </div>
             <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession"
-                    class="btn btn-secondary"
+                    class="btn btn-secondary" :disabled="saving"
             >
                 Next session
             </button>
@@ -102,6 +106,7 @@ const props = defineProps({
         required: false,
     },
     showError: Boolean,
+    saving: Boolean,
 });
 
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);

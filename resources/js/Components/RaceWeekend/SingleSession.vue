@@ -3,10 +3,14 @@
 
     <div class="d-flex my-3" v-if="canRunQualifying">
         <div class="ms-auto">
-            <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun">
+            <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun" :disabled="saving">
                 Perform run
             </button>
-            <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
+            <button @click.prevent="completeQualifying()"
+                    class="btn btn-success"
+                    v-if="canCompleteQualifying"
+                    :disabled="saving"
+            >
                 Complete qualifying
             </button>
         </div>
@@ -65,6 +69,7 @@ const props = defineProps({
     sessionDetails: Object,
     completed: Boolean,
     showError: Boolean,
+    saving: Boolean,
 });
 
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);

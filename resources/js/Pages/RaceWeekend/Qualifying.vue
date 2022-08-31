@@ -14,6 +14,7 @@
         :sessionDetails="race.qualifying_details"
         :completed="race.qualifying_completed"
         :showError="showError"
+        :saving="saving"
         @runPerformed="storeQualifyingResult"
         @completeQualifying="completeQualifying"
     />
@@ -50,6 +51,7 @@ const props = defineProps({
 });
 
 const showError = ref(false);
+const saving = ref(false);
 
 const components = {
     three_session_elimination: ThreeSessionElimination,
@@ -68,6 +70,7 @@ onMounted(() => {
 });
 
 const storeQualifyingResult = (data) => {
+    saving.value = true;
     const details = data.details;
     const drivers = [];
 
@@ -89,7 +92,8 @@ const storeQualifyingResult = (data) => {
     });
 
     axios.post(route('weekend.qualifying.results.store', [ props.race ]), { drivers, details })
-        .catch(() => showError.value = true);
+        .catch(() => showError.value = true)
+        .finally(() => saving.value = false);
 };
 
 const completeQualifying = () => {
