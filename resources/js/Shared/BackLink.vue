@@ -1,5 +1,7 @@
 <template>
-    <InertiaLink :href="backTo" class="d-inline-block my-2">&larr; back to {{ label }}</InertiaLink>
+    <div class="my-3">
+        <InertiaLink :href="backTo">&larr; back to {{ label }}</InertiaLink>
+    </div>
 </template>
 
 <script setup>
