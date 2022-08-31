@@ -20,4 +20,9 @@ class UniverseFilterRequest extends FormRequest
             'mine' => ['nullable'],
         ];
     }
+
+    public function onlyMine(): bool
+    {
+        return $this->validated('mine') === 'true';
+    }
 }

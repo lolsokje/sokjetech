@@ -21,8 +21,8 @@ class GetUniverses
             ->when($this->request->validated('search'), function (UniverseBuilder $builder, string $search) {
                 $builder->search($search);
             })
-            ->when($this->request->validated('mine'), function (UniverseBuilder $builder) {
-                $builder->where('user_id', auth()->user()?->id);
+            ->when($this->request->onlyMine(), function (UniverseBuilder $builder) {
+                $builder->where('user_id', (int) auth()->user()?->id);
             })
             ->orderBy('name', $this->request->validated('direction', 'asc'))
             ->paginate(20);
