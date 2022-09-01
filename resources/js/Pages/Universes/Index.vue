@@ -11,7 +11,7 @@
         <label class="form-check-label" for="edit-mode">Show only my universes</label>
     </div>
     <template v-if="universes.length">
-        <table class="table table-bordered table-dark table-narrow">
+        <table class="table table-narrow">
             <thead>
             <tr>
                 <th role="button" @click="sort(params)">

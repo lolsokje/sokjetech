@@ -4,7 +4,7 @@
             <TabLinks :links="links"/>
         </div>
 
-        <div class="w-100 bg-dark p-4">
+        <div class="st-card p-4">
             <h1>{{ series.name }}</h1>
             <slot/>
         </div>

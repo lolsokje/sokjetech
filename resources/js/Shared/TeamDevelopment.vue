@@ -53,7 +53,7 @@
                 <tr v-for="team in form.teams" :key="team.id">
                     <BackgroundColourCell :backgroundColour="team.accent_colour"/>
                     <td class="padded-left align-middle">{{ team.name }}</td>
-                    <td class="small-centered">{{ team.rating }}</td>
+                    <td class="small-centered bg-accent-odd">{{ team.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="team.min" class="form-control" type="number">
                     </td>
@@ -61,7 +61,7 @@
                         <input v-model="team.max" class="form-control" type="number">
                     </td>
                     <td class="small-centered">{{ team.dev }}</td>
-                    <td class="small-centered">
+                    <td class="small-centered bg-accent-even">
                         <template v-if="!state.editRatings">{{ team.new }}</template>
                         <template v-else>
                             <input type="number" class="form-control" v-model="team.new">

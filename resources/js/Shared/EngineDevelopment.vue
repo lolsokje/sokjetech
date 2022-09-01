@@ -65,7 +65,7 @@
                             {{ engine.individual_rating ? 'Yes' : 'No' }}
                         </template>
                     </td>
-                    <td class="small-centered">{{ engine.rating }}</td>
+                    <td class="small-centered bg-accent-odd">{{ engine.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.min" class="form-control" type="number"
                                v-if="showEngineInput(engine)"
@@ -77,7 +77,7 @@
                         >
                     </td>
                     <td class="small-centered">{{ engine.dev }}</td>
-                    <td class="small-centered">
+                    <td class="small-centered bg-accent-even">
                         <template v-if="!state.editRatings">
                             {{ engine.new }}
                         </template>

@@ -1,0 +1,81 @@
+body {
+  --base-100: #15151E;
+  --base-200: #24242C;
+  --base-300: #3A3A41;
+  --color: #FFFFFF;
+
+  --primary: #F8B739;
+  --primary-hover: #C6922E;
+  --primary-color: var(--base-100);
+
+  --secondary: #6610F2;
+  --secondary-hover: #520DC2;
+  --secondary-color: var(--color);
+
+  --success: #76BA1B;
+  --success-hover: #5E9516;
+  --success-color: var(--color);
+
+  --danger: #C80000;
+  --danger-hover: #A00000;
+  --danger-color: var(--color);
+
+  --warning: #FA8C00;
+  --warning-hover: #C87000;
+  --warning-color: var(--color);
+}
+
+.form-control,
+.form-select {
+  --input-background-color: var(--base-100);
+  --input-background-disabled: var(--base-300);
+  --input-border-color: var(--base-300);
+}
+
+.btn {
+  transition: all .15s ease-in-out;
+
+  --border-top-left-radius: .5rem;
+  --border-top-right-radius: 0;
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: .5rem;
+
+  --border-top-left-hover-radius: 0;
+  --border-top-right-hover-radius: .5rem;
+  --border-bottom-left-hover-radius: .5rem;
+  --border-bottom-right-hover-radius: 0;
+}
+
+.table {
+  --table-bg-header: var(--base-100);
+  --table-border-color-header: var(--base-100);
+  --table-color-header: var(--color);
+  --table-padding-header: 1rem;
+  --table-font-size-header: 1.1rem;
+
+  --table-border-color-body: var(--base-300);
+  --table-font-size-body: 1.1rem;
+  --table-bg-body: var(--base-200);
+  --table-color-body: var(--color);
+
+  --position-first-background: #FFD966;
+  --position-first-color: var(--base-100);
+
+  --position-second-background: #BFBFBF;
+  --position-second-color: var(--base-100);
+
+  --position-third-background: #C8980A;
+  --position-third-color: var(--base-100);
+
+  --position-points-background: #92D050;
+  --position-points-color: var(--base-100);
+
+  --position-other-background: #5B9BD5;
+  --position-other-color: var(--base-100);
+
+  --position-dnf-background: #DC3545;
+  --position-dnf-color: var(--base-100);
+
+  --bg-odd: var(--base-100);
+  --bg-even: var(--base-300);
+}

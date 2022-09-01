@@ -1,0 +1,17 @@
+@import 'light';
+@import 'f1-base';
+
+body {
+  --base-100: #FFFFFF;
+  --base-200: #F7F4F1;
+  --base-300: #DEDCD9;
+}
+
+.table {
+  --table-color-header: var(--base-100);
+
+  --table-bg-body: var(--base-100);
+
+  --bg-odd: var(--base-300);
+  --bg-even: var(--base-200);
+}

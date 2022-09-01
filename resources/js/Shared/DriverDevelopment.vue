@@ -57,7 +57,7 @@
                     <td class="padded-left align-middle">{{ driver.full_name }}</td>
                     <td :style="driver.team_style" class="small-centered">{{ driver.number }}</td>
                     <td class="padded-left align-middle">{{ driver.team_name }}</td>
-                    <td class="small-centered">{{ driver.rating }}</td>
+                    <td class="small-centered bg-accent-odd">{{ driver.rating }}</td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="driver.min" class="form-control" type="number">
                     </td>
@@ -65,7 +65,7 @@
                         <input v-model="driver.max" class="form-control" type="number">
                     </td>
                     <td class="small-centered">{{ driver.dev }}</td>
-                    <td class="small-centered">
+                    <td class="small-centered bg-accent-even">
                         <template v-if="!state.editRatings">{{ driver.new }}</template>
                         <template v-else>
                             <input type="number" class="form-control" v-model="driver.new">

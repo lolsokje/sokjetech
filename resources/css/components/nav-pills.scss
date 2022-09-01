@@ -1,0 +1,35 @@
+ul.pills {
+  .nav-item {
+    background-color: var(--base-200);
+
+    &:first-of-type {
+      border-radius: .75rem 0 0 .75rem;
+    }
+
+    &:last-of-type {
+      border-radius: 0 .75rem .75rem 0;
+    }
+
+    &:not(:last-of-type) {
+      border-right: 3px solid var(--base-100);
+    }
+
+    .nav-link {
+      padding: 1.5rem;
+    }
+
+    .dropdown-menu.show {
+      background-color: var(--base-300);
+
+      .dropdown-item {
+        color: var(--color);
+      }
+
+      .dropdown-item:hover,
+      .dropdown-item:focus {
+        background-color: var(--base-100);
+        color: var(--color);
+      }
+    }
+  }
+}

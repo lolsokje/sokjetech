@@ -6,7 +6,7 @@
         <InertiaLink :href="route('weekend.race', race)" class="btn btn-primary ms-auto">Go to race</InertiaLink>
     </div>
 
-    <table class="table table-bordered table-dark table-narrow" id="screenshot-target">
+    <table class="table table-narrow" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">Pos</th>

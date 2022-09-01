@@ -47,10 +47,10 @@
                     entrant
                 </InertiaLink>
             </td>
-            <td class="small-centered">{{ driver.team_rating }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.team_rating }}</td>
             <td class="small-centered">{{ driver.driver_rating }}</td>
-            <td class="small-centered">{{ driver.engine_rating }}</td>
-            <td class="small-centered">{{ driver.total_rating }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.engine_rating }}</td>
+            <td class="small-centered bg-accent-even">{{ driver.total_rating }}</td>
         </tr>
         </tbody>
     </table>

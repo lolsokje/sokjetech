@@ -1,0 +1,39 @@
+body {
+  --primary: #E10600;
+  --primary-hover: #B40500;
+  --primary-color: var(--base-100);
+
+  --secondary: #00DBE1;
+  --secondary-hover: #00AFB4;
+  --secondary-color: var(--color);
+
+  --success: #43EF39;
+  --success-hover: #36Bf2E;
+  --success-color: var(--color);
+
+  --danger: #CB392D;
+  --danger-hover: #A22E24;
+  --danger-color: var(--base-100);
+
+  --warning: #FCD600;
+  --warning-hover: #CAAB00;
+  --warning-color: var(--color);
+}
+
+.table {
+  --table-bg-header: var(--primary);
+  --table-border-color-header: var(--primary);
+}
+
+.btn {
+  --button-border-radius: .25rem;
+  --border-top-left-radius: var(--button-border-radius);
+  --border-top-right-radius: var(--button-border-radius);
+  --border-bottom-right-radius: var(--button-border-radius);
+  --border-bottom-left-radius: var(--button-border-radius);
+
+  --border-bottom-left-hover-radius: var(--button-border-radius);
+  --border-bottom-right-hover-radius: var(--button-border-radius);
+  --border-top-left-hover-radius: var(--button-border-radius);
+  --border-top-right-hover-radius: var(--button-border-radius);
+}

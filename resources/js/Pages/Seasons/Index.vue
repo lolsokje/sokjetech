@@ -7,7 +7,7 @@
         Create season
     </InertiaLink>
 
-    <table class="table table-bordered table-dark table-narrow">
+    <table class="table table-narrow">
         <thead>
         <tr>
             <th>Season</th>

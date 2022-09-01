@@ -8,17 +8,18 @@
 
         <p v-if="hasError" class="text-danger">This driver or number has already been selected</p>
         <SearchableDropdown :items="drivers" :selected-item="state.driver"
-                            label="Select a driver" text-key="full_name" @selected="setDriver"/>
+                            label="Select a driver" text-key="full_name" @selected="setDriver"
+        />
 
         <div class="mb-3 col-6">
             <label for="number">Driver number</label>
             <input id="number" v-model="state.number" class="form-control" type="number">
         </div>
 
-        <button class="btn btn-primary" type="button" @click.prevent="addDriver">Add driver</button>
+        <button class="btn btn-secondary" type="button" @click.prevent="addDriver">Add driver</button>
 
         <p class="mt-3">Current drivers</p>
-        <table class="table table-bordered table-dark my-3">
+        <table class="table my-3">
             <thead>
             <tr>
                 <th>Driver</th>

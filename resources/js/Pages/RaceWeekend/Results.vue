@@ -56,7 +56,7 @@ const getResultDisplayClasses = (driver) => {
     const classes = [];
 
     if (driver.dnf) {
-        classes.push('bg-danger');
+        classes.push('position-dnf');
     }
 
     if (driver.starting_position === 1) {

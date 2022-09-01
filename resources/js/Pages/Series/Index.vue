@@ -7,7 +7,7 @@
         Add series
     </InertiaLink>
 
-    <table class="table table-bordered table-dark table-narrow">
+    <table class="table table-narrow">
         <thead>
         <tr>
             <th>Name</th>

@@ -130,7 +130,7 @@ const getPositionChangeDisplayClasses = (driver) => {
 };
 
 const getTotalDisplayClasses = (driver) => {
-    return driver.dnf ? 'bg-danger' : '';
+    return driver.dnf ? 'position-dnf' : '';
 };
 
 const getTotalDisplayValue = (driver) => {

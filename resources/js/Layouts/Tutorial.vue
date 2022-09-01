@@ -1,6 +1,6 @@
 <template>
     <Base>
-        <div class="bg-dark p-4">
+        <div class="st-card p-4">
             <div class="col-6">
                 <slot/>
             </div>
