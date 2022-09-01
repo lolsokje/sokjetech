@@ -42,12 +42,12 @@
         <tbody>
         <template v-for="(driver, position) in drivers" :key="driver.id">
             <tr v-if="canDriverParticipateInCurrentSession(position)">
-                <td class="small-centered" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
+                <td class="smallest-centered" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
                     {{ position + 1 }}
                 </td>
                 <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+                <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
                 <td class="padded-left">{{ driver.team_name }}</td>
                 <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
                 <td v-for="i in runsPerSession"

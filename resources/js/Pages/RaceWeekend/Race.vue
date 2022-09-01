@@ -52,15 +52,15 @@
         </thead>
         <tbody>
         <tr v-for="driver in drivers" :key="driver.id">
-            <td class="small-centered">{{ driver.position }}</td>
-            <td class="small-centered">{{ driver.starting_position }}</td>
-            <td class="small-centered" :class="getPositionChangeDisplayClasses(driver)">
+            <td class="smallest-centered">{{ driver.position }}</td>
+            <td class="smallest-centered">{{ driver.starting_position }}</td>
+            <td class="smallest-centered" :class="getPositionChangeDisplayClasses(driver)">
                 {{ getPositionChange(driver) }}
             </td>
             <td class="colour-accent"></td>
             <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+            <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.short_team_name }}</td>
             <td class="small-centered bg-accent-even">{{ driver.total_rating }}</td>
             <td class="small-centered bg-accent-odd">{{ driver.bonus }}</td>

@@ -62,17 +62,17 @@
         </thead>
         <tbody>
         <tr v-for="race in races" :key="race.id">
-            <td class="small-centered">{{ race.order }}</td>
-            <td class="small-centered">
+            <td class="smallest-centered">{{ race.order }}</td>
+            <td class="smallest-centered">
                 <CountryFlag :country="race.circuit.country"/>
             </td>
             <td class="padded-left">{{ race.name }}</td>
             <template v-if="!spoilerFree && race.completed">
-                <td class="small-centered" :style="race.pole?.style_string">{{ race.pole?.number }}</td>
+                <td class="smallest-centered" :style="race.pole?.style_string">{{ race.pole?.number }}</td>
                 <td class="padded-left">
                     {{ race.pole?.full_name }}
                 </td>
-                <td class="small-centered" :style="race.winner?.style_string">{{ race.winner?.number }}</td>
+                <td class="smallest-centered" :style="race.winner?.style_string">{{ race.winner?.number }}</td>
                 <td class="padded-left">{{ race.winner?.full_name }}</td>
                 <BackgroundColourCell :backgroundColour="race.winner?.background_colour"/>
                 <td class="padded-left">{{ race.winner?.team_name }}</td>

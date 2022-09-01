@@ -29,9 +29,9 @@
             <td class="small-centered">{{ index + 1 }}</td>
             <BackgroundColourCell :backgroundColour="driver.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+            <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="medium-centered">{{ driver.points }}</td>
+            <td class="small-centered">{{ driver.points }}</td>
             <td class="smallest-centered" v-for="race in races" :key="race.order"
                 :class="getResultDisplayClasses(driver.results[race.order])"
             >

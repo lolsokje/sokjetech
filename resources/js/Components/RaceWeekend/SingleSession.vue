@@ -32,12 +32,12 @@
         </thead>
         <tbody>
         <tr v-for="(driver, position) in drivers" :key="driver.id">
-            <td class="small-centered">
+            <td class="smallest-centered">
                 {{ position + 1 }}
             </td>
             <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+            <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
             <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
             <td v-for="i in formatDetails.runs_per_session"

@@ -82,11 +82,11 @@
     }
 
     &.smallest-centered {
-      @include centered-width-table-column(80px);
+      @include centered-width-table-column(70px);
     }
 
     &.small-centered {
-      @include centered-width-table-column(90px);
+      @include centered-width-table-column(80px);
     }
 
     &.medium-centered {

@@ -29,7 +29,7 @@
         </thead>
         <tbody>
         <tr v-for="(driver, key) in drivers" :key="driver.id">
-            <td class="small-centered">{{ key + 1 }}</td>
+            <td class="smallest-centered">{{ key + 1 }}</td>
             <BackgroundColourCell :backgroundColour="driver.entrant.accent_colour"/>
             <td class="padded-left">{{ driver.driver_name }}</td>
             <td v-if="canEdit" class="small-centered">
@@ -37,10 +37,10 @@
                     driver
                 </InertiaLink>
             </td>
-            <td class="text-center">
+            <td class="small-centered">
                 <CountryFlag :country="driver.country"/>
             </td>
-            <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
+            <td :style="driver.style_string" class="smallest-centered">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
             <td v-if="canEdit && !hasActiveRace" class="small-centered">
                 <InertiaLink :href="route('seasons.entrants.edit', [season, driver.entrant])">

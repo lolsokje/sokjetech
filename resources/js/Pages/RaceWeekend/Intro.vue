@@ -23,7 +23,7 @@
             </thead>
             <tbody>
             <tr v-for="stint in stints" :key="stint.order">
-                <td class="text-center">{{ stint.order }}</td>
+                <td class="smallest-centered">{{ stint.order }}</td>
                 <td class="text-center">
                     <fa :icon="getIcon(stint.use_driver_rating)"/>
                 </td>
@@ -59,12 +59,12 @@
                     </thead>
                     <tbody>
                     <tr v-for="(driver, index) in driverStandings" :key="index">
-                        <td class="text-center">{{ index + 1 }}</td>
+                        <td class="smallest-centered">{{ index + 1 }}</td>
                         <BackgroundColourCell :backgroundColour="driver.background_colour"/>
                         <td class="padded-left">{{ driver.full_name }}</td>
-                        <td class="text-center" :style="driver.style_string">{{ driver.number }}</td>
+                        <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
                         <td class="padded-left">{{ driver.team_name }}</td>
-                        <td class="text-center">{{ driver.points }}</td>
+                        <td class="smallest-centered">{{ driver.points }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -83,11 +83,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="(team, index) in teamStandings" :key="index">
-                        <td class="text-center">{{ index + 1 }}</td>
+                        <td class="smallest-centered">{{ index + 1 }}</td>
                         <BackgroundColourCell :backgroundColour="team.background_colour"/>
                         <td class="padded-left">{{ team.full_name }}</td>
                         <td class="padded-left">{{ team.team_principal }}</td>
-                        <td class="text-center">{{ team.points }}</td>
+                        <td class="smallest-centered">{{ team.points }}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -24,11 +24,11 @@
             </thead>
             <tbody>
             <tr v-for="driver in drivers" :key="driver.id">
-                <td class="small-centered">{{ driver.position }}</td>
+                <td class="smallest-centered">{{ driver.position }}</td>
                 <td class="colour-accent"></td>
                 <BackgroundColourCell :backgroundColour="driver.background_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
+                <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
                 <td class="padded-left">{{ driver.team_name }}</td>
                 <td class="text-center text-uppercase" :class="getResultDisplayClasses(driver)">
                     {{ driver.dnf ? driver.dnf : driver.points }}
