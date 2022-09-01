@@ -23,6 +23,12 @@ body {
 .table {
   --table-bg-header: var(--primary);
   --table-border-color-header: var(--primary);
+
+  --table-header-font: 'f1-regular';
+  --table-font-size-header: 0.9rem;
+
+  --table-font-size-body: 0.9rem;
+  --table-body-font: 'f1-regular';
 }
 
 .btn {
