@@ -3,9 +3,9 @@ body {
   --primary-hover: #B40500;
   --primary-color: var(--base-100);
 
-  --secondary: #00DBE1;
-  --secondary-hover: #00AFB4;
-  --secondary-color: var(--color);
+  --secondary: #1F1F27;
+  --secondary-hover: #38383F;
+  --secondary-color: var(--base-100);
 
   --success: #43EF39;
   --success-hover: #36Bf2E;
@@ -18,6 +18,8 @@ body {
   --warning: #FCD600;
   --warning-hover: #CAAB00;
   --warning-color: var(--color);
+
+  --body-font-family: 'titillium-regular', sans-serif;
 }
 
 .table {

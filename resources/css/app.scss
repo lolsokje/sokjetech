@@ -3,6 +3,16 @@
   src: url('fonts/f1-regular.ttf');
 }
 
+@font-face {
+  font-family: 'titillium-regular';
+  src: url('fonts/titillium-regular.ttf');
+}
+
+@font-face {
+  font-family: 'roboto-regular';
+  src: url('fonts/roboto-regular.ttf');
+}
+
 @import 'bootstrap';
 @import 'components/tables';
 @import 'components/buttons';
@@ -32,7 +42,7 @@
 }
 
 body {
-  --bs-light: var(--primary);
+  font-family: var(--body-font-family);
 }
 
 body {
