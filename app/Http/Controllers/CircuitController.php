@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\GetCircuits;
 use App\Http\Requests\CircuitCreateRequest;
 use App\Http\Requests\CircuitFilterRequest;
+use App\Http\Resources\CircuitResource;
 use App\Models\Circuit;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -22,8 +23,9 @@ class CircuitController extends Controller
         $circuits = (new GetCircuits($request))->handle();
 
         return Inertia::render('Circuits/Index', [
-            'circuits' => $circuits,
-            'filters' => $request->all(['search', 'field', 'direction']),
+            'circuits' => CircuitResource::collection($circuits)->toArray($request),
+            'links' => $circuits->linkCollection(),
+            'filters' => $request->validated(),
         ]);
     }
 
@@ -34,7 +36,7 @@ class CircuitController extends Controller
 
     public function store(CircuitCreateRequest $request): RedirectResponse
     {
-        $request->user()->circuits()->create($request->validated());
+        $request->user()->circuits()->create($request->data());
 
         return redirect(route('circuits.index'))
             ->with('notice', 'Circuit created');
@@ -53,7 +55,7 @@ class CircuitController extends Controller
     {
         $this->authorize('alter', $circuit);
 
-        $circuit->update($request->validated());
+        $circuit->update($request->data());
 
         return redirect(route('circuits.index'))
             ->with('notice', 'Circuit updated');

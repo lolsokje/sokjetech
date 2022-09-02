@@ -5,7 +5,7 @@
 
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
 
-    <template v-if="circuits.data.length">
+    <template v-if="circuits.length">
         <table class="table">
             <thead>
             <tr>
@@ -21,7 +21,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="circuit in circuits.data" v-bind:key="circuit.id">
+            <tr v-for="circuit in circuits" v-bind:key="circuit.id">
                 <td class="padded-left">{{ circuit.name }}</td>
                 <td class="small-centered">
                     <CountryFlag :country="circuit.country"/>
@@ -32,7 +32,7 @@
             </tr>
             </tbody>
         </table>
-        <Pagination :links="circuits.links"/>
+        <Pagination :links="links"/>
     </template>
     <p v-else>No circuits added yet</p>
 </template>
@@ -44,14 +44,9 @@ import Pagination from '@/Shared/Pagination';
 import { filter, sort } from '@/Composables/useTableFiltering';
 
 const props = defineProps({
-    circuits: {
-        type: Object,
-        required: true,
-    },
-    filters: {
-        type: Object,
-        required: true,
-    },
+    circuits: Array,
+    links: Array,
+    filters: Object,
 });
 
 const params = reactive({

@@ -7,7 +7,7 @@ use App\Http\Requests\CircuitFilterRequest;
 use App\Models\Circuit;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class GetCircuits
+class GetSharedCircuits
 {
     public function __construct(protected CircuitFilterRequest $request)
     {
@@ -16,11 +16,12 @@ class GetCircuits
     public function handle(): LengthAwarePaginator
     {
         return Circuit::query()
-            ->owned()
-            ->when($this->request->search(), function (CircuitBuilder $builder, string $search) {
-                return $builder->search($search);
-            })
             ->sort($this->request->field(), $this->request->direction())
+            ->when($this->request->search(), function (CircuitBuilder $builder, string $search) {
+                $builder->search($search);
+            })
+            ->shared()
+            ->with('user')
             ->paginate(20)
             ->withQueryString();
     }

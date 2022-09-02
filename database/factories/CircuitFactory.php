@@ -18,6 +18,16 @@ class CircuitFactory extends Factory
             'name' => $this->faker->city(),
             'country' => $this->faker->countryCode(),
             'user_id' => User::factory(),
+            'shared' => false,
         ];
+    }
+
+    public function shared(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'shared' => true,
+            ];
+        });
     }
 }

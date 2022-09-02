@@ -9,7 +9,7 @@ test('an authenticated user can create a circuit', function () {
     $this->actingAs($user)
         ->post(route('circuits.store'), [
             'name' => 'Zandvoort',
-            'country' => 'nl'
+            'country' => 'nl',
         ])
         ->assertRedirect(route('circuits.index'));
 
@@ -20,7 +20,7 @@ test('an authenticated user can create a circuit', function () {
 test('an unauthenticated user can\'t create a circuit', function () {
     $this->post(route('circuits.store'), [
         'name' => 'Zandvoort',
-        'country' => 'nl'
+        'country' => 'nl',
     ])
         ->assertForbidden();
 
@@ -34,7 +34,7 @@ test('an authenticated user can update their own circuits', function () {
     $this->actingAs($user)
         ->put(route('circuits.update', [$circuit]), [
             'name' => 'New name',
-            'country' => 'NC'
+            'country' => 'NC',
         ])->assertRedirect(route('circuits.index'));
 
     $this->assertEquals('New name', $circuit->fresh()->name);
@@ -50,7 +50,7 @@ test('an authenticated user can\'t update someone else\'s circuits', function ()
     $this->actingAs(User::factory()->create())
         ->put(route('circuits.update', [$circuit]), [
             'name' => 'New name',
-            'country' => 'NC'
+            'country' => 'NC',
         ])->assertForbidden();
 
     $this->assertEquals($name, $circuit->fresh()->name);
@@ -103,7 +103,7 @@ it('shows all circuits created by a user on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Circuits/Index')
-                ->has('circuits.data', 5) // circuits.data since circuits are paginated
-                ->has('filters')
+                ->has('circuits', 5)
+                ->has('filters'),
         );
 });

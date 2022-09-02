@@ -19,10 +19,15 @@ class CircuitBuilder extends Builder
         });
     }
 
-    public function sort(?string $field, ?string $direction): CircuitBuilder
+    public function sort(string $field, string $direction): CircuitBuilder
     {
-        $field = $field ?? 'name';
-        $direction = $direction ?? 'asc';
         return $this->orderBy($field, $direction);
+    }
+
+    public function shared(): CircuitBuilder
+    {
+        return $this->where('shared', true)
+            ->groupBy('name')
+            ->groupBy('country');
     }
 }

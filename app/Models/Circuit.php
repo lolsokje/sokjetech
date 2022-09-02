@@ -16,6 +16,10 @@ class Circuit extends SnowflakeModel
         'updated_at',
     ];
 
+    protected $casts = [
+        'shared' => 'boolean',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
