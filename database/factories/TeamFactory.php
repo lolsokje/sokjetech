@@ -20,4 +20,13 @@ class TeamFactory extends Factory
             'country' => $this->faker->countryCode(),
         ];
     }
+
+    public function shared(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'shared' => true,
+            ];
+        });
+    }
 }

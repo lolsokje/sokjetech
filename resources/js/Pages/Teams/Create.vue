@@ -40,6 +40,11 @@
 
         <TeamNamePreview :team="form"/>
 
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-inline" v-model="form.shared" id="shared">
+            <label for="shared" class="form-check-label">Share with others</label>
+        </div>
+
         <button class="btn btn-primary mt-3" type="submit">Save team</button>
     </form>
 </template>
@@ -67,6 +72,7 @@ const form = useForm({
     secondary_colour: '#FFFFFF',
     accent_colour: '#000000',
     country: '',
+    shared: false,
 });
 
 function setCountry (country) {

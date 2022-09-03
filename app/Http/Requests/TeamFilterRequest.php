@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class TeamFilterRequest extends FormRequest
+class TeamFilterRequest extends FilterRequest
 {
     public function rules(): array
     {
@@ -13,5 +11,10 @@ class TeamFilterRequest extends FormRequest
             'field' => ['nullable', 'in:full_name,short_name,team_principal,country'],
             'direction' => ['nullable', 'in:asc,desc'],
         ];
+    }
+
+    public function field(): string
+    {
+        return $this->validated('field') ?? 'full_name';
     }
 }

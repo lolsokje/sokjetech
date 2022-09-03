@@ -7,6 +7,7 @@ use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteRaceController;
 use App\Http\Controllers\CompleteSeasonController;
 use App\Http\Controllers\CopyCircuitController;
+use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
@@ -37,6 +38,7 @@ use App\Http\Controllers\ShowRaceResultPageController;
 use App\Http\Controllers\ShowRaceWeekendIntroPageController;
 use App\Http\Controllers\ShowReliabilityConfigurationController;
 use App\Http\Controllers\ShowStartingGridController;
+use App\Http\Controllers\ShowTeamDatabaseIndexPageController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\ShowTeamStandingsController;
@@ -170,6 +172,11 @@ Route::group([
     'middleware' => 'auth',
 ], function () {
     Route::get('', ShowDatabaseIndexPageController::class)->name('index');
+
+    Route::group(['prefix' => 'teams', 'as' => 'teams.'], function () {
+        Route::get('', ShowTeamDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{team}', CopyTeamController::class)->name('copy');
+    });
 
     Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
         Route::get('', ShowCircuitDatabaseIndexPageController::class)->name('index');

@@ -103,3 +103,15 @@ ul.navbar-nav {
     }
   }
 }
+
+.modal-content {
+  background-color: var(--base-100);
+
+  .modal-header {
+    border-bottom: 1px solid var(--base-300);
+  }
+
+  .modal-footer {
+    border-top: 1px solid var(--base-300);
+  }
+}

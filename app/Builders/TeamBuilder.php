@@ -27,4 +27,13 @@ class TeamBuilder extends Builder
                 ->orWhere('team_principal', 'LIKE', $like);
         });
     }
+
+    public function shared(): TeamBuilder
+    {
+        return $this
+            ->where('shared', true)
+            ->groupBy('short_name')
+            ->groupBy('full_name')
+            ->groupBy('team_principal');
+    }
 }
