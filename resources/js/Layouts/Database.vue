@@ -18,6 +18,7 @@ import TabLinks from '@/Components/TabLinks';
 const links = [
     new TabLink('database.circuits.index', 'Circuits'),
     new TabLink('database.teams.index', 'Teams'),
+    new TabLink('database.drivers.index', 'Drivers'),
 ];
 </script>
 

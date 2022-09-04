@@ -7,6 +7,7 @@ use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteRaceController;
 use App\Http\Controllers\CompleteSeasonController;
 use App\Http\Controllers\CopyCircuitController;
+use App\Http\Controllers\CopyDriverController;
 use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\ShowCircuitDatabaseIndexPageController;
 use App\Http\Controllers\ShowCopySeasonSettingsPageController;
 use App\Http\Controllers\ShowDatabaseIndexPageController;
+use App\Http\Controllers\ShowDriverDatabaseIndexPageController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowDriverStandingsController;
@@ -176,6 +178,11 @@ Route::group([
     Route::group(['prefix' => 'teams', 'as' => 'teams.'], function () {
         Route::get('', ShowTeamDatabaseIndexPageController::class)->name('index');
         Route::post('copy/{team}', CopyTeamController::class)->name('copy');
+    });
+
+    Route::group(['prefix' => 'drivers', 'as' => 'drivers.'], function () {
+        Route::get('', ShowDriverDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{driver}', CopyDriverController::class)->name('copy');
     });
 
     Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {

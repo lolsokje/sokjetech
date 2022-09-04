@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class DriverFilterRequest extends FormRequest
+class DriverFilterRequest extends FilterRequest
 {
     public function rules(): array
     {
@@ -13,5 +11,10 @@ class DriverFilterRequest extends FormRequest
             'field' => ['nullable', 'in:first_name,dob'],
             'direction' => ['nullable', 'in:asc,desc'],
         ];
+    }
+
+    public function field(): string
+    {
+        return $this->validated('field') ?? 'first_name';
     }
 }

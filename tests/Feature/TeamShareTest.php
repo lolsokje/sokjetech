@@ -51,7 +51,7 @@ it('only shows shared teams on the team database index page', function () {
         );
 });
 
-it('groups teams by short name, full_name adn team_principal', function () {
+it('groups teams by short name, full_name and team_principal', function () {
     $user = User::factory()->create();
     Team::factory(2)->shared()->create([
         'short_name' => 'Test short name',

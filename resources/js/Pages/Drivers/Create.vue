@@ -25,6 +25,11 @@
             <CountrySelect class="col" label="Country of birth" @countryChanged="setCountry"/>
         </div>
 
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-inline" v-model="form.shared" id="shared">
+            <label for="shared" class="form-check-label">Share with others</label>
+        </div>
+
         <button class="btn btn-primary" type="submit">Save driver</button>
     </form>
 </template>
@@ -47,6 +52,7 @@ const form = useForm({
     last_name: '',
     dob: '',
     country: '',
+    shared: false,
 });
 
 function setCountry (country) {
