@@ -23,38 +23,34 @@
     </table>
     <Pagination :links="links"/>
 
-    <div class="modal" tabindex="-1" id="copyEngineModal">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Copy engine</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <CustomModal id="copyEngineModal">
+        <template #header>
+            <h5 class="modal-title">Copy engine</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </template>
+        <template #default>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="universe" class="form-label">Series to copy to</label>
+                    <select id="universe" class="form-select" v-model="form.series_id">
+                        <option v-for="series in series" :key="series.id" :value="series.id">
+                            {{ series.name }} ({{ series.universe.name }})
+                        </option>
+                    </select>
                 </div>
-                <div class="modal-body">
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="universe" class="form-label">Series to copy to</label>
-                            <select id="universe" class="form-select" v-model="form.series_id">
-                                <option v-for="series in series" :key="series.id" :value="series.id">
-                                    {{ series.name }} ({{ series.universe.name }})
-                                </option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button"
-                            class="btn btn-primary"
-                            @click.prevent="copy()"
-                            :disabled="form.series_id === null || form.processing"
-                    >
-                        Copy Engine
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+            </form>
+        </template>
+        <template #footer>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button"
+                    class="btn btn-primary"
+                    @click.prevent="copy()"
+                    :disabled="form.series_id === null || form.processing"
+            >
+                Copy Engine
+            </button>
+        </template>
+    </CustomModal>
 </template>
 
 <script setup>
@@ -64,6 +60,7 @@ import OrderIcon from '@/Shared/OrderIcon';
 import Pagination from '@/Shared/Pagination';
 import { Modal } from 'bootstrap';
 import { useForm } from '@inertiajs/inertia-vue3';
+import CustomModal from '@/Components/Modal';
 
 const props = defineProps({
     engines: Array,

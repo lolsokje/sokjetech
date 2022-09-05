@@ -35,38 +35,34 @@
     </table>
     <Pagination :links="links"/>
 
-    <div class="modal" tabindex="-1" id="copyDriverModal">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Copy driver</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <CustomModal id="copyDriverModal">
+        <template #header>
+            <h5 class="modal-title">Copy driver</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </template>
+        <template #default>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="universe" class="form-label">Universe to copy to</label>
+                    <select id="universe" class="form-select" v-model="form.universe_id">
+                        <option v-for="universe in universes" :key="universe.id" :value="universe.id">
+                            {{ universe.name }}
+                        </option>
+                    </select>
                 </div>
-                <div class="modal-body">
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="universe" class="form-label">Universe to copy to</label>
-                            <select id="universe" class="form-select" v-model="form.universe_id">
-                                <option v-for="universe in universes" :key="universe.id" :value="universe.id">
-                                    {{ universe.name }}
-                                </option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button"
-                            class="btn btn-primary"
-                            @click.prevent="copy()"
-                            :disabled="form.universe_id === null || form.processing"
-                    >
-                        Copy Driver
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+            </form>
+        </template>
+        <template #footer>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button"
+                    class="btn btn-primary"
+                    @click.prevent="copy()"
+                    :disabled="form.universe_id === null || form.processing"
+            >
+                Copy Driver
+            </button>
+        </template>
+    </CustomModal>
 </template>
 
 <script setup>
@@ -76,6 +72,7 @@ import OrderIcon from '@/Shared/OrderIcon';
 import Pagination from '@/Shared/Pagination';
 import { Modal } from 'bootstrap';
 import { useForm } from '@inertiajs/inertia-vue3';
+import CustomModal from '@/Components/Modal';
 
 const props = defineProps({
     drivers: Array,
