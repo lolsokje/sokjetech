@@ -25,6 +25,7 @@ class EngineCreateRequest extends FormRequest
     {
         return [
             'name' => ['required'],
+            'shared' => ['nullable'],
         ];
     }
 }

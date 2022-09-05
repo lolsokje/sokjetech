@@ -8,6 +8,7 @@ use App\Http\Controllers\CompleteRaceController;
 use App\Http\Controllers\CompleteSeasonController;
 use App\Http\Controllers\CopyCircuitController;
 use App\Http\Controllers\CopyDriverController;
+use App\Http\Controllers\CopyEngineController;
 use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EngineController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\ShowDriverDatabaseIndexPageController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowDriverStandingsController;
+use App\Http\Controllers\ShowEngineDatabaseIndexPageController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
 use App\Http\Controllers\ShowEngineReliabilityController;
 use App\Http\Controllers\ShowPointsConfigurationController;
@@ -188,5 +190,10 @@ Route::group([
     Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
         Route::get('', ShowCircuitDatabaseIndexPageController::class)->name('index');
         Route::post('copy/{circuit}', CopyCircuitController::class)->name('copy');
+    });
+
+    Route::group(['prefix' => 'engines', 'as' => 'engines.'], function () {
+        Route::get('', ShowEngineDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{engine}', CopyEngineController::class)->name('copy');
     });
 });

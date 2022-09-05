@@ -19,6 +19,7 @@ const links = [
     new TabLink('database.circuits.index', 'Circuits'),
     new TabLink('database.teams.index', 'Teams'),
     new TabLink('database.drivers.index', 'Drivers'),
+    new TabLink('database.engines.index', 'Engines'),
 ];
 </script>
 

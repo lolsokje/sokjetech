@@ -7,6 +7,11 @@
             <input type="text" id="name" v-model="form.name" class="form-control" required>
         </div>
 
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-inline" v-model="form.shared" id="shared">
+            <label for="shared" class="form-check-label">Share with others</label>
+        </div>
+
         <button type="submit" class="btn btn-primary">Save engine</button>
     </form>
 </template>
@@ -24,6 +29,7 @@ defineProps({
 
 const form = useForm({
     name: '',
+    shared: false,
 });
 </script>
 
