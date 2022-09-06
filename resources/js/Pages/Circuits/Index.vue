@@ -3,6 +3,10 @@
 
     <InertiaLink :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</InertiaLink>
 
+    <InertiaLink :href="route('database.circuits.index')" class="text-decoration-underline ms-3">
+        or copy an existing circuit
+    </InertiaLink>
+
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
 
     <template v-if="circuits.length">

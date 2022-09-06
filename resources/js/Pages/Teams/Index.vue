@@ -3,9 +3,15 @@
 
     <h3>Teams</h3>
 
-    <InertiaLink v-if="can.edit" :href="route('universes.teams.create', [universe])" class="btn btn-primary my-3">
-        Add team
-    </InertiaLink>
+    <template v-if="can.edit">
+        <InertiaLink :href="route('universes.teams.create', [universe])" class="btn btn-primary my-3">
+            Add team
+        </InertiaLink>
+
+        <InertiaLink :href="route('database.teams.index')" class="text-decoration-underline ms-3">
+            or copy an existing team
+        </InertiaLink>
+    </template>
 
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
     <template v-if="teams.length">

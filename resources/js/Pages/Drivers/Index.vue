@@ -3,9 +3,15 @@
 
     <h3>Drivers</h3>
 
-    <InertiaLink v-if="can.edit" :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">
-        Add driver
-    </InertiaLink>
+    <template v-if="can.edit">
+        <InertiaLink :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">
+            Add driver
+        </InertiaLink>
+
+        <InertiaLink :href="route('database.drivers.index')" class="text-decoration-underline ms-3">
+            or copy an existing driver
+        </InertiaLink>
+    </template>
 
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
     <template v-if="drivers.length">
