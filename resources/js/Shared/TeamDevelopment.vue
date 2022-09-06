@@ -61,7 +61,7 @@
                         <input v-model="team.max" class="form-control" type="number">
                     </td>
                     <td class="small-centered">{{ team.dev }}</td>
-                    <td class="small-centered bg-accent-even">
+                    <td class="bg-accent-even" :class="state.editRatings ? 'medium-centered' : 'small-centered'">
                         <template v-if="!state.editRatings">{{ team.new }}</template>
                         <template v-else>
                             <input type="number" class="form-control" v-model="team.new">

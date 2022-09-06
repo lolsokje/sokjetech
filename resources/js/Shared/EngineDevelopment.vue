@@ -77,7 +77,7 @@
                         >
                     </td>
                     <td class="small-centered">{{ engine.dev }}</td>
-                    <td class="small-centered bg-accent-even">
+                    <td class="bg-accent-even" :class="state.editRatings ? 'medium-centered' : 'small-centered'">
                         <template v-if="!state.editRatings">
                             {{ engine.new }}
                         </template>
