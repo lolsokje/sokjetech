@@ -10,7 +10,7 @@ class CopyTeamController extends Controller
 {
     public function __invoke(TeamCopyRequest $request, Team $team)
     {
-        $universe = Universe::query()->find($request->validated('universe_id'));
+        $universe = Universe::find($request->validated('universe_id'));
         $this->authorize('update', $universe);
 
         $newTeam = $team->replicate();
