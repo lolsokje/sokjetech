@@ -88,7 +88,7 @@
             <td class="small-centered">
                 <InertiaLink :href="getRaceLink(race)">{{ getRaceLinkText(race) }}</InertiaLink>
             </td>
-            <td class="small-centered" v-if="!season.started && canEdit">
+            <td class="medium-centered" v-if="!season.started && canEdit">
                 <button class="btn btn-link" @click.prevent="deleteRace(race)">
                     delete
                 </button>

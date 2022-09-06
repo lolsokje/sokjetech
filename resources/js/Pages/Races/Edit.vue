@@ -16,7 +16,7 @@
 
         <h4>Stints</h4>
 
-        <button class="btn btn-primary my-3" @click.prevent="addStint">Add stint</button>
+        <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
 
         <table class="table">
             <thead>
@@ -28,7 +28,7 @@
                 <th>Use team rating</th>
                 <th>Use driver rating</th>
                 <th>Use engine rating</th>
-                <th></th>
+                <th colspan="2"></th>
             </tr>
             </thead>
             <tbody>
@@ -40,10 +40,17 @@
                 <td><input v-model="stint.use_team_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_driver_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_engine_rating" type="checkbox"></td>
-                <td class="big-centered"><span
-                    v-if="form.stints.length > 1" class="text-primary" role="button"
-                    @click="deleteStint(stint.order)"
-                >delete stint</span></td>
+                <td class="small-centered">
+                    <span v-if="form.stints.length > 1" class="btn btn-link" role="button"
+                          @click="deleteStint(stint.order)"
+                    >delete
+                    </span>
+                </td>
+                <td class="small-centered">
+                    <button class="btn btn-link" @click.prevent="copyStint(stint.order, form.stints)">
+                        copy
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -59,6 +66,7 @@ import Errors from '@/Shared/Errors';
 import BackLink from '@/Shared/BackLink';
 import { onMounted } from 'vue';
 import { defaultStint } from '@/Composables/useDefaultStint';
+import { addStint, copyStint } from '@/Composables/useEditStint';
 
 const props = defineProps({
     season: {
@@ -84,19 +92,6 @@ const form = useForm({
 });
 
 const selectedCircuit = props.circuits.find((circuit) => circuit.id === form.circuit_id);
-
-function addStint () {
-    const lastOrder = form.stints[form.stints.length - 1].order;
-    form.stints.push({
-        order: lastOrder + 1,
-        min_rng: 0,
-        max_rng: 30,
-        reliability: false,
-        use_team_rating: false,
-        use_driver_rating: false,
-        use_engine_rating: false,
-    });
-}
 
 function deleteStint (order) {
     form.stints = form.stints.filter((stint) => stint.order !== order);
