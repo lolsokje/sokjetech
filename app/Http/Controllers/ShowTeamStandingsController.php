@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SeasonStandingResource;
 use App\Http\Resources\TeamStandingsResource;
 use App\Models\Season;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inertia\Inertia;
 
 class ShowTeamStandingsController extends Controller
@@ -13,7 +14,9 @@ class ShowTeamStandingsController extends Controller
     {
         $season->load([
             'pointDistribution',
-            'races' => ['circuit'],
+            'races' => function (HasMany $query) {
+                $query->orderBy('order')->with('circuit');
+            },
             'entrants' => [
                 'racersWithParticipation',
                 'raceResults' => [
