@@ -15,6 +15,10 @@
 
         <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
 
+        <button class="btn btn-link text-decoration-underline" @click.prevent="showDialog()">
+            or search for existing stints
+        </button>
+
         <table class="table">
             <thead>
             <tr class="text-center">
@@ -54,6 +58,8 @@
 
         <button class="btn btn-primary" type="submit">Save race</button>
     </form>
+
+    <StintFilterModal ref="stintFilterModal" @selected="selected"/>
 </template>
 
 <script setup>
@@ -62,7 +68,9 @@ import Errors from '@/Shared/Errors';
 import SearchableDropdown from '@/Shared/SearchableDropdown';
 import BackLink from '@/Shared/BackLink';
 import { defaultStint } from '@/Composables/useDefaultStint';
-import { addStint, copyStint } from '@/Composables/useEditStint';
+import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
+import StintFilterModal from '@/Components/StintFilterModal';
+import { ref } from 'vue';
 
 const props = defineProps({
     season: {
@@ -76,6 +84,8 @@ const props = defineProps({
 });
 
 const placeholder = `${props.season.year} Example Grand Prix`;
+
+const stintFilterModal = ref();
 
 const form = useForm({
     name: '',
@@ -94,6 +104,15 @@ function deleteStint (number) {
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 }
+
+const showDialog = () => {
+    stintFilterModal.value.showDialog();
+};
+
+const selected = (stint) => {
+    stint.order = getLastStintOrder(form.stints) + 1;
+    form.stints.push(stint);
+};
 </script>
 
 <script>

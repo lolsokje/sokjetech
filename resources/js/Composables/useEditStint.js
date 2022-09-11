@@ -33,6 +33,6 @@ export const copyStint = (order, stints) => {
     stints.push(newStint);
 };
 
-const getLastStintOrder = (stints) => {
+export const getLastStintOrder = (stints) => {
     return stints.at(-1).order;
 };

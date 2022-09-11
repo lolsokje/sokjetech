@@ -18,6 +18,10 @@
 
         <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
 
+        <button class="btn btn-link text-decoration-underline" @click.prevent="showDialog()">
+            or search for existing stints
+        </button>
+
         <table class="table">
             <thead>
             <tr class="text-center">
@@ -57,6 +61,8 @@
 
         <button class="btn btn-primary" type="submit">Save race</button>
     </form>
+
+    <StintFilterModal ref="stintFilterModal" @selected="selected"/>
 </template>
 
 <script setup>
@@ -64,9 +70,10 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import SearchableDropdown from '@/Shared/SearchableDropdown';
 import Errors from '@/Shared/Errors';
 import BackLink from '@/Shared/BackLink';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { defaultStint } from '@/Composables/useDefaultStint';
-import { addStint, copyStint } from '@/Composables/useEditStint';
+import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
+import StintFilterModal from '@/Components/StintFilterModal';
 
 const props = defineProps({
     season: {
@@ -84,6 +91,8 @@ const props = defineProps({
 });
 
 const placeholder = `${props.season.year} Example Grand Prix`;
+
+const stintFilterModal = ref();
 
 const form = useForm({
     name: props.race.name,
@@ -105,7 +114,16 @@ function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 }
 
-onMounted(() => {
+const showDialog = () => {
+    stintFilterModal.value.showDialog();
+};
+
+const selected = (stint) => {
+    stint.order = getLastStintOrder(form.stints) + 1;
+    form.stints.push(stint);
+};
+
+onMounted(async () => {
     if (form.stints.length === 0) {
         form.stints.push(defaultStint);
     }

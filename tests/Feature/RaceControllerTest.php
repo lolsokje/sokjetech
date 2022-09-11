@@ -49,7 +49,7 @@ test('an authenticated user can\'t create races in another user\'s universe', fu
 test('a universe owner can update races', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
-    $race = Race::factory()->for($season)->create();
+    $race = Race::factory()->for($season)->withStints()->create();
 
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$season, $race]), [
@@ -80,7 +80,7 @@ test('an unauthenticated user can\'t update races', function () {
 
 test('an authenticated user can\'t update another user\'s race', function () {
     $user = User::factory()->create();
-    $race = Race::factory()->create();
+    $race = Race::factory()->withStints()->create();
     $name = $race->name;
 
     $this->actingAs($user)

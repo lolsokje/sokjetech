@@ -1,6 +1,6 @@
 <template>
     <div class="modal" tabindex="-1" :id="id">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-centered modal-xl" :class="{ 'modal-dialog-scrollable': scrollable }">
             <div class="modal-content">
                 <div class="modal-header">
                     <slot name="header"/>
@@ -19,6 +19,7 @@
 <script setup>
 defineProps({
     id: String,
+    scrollable: Boolean,
 });
 </script>
 

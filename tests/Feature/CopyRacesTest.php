@@ -209,5 +209,5 @@ it("updates a races' name if it includes the season year", function () {
 
 function prepareSeasonRaces(Season $season): void
 {
-    Race::factory(RACE_COUNT)->for($season)->create();
+    Race::factory(RACE_COUNT)->for($season)->withStints()->create();
 }

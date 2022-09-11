@@ -10,11 +10,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RaceFactory extends Factory
 {
-    public function configure()
-    {
-        return $this->afterCreating(fn (Race $race) => Stint::factory(3)->for($race)->create());
-    }
-
     /**
      * Define the model's default state.
      *
@@ -32,5 +27,10 @@ class RaceFactory extends Factory
             'started' => false,
             'completed' => false,
         ];
+    }
+
+    public function withStints(): self
+    {
+        return $this->afterCreating(fn (Race $race) => Stint::factory(3)->for($race)->create());
     }
 }

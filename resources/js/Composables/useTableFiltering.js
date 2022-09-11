@@ -8,6 +8,11 @@ export const sort = (params, field = null) => {
 };
 
 export const filter = (params, route) => {
+    const requestParams = getRequestParams(params);
+    Inertia.get(route, requestParams, { replace: true, preserveState: true });
+};
+
+export const getRequestParams = (params) => {
     let requestParams = params;
 
     Object.entries(requestParams).forEach((entry) => {
@@ -18,5 +23,5 @@ export const filter = (params, route) => {
         }
     });
 
-    Inertia.get(route, requestParams, { replace: true, preserveState: true });
-};
+    return requestParams;
+}
