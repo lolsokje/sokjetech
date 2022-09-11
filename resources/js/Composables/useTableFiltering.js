@@ -13,7 +13,7 @@ export const filter = (params, route) => {
 };
 
 export const getRequestParams = (params) => {
-    let requestParams = params;
+    let requestParams = { ...params };
 
     Object.entries(requestParams).forEach((entry) => {
         const [ key, value ] = entry;
@@ -24,4 +24,4 @@ export const getRequestParams = (params) => {
     });
 
     return requestParams;
-}
+};
