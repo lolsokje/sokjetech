@@ -74,7 +74,7 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logou
 Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')
     ->where('page', '.*');
 
-Route::resource('circuits', CircuitController::class)->except('destroy');
+Route::resource('circuits', CircuitController::class);
 
 Route::resource('universes', UniverseController::class)->except('destroy');
 

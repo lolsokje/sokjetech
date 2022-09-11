@@ -15,6 +15,7 @@ class CircuitResource extends JsonResource
             'name' => $this->name,
             'country' => $this->country,
             'shared' => $this->shared,
+            'races_count' => $this->races_count ?? null,
         ];
     }
 }

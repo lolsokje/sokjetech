@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\Race;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+use function Pest\Laravel\assertDatabaseCount;
 
 test('an authenticated user can create a circuit', function () {
     $user = User::factory()->create();
@@ -107,3 +109,43 @@ it('shows all circuits created by a user on the index page', function () {
                 ->has('filters'),
         );
 });
+
+test('an authenticated user can delete circuits', function () {
+    $user = User::factory()->create();
+    $circuit = Circuit::factory()->for($user)->create();
+
+    $this->actingAs($user)
+        ->delete(route('circuits.destroy', $circuit))
+        ->assertRedirect();
+
+    assertDatabaseCount('circuits', 0);
+});
+
+test('an unauthorised  user cannot delete circuits', function () {
+    $circuit = Circuit::factory()->create();
+
+    $this->delete(route('circuits.destroy', $circuit))
+        ->assertForbidden();
+
+    assertDatabaseCount('circuits', 1);
+
+    $this->actingAs(User::factory()->create())
+        ->delete(route('circuits.destroy', $circuit))
+        ->assertForbidden();
+
+    assertDatabaseCount('circuits', 1);
+});
+
+test('a circuit cannot be removed once it has been used for a race', function () {
+    $this->withoutExceptionHandling();
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $circuit = Circuit::factory()->for($user)->create();
+
+    Race::factory()->for($season)->for($circuit)->create();
+
+    $this->actingAs($user)
+        ->delete(route('circuits.destroy', $circuit));
+
+    assertDatabaseCount('circuits', 1);
+})->throws(Exception::class);

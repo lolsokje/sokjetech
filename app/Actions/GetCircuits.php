@@ -16,6 +16,7 @@ class GetCircuits
     public function handle(): LengthAwarePaginator
     {
         return Circuit::query()
+            ->withCount('races')
             ->owned()
             ->when($this->request->search(), function (CircuitBuilder $builder, string $search) {
                 return $builder->search($search);

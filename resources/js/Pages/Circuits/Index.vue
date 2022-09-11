@@ -21,7 +21,7 @@
                     <span>Country</span>
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
                 </th>
-                <th></th>
+                <th colspan="2"></th>
             </tr>
             </thead>
             <tbody>
@@ -32,6 +32,11 @@
                 </td>
                 <td class="small-centered">
                     <InertiaLink :href="route('circuits.edit', circuit)">edit</InertiaLink>
+                </td>
+                <td class="medium-centered">
+                    <template v-if="circuit.races_count === 0">
+                        <button class="btn btn-link" @click="deleteCircuit(circuit.id)">delete</button>
+                    </template>
                 </td>
             </tr>
             </tbody>
@@ -46,6 +51,7 @@ import { reactive, watch } from 'vue';
 import OrderIcon from '@/Shared/OrderIcon';
 import Pagination from '@/Shared/Pagination';
 import { filter, sort } from '@/Composables/useTableFiltering';
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
     circuits: Array,
@@ -58,6 +64,14 @@ const params = reactive({
     field: props.filters.field ?? '',
     direction: props.filters.direction ?? '',
 });
+
+const deleteCircuit = (id) => {
+    if (!confirm("Are you sure you want to delete this circuit?")) {
+        return;
+    }
+
+    Inertia.delete(route('circuits.destroy', id));
+};
 
 watch(params, () => {
     filter(params, route('circuits.index'));
