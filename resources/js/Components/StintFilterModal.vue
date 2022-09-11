@@ -151,6 +151,10 @@ watch(params, async () => {
     const response = await axios.get(`${route('stints')}?${queryString}`);
     stints.value = response.data;
 });
+
+defineExpose({
+    showDialog,
+});
 </script>
 
 <script>
