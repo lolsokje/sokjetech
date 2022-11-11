@@ -18,11 +18,11 @@
         </thead>
         <tbody>
         <tr v-for="driver in drivers" :key="driver.id">
-            <td class="small-centered">{{ driver.position }}</td>
-            <BackgroundColourCell :backgroundColour="driver.background_colour"/>
+            <td class="small-centered">{{ driver.result.position }}</td>
+            <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.team_name }}</td>
+            <td :style="driver.team.style_string" class="small-centered">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team.team_name }}</td>
         </tr>
         </tbody>
     </table>

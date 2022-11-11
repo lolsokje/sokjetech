@@ -35,20 +35,20 @@
             <td class="smallest-centered">
                 {{ position + 1 }}
             </td>
-            <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
+            <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
+            <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team.team_name }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.ratings.total_rating }}</td>
             <td v-for="i in formatDetails.runs_per_session"
                 :key="i"
                 class="small-centered"
                 :class="{ 'bg-accent-even': isEven(i) }"
             >
-                {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
+                {{ driver.result.runs.length ? driver.result.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
             </td>
-            <td class="small-centered">{{ driver.best_stint }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.total }}</td>
+            <td class="small-centered">{{ driver.result.best_stint }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.result.total }}</td>
         </tr>
         </tbody>
     </table>
@@ -57,7 +57,7 @@
 
 <script setup>
 import { singleSessionStore as store } from '@/Stores/singleSessionStore';
-import { fillDriverRuns, performQualifyingRun } from '@/Composables/useRunQualifying';
+import { calculateDriverTotals, performQualifyingRun } from '@/Composables/useRunQualifying';
 import { computed, onBeforeUnmount, onMounted } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
@@ -106,7 +106,7 @@ onMounted(() => {
         store.setCurrentRun(props.sessionDetails.completed_runs);
     }
 
-    fillDriverRuns(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
+    calculateDriverTotals(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
 });
 
 onBeforeUnmount(() => store.resetQualifyingSessionStats());

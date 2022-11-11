@@ -10,7 +10,6 @@
         :formatDetails="race.season.format"
         :drivers="sortedDrivers"
         :canRunQualifying="can.edit"
-        :results="qualifyingResults"
         :sessionDetails="race.qualifying_details"
         :completed="race.qualifying_completed"
         :showError="showError"
@@ -44,10 +43,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    qualifyingResults: {
-        type: Object,
-        required: false,
-    },
 });
 
 const showError = ref(false);
@@ -78,10 +73,10 @@ const storeQualifyingResult = (data) => {
         drivers.push({
             id: result.id,
             entrant_id: result.entrant_id,
-            driver_rating: result.driver_rating,
-            team_rating: result.team_rating,
-            engine_rating: result.engine_rating,
-            runs: result.runs,
+            driver_rating: result.ratings.driver_rating,
+            team_rating: result.ratings.team_rating,
+            engine_rating: result.ratings.engine_rating,
+            runs: result.result.runs,
         });
     });
 

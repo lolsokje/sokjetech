@@ -15,11 +15,15 @@ class StartingGridResource extends JsonResource
         return [
             'id' => $racer->id,
             'full_name' => $driver->full_name,
-            'team_name' => $entrant->short_name,
-            'style_string' => $entrant->style_string,
-            'background_colour' => $entrant->accent_colour,
-            'position' => $this->position,
             'number' => $racer->number,
+            'team' => [
+                'team_name' => $entrant->short_name,
+                'style_string' => $entrant->style_string,
+                'background_colour' => $entrant->accent_colour,
+            ],
+            'result' => [
+                'position' => $this->position,
+            ],
         ];
     }
 }

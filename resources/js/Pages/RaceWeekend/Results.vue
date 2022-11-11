@@ -24,14 +24,14 @@
             </thead>
             <tbody>
             <tr v-for="driver in drivers" :key="driver.id">
-                <td class="smallest-centered">{{ driver.position }}</td>
+                <td class="smallest-centered">{{ driver.result.position }}</td>
                 <td class="colour-accent"></td>
-                <BackgroundColourCell :backgroundColour="driver.background_colour"/>
+                <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
-                <td class="padded-left">{{ driver.team_name }}</td>
+                <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
+                <td class="padded-left">{{ driver.team.team_name }}</td>
                 <td class="text-center text-uppercase" :class="getResultDisplayClasses(driver)">
-                    {{ driver.dnf ? driver.dnf : driver.points }}
+                    {{ driver.result.dnf ? driver.result.dnf : driver.result.points }}
                 </td>
             </tr>
             </tbody>
@@ -55,15 +55,15 @@ const props = defineProps({
 const getResultDisplayClasses = (driver) => {
     const classes = [];
 
-    if (driver.dnf) {
+    if (driver.result.dnf) {
         classes.push('position-dnf');
     }
 
-    if (driver.starting_position === 1) {
+    if (driver.result.starting_position === 1) {
         classes.push('fst-italic');
     }
 
-    if (driver.fastest_lap) {
+    if (driver.result.fastest_lap) {
         classes.push('text-decoration-underline');
     }
 

@@ -45,20 +45,20 @@
                 <td class="smallest-centered" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
                     {{ position + 1 }}
                 </td>
-                <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
+                <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
-                <td class="padded-left">{{ driver.team_name }}</td>
-                <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
+                <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
+                <td class="padded-left">{{ driver.team.team_name }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.ratings.total_rating }}</td>
                 <td v-for="i in runsPerSession"
                     :key="i"
                     class="small-centered"
                     :class="{ 'bg-accent-even': isEven(i) }"
                 >
-                    {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
+                    {{ driver.result.runs.length ? driver.result.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
                 </td>
-                <td class="small-centered">{{ driver.best_stint }}</td>
-                <td class="small-centered bg-accent-odd">{{ driver.total }}</td>
+                <td class="small-centered">{{ driver.result.best_stint }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.result.total }}</td>
             </tr>
         </template>
         </tbody>
@@ -69,8 +69,8 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted } from 'vue';
 import {
+    calculateDriverTotals,
     calculateSessionBestAndTotal,
-    fillDriverRuns,
     performQualifyingRun,
     sortDriversByPosition,
     sortDriversByTotal,
@@ -145,8 +145,8 @@ const viewNextSession = () => {
     store.incrementCurrentSession();
 
     store.getDrivers().forEach(driver => {
-        if (!driver.runs[store.getCurrentSessionIndex()]) {
-            driver.runs[store.getCurrentSessionIndex()] = [];
+        if (!driver.result.runs[store.getCurrentSessionIndex()]) {
+            driver.result.runs[store.getCurrentSessionIndex()] = [];
         }
         calculateSessionBestAndTotal(driver, store.getCurrentSessionIndex());
     });
@@ -195,7 +195,7 @@ onMounted(() => {
     store.setMinRng(props.formatDetails.min_rng);
     store.setMaxRng(props.formatDetails.max_rng);
 
-    fillDriverRuns(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
+    calculateDriverTotals(store.getDrivers(), store.getCurrentSessionIndex());
 });
 
 onBeforeUnmount(() => {
