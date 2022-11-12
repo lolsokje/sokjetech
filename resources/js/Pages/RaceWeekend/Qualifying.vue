@@ -26,7 +26,6 @@ import { getQualifyingFormatComponentName } from '@/Composables/useQualifyingFor
 import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination.vue';
 import SingleSession from '@/Components/RaceWeekend/SingleSession.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { sortDriversByTotal } from '@/Composables/useRunQualifying';
 import axios from 'axios';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 
@@ -79,9 +78,7 @@ const storeQualifyingResult = (data) => {
             runs: result.result.runs,
         });
     });
-
-    sortDriversByTotal(drivers);
-
+    
     drivers.forEach((driver, index) => {
         driver.position = index + 1;
     });

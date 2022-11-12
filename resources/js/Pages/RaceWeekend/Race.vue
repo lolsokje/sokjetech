@@ -86,7 +86,6 @@
 <script setup>
 import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted } from 'vue';
-import { sortDriversByPosition } from '@/Composables/useRunQualifying';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import { isEven } from '@/Utilities/IsEven';
@@ -99,6 +98,7 @@ import {
     performNextStint,
     sortDrivers,
 } from '@/Composables/useRunRace';
+import { sortDriversByPosition } from '@/Composables/useRunQualifying.js';
 
 const props = defineProps({
     race: Object,
@@ -113,7 +113,7 @@ const reliabilityMinRng = props.reliability_configuration.min_rng;
 const reliabilityMaxRng = props.reliability_configuration.max_rng;
 
 const getFastestLapClass = (driver) => {
-    return driver.fastest_lap ? 'bg-purple' : '';
+    return driver.result.fastest_lap ? 'bg-purple' : '';
 };
 
 const getPositionChangeDisplayClasses = (driver) => {

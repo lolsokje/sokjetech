@@ -15,13 +15,13 @@ export const performNextStint = () => {
     const dnfChance = currentStintSettings.reliability;
 
     raceStore.drivers.forEach(driver => {
-        if (driver.dnf) {
+        if (driver.result.dnf) {
             return;
         }
 
         if (dnfChance) {
             if (getDnfRoll(driver)) {
-                driver.total = 0;
+                driver.result.total = 0;
                 return;
             }
         }
@@ -29,19 +29,19 @@ export const performNextStint = () => {
         let total = getRoll(minRng, maxRng);
 
         if (useDriverRating) {
-            total += driver.driver_rating;
+            total += driver.ratings.driver_rating;
         }
 
         if (useTeamRating) {
-            total += driver.team_rating;
+            total += driver.ratings.team_rating;
         }
 
         if (useEngineRating) {
-            total += driver.engine_rating;
+            total += driver.ratings.engine_rating;
         }
 
-        driver.stints[currentStintIndex] = total;
-        driver.total = getTotal(driver);
+        driver.result.stints[currentStintIndex] = total;
+        driver.result.total = getTotal(driver);
     });
 
     sortDrivers();
@@ -58,13 +58,13 @@ export const performNextStint = () => {
 export const fastestLapRoll = () => {
     raceStore.drivers.forEach(driver => {
         if (driver.dnf) {
-            return driver.fastest_lap_roll = null;
+            return driver.result.fastest_lap_roll = null;
         }
 
         if (!raceStore.fastestLapIsSeparateStint) {
-            return driver.fastest_lap_roll = driver.stints.at(-1);
+            return driver.result.fastest_lap_roll = driver.result.stints.at(-1);
         } else {
-            return driver.fastest_lap_roll = driver.driver_rating + getRoll(raceStore.fastestLapMinRng, raceStore.fastestLapMaxRng);
+            return driver.result.fastest_lap_roll = driver.ratings.driver_rating + getRoll(raceStore.fastestLapMinRng, raceStore.fastestLapMaxRng);
         }
     });
 
@@ -89,15 +89,15 @@ export const getTotal = (driver) => {
 
 export const sortDrivers = () => {
     raceStore.drivers.sort((driverOne, driverTwo) => {
-        if (driverOne.stints.length === 0 && !driverOne.dnf) {
-            return driverOne.starting_position - driverTwo.starting_position;
+        if (driverOne.result.stints.length === 0 && !driverOne.result.dnf) {
+            return driverOne.result.starting_position - driverTwo.result.starting_position;
         }
         return driverTwo.result.total - driverOne.result.total;
     });
 
     raceStore.drivers.forEach((driver, index) => {
-        driver.position = index + 1;
-        driver.position_change = getPositionChange(driver);
+        driver.result.position = index + 1;
+        driver.result.position_change = getPositionChange(driver);
     });
 };
 
@@ -166,15 +166,15 @@ const storeRaceResults = () => {
         drivers.push({
             id: driver.id,
             entrant_id: driver.entrant_id,
-            stints: driver.stints,
-            position: driver.position,
-            starting_bonus: driver.bonus,
-            driver_rating: driver.driver_rating,
-            team_rating: driver.team_rating,
-            engine_rating: driver.engine_rating,
-            dnf: driver.dnf,
-            fastest_lap_roll: driver.fastest_lap_roll,
-            fastest_lap: driver.fastest_lap,
+            stints: driver.result.stints,
+            position: driver.result.position,
+            starting_bonus: driver.result.bonus,
+            driver_rating: driver.ratings.driver_rating,
+            team_rating: driver.ratings.team_rating,
+            engine_rating: driver.ratings.engine_rating,
+            dnf: driver.result.dnf,
+            fastest_lap_roll: driver.result.fastest_lap_roll,
+            fastest_lap: driver.result.fastest_lap,
         });
     });
 

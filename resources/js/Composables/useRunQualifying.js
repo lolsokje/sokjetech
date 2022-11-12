@@ -57,9 +57,19 @@ export function calculateDriverTotals (drivers, currentSession) {
 }
 
 export function performQualifyingRun (store, participationCheck = null) {
+    const currentSessionIndex = store.getCurrentSessionIndex();
+    const currentSessionRunCount = store.getCurrentSessionRunCount();
     store.getDrivers().forEach((driver, index) => {
+        if (driver.result.runs[currentSessionIndex] === undefined) {
+            driver.result.runs[currentSessionIndex] = [];
+        }
+
+        if (driver.result.runs[currentSessionIndex][currentSessionRunCount] === undefined) {
+            driver.result.runs[currentSessionIndex][currentSessionRunCount] = [];
+        }
+
         if (participationCheck === null || participationCheck(index)) {
-            driver.result.runs[store.getCurrentSessionIndex()][store.getCurrentSessionRunCount()] = getRoll(store.getMinRng(), store.getMaxRng());
+            driver.result.runs[currentSessionIndex][currentSessionRunCount] = getRoll(store.getMinRng(), store.getMaxRng());
             calculateSessionBestAndTotal(driver, store.getCurrentSessionIndex());
         }
     });
