@@ -7,4 +7,4 @@
 </template>
 
 <script setup>
-import Base from './Base';</script>
+import Base from './Base.vue';</script>

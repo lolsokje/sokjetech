@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import CopySeasonSetupItem from '@/Utilities/CopySeasonSetupItem';
 import CopySeasonSetupItemDependency from '@/Utilities/CopySeasonSetupItemDependency';
@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

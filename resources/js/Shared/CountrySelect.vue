@@ -9,7 +9,7 @@
 <script setup>
 import countries from '../Utilities/Countries';
 import { reactive } from 'vue';
-import SearchableDropdown from './SearchableDropdown';
+import SearchableDropdown from './SearchableDropdown.vue';
 
 const props = defineProps({
 	label: {

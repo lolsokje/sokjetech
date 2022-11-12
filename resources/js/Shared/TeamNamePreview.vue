@@ -28,7 +28,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { getRoll } from '@/Composables/useRunQualifying';
 
 const props = defineProps({

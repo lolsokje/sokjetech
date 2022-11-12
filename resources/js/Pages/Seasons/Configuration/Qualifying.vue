@@ -25,9 +25,9 @@
 <script setup>
 import { markRaw, onMounted, ref, watch } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import ThreeSessionElimination from '@/Shared/QualifyingFormats/ThreeSessionElimination';
-import SingleSession from '@/Shared/QualifyingFormats/SingleSession';
+import Errors from '@/Shared/Errors.vue';
+import ThreeSessionElimination from '@/Shared/QualifyingFormats/ThreeSessionElimination.vue';
+import SingleSession from '@/Shared/QualifyingFormats/SingleSession.vue';
 
 const props = defineProps({
     season: {
@@ -90,7 +90,7 @@ const seasonHasStarted = () => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

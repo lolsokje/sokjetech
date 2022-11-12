@@ -52,10 +52,10 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import CountrySelect from '@/Shared/CountrySelect';
-import TeamNamePreview from '@/Shared/TeamNamePreview';
-import ColourPicker from '@/Components/ColourPicker';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import CountrySelect from '@/Shared/CountrySelect.vue';
+import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
+import ColourPicker from '@/Components/ColourPicker.vue';
 
 const props = defineProps({
     season: {
@@ -110,7 +110,7 @@ function setEngineSupplier (engine) {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

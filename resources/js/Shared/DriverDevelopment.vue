@@ -89,12 +89,12 @@
 <script setup>
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Development from '../Utilities/Development';
+import Development from '../Utilities/Development.vue';
 import DevelopmentDriver from '../Utilities/DevelopmentDriver';
-import CopyScreenshotButton from './CopyScreenshotButton';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import Errors from '@/Shared/Errors';
+import CopyScreenshotButton from './CopyScreenshotButton.vue';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import Errors from '@/Shared/Errors.vue';
 
 const props = defineProps({
     season: {

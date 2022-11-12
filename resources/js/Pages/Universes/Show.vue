@@ -7,7 +7,7 @@
 </script>
 
 <script>
-import Universe from '@/Layouts/Universe';
+import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
 </script>

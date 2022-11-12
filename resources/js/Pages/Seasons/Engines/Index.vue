@@ -44,9 +44,9 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
+import BackLink from '@/Shared/BackLink.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 
 const props = defineProps({
     season: {
@@ -68,7 +68,7 @@ const canEdit = props.can.edit && !hasActiveRace;
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

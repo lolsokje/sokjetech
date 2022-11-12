@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
-import EngineDevelopment from '@/Shared/EngineDevelopment';
+import BackLink from '@/Shared/BackLink.vue';
+import EngineDevelopment from '@/Shared/EngineDevelopment.vue';
 
 const props = defineProps({
     season: {
@@ -83,7 +83,7 @@ const props = defineProps({
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

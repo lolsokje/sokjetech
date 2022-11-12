@@ -11,9 +11,9 @@
 </template>
 
 <script setup>
-import Base from '@/Layouts/Base';
+import Base from '@/Layouts/Base.vue';
 import { TabLink } from '@/Utilities/TabLink';
-import TabLinks from '@/Components/TabLinks';
+import TabLinks from '@/Components/TabLinks.vue';
 
 const links = [
     new TabLink('database.circuits.index', 'Circuits'),

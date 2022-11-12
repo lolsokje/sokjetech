@@ -84,11 +84,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import { isEven } from '@/Utilities/IsEven';
 import { raceStore } from '@/Stores/raceStore';
 import {
@@ -168,7 +168,7 @@ onMounted(() => {
 </script>
 
 <script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

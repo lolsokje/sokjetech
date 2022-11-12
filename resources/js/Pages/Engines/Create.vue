@@ -18,7 +18,7 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 
 defineProps({
     series: {
@@ -34,7 +34,7 @@ const form = useForm({
 </script>
 
 <script>
-import Series from '@/Layouts/Series';
+import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };
 </script>

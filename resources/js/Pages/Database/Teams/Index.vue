@@ -73,11 +73,11 @@
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
 import { filter, sort } from '@/Composables/useTableFiltering';
-import OrderIcon from '@/Shared/OrderIcon';
-import Pagination from '@/Shared/Pagination';
+import OrderIcon from '@/Shared/OrderIcon.vue';
+import Pagination from '@/Shared/Pagination.vue';
 import { Modal } from 'bootstrap';
 import { useForm } from '@inertiajs/inertia-vue3';
-import CustomModal from '@/Components/Modal';
+import CustomModal from '@/Components/Modal.vue';
 
 const props = defineProps({
     teams: Array,
@@ -121,7 +121,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Database from '@/Layouts/Database';
+import Database from '@/Layouts/Database.vue';
 
 export default { layout: Database };
 </script>

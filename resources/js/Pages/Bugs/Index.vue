@@ -48,8 +48,8 @@
 
 <script setup>
 import { reactive, watch } from 'vue';
-import Pagination from '@/Shared/Pagination';
-import OrderIcon from '@/Shared/OrderIcon';
+import Pagination from '@/Shared/Pagination.vue';
+import OrderIcon from '@/Shared/OrderIcon.vue';
 import { getStatusClass } from '@/Composables/useStatusClasses';
 import { filter, sort } from '@/Composables/useTableFiltering';
 

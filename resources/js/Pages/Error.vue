@@ -29,7 +29,7 @@ const description = computed(() => {
 </script>
 
 <script>
-import ErrorLayout from '@/Layouts/ErrorLayout';
+import ErrorLayout from '@/Layouts/ErrorLayout.vue';
 
 export default { layout: ErrorLayout };
 </script>

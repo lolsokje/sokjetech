@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import EngineDevelopment from '@/Shared/EngineDevelopment';
+import EngineDevelopment from '@/Shared/EngineDevelopment.vue';
 
 const props = defineProps({
     season: Object,
@@ -18,8 +18,8 @@ const props = defineProps({
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
-import BackLink from '@/Shared/BackLink';
+import Season from '@/Layouts/Season.vue';
+import BackLink from '@/Shared/BackLink.vue';
 
 export default {
     components: { BackLink },

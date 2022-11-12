@@ -105,11 +105,11 @@
 <script setup>
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Development from '@/Utilities/Development';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import Development from '@/Utilities/Development.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
-import Errors from '@/Shared/Errors';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import Errors from '@/Shared/Errors.vue';
 
 const props = defineProps({
     season: Object,

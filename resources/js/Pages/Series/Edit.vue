@@ -15,8 +15,8 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import BackLink from '@/Shared/BackLink';
+import Errors from '@/Shared/Errors.vue';
+import BackLink from '@/Shared/BackLink.vue';
 
 const props = defineProps({
     universe: {
@@ -35,7 +35,7 @@ const form = useForm({
 </script>
 
 <script>
-import Universe from '@/Layouts/Universe';
+import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
 </script>
