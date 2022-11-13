@@ -10,7 +10,6 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
     <title>{{ config('app.name') }}</title>
-    @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @routes
 

@@ -105,7 +105,7 @@
 <script setup>
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Development from '@/Utilities/Development.vue';
+import Development from '@/Utilities/Development';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
