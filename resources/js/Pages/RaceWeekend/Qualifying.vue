@@ -21,11 +21,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { markRaw, onMounted, ref } from 'vue';
 import { getQualifyingFormatComponentName } from '@/Composables/useQualifyingFormat';
-import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination';
-import SingleSession from '@/Components/RaceWeekend/SingleSession';
+import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination.vue';
+import SingleSession from '@/Components/RaceWeekend/SingleSession.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { sortDriversByTotal } from '@/Composables/useRunQualifying';
 import axios from 'axios';
@@ -103,7 +103,7 @@ const completeQualifying = () => {
 </script>
 
 <script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

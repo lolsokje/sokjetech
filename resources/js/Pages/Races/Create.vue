@@ -64,12 +64,12 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import BackLink from '@/Shared/BackLink';
+import Errors from '@/Shared/Errors.vue';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import BackLink from '@/Shared/BackLink.vue';
 import { defaultStint } from '@/Composables/useDefaultStint';
 import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
-import StintFilterModal from '@/Components/StintFilterModal';
+import StintFilterModal from '@/Components/StintFilterModal.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -116,7 +116,7 @@ const selected = (stint) => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

@@ -97,8 +97,8 @@
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed, onMounted, ref } from 'vue';
 import FastestLapDetermination from '@/Enums/FastestLapDetermination';
-import Errors from '@/Shared/Errors';
-import BackLink from '@/Shared/BackLink';
+import Errors from '@/Shared/Errors.vue';
+import BackLink from '@/Shared/BackLink.vue';
 
 const props = defineProps({
     season: {
@@ -164,7 +164,7 @@ const hasSeasonStarted = () => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

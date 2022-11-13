@@ -30,11 +30,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 
 const props = defineProps({
     race: {
@@ -51,7 +51,7 @@ onMounted(() => sortDriversByPosition(props.drivers));
 </script>
 
 <script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

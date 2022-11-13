@@ -21,9 +21,9 @@
 </template>
 
 <script setup>
-import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageList from '@/Components/TutorialPageList.vue';
 import TutorialPageLink from '@/Utilities/TutorialPageLink';
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 
 const pages = [
     new TutorialPageLink('teams', 'Teams'),

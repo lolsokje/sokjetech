@@ -100,9 +100,9 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import BackLink from '@/Shared/BackLink.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
@@ -300,7 +300,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

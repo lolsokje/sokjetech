@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 
 defineProps({
     series: {
@@ -47,7 +47,7 @@ defineProps({
 </script>
 
 <script>
-import Series from '@/Layouts/Series';
+import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };
 </script>

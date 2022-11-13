@@ -36,9 +36,9 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import CountrySelect from '@/Shared/CountrySelect';
-import BackLink from '@/Shared/BackLink';
+import Errors from '@/Shared/Errors.vue';
+import CountrySelect from '@/Shared/CountrySelect.vue';
+import BackLink from '@/Shared/BackLink.vue';
 
 defineProps({
     universe: {
@@ -61,7 +61,7 @@ function setCountry (country) {
 </script>
 
 <script>
-import Universe from '@/Layouts/Universe';
+import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
 </script>

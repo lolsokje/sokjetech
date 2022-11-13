@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import Base from '@/Layouts/Base';
-import TabLinks from '@/Components/TabLinks';
+import Base from '@/Layouts/Base.vue';
+import TabLinks from '@/Components/TabLinks.vue';
 import { computed, onMounted } from 'vue';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 

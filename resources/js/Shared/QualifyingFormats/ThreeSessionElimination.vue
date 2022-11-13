@@ -79,7 +79,7 @@ watch(formatDetails, () => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

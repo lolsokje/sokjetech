@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
-import DriverDevelopment from '@/Shared/DriverDevelopment';
+import BackLink from '@/Shared/BackLink.vue';
+import DriverDevelopment from '@/Shared/DriverDevelopment.vue';
 
 const props = defineProps({
     season: {
@@ -24,7 +24,7 @@ const props = defineProps({
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

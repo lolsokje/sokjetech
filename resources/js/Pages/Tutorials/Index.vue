@@ -6,7 +6,7 @@
 
 <script setup>
 import TutorialPageLink from '@/Utilities/TutorialPageLink';
-import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageList from '@/Components/TutorialPageList.vue';
 
 const pages = [
     new TutorialPageLink('circuits', 'Circuits'),

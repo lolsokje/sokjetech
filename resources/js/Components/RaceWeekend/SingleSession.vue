@@ -59,9 +59,9 @@
 import { singleSessionStore as store } from '@/Stores/singleSessionStore';
 import { fillDriverRuns, performQualifyingRun } from '@/Composables/useRunQualifying';
 import { computed, onBeforeUnmount, onMounted } from 'vue';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 
 const props = defineProps({
     formatDetails: Object,

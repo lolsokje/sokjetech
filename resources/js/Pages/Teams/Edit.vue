@@ -46,11 +46,11 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import CountrySelect from '@/Shared/CountrySelect';
-import Errors from '@/Shared/Errors';
-import BackLink from '@/Shared/BackLink';
-import TeamNamePreview from '@/Shared/TeamNamePreview';
-import ColourPicker from '@/Components/ColourPicker';
+import CountrySelect from '@/Shared/CountrySelect.vue';
+import Errors from '@/Shared/Errors.vue';
+import BackLink from '@/Shared/BackLink.vue';
+import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
+import ColourPicker from '@/Components/ColourPicker.vue';
 
 const props = defineProps({
     universe: {
@@ -79,7 +79,7 @@ function setCountry (country) {
 </script>
 
 <script>
-import Universe from '@/Layouts/Universe';
+import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
 </script>

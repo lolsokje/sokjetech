@@ -10,8 +10,8 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
     <title>{{ config('app.name') }}</title>
-    <link href="{{ mix('/css/app.css') }}" rel="stylesheet"/>
-    <script src="{{ mix('/js/app.js') }}" defer></script>
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     @routes
 
     <script>

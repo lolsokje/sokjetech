@@ -34,7 +34,7 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed } from 'vue';
-import Errors from '@/Shared/Errors';
+import Errors from '@/Shared/Errors.vue';
 import { feedbackTypes } from '@/Composables/useFeedbackTypes';
 
 const form = useForm({

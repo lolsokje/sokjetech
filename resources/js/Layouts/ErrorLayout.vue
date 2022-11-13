@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Nav from '@/Shared/Nav';
+import Nav from '@/Shared/Nav.vue';
 
 export default {
     name: "ErrorLayout",

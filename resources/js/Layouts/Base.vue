@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import Toast from '../Shared/Toast';
-import Nav from '@/Shared/Nav';
+import Toast from '../Shared/Toast.vue';
+import Nav from '@/Shared/Nav.vue';
 
 const themes = [
     { name: 'dark', label: 'Dark', background: '#15151E', color: '#F8B739' },

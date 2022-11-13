@@ -59,10 +59,10 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue';
-import BackLink from '@/Shared/BackLink';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import BackLink from '@/Shared/BackLink.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 
 const props = defineProps({
     season: {
@@ -117,7 +117,7 @@ watch(editMode, () => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

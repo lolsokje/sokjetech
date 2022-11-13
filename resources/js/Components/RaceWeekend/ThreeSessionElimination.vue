@@ -76,8 +76,8 @@ import {
     sortDriversByTotal,
 } from '@/Composables/useRunQualifying';
 import { threeSessionEliminationStore as store } from '@/Stores/threeSessionEliminationStore';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
 
 const props = defineProps({

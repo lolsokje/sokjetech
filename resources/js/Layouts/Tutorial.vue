@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import Base from '@/Layouts/Base';</script>
+import Base from '@/Layouts/Base.vue';</script>
 
 <script>
 export default { name: "Tutorial" };

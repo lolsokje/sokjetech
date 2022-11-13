@@ -22,8 +22,8 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import CountrySelect from '@/Shared/CountrySelect';
+import Errors from '@/Shared/Errors.vue';
+import CountrySelect from '@/Shared/CountrySelect.vue';
 
 const form = useForm({
     name: null,

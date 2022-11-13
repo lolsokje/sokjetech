@@ -44,12 +44,12 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { getResultClasses } from '@/Composables/useResultPage';
 import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 
 const props = defineProps({
     season: Object,
@@ -71,7 +71,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

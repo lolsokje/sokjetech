@@ -67,13 +67,13 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import Errors from '@/Shared/Errors';
-import BackLink from '@/Shared/BackLink';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import Errors from '@/Shared/Errors.vue';
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted, ref } from 'vue';
 import { defaultStint } from '@/Composables/useDefaultStint';
 import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
-import StintFilterModal from '@/Components/StintFilterModal';
+import StintFilterModal from '@/Components/StintFilterModal.vue';
 
 const props = defineProps({
     season: {
@@ -131,7 +131,7 @@ onMounted(async () => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

@@ -65,4 +65,4 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';</script>
+import BackLink from '@/Shared/BackLink.vue';</script>

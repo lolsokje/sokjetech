@@ -43,10 +43,10 @@
 <script setup>
 import { computed, reactive, watch } from 'vue';
 import { usePage } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink';
-import Pagination from '@/Shared/Pagination';
+import BackLink from '@/Shared/BackLink.vue';
+import Pagination from '@/Shared/Pagination.vue';
 import { filter, sort } from '@/Composables/useTableFiltering';
-import OrderIcon from '@/Shared/OrderIcon';
+import OrderIcon from '@/Shared/OrderIcon.vue';
 
 const props = defineProps({
     links: Array,

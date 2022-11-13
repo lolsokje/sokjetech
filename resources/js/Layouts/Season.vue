@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import Base from './Base';
-import TabLinks from '@/Components/TabLinks';
+import Base from './Base.vue';
+import TabLinks from '@/Components/TabLinks.vue';
 import { TabLink } from '@/Utilities/TabLink';
 
 const props = defineProps({

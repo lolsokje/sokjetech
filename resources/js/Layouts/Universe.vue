@@ -12,9 +12,9 @@
 </template>
 
 <script setup>
-import Base from './Base';
+import Base from './Base.vue';
 import { TabLink } from '@/Utilities/TabLink';
-import TabLinks from '@/Components/TabLinks';
+import TabLinks from '@/Components/TabLinks.vue';
 
 const props = defineProps({
     universe: {

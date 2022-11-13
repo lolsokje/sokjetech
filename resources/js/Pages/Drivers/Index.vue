@@ -51,11 +51,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { reactive, watch } from 'vue';
 import { filter, sort } from '@/Composables/useTableFiltering';
-import OrderIcon from '@/Shared/OrderIcon';
-import Pagination from '@/Shared/Pagination';
+import OrderIcon from '@/Shared/OrderIcon.vue';
+import Pagination from '@/Shared/Pagination.vue';
 
 const props = defineProps({
     universe: Object,
@@ -77,7 +77,7 @@ watch(params, () => {
 </script>
 
 <script>
-import Universe from '@/Layouts/Universe';
+import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
 </script>

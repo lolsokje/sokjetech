@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Database from '@/Layouts/Database';
-import Base from '@/Layouts/Base';
+import Database from '@/Layouts/Database.vue';
+import Base from '@/Layouts/Base.vue';
 
 export default {
     components: { Base },

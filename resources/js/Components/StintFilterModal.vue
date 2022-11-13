@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-import CustomModal from '@/Components/Modal';
+import CustomModal from '@/Components/Modal.vue';
 import { onMounted, reactive, ref, watch } from 'vue';
 import axios from 'axios';
 import { Modal } from 'bootstrap';

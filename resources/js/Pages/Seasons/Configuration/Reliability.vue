@@ -67,8 +67,8 @@
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink';
-import Errors from '@/Shared/Errors';
+import BackLink from '@/Shared/BackLink.vue';
+import Errors from '@/Shared/Errors.vue';
 import { computed, onMounted } from 'vue';
 
 const props = defineProps({
@@ -109,7 +109,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

@@ -36,8 +36,8 @@
 import { Inertia } from '@inertiajs/inertia';
 import { reactive, watch } from 'vue';
 import { filter, sort } from '@/Composables/useTableFiltering';
-import OrderIcon from '@/Shared/OrderIcon';
-import Pagination from '@/Shared/Pagination';
+import OrderIcon from '@/Shared/OrderIcon.vue';
+import Pagination from '@/Shared/Pagination.vue';
 
 const props = defineProps({
     circuits: Array,
@@ -67,7 +67,7 @@ watch(params, () => {
 </script>
 
 <script>
-import Database from '@/Layouts/Database';
+import Database from '@/Layouts/Database.vue';
 
 export default { layout: Database };
 </script>
