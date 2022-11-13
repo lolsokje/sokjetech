@@ -1,6 +1,6 @@
 import { Inertia } from '@inertiajs/inertia';
 
-export const sort = (params, field = null) => {
+export const sortTable = (params, field = null) => {
     if (field) {
         params.field = field;
     }

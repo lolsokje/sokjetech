@@ -5,7 +5,7 @@
     <table class="table">
         <thead>
         <tr>
-            <th role="button" @click="sort(params, 'name')">
+            <th role="button" @click="sortTable(params, 'name')">
                 <span>Name</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
             </th>
@@ -55,7 +55,7 @@
 
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { Modal } from 'bootstrap';

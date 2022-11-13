@@ -5,11 +5,11 @@
     <table class="table">
         <thead>
         <tr>
-            <th role="button" @click="sort(params, 'name')">
+            <th role="button" @click="sortTable(params, 'name')">
                 <span>Name</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
             </th>
-            <th class="text-center" role="button" @click="sort(params, 'country')">
+            <th class="text-center" role="button" @click="sortTable(params, 'country')">
                 Country
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
             </th>
@@ -35,7 +35,7 @@
 
 import { Inertia } from '@inertiajs/inertia';
 import { reactive, watch } from 'vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 

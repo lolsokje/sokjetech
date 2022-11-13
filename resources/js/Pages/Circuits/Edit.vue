@@ -20,22 +20,27 @@
     </form>
 </template>
 
-<script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+<script setup lang="ts">
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
 import Errors from '@/Shared/Errors.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
+import Circuit from '@/Interfaces/Circuit';
 
-const props = defineProps({
-    circuit: { type: Object, required: true },
-});
+const props = defineProps<{
+    circuit: Circuit,
+}>();
 
-const form = useForm({
+const form: InertiaForm<{
+    name: string,
+    country: string,
+    shared: boolean,
+}> = useForm({
     name: props.circuit.name,
     country: props.circuit.country,
     shared: props.circuit.shared,
 });
 
-function setCountry (country) {
+function setCountry (country: string) {
     form.country = country;
 }
 </script>

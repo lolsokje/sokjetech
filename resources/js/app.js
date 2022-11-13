@@ -9,6 +9,7 @@ import CountryFlagEsm from 'vue-country-flag-next';
 import Tutorial from '@/Layouts/Tutorial.vue';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import route from 'ziggy-js';
 
 createInertiaApp({
     resolve: name => {

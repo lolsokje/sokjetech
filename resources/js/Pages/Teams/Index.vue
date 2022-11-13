@@ -19,15 +19,15 @@
             <thead>
             <tr>
                 <th class="colour-accent"></th>
-                <th role="button" @click.prevent="sort(params, 'full_name')">
+                <th role="button" @click.prevent="sortTable(params, 'full_name')">
                     Full name
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="full_name"/>
                 </th>
-                <th role="button" @click.prevent="sort(params, 'short_name')">
+                <th role="button" @click.prevent="sortTable(params, 'short_name')">
                     Short name
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="short_name"/>
                 </th>
-                <th role="button" @click.prevent="sort(params, 'team_principal')">
+                <th role="button" @click.prevent="sortTable(params, 'team_principal')">
                     Team principal
                     <OrderIcon :current-field="params.field"
                                :direction="params.direction"
@@ -63,7 +63,7 @@
 import BackLink from '@/Shared/BackLink.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { reactive, watch } from 'vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 

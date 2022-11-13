@@ -28,11 +28,11 @@
         <table class="table">
             <thead>
             <tr>
-                <th role="button" @click.prevent="sort(params, 'first_name')">
+                <th role="button" @click.prevent="sortTable(params, 'first_name')">
                     Driver name
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="first_name"/>
                 </th>
-                <th role="button" @click.prevent="sort(params, 'dob')">
+                <th role="button" @click.prevent="sortTable(params, 'dob')">
                     DOB
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="dob"/>
                 </th>
@@ -63,7 +63,7 @@
 <script setup>
 import BackLink from '@/Shared/BackLink.vue';
 import { reactive, watch } from 'vue';
-import { filter } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 

@@ -13,11 +13,11 @@
         <table class="table">
             <thead>
             <tr>
-                <th role="button" @click="sort(params, 'name')">
+                <th role="button" @click="sortTable(params, 'name')">
                     <span>Name</span>
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
                 </th>
-                <th role="button" @click="sort(params, 'country')">
+                <th role="button" @click="sortTable(params, 'country')">
                     <span>Country</span>
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
                 </th>
@@ -46,18 +46,23 @@
     <p v-else>No circuits added yet</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, watch } from 'vue';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import { Inertia } from '@inertiajs/inertia';
+import Circuit from '@/Interfaces/Circuit';
+import Filters from '@/Interfaces/Filters';
+import PaginationLink from '@/Interfaces/PaginationLink';
 
-const props = defineProps({
-    circuits: Array,
-    links: Array,
-    filters: Object,
-});
+interface Props {
+    circuits: Array<Circuit>,
+    links: Array<PaginationLink>,
+    filters: Filters,
+}
+
+const props = defineProps<Props>();
 
 const params = reactive({
     search: props.filters.search ?? '',
@@ -65,7 +70,7 @@ const params = reactive({
     direction: props.filters.direction ?? '',
 });
 
-const deleteCircuit = (id) => {
+const deleteCircuit = (id: string): void => {
     if (!confirm("Are you sure you want to delete this circuit?")) {
         return;
     }
@@ -73,7 +78,7 @@ const deleteCircuit = (id) => {
     Inertia.delete(route('circuits.destroy', id));
 };
 
-watch(params, () => {
+watch(params, (): void => {
     filter(params, route('circuits.index'));
 });
 </script>

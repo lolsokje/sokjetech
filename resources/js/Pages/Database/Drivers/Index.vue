@@ -5,15 +5,15 @@
     <table class="table">
         <thead>
         <tr>
-            <th role="button" @click="sort(params, 'first_name')">
+            <th role="button" @click="sortTable(params, 'first_name')">
                 <span>Full name</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
             </th>
-            <th role="button" @click="sort(params, 'dob')">
+            <th role="button" @click="sortTable(params, 'dob')">
                 <span>Date of birth</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="dob"/>
             </th>
-            <th class="text-center" role="button" @click="sort(params, 'country')">
+            <th class="text-center" role="button" @click="sortTable(params, 'country')">
                 Country
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
             </th>
@@ -67,7 +67,7 @@
 
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { Modal } from 'bootstrap';

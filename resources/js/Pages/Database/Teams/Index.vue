@@ -5,19 +5,19 @@
     <table class="table">
         <thead>
         <tr>
-            <th role="button" @click="sort(params, 'full_name')">
+            <th role="button" @click="sortTable(params, 'full_name')">
                 <span>Full name</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="name"/>
             </th>
-            <th role="button" @click="sort(params, 'short_name')">
+            <th role="button" @click="sortTable(params, 'short_name')">
                 <span>Short name</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="short_name"/>
             </th>
-            <th role="button" @click="sort(params, 'team_principal')">
+            <th role="button" @click="sortTable(params, 'team_principal')">
                 <span>Team principal</span>
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="team_principal"/>
             </th>
-            <th class="text-center" role="button" @click="sort(params, 'country')">
+            <th class="text-center" role="button" @click="sortTable(params, 'country')">
                 Country
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
             </th>
@@ -72,7 +72,7 @@
 
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { Modal } from 'bootstrap';

@@ -20,18 +20,22 @@
     </form>
 </template>
 
-<script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+<script setup lang="ts">
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
 import Errors from '@/Shared/Errors.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 
-const form = useForm({
+const form: InertiaForm<{
+    name: string | null,
+    country: string | null,
+    shared: boolean
+}> = useForm({
     name: null,
     country: null,
     shared: false,
 });
 
-function setCountry (country) {
+function setCountry (country: string) {
     form.country = country;
 }
 </script>

@@ -14,7 +14,7 @@
         <table class="table table-narrow">
             <thead>
             <tr>
-                <th role="button" @click="sort(params)">
+                <th role="button" @click="sortTable(params)">
                     Name
                     <OrderIcon :direction="params.direction"/>
                 </th>
@@ -45,7 +45,7 @@ import { computed, reactive, watch } from 'vue';
 import { usePage } from '@inertiajs/inertia-vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Pagination from '@/Shared/Pagination.vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 
 const props = defineProps({

@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import { homedir } from 'os';
+import * as path from 'path';
 import { resolve } from 'path';
 
 const host = 'sokjetech.test';
@@ -24,6 +25,12 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'resources/js'),
+            '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+        },
+    },
     server: detectServerConfig(host),
 });
 

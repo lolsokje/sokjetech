@@ -17,12 +17,12 @@
             <thead>
             <tr>
                 <th>Summary</th>
-                <th role="button" @click.prevent="sort(params, 'type')">
+                <th role="button" @click.prevent="sortTable(params, 'type')">
                     Type
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="type"/>
                 </th>
                 <th>Reported by</th>
-                <th class="text-center" role="button" @click.prevent="sort(params, 'status')">
+                <th class="text-center" role="button" @click.prevent="sortTable(params, 'status')">
                     Status
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="status"/>
                 </th>
@@ -51,7 +51,7 @@ import { reactive, watch } from 'vue';
 import Pagination from '@/Shared/Pagination.vue';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import { getStatusClass } from '@/Composables/useStatusClasses';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering';
 
 const props = defineProps({
     bugs: Array,
