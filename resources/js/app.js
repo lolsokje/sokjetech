@@ -17,7 +17,7 @@ createInertiaApp({
         page.then((module) => {
             if (name.includes('Pages/Tutorials/')) {
                 module.default.layout = Tutorial;
-            } else if (page.layout === undefined) {
+            } else if (module.default.layout === undefined) {
                 module.default.layout = Default;
             }
         });
