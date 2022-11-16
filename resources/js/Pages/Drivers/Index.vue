@@ -4,13 +4,23 @@
     <h3>Drivers</h3>
 
     <template v-if="can.edit">
-        <InertiaLink :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">
-            Add driver
-        </InertiaLink>
+        <div>
+            <InertiaLink :href="route('universes.drivers.create', [universe])" class="btn btn-primary my-3">
+                Add driver
+            </InertiaLink>
+        </div>
 
-        <InertiaLink :href="route('database.drivers.index')" class="text-decoration-underline ms-3">
-            or copy an existing driver
-        </InertiaLink>
+        <div class="mb-3">
+            <InertiaLink :href="route('database.drivers.index')" class="text-decoration-underline">
+                copy existing drivers
+            </InertiaLink>
+            &nbsp; or
+            <InertiaLink :href="route('universes.drivers.generate.show', [universe])"
+                         class="text-decoration-underline ms-1"
+            >
+                generate random drivers
+            </InertiaLink>
+        </div>
     </template>
 
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
@@ -53,7 +63,7 @@
 <script setup>
 import BackLink from '@/Shared/BackLink.vue';
 import { reactive, watch } from 'vue';
-import { filter, sort } from '@/Composables/useTableFiltering';
+import { filter } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 

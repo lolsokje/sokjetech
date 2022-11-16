@@ -11,6 +11,9 @@ use App\Http\Controllers\CopyDriverController;
 use App\Http\Controllers\CopyEngineController;
 use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\Drivers\GenerateDriversController;
+use App\Http\Controllers\Drivers\PersistGeneratedDriversController;
+use App\Http\Controllers\Drivers\ShowDriverGenerationPage;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
 use App\Http\Controllers\EntrantController;
@@ -71,8 +74,7 @@ Route::get('/auth/discord/redirect', [AuthController::class, 'redirect'])->name(
 Route::get('/auth/discord/callback', [AuthController::class, 'callback'])->name('auth.callback');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')
-    ->where('page', '.*');
+Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')->where('page', '.*');
 
 Route::resource('circuits', CircuitController::class);
 
@@ -84,6 +86,10 @@ Route::resource('suggestions', SuggestionController::class);
 Route::get('stints', FilterStintsController::class)->name('stints')->middleware('auth');
 
 Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], function () {
+    Route::get('drivers/generate', ShowDriverGenerationPage::class)->name('drivers.generate.show');
+    Route::post('drivers/generate', GenerateDriversController::class)->name('drivers.generate');
+    Route::post('drivers/persist', PersistGeneratedDriversController::class)->name('drivers.persist');
+
     Route::resource('drivers', DriverController::class)->except('destroy');
     Route::resource('series', SeriesController::class)->except('destroy');
     Route::resource('teams', TeamController::class)->except('destroy');
