@@ -69,6 +69,6 @@ class SeriesController extends Controller
         $series->update($request->validated());
 
         return redirect(route('universes.series.index', [$universe]))
-            ->with('notice', 'Circuit updated');
+            ->with('notice', 'Series updated');
     }
 }
