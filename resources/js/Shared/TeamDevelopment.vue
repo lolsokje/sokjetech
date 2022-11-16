@@ -86,7 +86,7 @@
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed, onMounted, reactive } from 'vue';
 import CopyScreenshotButton from '../Shared/CopyScreenshotButton.vue';
-import Development from '../Utilities/Development.vue';
+import Development from '../Utilities/Development.js';
 import DevelopmentTeam from '../Utilities/DevelopmentTeam';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
