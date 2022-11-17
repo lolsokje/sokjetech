@@ -20,3 +20,21 @@
 .form-narrow {
   width: 50%;
 }
+
+@media (max-width: 1920px) {
+  .form-narrow {
+    width: 75%;
+  }
+}
+
+@media (max-width: 1536px) {
+  .form-narrow {
+    width: 85%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .form-narrow {
+    width: 100%;
+  }
+}

@@ -22,17 +22,17 @@
         <CountrySelect :country="form.country" @countryChanged="setCountry"></CountrySelect>
 
         <div class="row mb-3">
-            <div class="col-3">
+            <div class="col-lg-4 col-md-6 col-12">
                 <label class="form-label" for="primary_colour">Primary colour</label>
                 <ColourPicker v-model="form.primary_colour" id="primary_colour" required/>
             </div>
 
-            <div class="col-3">
+            <div class="col-lg-4 col-md-6 col-12">
                 <label class="form-label" for="secondary_colour">Secondary colour</label>
                 <ColourPicker v-model="form.secondary_colour" id="secondary_colour" required/>
             </div>
 
-            <div class="col-3">
+            <div class="col-lg-4 col-md-6 col-12">
                 <label class="form-label" for="accent_colour">Accent colour</label>
                 <ColourPicker v-model="form.accent_colour" id="accent_colour" required/>
             </div>
@@ -44,7 +44,7 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Errors from '@/Shared/Errors.vue';
@@ -52,16 +52,12 @@ import BackLink from '@/Shared/BackLink.vue';
 import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
 import ColourPicker from '@/Components/ColourPicker.vue';
 
-const props = defineProps({
-    universe: {
-        type: Object,
-        required: true,
-    },
-    team: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    universe: Universe,
+    team: Team,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     full_name: props.team.full_name,
@@ -73,12 +69,12 @@ const form = useForm({
     country: props.team.country,
 });
 
-function setCountry (country) {
+const setCountry = (country: string): void => {
     form.country = country;
-}
+};
 </script>
 
-<script>
+<script lang="ts">
 import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };

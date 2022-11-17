@@ -59,23 +59,27 @@
     <p v-else>No teams found</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { reactive, watch } from 'vue';
-import { filter, sortTable } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
+import PaginationLink from '@/Interfaces/PaginationLink';
+import Filters from '@/Interfaces/Filters';
 
-const props = defineProps({
-    universe: Object,
-    teams: Array,
-    links: Array,
-    filters: Object,
-    can: Object,
-});
+interface Props {
+    universe: Universe,
+    teams: Array<Team>,
+    links: Array<PaginationLink>,
+    filters: Filters,
+    can: Permission,
+}
 
-const params = reactive({
+const props = defineProps<Props>();
+
+const params: Filters = reactive({
     search: props.filters.search ?? '',
     field: props.filters.field ?? '',
     direction: props.filters.direction ?? '',
@@ -86,7 +90,7 @@ watch(params, () => {
 });
 </script>
 
-<script>
+<script lang="ts">
 import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
