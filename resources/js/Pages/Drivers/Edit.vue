@@ -34,22 +34,18 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Errors from '@/Shared/Errors.vue';
 import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    universe: {
-        type: Object,
-        required: true,
-    },
-    driver: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    universe: Universe,
+    driver: Driver,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     first_name: props.driver.first_name,
@@ -59,12 +55,12 @@ const form = useForm({
     shared: props.driver.shared,
 });
 
-function setCountry (country) {
+const setCountry = (country: string): void => {
     form.country = country;
-}
+};
 </script>
 
-<script>
+<script lang="ts">
 import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };

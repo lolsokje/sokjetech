@@ -80,24 +80,43 @@
     <button class="btn btn-success" v-if="drivers.length" @click="persistDrivers" :disabled="processing">Save</button>
 </template>
 
-<script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+<script setup lang="ts">
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, Ref, ref } from 'vue';
 import axios from 'axios';
-import { Inertia } from '@inertiajs/inertia';
+import { Inertia, RequestPayload } from '@inertiajs/inertia';
 
-const props = defineProps({
-    universe: Object,
-    languages: Object,
-});
+interface Language {
+    [key: string]: string,
+}
 
-const sortedLanguages = ref([]);
-const drivers = ref([]);
+interface SortedLanguage {
+    language: string,
+    locale: string,
+}
+
+interface Props {
+    universe: Universe,
+    languages: Language
+}
+
+interface Form {
+    language: string | null,
+    gender: string | null,
+    start: string | null,
+    end: string | null,
+    amount: number,
+}
+
+const props = defineProps<Props>();
+
+const sortedLanguages: Ref<Array<SortedLanguage>> = ref([]);
+const drivers: Ref<Array<Driver>> = ref([]);
 const processing = ref(false);
 
-const form = useForm({
+const form: InertiaForm<Form> = useForm({
     language: null,
     gender: null,
     start: null,
@@ -105,8 +124,8 @@ const form = useForm({
     amount: 10,
 });
 
-const buttonText = computed(() => form.amount === 1 ? 'driver' : 'drivers');
-const formValid = computed(() => {
+const buttonText = computed((): string => form.amount === 1 ? 'driver' : 'drivers');
+const formValid = computed((): boolean => {
     return form.start !== null && form.end !== null && form.amount > 0;
 });
 
@@ -115,16 +134,16 @@ const generateDrivers = async () => {
     drivers.value = await response.data;
 };
 
-const rejectDriver = (index) => {
+const rejectDriver = (index: number): void => {
     drivers.value.splice(index, 1);
 };
 
 const persistDrivers = async () => {
     processing.value = true;
 
-    Inertia.post(route('universes.drivers.persist', [ props.universe ]), {
-        drivers: drivers.value,
-    }, {
+    const payload: RequestPayload = { drivers: drivers.value } as RequestPayload;
+
+    Inertia.post(route('universes.drivers.persist', [ props.universe ]), payload, {
         preserveState: true,
         preserveScroll: true,
     });
@@ -133,7 +152,7 @@ const persistDrivers = async () => {
     processing.value = false;
 };
 
-onMounted(() => {
+onMounted((): void => {
     for (const [ locale, language ] of Object.entries(props.languages)) {
         sortedLanguages.value.push({
             locale,
@@ -141,13 +160,13 @@ onMounted(() => {
         });
     }
 
-    sortedLanguages.value.sort((a, b) => {
+    sortedLanguages.value.sort((a: SortedLanguage, b: SortedLanguage) => {
         return a.language < b.language ? -1 : 1;
     });
 });
 </script>
 
-<script>
+<script lang="ts">
 import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };

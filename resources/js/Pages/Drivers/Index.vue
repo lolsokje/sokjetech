@@ -60,20 +60,24 @@
     <p v-else>No drivers found </p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import { reactive, watch } from 'vue';
-import { filter, sortTable } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
+import Filters from '@/Interfaces/Filters';
+import PaginationLink from '@/Interfaces/PaginationLink';
 
-const props = defineProps({
-    universe: Object,
-    drivers: Object,
-    filters: Object,
-    can: Object,
-    links: Array,
-});
+interface Props {
+    universe: Universe,
+    drivers: Array<Driver>,
+    filters: Filters,
+    can: Permission,
+    links: Array<PaginationLink>,
+}
+
+const props = defineProps<Props>();
 
 const params = reactive({
     search: props.filters.search ?? '',
@@ -81,12 +85,12 @@ const params = reactive({
     direction: props.filters.direction ?? '',
 });
 
-watch(params, () => {
+watch(params, (): void => {
     filter(params, route('universes.drivers.index', [ props.universe ]));
 });
 </script>
 
-<script>
+<script lang="ts">
 import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
