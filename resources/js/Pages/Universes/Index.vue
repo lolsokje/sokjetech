@@ -30,7 +30,7 @@
                     <InertiaLink v-if="universe.can?.edit" :href="route('universes.edit', universe)">edit</InertiaLink>
                 </td>
                 <td class="small-centered">
-                    <InertiaLink :href="route('universes.show', universe)">view</InertiaLink>
+                    <InertiaLink :href="route('universes.series.index', universe)">view</InertiaLink>
                 </td>
             </tr>
             </tbody>
@@ -40,22 +40,23 @@
     <p v-else>No universes found</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
 import { usePage } from '@inertiajs/inertia-vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Pagination from '@/Shared/Pagination.vue';
-import { filter, sortTable } from '@/Composables/useTableFiltering';
+import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import OrderIcon from '@/Shared/OrderIcon.vue';
+import PaginationLink from '@/Interfaces/PaginationLink';
+import Filters from '@/Interfaces/Filters';
 
-const props = defineProps({
-    links: Array,
-    filters: Object,
-    universes: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    links: Array<PaginationLink>,
+    filters: Filters,
+    universes: Array<Universe>,
+}
+
+const props = defineProps<Props>();
 
 const params = reactive({
     search: props.filters.search ?? '',
@@ -63,9 +64,9 @@ const params = reactive({
     mine: props.filters.mine ?? false,
 });
 
-const user = computed(() => usePage().props.value.auth.user);
+const user = computed((): User => usePage().props.value.auth.user);
 
-watch(params, () => {
+watch(params, (): void => {
     filter(params, route('universes.index'));
 });
 </script>

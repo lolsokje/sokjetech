@@ -1,0 +1,3 @@
+interface Permission {
+    edit?: boolean,
+}
