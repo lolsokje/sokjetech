@@ -13,24 +13,25 @@
     </form>
 </template>
 
-<script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+<script setup lang="ts">
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
 import Errors from '@/Shared/Errors.vue';
 import BackLink from '@/Shared/BackLink.vue';
 
-defineProps({
-    universe: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    universe: Universe,
+}
 
-const form = useForm({
+defineProps<Props>();
+
+const form: InertiaForm<{
+    name: string,
+}> = useForm({
     name: '',
 });
 </script>
 
-<script>
+<script lang="ts">
 import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
