@@ -16,16 +16,15 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import BackLink from '@/Shared/BackLink.vue';
 
-defineProps({
-    series: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    series: Series,
+}
+
+defineProps<Props>();
 
 const form = useForm({
     name: '',
@@ -33,7 +32,7 @@ const form = useForm({
 });
 </script>
 
-<script>
+<script lang="ts">
 import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };

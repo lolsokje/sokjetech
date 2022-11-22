@@ -31,22 +31,18 @@
     </table>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 
-defineProps({
-    series: {
-        type: Object,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    series: Series,
+    can: Permission,
+}
+
+defineProps<Props>();
 </script>
 
-<script>
+<script lang="ts">
 import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };
