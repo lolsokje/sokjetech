@@ -135,3 +135,21 @@
   border-top: 1px solid black !important;
   border-bottom: 1px solid black !important;
 }
+
+@media (max-width: 1920px) {
+  .table-narrow {
+    width: 75%;
+  }
+}
+
+@media (max-width: 1536px) {
+  .table-narrow {
+    width: 85%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .table-narrow {
+    width: 100%;
+  }
+}

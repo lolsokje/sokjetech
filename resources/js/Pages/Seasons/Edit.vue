@@ -25,21 +25,17 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import Errors from '@/Shared/Errors.vue';
 import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    series: {
-        type: Object,
-        required: true,
-    },
-    season: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    series: Series,
+    season: Season,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     year: props.season.year,
@@ -47,7 +43,7 @@ const form = useForm({
 });
 </script>
 
-<script>
+<script lang="ts">
 import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };
