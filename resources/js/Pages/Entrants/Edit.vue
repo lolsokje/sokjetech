@@ -1,4 +1,6 @@
 <template>
+    <BackLink :backTo="route('seasons.entrants.index', [season])" label="team entries overview"/>
+
     <form class="form-narrow" @submit.prevent="form.put(route('seasons.entrants.update', [season, entrant]))">
         <SearchableDropdown :items="teams" :selected-item="selectedTeam" label="Select a base team" text-key="full_name"
                             value-key="id"
@@ -53,36 +55,29 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed } from 'vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
 import ColourPicker from '@/Components/ColourPicker.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import Team from '@/Interfaces/Team';
+import { Engine } from '@/Interfaces/Engine';
+import Entrant from '@/Interfaces/Entrant';
+import Permission from '@/Interfaces/Permission';
+import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-    engines: {
-        type: Array,
-        required: true,
-    },
-    entrant: {
-        type: Object,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    teams: Team[],
+    engines: Engine[],
+    entrant: Entrant,
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     team_id: props.entrant.team_id,
@@ -96,7 +91,7 @@ const form = useForm({
     engine_id: props.entrant.engine_id,
 });
 
-function setBaseTeam (team) {
+function setBaseTeam (team: Team): void {
     if (form.team_id === team.id) {
         return;
     }
@@ -112,11 +107,11 @@ function setBaseTeam (team) {
     form.country = team.country;
 }
 
-function setCountry (country) {
+function setCountry (country: string): void {
     form.country = country;
 }
 
-function setEngineSupplier (engine) {
+function setEngineSupplier (engine: Engine): void {
     form.engine_id = engine.id;
 }
 
@@ -124,7 +119,7 @@ const selectedTeam = computed(() => props.teams.find((team) => team.id === form.
 const selectedEngine = computed(() => form.engine_id ? props.engines.find((engine) => engine.id === form.engine_id) : {});
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };

@@ -1,4 +1,6 @@
 <template>
+    <BackLink :backTo="route('seasons.entrants.index', [season])" label="team entries overview"/>
+
     <form class="form-narrow" @submit.prevent="form.post(route('seasons.entrants.store', [season]))">
         <SearchableDropdown :items="teams" label="Select a base team" text-key="full_name" value-key="id"
                             @selected="setBaseTeam"
@@ -50,31 +52,26 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
 import ColourPicker from '@/Components/ColourPicker.vue';
+import { Engine } from '@/Interfaces/Engine';
+import SeasonInterface from '@/Interfaces/Season';
+import Team from '@/Interfaces/Team';
+import Permission from '@/Interfaces/Permission';
+import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-    engines: {
-        type: Array,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    teams: Team[],
+    engines: Engine[],
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     team_id: '',
@@ -85,10 +82,10 @@ const form = useForm({
     secondary_colour: '',
     accent_colour: '',
     country: '',
-    engine_id: null,
+    engine_id: '',
 });
 
-function setBaseTeam (team) {
+function setBaseTeam (team: Team): void {
     form.team_id = team.id;
 
     for (let key of Object.keys(form)) {
@@ -100,16 +97,16 @@ function setBaseTeam (team) {
     form.country = team.country;
 }
 
-function setCountry (country) {
+function setCountry (country: string): void {
     form.country = country;
 }
 
-function setEngineSupplier (engine) {
+function setEngineSupplier (engine: Engine): void {
     form.engine_id = engine.id;
 }
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
