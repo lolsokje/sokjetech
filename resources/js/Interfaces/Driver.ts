@@ -1,4 +1,4 @@
-interface Driver {
+export default interface Driver {
     id: string,
     universe?: Universe,
     first_name?: string,

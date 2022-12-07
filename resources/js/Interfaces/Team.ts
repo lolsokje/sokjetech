@@ -1,4 +1,4 @@
-interface Team {
+export default interface Team {
     id: string,
     full_name: string,
     short_name: string,

@@ -99,36 +99,31 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, Ref, ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
+import { Participant, Race } from '@/Interfaces/Race';
+import SeasonInterface from '@/Interfaces/Season';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    poles: Array,
-    winners: Array,
-    next_race_id: {
-        type: String,
-        required: false,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    poles: Participant[],
+    winners: Participant[],
+    next_race_id?: string,
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const canEdit = props.can.edit;
 const spoilerFree = ref(true);
-const races = ref(props.season.races);
+const races: Ref<Race[] | undefined> = ref([]);
 
-const stages = {
+const stages: { [key: string]: string } = {
     INTRO: 'intro',
     QUALIFYING: 'qualifying',
     GRID: 'grid',
@@ -136,7 +131,7 @@ const stages = {
     RESULTS: 'results',
 };
 
-const deleteRace = async (race) => {
+const deleteRace = async (race: Race) => {
     if (!confirm("Are you sure you want to delete this race from the calendar?")) {
         return;
     }
@@ -147,32 +142,28 @@ const deleteRace = async (race) => {
     resetRacesAfterDeletion(race);
 };
 
-const resetRacesAfterDeletion = (race) => {
-    races.value = races.value.filter(r => r.id !== race.id);
-    races.value.forEach((race, index) => race.order = index + 1);
+const resetRacesAfterDeletion = (race: Race): void => {
+    races.value = races.value?.filter((r: Race) => r.id !== race.id);
+    races.value?.forEach((race, index) => race.order = index + 1);
 };
 
-const canRunRaces = () => {
-    return canEdit;
+const canRunRaces = (): boolean => {
+    return <boolean>canEdit;
 };
 
-const canAddRace = () => {
-    return canEdit && !props.season.started;
+const canAddRace = (): boolean => {
+    return <boolean>canEdit && !props.season.started;
 };
 
-const canReorderRaces = () => {
-    return canAddRace() && props.season.races.length > 1;
+const canReorderRaces = (): boolean => {
+    return canAddRace() && props.season.races?.length > 1;
 };
 
-const canEditRace = (race) => {
-    return canAddRace() && !race.completed;
-};
-
-const isNextRace = (race) => {
+const isNextRace = (race: Race): boolean => {
     return race.id === props.next_race_id;
 };
 
-const getCurrentRaceStage = (race) => {
+const getCurrentRaceStage = (race: Race): string => {
     if (race.completed) {
         return stages.RESULTS;
     }
@@ -194,7 +185,7 @@ const getCurrentRaceStage = (race) => {
     }
 };
 
-const getRaceLink = (race) => {
+const getRaceLink = (race: Race): string | null => {
     if (canRunRaces() && !props.season.started) {
         return route('seasons.races.edit', [ props.season, race ]);
     }
@@ -226,7 +217,7 @@ const getRaceLink = (race) => {
     return route('weekend.results', [ race ]);
 };
 
-const getRaceLinkText = (race) => {
+const getRaceLinkText = (race: Race): string | null => {
     const canRunRace = canRunRaces();
     if (canRunRace && !props.season.started) {
         return 'edit';
@@ -255,7 +246,7 @@ const getRaceLinkText = (race) => {
     }
 };
 
-const attachPoleAndWinner = (race) => {
+const attachPoleAndWinner = (race: Race): void => {
     const pole = props.poles.find(pole => pole.race_id === race.id);
     const winner = props.winners.find(winner => winner.race_id === race.id);
 
@@ -263,7 +254,7 @@ const attachPoleAndWinner = (race) => {
     race.winner = winner;
 };
 
-const confirmSeasonStart = () => {
+const confirmSeasonStart = (): void => {
     if (!confirm('Are you sure you want to start the season? You will no longer be able to modify the calendar, qualifying format and point system')) {
         return;
     }
@@ -271,7 +262,7 @@ const confirmSeasonStart = () => {
     Inertia.put(route('seasons.start', [ props.season ]));
 };
 
-const confirmSeasonComplete = () => {
+const confirmSeasonComplete = (): void => {
     if (!confirm("Are you sure you want to mark the current season as completed?")) {
         return;
     }
@@ -287,11 +278,12 @@ watch(spoilerFree, (value) => {
 });
 
 onMounted(() => {
-    props.season.races.forEach(race => {
+    races.value = props.season?.races;
+    races.value?.forEach(race => {
         attachPoleAndWinner(race);
     });
 
-    props.season.races.sort((raceOne, raceTwo) => raceOne.order - raceTwo.order);
+    races.value?.sort((raceOne: Race, raceTwo: Race): number => raceOne.order - raceTwo.order);
 
     if (localStorage.getItem('spoiler_free')) {
         spoilerFree.value = localStorage.getItem('spoiler_free') === 'true';
@@ -299,7 +291,7 @@ onMounted(() => {
 });
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };

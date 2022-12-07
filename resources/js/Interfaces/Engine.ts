@@ -1,4 +1,4 @@
-interface Engine {
+export interface Engine {
     id: string,
     name: string,
     shared?: boolean,
