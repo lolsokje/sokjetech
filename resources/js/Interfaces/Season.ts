@@ -11,4 +11,5 @@ export default interface Season {
     started: boolean,
     can_start?: boolean,
     can_complete?: boolean,
+    last_point_paying_position?: number,
 }

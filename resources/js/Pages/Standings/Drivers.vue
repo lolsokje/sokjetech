@@ -43,23 +43,29 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
-import { getResultClasses } from '@/Composables/useResultPage';
-import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings';
+import { getResultClasses } from '@/Composables/useResultPage.js';
+import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings.js';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import { Race } from '@/Interfaces/Race';
+import RaceResult from '@/Interfaces/RaceResult';
+import Racer from '@/Interfaces/Racer';
 
-const props = defineProps({
-    season: Object,
-    races: Array,
-    drivers: Array,
-});
+interface Props {
+    season: SeasonInterface,
+    races: Race[],
+    drivers: Racer[],
+}
+
+const props = defineProps<Props>();
 
 const lastPointPayingPosition = props.season.last_point_paying_position;
 
-const getResultDisplayClasses = (result) => {
+const getResultDisplayClasses = (result: RaceResult): string => {
     return getResultClasses(result, lastPointPayingPosition);
 };
 
@@ -70,7 +76,7 @@ onMounted(() => {
 });
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
