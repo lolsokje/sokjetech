@@ -7,7 +7,7 @@
         <Errors :errors="form.errors"/>
 
         <p v-if="hasError" class="text-danger">This driver or number has already been selected</p>
-        <SearchableDropdown :items="drivers" :selected-item="state.driver"
+        <SearchableDropdown :items="availableDrivers" :selected-item="state.driver"
                             label="Select a driver" text-key="full_name" @selected="setDriver"
         />
 
@@ -28,13 +28,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="driver in form.drivers" :key="driver.id">
+            <tr v-for="driver in form.drivers" :key="driver.driver_id">
                 <td class="padded-left">{{ driver.full_name }}</td>
                 <td class="small-centered">
                     <input type="number" class="form-control text-center" v-model="driver.number">
                 </td>
                 <td class="small-centered">
-                    <button class="btn btn-link p-0" role="button" @click.prevent="removeDriver(driver.id)">
+                    <button class="btn btn-link p-0" role="button" @click.prevent="removeDriver(driver.driver_id)">
                         delete
                     </button>
                 </td>
@@ -46,110 +46,123 @@
     </form>
 </template>
 
-<script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
-import { onMounted, reactive, ref } from 'vue';
-import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
-import Errors from '@/Shared/Errors.vue';
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
+import Errors from '@/Shared/Errors.vue';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import SeasonInterface from '@/Interfaces/Season';
+import Entrant from '@/Interfaces/Entrant';
+import { onMounted, reactive, ref, Ref } from 'vue';
+import Racer from '@/Interfaces/Racer';
+import Driver from '@/Interfaces/Driver';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    entrant: {
-        type: Object,
-        required: true,
-    },
-    drivers: {
-        type: Array,
-        required: true,
-    },
-    numbers: {
-        type: Object,
-        required: true,
-    },
-});
+interface FormDriver {
+    driver_id: string,
+    full_name: string,
+    number: number,
+    active: boolean,
+}
 
-const form = useForm({
+interface Props {
+    season: SeasonInterface,
+    entrant: Entrant,
+    drivers: Driver[],
+    numbers: number[],
+}
+
+interface State {
+    driver?: Driver,
+    number: number,
+}
+
+const props = defineProps<Props>();
+
+const form: InertiaForm<{
+    drivers: FormDriver[],
+}> = useForm({
     drivers: [],
 });
 
-const hasError = ref(false);
-const usedDriverNumbers = ref([]);
-const drivers = ref(props.drivers);
-
-const state = reactive({
+const state: State = reactive({
     driver: {},
-    number: null,
+    number: 0,
 });
 
-function removeDriver (id) {
-    const driver = form.drivers.find((driver) => driver.id === id);
-    drivers.value.push(driver);
-    form.drivers = form.drivers.filter((driver) => driver.id !== id);
-    usedDriverNumbers.value = usedDriverNumbers.value.filter((number) => number !== driver.number);
-}
+const hasError: Ref<boolean> = ref(false);
+const usedDriverNumbers: Ref<number[]> = ref([]);
+const availableDrivers: Ref<Driver[]> = ref(props.drivers);
 
-function setDriver (driver) {
+const setDriver = (driver: Driver): void => {
     state.driver = driver;
-}
+};
 
-function addDriver () {
+const addDriver = (): void => {
     hasError.value = false;
 
-    const duplicateDriver = form.drivers.find((driver) => driver.driver_id === state.driver.id) !== undefined;
-    const duplicateNumber = form.drivers.find((driver) => driver.number === state.number) !== undefined || usedDriverNumbers.value.includes(state.number);
+    if (!state.driver) {
+        return;
+    }
 
-    if (duplicateDriver || duplicateNumber) {
+    const duplicateDriver = form.drivers.find((driver: FormDriver) => driver.driver_id === state.driver?.id);
+    const duplicateNumber = usedDriverNumbers.value.find((number: number | undefined) => number === state.number);
+
+    if (duplicateDriver || duplicateNumber !== undefined) {
         hasError.value = true;
         clearForm();
         return;
     }
 
     form.drivers.push({
-        id: state.driver.id,
         driver_id: state.driver.id,
         full_name: state.driver.full_name,
         number: state.number,
+        active: true,
     });
 
-    drivers.value = drivers.value.filter((driver) => driver.id !== state.driver.id);
+    availableDrivers.value = availableDrivers.value.filter((driver: Driver) => driver.id !== state.driver?.id);
 
-    getUsedDriverNumbers();
+    setUsedDriverNumbers();
     clearForm();
-}
+};
 
-function clearForm () {
-    state.driver = {};
-    state.number = null;
-}
+const removeDriver = (id: string): void => {
+    const driver = form.drivers.find((driver: FormDriver) => driver.driver_id === id);
 
-function getUsedDriverNumbers () {
-    usedDriverNumbers.value = form.drivers.map((driver) => driver.number);
-}
+    if (!driver) {
+        return;
+    }
+
+    form.drivers = form.drivers.filter((driver: FormDriver) => driver.driver_id !== id);
+    availableDrivers.value.push(driver as Driver);
+
+    setUsedDriverNumbers();
+};
+
+const clearForm = (): void => {
+    state.driver = undefined;
+    state.number = 0;
+};
+
+const setUsedDriverNumbers = () => {
+    usedDriverNumbers.value = form.drivers.map((driver: FormDriver) => driver.number);
+};
 
 onMounted(() => {
-    form.drivers = props.entrant.active_racers.map((driver) => {
-        return getDriverInformation(driver);
+    form.drivers = props.entrant.active_racers.map((driver: Racer) => {
+        return {
+            driver_id: driver.driver.id,
+            full_name: driver.driver.full_name,
+            number: driver.number,
+            active: true,
+        };
     });
 
-    getUsedDriverNumbers();
+    setUsedDriverNumbers();
 });
-
-function getDriverInformation (driver) {
-    return {
-        id: driver.id,
-        driver_id: driver.driver.id,
-        full_name: driver.driver.full_name,
-        number: driver.number,
-        active: driver.active,
-    };
-}
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };

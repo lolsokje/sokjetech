@@ -57,39 +57,50 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
-import { onMounted, ref, watch } from 'vue';
+<script setup lang="ts">
+import { onMounted, Ref, ref, watch } from 'vue';
 import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import Racer from '@/Interfaces/Racer';
+import Permission from '@/Interfaces/Permission';
+import Entrant from '@/Interfaces/Entrant';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    racers: {
-        type: Array,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    racers: Racer[],
+    can: Permission,
+}
+
+interface Driver {
+    style_string: string,
+    team_name: string,
+    team_rating: number,
+    driver_name: string,
+    country: string,
+    number: number,
+    driver_rating: number,
+    engine_rating: number,
+    total_rating: number,
+    entrant: Entrant,
+}
+
+const props = defineProps<Props>();
 
 const hasActiveRace = props.season.has_active_race;
-const drivers = ref([]);
+const drivers: Ref<Driver[]> = ref([]);
 const editMode = ref(false);
-const canEdit = ref(props.can.edit && editMode);
+const canEdit: Ref<boolean> = ref(props.can.edit && editMode);
 
 onMounted(() => {
-    props.racers.forEach((racer) => {
+    props.racers.forEach((racer: Racer) => {
         const entrant = racer.entrant;
         const engineRating = entrant.engine?.rating ?? 0;
         const totalRating = racer.rating + entrant.rating + engineRating;
 
+        // TODO: move to Laravel API Resource
         drivers.value.push({
             style_string: entrant.style_string,
             team_name: entrant.full_name,
@@ -116,7 +127,7 @@ watch(editMode, () => {
 });
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };

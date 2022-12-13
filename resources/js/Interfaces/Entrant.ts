@@ -1,5 +1,5 @@
 import Racer from '@/Interfaces/Racer';
-import { Engine } from '@/Interfaces/Engine';
+import SeasonEngine from '@/Interfaces/SeasonEngine';
 
 export default interface Entrant {
     id: string,
@@ -14,8 +14,10 @@ export default interface Entrant {
     background_colour: string,
     team_principal: string,
     results: Racer[],
-    engine: Engine,
+    engine: SeasonEngine,
+    active_racers: Racer[],
     driver_count?: number,
+    rating: number,
     points: number,
     style_string: string,
 }
