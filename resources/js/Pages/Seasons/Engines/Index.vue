@@ -43,31 +43,26 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import Permission from '@/Interfaces/Permission';
+import SeasonEngine from '@/Interfaces/SeasonEngine';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    engines: {
-        type: Array,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: Season,
+    engines: SeasonEngine[],
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const hasActiveRace = props.season.has_active_race;
 const canEdit = props.can.edit && !hasActiveRace;
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
