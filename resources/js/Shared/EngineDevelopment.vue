@@ -65,7 +65,9 @@
                             {{ engine.individual_rating ? 'Yes' : 'No' }}
                         </template>
                     </td>
-                    <td class="small-centered bg-accent-odd">{{ engine.rating }}</td>
+                    <td class="small-centered bg-accent-odd">
+                        {{ development.isReliability() ? engine.reliability : engine.rating }}
+                    </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.min" class="form-control" type="number"
                                v-if="showEngineInput(engine)"
@@ -102,26 +104,27 @@
     <p v-else>No engines have been added yet</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import Development from '@/Utilities/Development';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
-import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import Errors from '@/Shared/Errors.vue';
+import Season from '@/Interfaces/Season';
+import DevelopmentState from '@/Interfaces/Development';
+import DevelopmentEngine from '@/Interfaces/DevelopmentEngine';
 
-const props = defineProps({
-    season: Object,
-    engines: Array,
-    type: {
-        type: String,
-        default: 'development',
-    },
-    formRoute: String,
-});
+interface Props {
+    season: Season,
+    engines: DevelopmentEngine[],
+    type?: string,
+    formRoute: string,
+}
 
-const state = reactive({
+const props = defineProps<Props>();
+
+const state: DevelopmentState = reactive({
     error: null,
     completed: false,
     hideInputs: false,
@@ -131,31 +134,34 @@ const state = reactive({
 });
 
 const form = useForm({
-    engines: [],
+    engines: props.engines,
 });
 
-function applyDevRanges () {
+const development = new Development(props.type);
+
+const applyDevRanges = (): void => {
     state.error = null;
-    if (Development.validateDevRange(state)) {
-        Development.applyDevRangesToItems(form.engines, state);
+    if (development.validateDevRange(state.min, state.max)) {
+        development.applyDevRangesToItems(form.engines, state);
     } else {
         state.error = 'The minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function runDev () {
+const runDev = (): void => {
     state.error = null;
-    if (Development.performDev(form.engines)) {
+    if (development.performDev(form.engines)) {
         updateEnginesUsingParentRating();
         state.completed = true;
     } else {
         state.error = 'One of the engines\' dev ranges are invalid, the minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function updateEnginesUsingParentRating () {
-    form.engines.filter(e => e.individual_rating === false).forEach(engine => {
-        const parentEngine = form.engines.find(e => e.base_engine_id === engine.base_engine_id && e.rebadge === false);
+const updateEnginesUsingParentRating = (): void => {
+    form.engines.filter(e => !e.individual_rating).forEach(engine => {
+        const parentEngine = form.engines.find(e => e.base_engine_id === engine.base_engine_id && !e.rebadge);
+
         if (!parentEngine) {
             return;
         }
@@ -163,28 +169,24 @@ function updateEnginesUsingParentRating () {
         engine.dev = parentEngine.dev;
         engine.new = parentEngine.new;
     });
-}
+};
 
-function store () {
-    Development.storeDev(form, props.formRoute, state);
-}
+const store = (): void => {
+    development.storeDev(form, props.formRoute, state);
+};
 
-const showEngineInput = (engine) => {
+const showEngineInput = (engine): boolean => {
     return !engine.rebadge || engine.rebadge && engine.individual_rating;
 };
 
-const devCompleted = computed(() => !state.completed);
-const inputsHidden = computed(() => !state.hideInputs);
+const devCompleted = computed((): boolean => !state.completed);
+const inputsHidden = computed((): boolean => !state.hideInputs);
 
 onMounted(() => {
-    props.engines.forEach((engine) => {
-        form.engines.push(new DevelopmentEngine(engine, props.type === 'reliability'));
-    });
-
     form.engines.sort((a, b) => a.name.localeCompare(b.name));
 });
 </script>
 
-<script>
+<script lang="ts">
 export default { name: "EngineDevelopment" };
 </script>

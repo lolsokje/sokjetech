@@ -5,19 +5,24 @@
 
     <EngineDevelopment :season="season" :engines="engines"
                        :form-route="route('seasons.development.reliability.engines.store', [season])"
-                       type="reliability"/>
+                       type="reliability"
+    />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import EngineDevelopment from '@/Shared/EngineDevelopment.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import DevelopmentEngine from '@/Interfaces/DevelopmentEngine';
 
-const props = defineProps({
-    season: Object,
-    engines: Array,
-});
+interface Props {
+    season: SeasonInterface,
+    engines: DevelopmentEngine[],
+}
+
+const props = defineProps<Props>();
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 import BackLink from '@/Shared/BackLink.vue';
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Development\DriverResource;
 use App\Models\Season;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -12,9 +13,12 @@ class ShowDriverDevelopmentPageController extends Controller
     {
         $this->authorize('update', $season->universe);
 
+        $drivers = $season->activeRacers()->with(['driver', 'entrant'])->get();
+        $drivers = DriverResource::collection($drivers)->toArray(request());
+
         return Inertia::render('Development/Drivers', [
             'season' => $season->append('has_active_race'),
-            'drivers' => $season->activeRacers->load(['driver', 'entrant']),
+            'drivers' => $drivers,
         ]);
     }
 }

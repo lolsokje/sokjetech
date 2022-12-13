@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Development\EngineResource;
 use App\Models\Season;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,7 +15,7 @@ class ShowEngineDevelopmentPageController extends Controller
 
         return Inertia::render('Development/Engines', [
             'season' => $season->append('has_active_race'),
-            'engines' => $season->engines,
+            'engines' => EngineResource::collection($season->engines)->toArray(request()),
         ]);
     }
 }

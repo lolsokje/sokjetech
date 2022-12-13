@@ -6,23 +6,21 @@
     <TeamDevelopment :season="season" :teams="teams" :form-route="route('seasons.development.teams.store', [season])"/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import TeamDevelopment from '@/Shared/TeamDevelopment.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import DevelopmentTeam from '@/Interfaces/DevelopmentTeam';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    teams: DevelopmentTeam[],
+}
+
+defineProps<Props>();
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };

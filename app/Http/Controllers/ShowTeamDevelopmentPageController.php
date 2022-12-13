@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Development\TeamResource;
 use App\Models\Season;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -12,9 +13,12 @@ class ShowTeamDevelopmentPageController extends Controller
     {
         $this->authorize('update', $season->universe);
 
+        $teams = $season->entrants()->with('team')->get();
+        $teams = TeamResource::collection($teams)->toArray(request());
+
         return Inertia::render('Development/Teams', [
             'season' => $season->append('has_active_race'),
-            'teams' => $season->entrants()->with('team')->get(),
+            'teams' => $teams,
         ]);
     }
 }

@@ -53,7 +53,9 @@
                 <tr v-for="team in form.teams" :key="team.id">
                     <BackgroundColourCell :backgroundColour="team.accent_colour"/>
                     <td class="padded-left align-middle">{{ team.name }}</td>
-                    <td class="small-centered bg-accent-odd">{{ team.rating }}</td>
+                    <td class="small-centered bg-accent-odd">
+                        {{ development.isReliability() ? team.reliability : team.rating }}
+                    </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="team.min" class="form-control" type="number">
                     </td>
@@ -82,39 +84,30 @@
     <p v-else>No teams have been added to this season yet</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
-import { computed, onMounted, reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import CopyScreenshotButton from '../Shared/CopyScreenshotButton.vue';
-import Development from '../Utilities/Development.js';
-import DevelopmentTeam from '../Utilities/DevelopmentTeam';
+import Development from '../Utilities/Development';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import Errors from '@/Shared/Errors.vue';
+import Season from '@/Interfaces/Season';
+import DevelopmentState from '@/Interfaces/Development';
+import DevelopmentTeam from '@/Interfaces/DevelopmentTeam';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-    type: {
-        type: String,
-        required: false,
-        default: 'development',
-    },
-    formRoute: {
-        type: String,
-        required: true,
-    },
-});
+interface Props {
+    season: Season,
+    teams: DevelopmentTeam[],
+    type?: string,
+    formRoute: string,
+}
 
-const state = reactive({
+const props = defineProps<Props>();
+
+const state: DevelopmentState = reactive({
     error: null,
-    devCompleted: false,
+    completed: false,
     hideInputs: false,
     min: 0,
     max: 0,
@@ -122,41 +115,37 @@ const state = reactive({
 });
 
 const form = useForm({
-    teams: [],
+    teams: props.teams,
 });
 
-function applyDevRanges () {
+const development = new Development(props.type);
+
+const applyDevRanges = (): void => {
     state.error = null;
-    if (Development.validateDevRange(state)) {
-        Development.applyDevRangesToItems(form.teams, state);
+    if (development.validateDevRange(state.min, state.max)) {
+        development.applyDevRangesToItems(form.teams, state);
     } else {
         state.error = 'The minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function runDev () {
+const runDev = (): void => {
     state.error = null;
-    if (Development.performDev(form.teams)) {
-        state.devCompleted = true;
+    if (development.performDev(form.teams)) {
+        state.completed = true;
     } else {
         state.error = 'One of the teams\' dev ranges are invalid, the minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function store () {
-    Development.storeDev(form, props.formRoute, state);
-}
+const store = (): void => {
+    development.storeDev(form, props.formRoute, state);
+};
 
-const devCompleted = computed(() => !state.devCompleted);
-const inputsHidden = computed(() => !state.hideInputs);
-
-onMounted(() => {
-    props.teams.forEach((team) => {
-        form.teams.push(new DevelopmentTeam(team, props.type === 'reliability'));
-    });
-});
+const devCompleted = computed((): boolean => !state.completed);
+const inputsHidden = computed((): boolean => !state.hideInputs);
 </script>
 
-<script>
+<script lang="ts">
 export default { name: 'TeamDevelopment' };
 </script>

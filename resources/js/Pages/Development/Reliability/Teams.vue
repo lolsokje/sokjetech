@@ -4,26 +4,25 @@
     <h2>Team reliability</h2>
 
     <TeamDevelopment :season="season" :teams="teams" type="reliability"
-                     :form-route="route('seasons.development.reliability.teams.store', [season])"/>
+                     :form-route="route('seasons.development.reliability.teams.store', [season])"
+    />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import TeamDevelopment from '@/Shared/TeamDevelopment.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import DevelopmentTeam from '@/Interfaces/DevelopmentTeam';
 
-defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    teams: DevelopmentTeam[],
+}
+
+defineProps<Props>();
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };

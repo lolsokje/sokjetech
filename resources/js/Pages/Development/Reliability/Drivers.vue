@@ -5,26 +5,25 @@
 
     <DriverDevelopment :season="season" :drivers="drivers"
                        :form-route="route('seasons.development.reliability.drivers.store', [season])"
-                       type="reliability"/>
+                       type="reliability"
+    />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import DriverDevelopment from '@/Shared/DriverDevelopment.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import DevelopmentDriver from '@/Interfaces/DevelopmentDriver';
 
-defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    drivers: {
-        type: Array,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    drivers: DevelopmentDriver[],
+}
+
+defineProps<Props>();
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
