@@ -1,12 +1,14 @@
 import { Race } from '@/Interfaces/Race';
 import Series from '@/Interfaces/Series';
 import Entrant from '@/Interfaces/Entrant';
+import PointSystem from '@/Interfaces/PointSystem';
 
 export default interface Season {
     id: string,
     series?: Series,
     races?: Race[],
     entrants?: Entrant[],
+    point_system: PointSystem,
     name: string,
     full_name?: string,
     year: number,
