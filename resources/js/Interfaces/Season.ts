@@ -9,6 +9,7 @@ export default interface Season {
     races?: Race[],
     entrants?: Entrant[],
     point_system: PointSystem,
+    format_type: string,
     name: string,
     full_name?: string,
     year: number,
