@@ -97,24 +97,55 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
-import { getDriverPoints, getTeamPoints, getTopPerformers, sortResults } from '@/Composables/useChampionshipStandings';
+import {
+    getDriverPoints,
+    getTeamPoints,
+    getTopPerformers,
+    sortResults,
+} from '@/Composables/useChampionshipStandings.js';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import { Race } from '@/Interfaces/Race';
+import RaceStint from '@/Interfaces/RaceStint';
+import RaceResult from '@/Interfaces/RaceResult';
+import TeamRaceResult from '@/Interfaces/TeamRaceResult';
 
-const props = defineProps({
-    race: {
-        type: Object,
-        required: true,
-    },
-    stints: Array,
-    driverStandings: Array,
-    teamStandings: Array,
-});
+interface DriverStandings {
+    id: string,
+    full_name: string,
+    team_name: string,
+    number: number,
+    background_colour: string,
+    style_string: string,
+    points: number,
+    results: RaceResult[],
+}
 
-const getIcon = (boolean) => {
+interface TeamStandings {
+    id: string,
+    full_name: string,
+    team_name: string,
+    team_principal: string,
+    driver_count: number,
+    background_colour: string,
+    style_string: string,
+    points: number,
+    results: TeamRaceResult[],
+}
+
+interface Props {
+    race: Race,
+    stints: RaceStint[],
+    driverStandings: DriverStandings[],
+    teamStandings: TeamStandings[],
+}
+
+const props = defineProps<Props>();
+
+const getIcon = (boolean: boolean): string => {
     return boolean ? 'check' : 'times';
 };
 
@@ -129,7 +160,7 @@ onMounted(() => {
 });
 </script>
 
-<script>
+<script lang="ts">
 import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
