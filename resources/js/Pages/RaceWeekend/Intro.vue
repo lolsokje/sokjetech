@@ -100,47 +100,19 @@
 <script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
-import {
-    getDriverPoints,
-    getTeamPoints,
-    getTopPerformers,
-    sortResults,
-} from '@/Composables/useChampionshipStandings.js';
+import { getDriverPoints, getTeamPoints, getTopPerformers, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import { Race } from '@/Interfaces/Race';
 import RaceStint from '@/Interfaces/RaceStint';
-import RaceResult from '@/Interfaces/RaceResult';
-import TeamRaceResult from '@/Interfaces/TeamRaceResult';
-
-interface DriverStandings {
-    id: string,
-    full_name: string,
-    team_name: string,
-    number: number,
-    background_colour: string,
-    style_string: string,
-    points: number,
-    results: RaceResult[],
-}
-
-interface TeamStandings {
-    id: string,
-    full_name: string,
-    team_name: string,
-    team_principal: string,
-    driver_count: number,
-    background_colour: string,
-    style_string: string,
-    points: number,
-    results: TeamRaceResult[],
-}
+import DriverResults from '@/Interfaces/DriverResults';
+import TeamResults from '@/Interfaces/TeamResults';
 
 interface Props {
     race: Race,
     stints: RaceStint[],
-    driverStandings: DriverStandings[],
-    teamStandings: TeamStandings[],
+    driverStandings: DriverResults[],
+    teamStandings: TeamResults[],
 }
 
 const props = defineProps<Props>();

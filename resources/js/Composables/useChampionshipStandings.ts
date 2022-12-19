@@ -1,22 +1,27 @@
-const getDriverPoints = (drivers) => {
+import DriverResults from '@/Interfaces/DriverResults';
+import RaceResult from '@/Interfaces/RaceResult';
+import TeamResults from '@/Interfaces/TeamResults';
+import TeamRaceResult from '@/Interfaces/TeamRaceResult';
+
+const getDriverPoints = (drivers: DriverResults[]): void => {
     drivers.forEach(driver => {
-        let points = 0;
-        Object.values(driver.results).forEach(result => points += result.points);
-        driver.points = points;
+        driver.points = Object
+            .values(driver.results)
+            .reduce((points: number, currentResult: RaceResult) => points + currentResult.points, 0);
     });
 };
 
-const getTeamPoints = (teams) => {
+const getTeamPoints = (teams: TeamResults[]) => {
     teams.forEach(team => {
         let points = 0;
-        Object.values(team.results).forEach(drivers => {
-            Object.values(drivers.results).forEach(result => points += result.points);
+        Object.values(team.results).forEach((drivers: TeamRaceResult) => {
+            Object.values(drivers.results).forEach((result: RaceResult) => points += result.points);
         });
         team.points = points;
     });
 };
 
-const sortResults = (entities) => {
+const sortResults = (entities: DriverResults[] | TeamResults[]): void => {
     entities.sort((entityOne, entityTwo) => {
         if (entityOne.points === entityTwo.points) {
             return calculateTieBreaker(entityOne, entityTwo);
@@ -25,7 +30,7 @@ const sortResults = (entities) => {
     });
 };
 
-const calculateTieBreaker = (entityOne, entityTwo) => {
+const calculateTieBreaker = (entityOne, entityTwo): number => {
     // will probably break with team tiebreakers
     const resultsTallyOne = getResultsTallyPerPosition(entityOne);
     const resultsTallyTwo = getResultsTallyPerPosition(entityTwo);
@@ -66,13 +71,13 @@ const calculateTieBreaker = (entityOne, entityTwo) => {
     return result;
 };
 
-const getLowestFinishingPosition = (tallies) => {
+const getLowestFinishingPosition = (tallies: object[]): number => {
     const positionArray = Object.keys(tallies).map(position => parseInt(position));
 
     return Math.min(...positionArray);
 };
 
-const getResultsTallyPerPosition = (entity) => {
+const getResultsTallyPerPosition = (entity): object[] => {
     const results = [];
 
     Object.values(entity.results).forEach(result => {
@@ -97,7 +102,7 @@ const getResultsTallyPerPosition = (entity) => {
     return results;
 };
 
-const getTopPerformers = (standings, amountToShow) => {
+const getTopPerformers = (standings: DriverResults[] | TeamResults[], amountToShow: number): void => {
     standings.splice(amountToShow);
 };
 

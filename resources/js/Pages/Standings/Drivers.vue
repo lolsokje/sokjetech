@@ -47,7 +47,7 @@
 import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { getResultClasses } from '@/Composables/useResultPage.js';
-import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings.js';
+import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import SeasonInterface from '@/Interfaces/Season';
