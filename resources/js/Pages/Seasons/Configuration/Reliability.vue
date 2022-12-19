@@ -65,17 +65,31 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import { computed, onMounted } from 'vue';
+import SeasonInterface from '@/Interfaces/Season';
 
-const props = defineProps({
-    season: Object,
-    configuration: Object,
-    reasons: Object,
-});
+interface ReliabilityConfiguration {
+    min_rng: number,
+    max_rng: number,
+}
+
+interface ReliabilityReasons {
+    drivers: string[],
+    engine: string[],
+    team: string[],
+}
+
+interface Props {
+    season: SeasonInterface,
+    configuration: ReliabilityConfiguration | null,
+    reasons: ReliabilityReasons,
+}
+
+const props = defineProps<Props>();
 
 const reasons = props.reasons;
 
@@ -89,7 +103,7 @@ const form = useForm({
     },
 });
 
-const hasSeasonStarted = () => {
+const hasSeasonStarted = (): boolean => {
     return props.season.started;
 };
 
@@ -102,13 +116,13 @@ const invalidReasons = computed(() => {
 });
 
 onMounted(() => {
-    Object.keys(reasons).forEach(key => {
+    Object.keys(reasons).forEach((key: string) => {
         form.reasons[key] = reasons[key].join('\n');
     });
 });
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
