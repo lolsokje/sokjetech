@@ -109,7 +109,7 @@ class Locales
 
     public static function getLocalesForLanguage(string $language): array
     {
-        if (!in_array($language, array_keys(self::LOCALES))) {
+        if (! in_array($language, array_keys(self::LOCALES))) {
             throw new InvalidArgumentException("Language [$language] is invalid");
         }
 
