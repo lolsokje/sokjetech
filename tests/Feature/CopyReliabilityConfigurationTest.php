@@ -1,6 +1,5 @@
 <?php
 
-use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\ReliabilityConfiguration;
 use App\Models\ReliabilityReason;
 use App\Models\Season;
@@ -59,7 +58,6 @@ test('the source season needs to be owned by the universe owner', function () {
 })->throws(UnauthorizedException::class);
 
 test('a source season needs a reliability configuration before copying', function () {
-    withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $newSeason = createSeasonForUser($user);
@@ -67,8 +65,9 @@ test('a source season needs a reliability configuration before copying', functio
     actingAs($user)
         ->post(route('seasons.settings.copy.reliability', [$newSeason]), [
             'season_id' => $season->id,
-        ]);
-})->throws(InvalidSeasonRequirements::class);
+        ])
+        ->assertJson(['error' => 'No reliability configuration found']);
+});
 
 it('clears an existing reliability configuration before copying', function () {
     $user = User::factory()->create();

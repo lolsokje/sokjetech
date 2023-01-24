@@ -1,10 +1,14 @@
 <template>
     <ul class="nav pills">
         <template v-for="(link, key) in links" :key="key">
-            <li class="nav-item bg-nav-item" v-if="link.show">
+            <li class="nav-item" v-if="link.show">
                 <template v-if="link.hasChildren()">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-expanded="false">
+                    <a class="nav-link dropdown-toggle"
+                       data-bs-toggle="dropdown"
+                       href="#"
+                       role="button"
+                       aria-expanded="false"
+                    >
                         {{ link.label }}
                     </a>
                     <ul class="dropdown-menu">

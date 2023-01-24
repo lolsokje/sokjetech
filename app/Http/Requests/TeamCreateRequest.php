@@ -29,7 +29,9 @@ class TeamCreateRequest extends FormRequest
             'team_principal' => ['required'],
             'primary_colour' => ['required'],
             'secondary_colour' => ['required'],
+            'accent_colour' => ['required'],
             'country' => ['required'],
+            'shared' => ['nullable'],
         ];
     }
 }

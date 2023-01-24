@@ -21,6 +21,7 @@ class Driver extends SnowflakeModel
 
     protected $casts = [
         'dob' => 'datetime',
+        'shared' => 'boolean',
     ];
 
     public function readableDob(): Attribute

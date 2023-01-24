@@ -15,7 +15,8 @@ class ShowRaceWeekendIntroPageController extends Controller
     {
         $this->eagerLoadRelationships($race);
 
-        $driverStandings = DriverStandingsResource::collection($race->season->drivers)->toArray(request());
+        $driverStandings = DriverStandingsResource::collection($race->season->driversWithParticipation)
+            ->toArray(request());
         $teamStandings = TeamStandingsResource::collection($race->season->entrants)->toArray(request());
 
         return Inertia::render('RaceWeekend/Intro', [
@@ -31,7 +32,7 @@ class ShowRaceWeekendIntroPageController extends Controller
         $race->load([
             'stints',
             'season' => [
-                'drivers' => [
+                'driversWithParticipation' => [
                     'driver',
                     'entrant',
                     'raceResults' => [
@@ -39,7 +40,7 @@ class ShowRaceWeekendIntroPageController extends Controller
                     ],
                 ],
                 'entrants' => [
-                    'allRacers',
+                    'racersWithParticipation',
                     'raceResults' => [
                         'racer',
                         'race',

@@ -3,11 +3,17 @@
 
     <h3>Engines</h3>
 
-    <InertiaLink v-if="can.edit" :href="route('series.engines.create', [series])" class="btn btn-primary my-3">
-        Add engine
-    </InertiaLink>
+    <template v-if="can.edit">
+        <InertiaLink :href="route('series.engines.create', [series])" class="btn btn-primary my-3">
+            Add engine
+        </InertiaLink>
 
-    <table class="table table-bordered table-dark table-narrow">
+        <InertiaLink :href="route('database.engines.index')" class="text-decoration-underline ms-3">
+            or copy an existing engine
+        </InertiaLink>
+    </template>
+
+    <table class="table table-narrow">
         <thead>
         <tr>
             <th>Name</th>
@@ -25,23 +31,19 @@
     </table>
 </template>
 
-<script setup>
-import BackLink from '@/Shared/BackLink';
+<script setup lang="ts">
+import BackLink from '@/Shared/BackLink.vue';
 
-defineProps({
-    series: {
-        type: Object,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    series: Series,
+    can: Permission,
+}
+
+defineProps<Props>();
 </script>
 
-<script>
-import Series from '@/Layouts/Series';
+<script lang="ts">
+import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };
 </script>

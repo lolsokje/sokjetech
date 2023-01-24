@@ -1,9 +1,12 @@
 <template>
     <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
 
-    <h3>{{ race.name }} Starting Grid</h3>
+    <div class="d-flex col-6 mb-3">
+        <h3>{{ race.name }} Starting Grid</h3>
+        <InertiaLink :href="route('weekend.race', race)" class="btn btn-primary ms-auto">Go to race</InertiaLink>
+    </div>
 
-    <table class="table table-bordered table-dark table-narrow" id="screenshot-target">
+    <table class="table table-narrow" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
@@ -15,11 +18,11 @@
         </thead>
         <tbody>
         <tr v-for="driver in drivers" :key="driver.id">
-            <td class="small-centered">{{ driver.position }}</td>
-            <BackgroundColourCell :backgroundColour="driver.background_colour"/>
+            <td class="small-centered">{{ driver.result.position }}</td>
+            <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td :style="driver.style_string" class="small-centered">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.team_name }}</td>
+            <td :style="driver.team.style_string" class="small-centered">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team.team_name }}</td>
         </tr>
         </tbody>
     </table>
@@ -27,11 +30,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 
 const props = defineProps({
     race: {
@@ -48,7 +51,7 @@ onMounted(() => sortDriversByPosition(props.drivers));
 </script>
 
 <script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

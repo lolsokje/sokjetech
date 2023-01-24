@@ -28,14 +28,14 @@
         <template v-for="(team, index) in teams" :key="team.id">
             <tr v-for="(driver, driverIndex) in team.results" :key="driver.id">
                 <template v-if="isFirstResult(team, driverIndex)">
-                    <td class="text-center align-middle" :rowspan="team.driver_count">
+                    <td class="smallest-centered" :rowspan="team.driver_count">
                         {{ index + 1 }}
                     </td>
                     <BackgroundColourCell :backgroundColour="team.background_colour" :rowspan="team.driver_count"/>
-                    <td class="padded-left align-middle" :rowspan="team.driver_count">{{ team.team_name }}</td>
-                    <td class="text-center align-middle" :rowspan="team.driver_count">{{ team.points }}</td>
+                    <td class="padded-left" :rowspan="team.driver_count">{{ team.full_name }}</td>
+                    <td class="small-centered" :rowspan="team.driver_count">{{ team.points }}</td>
                 </template>
-                <td class="text-center" :style="team.style_string">{{ driver.number }}</td>
+                <td class="smallest-centered" :style="team.style_string">{{ driver.number }}</td>
                 <td class="colour-accent"></td>
                 <td v-for="race in races" :key="race.order" class="smallest-centered"
                     :class="getResultDisplayClasses(driver.results[race.order])"
@@ -49,29 +49,37 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
-import BackLink from '@/Shared/BackLink';
+<script setup lang="ts">
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
-import { getResultClasses } from '@/Composables/useResultPage';
+import { getResultClasses } from '@/Composables/useResultPage.js';
 import { getTeamPoints, sortResults } from '@/Composables/useChampionshipStandings';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import { Race } from '@/Interfaces/Race';
+import Entrant from '@/Interfaces/Entrant';
+import RaceResult from '@/Interfaces/RaceResult';
 
-const props = defineProps({
-    season: Object,
-    races: Array,
-    teams: Array,
-});
+interface Props {
+    season: SeasonInterface,
+    races: Race[],
+    teams: Entrant[],
+}
 
-const isFirstResult = (team, resultId) => {
+const props = defineProps<Props>();
+
+const lastPointPayingPosition = props.season.last_point_paying_position;
+
+const isFirstResult = (team: Entrant, resultId: string): boolean => {
     const results = team.results;
     const firstResultId = Object.keys(results)[0];
 
     return firstResultId === resultId;
 };
 
-const getResultDisplayClasses = (result) => {
-    return getResultClasses(result);
+const getResultDisplayClasses = (result: RaceResult): string => {
+    return getResultClasses(result, lastPointPayingPosition);
 };
 
 onMounted(() => {
@@ -81,8 +89,8 @@ onMounted(() => {
 });
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

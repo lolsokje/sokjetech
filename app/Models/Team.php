@@ -17,6 +17,10 @@ class Team extends SnowflakeModel
         'style_string',
     ];
 
+    protected $casts = [
+        'shared' => 'boolean',
+    ];
+
     public function styleString(): Attribute
     {
         return Attribute::get(function () {

@@ -16,11 +16,13 @@ class GetCircuits
     public function handle(): LengthAwarePaginator
     {
         return Circuit::query()
+            ->withCount('races')
             ->owned()
-            ->when($this->request->validated('search'), function (CircuitBuilder $builder, string $search) {
+            ->when($this->request->search(), function (CircuitBuilder $builder, string $search) {
                 return $builder->search($search);
             })
-            ->sort($this->request->get('field'), $this->request->get('direction'))
-            ->paginate(15);
+            ->sort($this->request->field(), $this->request->direction())
+            ->paginate(20)
+            ->withQueryString();
     }
 }

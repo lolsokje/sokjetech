@@ -1,6 +1,6 @@
 import { Inertia } from '@inertiajs/inertia';
 
-export const sort = (params, field = null) => {
+export const sortTable = (params, field = null) => {
     if (field) {
         params.field = field;
     }
@@ -8,7 +8,12 @@ export const sort = (params, field = null) => {
 };
 
 export const filter = (params, route) => {
-    let requestParams = params;
+    const requestParams = getRequestParams(params);
+    Inertia.get(route, requestParams, { replace: true, preserveState: true });
+};
+
+export const getRequestParams = (params) => {
+    let requestParams = { ...params };
 
     Object.entries(requestParams).forEach((entry) => {
         const [ key, value ] = entry;
@@ -18,5 +23,5 @@ export const filter = (params, route) => {
         }
     });
 
-    Inertia.get(route, requestParams, { replace: true, preserveState: true });
+    return requestParams;
 };

@@ -1,6 +1,9 @@
 <template>
     <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
 
+    <InertiaLink :href="route('weekend.qualifying', race)" class="btn btn-primary">
+        Go to qualifying
+    </InertiaLink>
     <div id="screenshot-target">
         <h3>Weekend intro</h3>
 
@@ -20,7 +23,7 @@
             </thead>
             <tbody>
             <tr v-for="stint in stints" :key="stint.order">
-                <td class="text-center">{{ stint.order }}</td>
+                <td class="smallest-centered">{{ stint.order }}</td>
                 <td class="text-center">
                     <fa :icon="getIcon(stint.use_driver_rating)"/>
                 </td>
@@ -56,12 +59,12 @@
                     </thead>
                     <tbody>
                     <tr v-for="(driver, index) in driverStandings" :key="index">
-                        <td class="text-center">{{ index + 1 }}</td>
+                        <td class="smallest-centered">{{ index + 1 }}</td>
                         <BackgroundColourCell :backgroundColour="driver.background_colour"/>
                         <td class="padded-left">{{ driver.full_name }}</td>
-                        <td class="text-center" :style="driver.style_string">{{ driver.number }}</td>
+                        <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
                         <td class="padded-left">{{ driver.team_name }}</td>
-                        <td class="text-center">{{ driver.points }}</td>
+                        <td class="smallest-centered">{{ driver.points }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -80,11 +83,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="(team, index) in teamStandings" :key="index">
-                        <td class="text-center">{{ index + 1 }}</td>
+                        <td class="smallest-centered">{{ index + 1 }}</td>
                         <BackgroundColourCell :backgroundColour="team.background_colour"/>
                         <td class="padded-left">{{ team.full_name }}</td>
                         <td class="padded-left">{{ team.team_principal }}</td>
-                        <td class="text-center">{{ team.points }}</td>
+                        <td class="smallest-centered">{{ team.points }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -94,24 +97,27 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
-import BackLink from '@/Shared/BackLink';
+<script setup lang="ts">
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { getDriverPoints, getTeamPoints, getTopPerformers, sortResults } from '@/Composables/useChampionshipStandings';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import { Race } from '@/Interfaces/Race';
+import RaceStint from '@/Interfaces/RaceStint';
+import DriverResults from '@/Interfaces/DriverResults';
+import TeamResults from '@/Interfaces/TeamResults';
 
-const props = defineProps({
-    race: {
-        type: Object,
-        required: true,
-    },
-    stints: Array,
-    driverStandings: Array,
-    teamStandings: Array,
-});
+interface Props {
+    race: Race,
+    stints: RaceStint[],
+    driverStandings: DriverResults[],
+    teamStandings: TeamResults[],
+}
 
-const getIcon = (boolean) => {
+const props = defineProps<Props>();
+
+const getIcon = (boolean: boolean): string => {
     return boolean ? 'check' : 'times';
 };
 
@@ -126,8 +132,8 @@ onMounted(() => {
 });
 </script>
 
-<script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+<script lang="ts">
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

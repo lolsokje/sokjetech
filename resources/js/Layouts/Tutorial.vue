@@ -1,6 +1,6 @@
 <template>
     <Base>
-        <div class="bg-dark p-4">
+        <div class="st-card p-4">
             <div class="col-6">
                 <slot/>
             </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import Base from '@/Layouts/Base';</script>
+import Base from '@/Layouts/Base.vue';</script>
 
 <script>
 export default { name: "Tutorial" };

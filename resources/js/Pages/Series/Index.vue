@@ -7,7 +7,7 @@
         Add series
     </InertiaLink>
 
-    <table class="table table-bordered table-dark table-narrow">
+    <table class="table table-narrow">
         <thead>
         <tr>
             <th>Name</th>
@@ -30,23 +30,19 @@
     </table>
 </template>
 
-<script setup>
-import BackLink from '@/Shared/BackLink';
+<script setup lang="ts">
+import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    universe: {
-        type: Object,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    universe: Universe,
+    can: Permission
+}
+
+const props = defineProps<Props>();
 </script>
 
-<script>
-import Universe from '@/Layouts/Universe';
+<script lang="ts">
+import Universe from '@/Layouts/Universe.vue';
 
 export default { layout: Universe };
 </script>

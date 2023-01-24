@@ -9,7 +9,6 @@ use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can create entrants', function () {
-    $this->withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $team = Team::factory()->for($season->universe)->create();
@@ -35,7 +34,8 @@ test('an authenticated user can\'t create entrants in another user\'s universe',
     $team = Team::factory()->for($season->universe)->create();
     $user = User::factory()->create();
 
-    $this->post(route('seasons.entrants.store', [$season]), getTeamCreationData($team))
+    $this->actingAs($user)
+        ->post(route('seasons.entrants.store', [$season]), getTeamCreationData($team))
         ->assertForbidden();
 });
 
@@ -231,6 +231,7 @@ function getTeamCreationData(Team $team, ?array $merge = []): array
         'team_principal' => $team->team_principal,
         'primary_colour' => $team->primary_colour,
         'secondary_colour' => $team->secondary_colour,
+        'accent_colour' => $team->accent_colour,
         'country' => $team->country,
     ], $merge);
 }

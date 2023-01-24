@@ -13,16 +13,20 @@ class RaceResultPageResource extends JsonResource
         $entrant = $racer->entrant;
 
         return [
-            'starting_position' => $this->starting_position,
-            'position' => $this->position,
-            'background_colour' => $entrant->primary_colour,
-            'style_string' => $entrant->style_string,
             'full_name' => $driver->full_name,
             'number' => $racer->number,
-            'team_name' => $entrant->full_name,
-            'dnf' => $this->dnf,
-            'fastest_lap' => $this->fastest_lap,
-            'points' => $this->points,
+            'team' => [
+                'background_colour' => $entrant->accent_colour,
+                'style_string' => $entrant->style_string,
+                'team_name' => $entrant->full_name,
+            ],
+            'result' => [
+                'starting_position' => $this->starting_position,
+                'position' => $this->position,
+                'dnf' => $this->dnf,
+                'fastest_lap' => $this->fastest_lap,
+                'points' => $this->points,
+            ],
         ];
     }
 }

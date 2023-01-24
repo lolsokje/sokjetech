@@ -7,28 +7,33 @@
             <input type="text" id="name" v-model="form.name" class="form-control" required>
         </div>
 
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-inline" v-model="form.shared" id="shared">
+            <label for="shared" class="form-check-label">Share with others</label>
+        </div>
+
         <button type="submit" class="btn btn-primary">Save engine</button>
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 
-defineProps({
-    series: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    series: Series,
+}
+
+defineProps<Props>();
 
 const form = useForm({
     name: '',
+    shared: false,
 });
 </script>
 
-<script>
-import Series from '@/Layouts/Series';
+<script lang="ts">
+import Series from '@/Layouts/Series.vue';
 
 export default { layout: Series };
 </script>

@@ -3,16 +3,20 @@
 
     <div class="d-flex my-3" v-if="canRunQualifying">
         <div class="ms-auto">
-            <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun">
+            <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun" :disabled="saving">
                 Perform run
             </button>
-            <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
+            <button @click.prevent="completeQualifying()"
+                    class="btn btn-success"
+                    v-if="canCompleteQualifying"
+                    :disabled="saving"
+            >
                 Complete qualifying
             </button>
         </div>
     </div>
 
-    <table class="table">
+    <table class="table" id="screenshot-target">
         <thead>
         <tr>
             <th class="text-center">Pos</th>
@@ -28,34 +32,36 @@
         </thead>
         <tbody>
         <tr v-for="(driver, position) in drivers" :key="driver.id">
-            <td class="small-centered">
+            <td class="smallest-centered">
                 {{ position + 1 }}
             </td>
-            <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
+            <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team.team_name }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.ratings.total_rating }}</td>
             <td v-for="i in formatDetails.runs_per_session"
                 :key="i"
                 class="small-centered"
                 :class="{ 'bg-accent-even': isEven(i) }"
             >
-                {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
+                {{ driver.result.runs.length ? driver.result.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
             </td>
-            <td class="small-centered">{{ driver.best_stint }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.total }}</td>
+            <td class="small-centered">{{ driver.result.best_stint }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.result.total }}</td>
         </tr>
         </tbody>
     </table>
+    <CopyScreenshotButton/>
 </template>
 
 <script setup>
 import { singleSessionStore as store } from '@/Stores/singleSessionStore';
-import { fillDriverRuns, performQualifyingRun } from '@/Composables/useRunQualifying';
+import { calculateDriverTotals, performQualifyingRun } from '@/Composables/useRunQualifying';
 import { computed, onBeforeUnmount, onMounted } from 'vue';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 
 const props = defineProps({
     formatDetails: Object,
@@ -65,6 +71,7 @@ const props = defineProps({
     sessionDetails: Object,
     completed: Boolean,
     showError: Boolean,
+    saving: Boolean,
 });
 
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
@@ -99,7 +106,7 @@ onMounted(() => {
         store.setCurrentRun(props.sessionDetails.completed_runs);
     }
 
-    fillDriverRuns(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
+    calculateDriverTotals(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
 });
 
 onBeforeUnmount(() => store.resetQualifyingSessionStats());

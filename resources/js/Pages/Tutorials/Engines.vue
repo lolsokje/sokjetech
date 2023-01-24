@@ -15,9 +15,9 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import TutorialPageLink from '@/Utilities/TutorialPageLink';
-import TutorialPageList from '@/Components/TutorialPageList';
+import TutorialPageList from '@/Components/TutorialPageList.vue';
 
 const pages = [
     new TutorialPageLink('season/engines', 'Adding engines to a season'),

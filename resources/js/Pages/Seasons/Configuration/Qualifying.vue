@@ -22,35 +22,64 @@
     </form>
 </template>
 
-<script setup>
-import { markRaw, onMounted, ref, watch } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import ThreeSessionElimination from '@/Shared/QualifyingFormats/ThreeSessionElimination';
-import SingleSession from '@/Shared/QualifyingFormats/SingleSession';
+<script setup lang="ts">
+import { markRaw, onMounted, Ref, ref, watch } from 'vue';
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import Errors from '@/Shared/Errors.vue';
+import ThreeSessionElimination from '@/Shared/QualifyingFormats/ThreeSessionElimination.vue';
+import SingleSession from '@/Shared/QualifyingFormats/SingleSession.vue';
+import SeasonInterface from '@/Interfaces/Season';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    formats: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    formats: object,
+}
+
+interface Form {
+    selected_format: string | null,
+    format_details: FormatDetails,
+}
+
+interface FormatDetails {
+    [key: string]: number | string,
+}
+
+const props = defineProps<Props>();
 
 const components = {
     three_session_elimination: ThreeSessionElimination,
     single_session: SingleSession,
 };
 
-const qualifyingComponent = ref(null);
-const format = ref(null);
+const qualifyingComponent: Ref<object | null> = ref(null);
+const format: Ref<string | null> = ref(null);
 
-const form = useForm({
+const form: InertiaForm<Form> = useForm({
     selected_format: null,
     format_details: {},
+});
+
+const handleFormatDetailsUpdate = (formatDetails: FormatDetails): void => {
+    form.format_details = {};
+    for (const [ key, value ] of Object.entries(formatDetails)) {
+        form.format_details[key] = value;
+    }
+};
+
+const pascalCaseToSnakeCase = (string: string): string => {
+    return string
+        .split(/(?=[A-Z])/) // split at uppercase letters
+        .join('_') // join with underscores
+        .toLowerCase();
+};
+
+const seasonHasStarted = (): boolean => {
+    return props.season.started;
+};
+
+watch(format, (newFormat) => {
+    qualifyingComponent.value = markRaw(components[newFormat]);
+    form.selected_format = newFormat;
 });
 
 onMounted(() => {
@@ -64,33 +93,10 @@ onMounted(() => {
 
     qualifyingComponent.value = markRaw(components[form.selected_format]);
 });
-
-const handleFormatDetailsUpdate = (formatDetails) => {
-    form.format_details = {};
-    for (const [ key, value ] of Object.entries(formatDetails)) {
-        form.format_details[key] = value;
-    }
-};
-
-const pascalCaseToSnakeCase = (string) => {
-    return string
-        .split(/(?=[A-Z])/) // split at uppercase letters
-        .join('_') // join with underscores
-        .toLowerCase();
-};
-
-watch(format, (newFormat) => {
-    qualifyingComponent.value = markRaw(components[newFormat]);
-    form.selected_format = newFormat;
-});
-
-const seasonHasStarted = () => {
-    return props.season.started;
-};
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

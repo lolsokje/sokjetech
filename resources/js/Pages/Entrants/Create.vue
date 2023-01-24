@@ -1,7 +1,10 @@
 <template>
+    <BackLink :backTo="route('seasons.entrants.index', [season])" label="team entries overview"/>
+
     <form class="form-narrow" @submit.prevent="form.post(route('seasons.entrants.store', [season]))">
         <SearchableDropdown :items="teams" label="Select a base team" text-key="full_name" value-key="id"
-                            @selected="setBaseTeam"/>
+                            @selected="setBaseTeam"
+        />
 
         <template v-if="form.team_id !== ''">
             <div class="mb-3">
@@ -24,19 +27,21 @@
             <div class="row mb-3">
                 <div class="col-3">
                     <label class="form-label" for="primary_colour">Primary colour</label>
-                    <input id="primary_colour" v-model="form.primary_colour" class="form-control w-50 h-75" required
-                           type="color">
+                    <ColourPicker v-model="form.primary_colour" id="primary_colour" required/>
                 </div>
 
                 <div class="col-3">
                     <label class="form-label" for="secondary_colour">Secondary colour</label>
-                    <input id="secondary_colour" v-model="form.secondary_colour" class="form-control w-50 h-75" required
-                           type="color">
+                    <ColourPicker v-model="form.secondary_colour" id="secondary_colour" required/>
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="accent_colour">Accent colour</label>
+                    <ColourPicker v-model="form.accent_colour" id="accent_colour" required/>
                 </div>
             </div>
 
-            <TeamNamePreview :background-colour="form.primary_colour" :name="form.full_name"
-                             :text-colour="form.secondary_colour"/>
+            <TeamNamePreview :team="form"/>
 
             <div v-if="engines.length" class="my-3">
                 <SearchableDropdown :items="engines" label="Engine supplier" @selected="setEngineSupplier"/>
@@ -47,30 +52,26 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import CountrySelect from '@/Shared/CountrySelect';
-import TeamNamePreview from '@/Shared/TeamNamePreview';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import CountrySelect from '@/Shared/CountrySelect.vue';
+import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
+import ColourPicker from '@/Components/ColourPicker.vue';
+import { Engine } from '@/Interfaces/Engine';
+import SeasonInterface from '@/Interfaces/Season';
+import Team from '@/Interfaces/Team';
+import Permission from '@/Interfaces/Permission';
+import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-    engines: {
-        type: Array,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    teams: Team[],
+    engines: Engine[],
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     team_id: '',
@@ -79,11 +80,12 @@ const form = useForm({
     team_principal: '',
     primary_colour: '',
     secondary_colour: '',
+    accent_colour: '',
     country: '',
-    engine_id: null,
+    engine_id: '',
 });
 
-function setBaseTeam (team) {
+function setBaseTeam (team: Team): void {
     form.team_id = team.id;
 
     for (let key of Object.keys(form)) {
@@ -95,17 +97,17 @@ function setBaseTeam (team) {
     form.country = team.country;
 }
 
-function setCountry (country) {
+function setCountry (country: string): void {
     form.country = country;
 }
 
-function setEngineSupplier (engine) {
+function setEngineSupplier (engine: Engine): void {
     form.engine_id = engine.id;
 }
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

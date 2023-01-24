@@ -49,7 +49,7 @@ test('an authenticated user can\'t create races in another user\'s universe', fu
 test('a universe owner can update races', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
-    $race = Race::factory()->for($season)->create();
+    $race = Race::factory()->for($season)->withStints()->create();
 
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$season, $race]), [
@@ -80,7 +80,7 @@ test('an unauthenticated user can\'t update races', function () {
 
 test('an authenticated user can\'t update another user\'s race', function () {
     $user = User::factory()->create();
-    $race = Race::factory()->create();
+    $race = Race::factory()->withStints()->create();
     $name = $race->name;
 
     $this->actingAs($user)
@@ -431,6 +431,20 @@ it('reorders remaining races', function () {
     foreach ($season->races()->orderBy('order')->get() as $key => $race) {
         assertEquals($key + 1, $race->order);
     }
+});
+
+it('correctly determines the next race after reordering races', function () {
+    $user = User::factory()->create();
+    $season = tap(createSeasonForUser($user), fn (Season $season) => Race::factory(2)->for($season)->create());
+
+    [$firstRace, $secondRace] = Race::all();
+
+    $this->assertEquals($firstRace->id, $season->nextRace()->id);
+
+    $secondRace->update(['order' => 1]);
+    $firstRace->update(['order' => 2]);
+
+    $this->assertEquals($secondRace->id, $season->nextRace()->id);
 });
 
 function getRaceCreationData(Season $season, ?User $user = null): array

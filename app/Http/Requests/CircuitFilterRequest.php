@@ -29,4 +29,19 @@ class CircuitFilterRequest extends FormRequest
             'direction' => ['nullable', 'in:asc,desc'],
         ];
     }
+
+    public function search(): ?string
+    {
+        return $this->validated('search');
+    }
+
+    public function field(): string
+    {
+        return $this->validated('field') ?? 'name';
+    }
+
+    public function direction(): string
+    {
+        return $this->validated('direction') ?? 'asc';
+    }
 }

@@ -4,7 +4,7 @@
             <TabLinks :links="links"/>
         </div>
 
-        <div class="w-100 bg-dark p-4">
+        <div class="st-card p-4">
             <h1>{{ universe.name }}</h1>
             <slot/>
         </div>
@@ -12,9 +12,9 @@
 </template>
 
 <script setup>
-import Base from './Base';
+import Base from './Base.vue';
 import { TabLink } from '@/Utilities/TabLink';
-import TabLinks from '@/Components/TabLinks';
+import TabLinks from '@/Components/TabLinks.vue';
 
 const props = defineProps({
     universe: {

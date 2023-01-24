@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetRaceResults;
 use App\Http\Resources\DnfReasonResource;
-use App\Http\Resources\RaceResultResource;
-use App\Http\Resources\RaceWeekendDriverResource;
 use App\Models\Race;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -22,12 +21,10 @@ class ShowRacePageController extends Controller
 
         $this->eagerLoadRace($race);
 
-        $drivers = RaceWeekendDriverResource::collection($race->season->activeRacers);
         $pointSystem = $race->season->pointSystem;
         return Inertia::render('RaceWeekend/Race', [
             'race' => $race->load('season'),
-            'drivers' => $drivers->toArray(request()),
-            'raceResults' => RaceResultResource::collection($race->raceResults)->toArray(request()),
+            'drivers' => (new GetRaceResults())->handle($race),
             'fastestLap' => [
                 'awarded' => $pointSystem->fastest_lap_point_awarded,
                 'type' => $pointSystem->fastest_lap_determination,

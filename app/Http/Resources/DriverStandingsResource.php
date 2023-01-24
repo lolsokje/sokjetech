@@ -15,7 +15,7 @@ class DriverStandingsResource extends JsonResource
             'full_name' => $this->driver->full_name,
             'number' => $this->number,
             'team_name' => $this->entrant->short_name,
-            'background_colour' => $this->entrant->primary_colour,
+            'background_colour' => $this->entrant->accent_colour,
             'style_string' => $this->entrant->style_string,
             'results' => $results,
         ];

@@ -8,13 +8,25 @@
     <div class="d-flex mb-3">
         <h3>Race</h3>
         <div class="ms-auto" v-if="can.edit">
-            <button v-if="canPerformStint" class="btn btn-primary" @click.prevent="performNextStint()">
+            <button v-if="canPerformStint"
+                    class="btn btn-primary"
+                    @click.prevent="performNextStint()"
+                    :disabled="raceStore.saving"
+            >
                 Run next stint
             </button>
-            <button class="btn btn-primary" v-if="canPerformFastestLap" @click.prevent="fastestLapRoll()">
+            <button class="btn btn-primary"
+                    v-if="canPerformFastestLap"
+                    @click.prevent="fastestLapRoll()"
+                    :disabled="raceStore.saving"
+            >
                 Fastest lap roll
             </button>
-            <button v-if="canCompleteRace" class="btn btn-success" @click.prevent="completeRace()">
+            <button v-if="canCompleteRace"
+                    class="btn btn-success"
+                    @click.prevent="completeRace()"
+                    :disabled="raceStore.saving"
+            >
                 Complete race
             </button>
         </div>
@@ -40,30 +52,30 @@
         </thead>
         <tbody>
         <tr v-for="driver in drivers" :key="driver.id">
-            <td class="small-centered">{{ driver.position }}</td>
-            <td class="small-centered">{{ driver.starting_position }}</td>
-            <td class="small-centered" :class="getPositionChangeDisplayClasses(driver)">
+            <td class="smallest-centered">{{ driver.result.position }}</td>
+            <td class="smallest-centered">{{ driver.result.starting_position }}</td>
+            <td class="smallest-centered" :class="getPositionChangeDisplayClasses(driver)">
                 {{ getPositionChange(driver) }}
             </td>
             <td class="colour-accent"></td>
-            <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.short_team_name }}</td>
-            <td class="small-centered bg-accent-even">{{ driver.total_rating }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.bonus }}</td>
+            <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
+            <td class="padded-left">{{ driver.team.short_team_name }}</td>
+            <td class="small-centered bg-accent-even">{{ driver.ratings.total_rating }}</td>
+            <td class="small-centered bg-accent-odd">{{ driver.result.bonus }}</td>
             <td class="small-centered"
                 v-for="(stint, index) in race.stints"
                 :key="stint.order"
                 :class="{ 'bg-accent-even': isEven(index) }"
             >
-                {{ driver.stints ? driver.stints[index] : '' }}
+                {{ driver.result.stints ? driver.result.stints[index] : '' }}
             </td>
             <td class="biggest-centered text-uppercase" :class="getTotalDisplayClasses(driver)">
                 {{ getTotalDisplayValue(driver) }}
             </td>
             <td class="small-centered" v-if="raceStore.fastestLapIsAwarded" :class="getFastestLapClass(driver)">
-                {{ driver.fastest_lap_roll }}
+                {{ driver.result.fastest_lap_roll }}
             </td>
         </tr>
         </tbody>
@@ -72,26 +84,25 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted } from 'vue';
-import { sortDriversByPosition } from '@/Composables/useRunQualifying';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import { isEven } from '@/Utilities/IsEven';
 import { raceStore } from '@/Stores/raceStore';
 import {
+    calculateDriverTotals,
     completeRace,
     fastestLapRoll,
     getPositionChange,
-    mergeRaceResults,
     performNextStint,
     sortDrivers,
 } from '@/Composables/useRunRace';
+import { sortDriversByPosition } from '@/Composables/useRunQualifying.js';
 
 const props = defineProps({
     race: Object,
     drivers: Array,
-    raceResults: Array,
     fastestLap: Object,
     can: Object,
     reliability_configuration: Object,
@@ -102,15 +113,15 @@ const reliabilityMinRng = props.reliability_configuration.min_rng;
 const reliabilityMaxRng = props.reliability_configuration.max_rng;
 
 const getFastestLapClass = (driver) => {
-    return driver.fastest_lap ? 'bg-purple' : '';
+    return driver.result.fastest_lap ? 'bg-purple' : '';
 };
 
 const getPositionChangeDisplayClasses = (driver) => {
-    if (driver.position_change === undefined || driver.position_change === 0) {
+    if (driver.result.position_change === undefined || driver.result.position_change === 0) {
         return 'bg-warning';
     }
 
-    if (driver.position_change < 0) {
+    if (driver.result.position_change < 0) {
         return 'bg-danger';
     }
 
@@ -118,15 +129,15 @@ const getPositionChangeDisplayClasses = (driver) => {
 };
 
 const getTotalDisplayClasses = (driver) => {
-    return driver.dnf ? 'bg-danger' : '';
+    return driver.result.dnf ? 'position-dnf' : '';
 };
 
 const getTotalDisplayValue = (driver) => {
-    if (driver.dnf) {
-        return driver.dnf;
+    if (driver.result.dnf) {
+        return driver.result.dnf;
     }
 
-    return driver.total;
+    return driver.result.total;
 };
 
 const canCompleteRace = computed(() => raceStore.canCompleteRace());
@@ -135,7 +146,7 @@ const canPerformFastestLap = computed(() => raceStore.canPerformFastestLapRoll()
 
 onMounted(() => {
     raceStore.setDrivers(props.drivers);
-    mergeRaceResults(props.raceResults);
+    calculateDriverTotals();
     raceStore.setCurrentStint(props.race.race_details?.current_stint ?? 0);
 
     if (raceStore.currentStint > 0) {
@@ -156,7 +167,7 @@ onMounted(() => {
 </script>
 
 <script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

@@ -1,15 +1,17 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\Race;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+use function Pest\Laravel\assertDatabaseCount;
 
 test('an authenticated user can create a circuit', function () {
     $user = User::factory()->create();
     $this->actingAs($user)
         ->post(route('circuits.store'), [
             'name' => 'Zandvoort',
-            'country' => 'nl'
+            'country' => 'nl',
         ])
         ->assertRedirect(route('circuits.index'));
 
@@ -20,7 +22,7 @@ test('an authenticated user can create a circuit', function () {
 test('an unauthenticated user can\'t create a circuit', function () {
     $this->post(route('circuits.store'), [
         'name' => 'Zandvoort',
-        'country' => 'nl'
+        'country' => 'nl',
     ])
         ->assertForbidden();
 
@@ -34,7 +36,7 @@ test('an authenticated user can update their own circuits', function () {
     $this->actingAs($user)
         ->put(route('circuits.update', [$circuit]), [
             'name' => 'New name',
-            'country' => 'NC'
+            'country' => 'NC',
         ])->assertRedirect(route('circuits.index'));
 
     $this->assertEquals('New name', $circuit->fresh()->name);
@@ -50,7 +52,7 @@ test('an authenticated user can\'t update someone else\'s circuits', function ()
     $this->actingAs(User::factory()->create())
         ->put(route('circuits.update', [$circuit]), [
             'name' => 'New name',
-            'country' => 'NC'
+            'country' => 'NC',
         ])->assertForbidden();
 
     $this->assertEquals($name, $circuit->fresh()->name);
@@ -103,7 +105,47 @@ it('shows all circuits created by a user on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Circuits/Index')
-                ->has('circuits.data', 5) // circuits.data since circuits are paginated
-                ->has('filters')
+                ->has('circuits', 5)
+                ->has('filters'),
         );
 });
+
+test('an authenticated user can delete circuits', function () {
+    $user = User::factory()->create();
+    $circuit = Circuit::factory()->for($user)->create();
+
+    $this->actingAs($user)
+        ->delete(route('circuits.destroy', $circuit))
+        ->assertRedirect();
+
+    assertDatabaseCount('circuits', 0);
+});
+
+test('an unauthorised  user cannot delete circuits', function () {
+    $circuit = Circuit::factory()->create();
+
+    $this->delete(route('circuits.destroy', $circuit))
+        ->assertForbidden();
+
+    assertDatabaseCount('circuits', 1);
+
+    $this->actingAs(User::factory()->create())
+        ->delete(route('circuits.destroy', $circuit))
+        ->assertForbidden();
+
+    assertDatabaseCount('circuits', 1);
+});
+
+test('a circuit cannot be removed once it has been used for a race', function () {
+    $this->withoutExceptionHandling();
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    $circuit = Circuit::factory()->for($user)->create();
+
+    Race::factory()->for($season)->for($circuit)->create();
+
+    $this->actingAs($user)
+        ->delete(route('circuits.destroy', $circuit));
+
+    assertDatabaseCount('circuits', 1);
+})->throws(Exception::class);

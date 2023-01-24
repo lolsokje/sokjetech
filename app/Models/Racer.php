@@ -12,6 +12,7 @@ class Racer extends SnowflakeModel
 
     protected $casts = [
         'number' => 'integer',
+        'active' => 'boolean',
     ];
 
     public function driver(): BelongsTo

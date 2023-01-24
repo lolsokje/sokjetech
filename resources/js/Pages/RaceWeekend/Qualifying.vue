@@ -10,23 +10,22 @@
         :formatDetails="race.season.format"
         :drivers="sortedDrivers"
         :canRunQualifying="can.edit"
-        :results="qualifyingResults"
         :sessionDetails="race.qualifying_details"
         :completed="race.qualifying_completed"
         :showError="showError"
+        :saving="saving"
         @runPerformed="storeQualifyingResult"
         @completeQualifying="completeQualifying"
     />
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { markRaw, onMounted, ref } from 'vue';
 import { getQualifyingFormatComponentName } from '@/Composables/useQualifyingFormat';
-import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination';
-import SingleSession from '@/Components/RaceWeekend/SingleSession';
+import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination.vue';
+import SingleSession from '@/Components/RaceWeekend/SingleSession.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { sortDriversByTotal } from '@/Composables/useRunQualifying';
 import axios from 'axios';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 
@@ -43,13 +42,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    qualifyingResults: {
-        type: Object,
-        required: false,
-    },
 });
 
 const showError = ref(false);
+const saving = ref(false);
 
 const components = {
     three_session_elimination: ThreeSessionElimination,
@@ -68,6 +64,7 @@ onMounted(() => {
 });
 
 const storeQualifyingResult = (data) => {
+    saving.value = true;
     const details = data.details;
     const drivers = [];
 
@@ -75,21 +72,20 @@ const storeQualifyingResult = (data) => {
         drivers.push({
             id: result.id,
             entrant_id: result.entrant_id,
-            driver_rating: result.driver_rating,
-            team_rating: result.team_rating,
-            engine_rating: result.engine_rating,
-            runs: result.runs,
+            driver_rating: result.ratings.driver_rating,
+            team_rating: result.ratings.team_rating,
+            engine_rating: result.ratings.engine_rating,
+            runs: result.result.runs,
         });
     });
-
-    sortDriversByTotal(drivers);
-
+    
     drivers.forEach((driver, index) => {
         driver.position = index + 1;
     });
 
     axios.post(route('weekend.qualifying.results.store', [ props.race ]), { drivers, details })
-        .catch(() => showError.value = true);
+        .catch(() => showError.value = true)
+        .finally(() => saving.value = false);
 };
 
 const completeQualifying = () => {
@@ -99,7 +95,7 @@ const completeQualifying = () => {
 </script>
 
 <script>
-import RaceWeekend from '@/Layouts/RaceWeekend';
+import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>

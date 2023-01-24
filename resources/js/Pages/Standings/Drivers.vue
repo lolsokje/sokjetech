@@ -26,12 +26,12 @@
         </thead>
         <tbody>
         <tr v-for="(driver, index) in drivers" :key="driver.id">
-            <td class="text-center">{{ index + 1 }}</td>
+            <td class="small-centered">{{ index + 1 }}</td>
             <BackgroundColourCell :backgroundColour="driver.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="text-center" :style="driver.style_string">{{ driver.number }}</td>
+            <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
             <td class="padded-left">{{ driver.team_name }}</td>
-            <td class="text-center">{{ driver.points }}</td>
+            <td class="small-centered">{{ driver.points }}</td>
             <td class="smallest-centered" v-for="race in races" :key="race.order"
                 :class="getResultDisplayClasses(driver.results[race.order])"
             >
@@ -43,22 +43,30 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
-import BackLink from '@/Shared/BackLink';
+<script setup lang="ts">
+import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
-import { getResultClasses } from '@/Composables/useResultPage';
+import { getResultClasses } from '@/Composables/useResultPage.js';
 import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import { Race } from '@/Interfaces/Race';
+import RaceResult from '@/Interfaces/RaceResult';
+import Racer from '@/Interfaces/Racer';
 
-const props = defineProps({
-    season: Object,
-    races: Array,
-    drivers: Array,
-});
+interface Props {
+    season: SeasonInterface,
+    races: Race[],
+    drivers: Racer[],
+}
 
-const getResultDisplayClasses = (result) => {
-    return getResultClasses(result);
+const props = defineProps<Props>();
+
+const lastPointPayingPosition = props.season.last_point_paying_position;
+
+const getResultDisplayClasses = (result: RaceResult): string => {
+    return getResultClasses(result, lastPointPayingPosition);
 };
 
 onMounted(() => {
@@ -68,8 +76,8 @@ onMounted(() => {
 });
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

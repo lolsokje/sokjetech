@@ -49,6 +49,11 @@ class Entrant extends SnowflakeModel
         return $this->hasMany(Racer::class);
     }
 
+    public function racersWithParticipation(): HasMany
+    {
+        return $this->hasMany(Racer::class)->whereHas('raceResults');
+    }
+
     public function qualifyingResults(): HasMany
     {
         return $this->hasMany(QualifyingResult::class);

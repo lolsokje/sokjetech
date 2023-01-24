@@ -31,7 +31,8 @@
                 </div>
                 <div class="mb-3 form-check form-check-inline">
                     <input type="checkbox" class="form-check-input" v-model="form.individual_rating"
-                           id="individual_rating">
+                           id="individual_rating"
+                    >
                     <label class="form-check-label" for="individual_rating">Individual engine ratings?</label>
                     <p>
                         <small>
@@ -47,37 +48,48 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink';
-import Errors from '@/Shared/Errors';
+import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import BackLink from '@/Shared/BackLink.vue';
+import Errors from '@/Shared/Errors.vue';
+import SeasonEngine from '@/Interfaces/SeasonEngine';
+import { Engine } from '@/Interfaces/Engine';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    engines: {
-        type: Array,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonEngine,
+    engines: Engine[],
+}
 
-const state = reactive({
+interface State {
+    base_engine: string | null,
+    rebadge: boolean,
+    name: string,
+}
+
+interface Form {
+    base_engine_id: string | null,
+    rebadge: boolean,
+    individual_rating: boolean,
+    name: string,
+}
+
+const props = defineProps<Props>();
+
+const state: State = reactive({
     base_engine: null,
     rebadge: false,
     name: '',
 });
 
-const form = useForm({
+const form: InertiaForm<Form> = useForm({
     base_engine_id: null,
     rebadge: state.rebadge,
     individual_rating: false,
     name: '',
 });
 
-const showSubmitButton = computed(() => {
+const showSubmitButton = computed((): boolean => {
     if (form.base_engine_id) {
         return !(form.rebadge && form.name.length < 3);
     }
@@ -97,8 +109,8 @@ watch(state, (newState) => {
 });
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

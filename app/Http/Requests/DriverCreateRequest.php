@@ -28,6 +28,7 @@ class DriverCreateRequest extends FormRequest
             'last_name' => ['required'],
             'dob' => ['nullable', 'date'],
             'country' => ['required'],
+            'shared' => ['nullable'],
         ];
     }
 }

@@ -1,8 +1,11 @@
 <template>
+    <BackLink :backTo="route('seasons.entrants.index', [season])" label="team entries overview"/>
+
     <form class="form-narrow" @submit.prevent="form.put(route('seasons.entrants.update', [season, entrant]))">
         <SearchableDropdown :items="teams" :selected-item="selectedTeam" label="Select a base team" text-key="full_name"
                             value-key="id"
-                            @selected="setBaseTeam"/>
+                            @selected="setBaseTeam"
+        />
 
         <template v-if="form.team_id !== ''">
             <div class="mb-3">
@@ -25,23 +28,26 @@
             <div class="row mb-3">
                 <div class="col-3">
                     <label class="form-label" for="primary_colour">Primary colour</label>
-                    <input id="primary_colour" v-model="form.primary_colour" class="form-control w-50 h-75" required
-                           type="color">
+                    <ColourPicker v-model="form.primary_colour" id="primary_colour" required/>
                 </div>
 
                 <div class="col-3">
                     <label class="form-label" for="secondary_colour">Secondary colour</label>
-                    <input id="secondary_colour" v-model="form.secondary_colour" class="form-control w-50 h-75" required
-                           type="color">
+                    <ColourPicker v-model="form.secondary_colour" id="secondary_colour" required/>
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="accent_colour">Accent colour</label>
+                    <ColourPicker v-model="form.accent_colour" id="accent_colour" required/>
                 </div>
             </div>
 
-            <TeamNamePreview :background-colour="form.primary_colour" :name="form.full_name"
-                             :text-colour="form.secondary_colour"/>
+            <TeamNamePreview :team="form"/>
 
             <div v-if="engines.length" class="my-3">
                 <SearchableDropdown :items="engines" :selected-item="selectedEngine" label="Engine supplier"
-                                    @selected="setEngineSupplier"/>
+                                    @selected="setEngineSupplier"
+                />
             </div>
 
             <button class="btn btn-primary mt-3" type="submit">Save team</button>
@@ -49,35 +55,29 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
 import { computed } from 'vue';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import CountrySelect from '@/Shared/CountrySelect';
-import TeamNamePreview from '@/Shared/TeamNamePreview';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import CountrySelect from '@/Shared/CountrySelect.vue';
+import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
+import ColourPicker from '@/Components/ColourPicker.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import Team from '@/Interfaces/Team';
+import { Engine } from '@/Interfaces/Engine';
+import Entrant from '@/Interfaces/Entrant';
+import Permission from '@/Interfaces/Permission';
+import BackLink from '@/Shared/BackLink.vue';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    teams: {
-        type: Array,
-        required: true,
-    },
-    engines: {
-        type: Array,
-        required: true,
-    },
-    entrant: {
-        type: Object,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    teams: Team[],
+    engines: Engine[],
+    entrant: Entrant,
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     team_id: props.entrant.team_id,
@@ -86,11 +86,12 @@ const form = useForm({
     team_principal: props.entrant.team_principal,
     primary_colour: props.entrant.primary_colour,
     secondary_colour: props.entrant.secondary_colour,
+    accent_colour: props.entrant.accent_colour,
     country: props.entrant.country,
     engine_id: props.entrant.engine_id,
 });
 
-function setBaseTeam (team) {
+function setBaseTeam (team: Team): void {
     if (form.team_id === team.id) {
         return;
     }
@@ -106,11 +107,11 @@ function setBaseTeam (team) {
     form.country = team.country;
 }
 
-function setCountry (country) {
+function setCountry (country: string): void {
     form.country = country;
 }
 
-function setEngineSupplier (engine) {
+function setEngineSupplier (engine: Engine): void {
     form.engine_id = engine.id;
 }
 
@@ -118,8 +119,8 @@ const selectedTeam = computed(() => props.teams.find((team) => team.id === form.
 const selectedEngine = computed(() => form.engine_id ? props.engines.find((engine) => engine.id === form.engine_id) : {});
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

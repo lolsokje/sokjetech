@@ -26,12 +26,12 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
-import TutorialPageList from '@/Components/TutorialPageList';
+import BackLink from '@/Shared/BackLink.vue';
+import TutorialPageList from '@/Components/TutorialPageList.vue';
 import TutorialPageLink from '@/Utilities/TutorialPageLink';
 
 const pages = [
-    new TutorialPageLink('entrants', 'Entrants'),
+    new TutorialPageLink('season/entrants', 'Entrants'),
     new TutorialPageLink('engines', 'Engines (series)'),
 ];
 </script>

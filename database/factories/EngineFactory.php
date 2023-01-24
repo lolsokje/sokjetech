@@ -19,4 +19,13 @@ class EngineFactory extends Factory
             'name' => $this->faker->name(),
         ];
     }
+
+    public function shared(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'shared' => true,
+            ];
+        });
+    }
 }

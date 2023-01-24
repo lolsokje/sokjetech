@@ -1,6 +1,7 @@
 <template>
     <ActiveRaceWarning v-if="season.has_active_race"/>
     <template v-else-if="engines.length">
+        <Errors :errors="form.errors"/>
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
 
         <div class="row row-cols-lg-auto mb-3">
@@ -28,6 +29,11 @@
                 </div>
             </div>
 
+            <p class="mb-2">
+                Rebadged engines without individual ratings will take the engine rating from their base engine, so no
+                min/max RNG inputs will be shown. You also won't be able to edit their ratings directly.
+            </p>
+
             <div>
                 <div class="form-check-inline">
                     <input type="checkbox" v-model="state.editRatings" class="form-check-inline" id="edit-ratings">
@@ -41,6 +47,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th class="text-center">Rebadged</th>
                     <th class="text-center">Individual rating</th>
                     <th class="text-center">Current</th>
                     <th v-if="inputsHidden" class="text-center">Min</th>
@@ -52,23 +59,34 @@
                 <tbody>
                 <tr v-for="engine in form.engines" :key="engine.id">
                     <td class="padded-left">{{ engine.name }}</td>
-                    <td class="big-centered">{{ engine.individual_rating ? 'Yes' : 'No' }}</td>
-                    <td class="small-centered">{{ engine.rating }}</td>
+                    <td class="big-centered">{{ engine.rebadge ? 'Yes' : 'No' }}</td>
+                    <td class="big-centered">
+                        <template v-if="engine.rebadge">
+                            {{ engine.individual_rating ? 'Yes' : 'No' }}
+                        </template>
+                    </td>
+                    <td class="small-centered bg-accent-odd">
+                        {{ development.isReliability() ? engine.reliability : engine.rating }}
+                    </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.min" class="form-control" type="number"
-                               v-if="engine.individual_rating">
+                               v-if="showEngineInput(engine)"
+                        >
                     </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="engine.max" class="form-control" type="number"
-                               v-if="engine.individual_rating">
+                               v-if="showEngineInput(engine)"
+                        >
                     </td>
                     <td class="small-centered">{{ engine.dev }}</td>
-                    <td class="small-centered">
+                    <td class="bg-accent-even" :class="state.editRatings ? 'medium-centered' : 'small-centered'">
                         <template v-if="!state.editRatings">
                             {{ engine.new }}
                         </template>
                         <template v-else>
-                            <input type="number" class="form-control" v-model="engine.new">
+                            <template v-if="showEngineInput(engine)">
+                                <input type="number" class="form-control" v-model="engine.new">
+                            </template>
                         </template>
                     </td>
                 </tr>
@@ -86,25 +104,27 @@
     <p v-else>No engines have been added yet</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import Development from '@/Utilities/Development';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import DevelopmentEngine from '@/Utilities/DevelopmentEngine';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import Errors from '@/Shared/Errors.vue';
+import Season from '@/Interfaces/Season';
+import DevelopmentState from '@/Interfaces/Development';
+import DevelopmentEngine from '@/Interfaces/DevelopmentEngine';
 
-const props = defineProps({
-    season: Object,
-    engines: Array,
-    type: {
-        type: String,
-        default: 'development',
-    },
-    formRoute: String,
-});
+interface Props {
+    season: Season,
+    engines: DevelopmentEngine[],
+    type?: string,
+    formRoute: string,
+}
 
-const state = reactive({
+const props = defineProps<Props>();
+
+const state: DevelopmentState = reactive({
     error: null,
     completed: false,
     hideInputs: false,
@@ -114,31 +134,34 @@ const state = reactive({
 });
 
 const form = useForm({
-    engines: [],
+    engines: props.engines,
 });
 
-function applyDevRanges () {
+const development = new Development(props.type);
+
+const applyDevRanges = (): void => {
     state.error = null;
-    if (Development.validateDevRange(state)) {
-        Development.applyDevRangesToItems(form.engines, state);
+    if (development.validateDevRange(state.min, state.max)) {
+        development.applyDevRangesToItems(form.engines, state);
     } else {
         state.error = 'The minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function runDev () {
+const runDev = (): void => {
     state.error = null;
-    if (Development.performDev(form.engines)) {
+    if (development.performDev(form.engines)) {
         updateEnginesUsingParentRating();
         state.completed = true;
     } else {
         state.error = 'One of the engines\' dev ranges are invalid, the minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function updateEnginesUsingParentRating () {
-    form.engines.filter(e => e.individual_rating === false).forEach(engine => {
-        const parentEngine = form.engines.find(e => e.base_engine_id === engine.base_engine_id && e.rebadge === false);
+const updateEnginesUsingParentRating = (): void => {
+    form.engines.filter(e => !e.individual_rating).forEach(engine => {
+        const parentEngine = form.engines.find(e => e.base_engine_id === engine.base_engine_id && !e.rebadge);
+
         if (!parentEngine) {
             return;
         }
@@ -146,24 +169,24 @@ function updateEnginesUsingParentRating () {
         engine.dev = parentEngine.dev;
         engine.new = parentEngine.new;
     });
-}
+};
 
-function store () {
-    Development.storeDev(form, props.formRoute, state);
-}
+const store = (): void => {
+    development.storeDev(form, props.formRoute, state);
+};
 
-const devCompleted = computed(() => !state.completed);
-const inputsHidden = computed(() => !state.hideInputs);
+const showEngineInput = (engine): boolean => {
+    return !engine.rebadge || engine.rebadge && engine.individual_rating;
+};
+
+const devCompleted = computed((): boolean => !state.completed);
+const inputsHidden = computed((): boolean => !state.hideInputs);
 
 onMounted(() => {
-    props.engines.forEach((engine) => {
-        form.engines.push(new DevelopmentEngine(engine, props.type === 'reliability'));
-    });
-
     form.engines.sort((a, b) => a.name.localeCompare(b.name));
 });
 </script>
 
-<script>
+<script lang="ts">
 export default { name: "EngineDevelopment" };
 </script>

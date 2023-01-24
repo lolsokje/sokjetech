@@ -31,6 +31,7 @@ class RaceWeekendDriverResource extends JsonResource
             'driver_reliability' => $this->reliability,
             'primary_colour' => $entrant->primary_colour,
             'secondary_colour' => $entrant->secondary_colour,
+            'accent_colour' => $entrant->accent_colour,
         ];
     }
 

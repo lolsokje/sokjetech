@@ -4,7 +4,7 @@
             <TabLinks :links="links"/>
         </div>
 
-        <div class="w-100 bg-dark p-4">
+        <div class="st-card p-4">
             <h1>{{ season.full_name }}</h1>
             <slot/>
         </div>
@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import Base from './Base';
-import TabLinks from '@/Components/TabLinks';
+import Base from './Base.vue';
+import TabLinks from '@/Components/TabLinks.vue';
 import { TabLink } from '@/Utilities/TabLink';
 
 const props = defineProps({

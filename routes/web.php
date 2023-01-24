@@ -6,10 +6,18 @@ use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteRaceController;
 use App\Http\Controllers\CompleteSeasonController;
+use App\Http\Controllers\CopyCircuitController;
+use App\Http\Controllers\CopyDriverController;
+use App\Http\Controllers\CopyEngineController;
+use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\Drivers\GenerateDriversController;
+use App\Http\Controllers\Drivers\PersistGeneratedDriversController;
+use App\Http\Controllers\Drivers\ShowDriverGenerationPage;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
 use App\Http\Controllers\EntrantController;
+use App\Http\Controllers\FilterStintsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
@@ -20,10 +28,14 @@ use App\Http\Controllers\SeasonSetupCopy\Races;
 use App\Http\Controllers\SeasonSetupCopy\Reliability;
 use App\Http\Controllers\SeasonSetupCopy\Teams;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\ShowCircuitDatabaseIndexPageController;
 use App\Http\Controllers\ShowCopySeasonSettingsPageController;
+use App\Http\Controllers\ShowDatabaseIndexPageController;
+use App\Http\Controllers\ShowDriverDatabaseIndexPageController;
 use App\Http\Controllers\ShowDriverDevelopmentPageController;
 use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowDriverStandingsController;
+use App\Http\Controllers\ShowEngineDatabaseIndexPageController;
 use App\Http\Controllers\ShowEngineDevelopmentPageController;
 use App\Http\Controllers\ShowEngineReliabilityController;
 use App\Http\Controllers\ShowPointsConfigurationController;
@@ -34,6 +46,7 @@ use App\Http\Controllers\ShowRaceResultPageController;
 use App\Http\Controllers\ShowRaceWeekendIntroPageController;
 use App\Http\Controllers\ShowReliabilityConfigurationController;
 use App\Http\Controllers\ShowStartingGridController;
+use App\Http\Controllers\ShowTeamDatabaseIndexPageController;
 use App\Http\Controllers\ShowTeamDevelopmentPageController;
 use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\ShowTeamStandingsController;
@@ -46,6 +59,7 @@ use App\Http\Controllers\StoreRaceResultsController;
 use App\Http\Controllers\StoreReliabilityConfigurationController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TempController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
 use App\Http\Controllers\UpdateDriverReliabilityController;
@@ -61,17 +75,22 @@ Route::get('/auth/discord/redirect', [AuthController::class, 'redirect'])->name(
 Route::get('/auth/discord/callback', [AuthController::class, 'callback'])->name('auth.callback');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')
-    ->where('page', '.*');
+Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')->where('page', '.*');
 
-Route::resource('circuits', CircuitController::class)->except('destroy');
+Route::resource('circuits', CircuitController::class);
 
 Route::resource('universes', UniverseController::class)->except('destroy');
 
 Route::resource('bugs', BugController::class);
 Route::resource('suggestions', SuggestionController::class);
 
+Route::get('stints', FilterStintsController::class)->name('stints')->middleware('auth');
+
 Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], function () {
+    Route::get('drivers/generate', ShowDriverGenerationPage::class)->name('drivers.generate.show');
+    Route::post('drivers/generate', GenerateDriversController::class)->name('drivers.generate');
+    Route::post('drivers/persist', PersistGeneratedDriversController::class)->name('drivers.persist');
+
     Route::resource('drivers', DriverController::class)->except('destroy');
     Route::resource('series', SeriesController::class)->except('destroy');
     Route::resource('teams', TeamController::class)->except('destroy');
@@ -159,4 +178,32 @@ Route::group([
     Route::post('qualifying/complete', CompleteQualifyingController::class)->name('qualifying.complete');
     Route::post('race/results', StoreRaceResultsController::class)->name('race.store');
     Route::post('race/complete', CompleteRaceController::class)->name('race.complete');
+});
+
+Route::group([
+    'prefix' => 'database',
+    'as' => 'database.',
+    'middleware' => 'auth',
+], function () {
+    Route::get('', ShowDatabaseIndexPageController::class)->name('index');
+
+    Route::group(['prefix' => 'teams', 'as' => 'teams.'], function () {
+        Route::get('', ShowTeamDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{team}', CopyTeamController::class)->name('copy');
+    });
+
+    Route::group(['prefix' => 'drivers', 'as' => 'drivers.'], function () {
+        Route::get('', ShowDriverDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{driver}', CopyDriverController::class)->name('copy');
+    });
+
+    Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
+        Route::get('', ShowCircuitDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{circuit}', CopyCircuitController::class)->name('copy');
+    });
+
+    Route::group(['prefix' => 'engines', 'as' => 'engines.'], function () {
+        Route::get('', ShowEngineDatabaseIndexPageController::class)->name('index');
+        Route::post('copy/{engine}', CopyEngineController::class)->name('copy');
+    });
 });

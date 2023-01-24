@@ -13,7 +13,11 @@
 
         <h4>Stints</h4>
 
-        <button class="btn btn-primary my-3" @click.prevent="addStint">Add stint</button>
+        <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
+
+        <button class="btn btn-link text-decoration-underline" @click.prevent="showDialog()">
+            or search for existing stints
+        </button>
 
         <table class="table">
             <thead>
@@ -25,7 +29,7 @@
                 <th>Use team rating</th>
                 <th>Use driver rating</th>
                 <th>Use engine rating</th>
-                <th></th>
+                <th colspan="2"></th>
             </tr>
             </thead>
             <tbody>
@@ -37,21 +41,36 @@
                 <td><input v-model="stint.use_team_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_driver_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_engine_rating" type="checkbox"></td>
-                <td class="big-centered"><span v-if="form.stints.length > 1" class="text-primary" role="button"
-                                               @click="deleteStint(stint.number)">delete stint</span></td>
+                <td class="small-centered">
+                    <span v-if="form.stints.length > 1" class="btn btn-link" role="button"
+                          @click="deleteStint(stint.order)"
+                    >delete
+                    </span>
+                </td>
+                <td class="small-centered">
+                    <button class="btn btn-link" @click.prevent="copyStint(stint.order, form.stints)">
+                        copy
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
 
         <button class="btn btn-primary" type="submit">Save race</button>
     </form>
+
+    <StintFilterModal ref="stintFilterModal" @selected="selected"/>
 </template>
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import Errors from '@/Shared/Errors';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import BackLink from '@/Shared/BackLink';
+import Errors from '@/Shared/Errors.vue';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import BackLink from '@/Shared/BackLink.vue';
+import { defaultStint } from '@/Composables/useDefaultStint';
+import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
+import StintFilterModal from '@/Components/StintFilterModal.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     season: {
@@ -66,34 +85,13 @@ const props = defineProps({
 
 const placeholder = `${props.season.year} Example Grand Prix`;
 
+const stintFilterModal = ref();
+
 const form = useForm({
     name: '',
     circuit_id: '',
-    stints: [
-        {
-            order: 1,
-            min_rng: 0,
-            max_rng: 30,
-            reliability: true,
-            use_team_rating: true,
-            use_driver_rating: true,
-            use_engine_rating: true,
-        },
-    ],
+    stints: [ defaultStint ],
 });
-
-function addStint () {
-    const lastOrder = form.stints[form.stints.length - 1].order;
-    form.stints.push({
-        order: lastOrder + 1,
-        min_rng: 0,
-        max_rng: 30,
-        reliability: false,
-        use_team_rating: false,
-        use_driver_rating: false,
-        use_engine_rating: false,
-    });
-}
 
 function deleteStint (number) {
     form.stints = form.stints.filter((stint) => stint.order !== number);
@@ -106,10 +104,19 @@ function deleteStint (number) {
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 }
+
+const showDialog = () => {
+    stintFilterModal.value.showDialog();
+};
+
+const selected = (stint) => {
+    stint.order = getLastStintOrder(form.stints) + 1;
+    form.stints.push(stint);
+};
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

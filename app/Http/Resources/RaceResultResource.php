@@ -2,24 +2,39 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Racer;
+use App\Models\RaceResult;
 
-class RaceResultResource extends JsonResource
+class RaceResultResource extends BaseResultResource
 {
     public function toArray($request): array
     {
+        /** @var Racer $racer */
+        $racer = $this->resource['racer'];
+        /** @var RaceResult $result */
+        $result = $this->resource['result'];
+
         return [
-            'driver_id' => (string) $this->racer_id,
-            'starting_position' => $this->starting_position,
-            'position' => $this->position,
-            'driver_rating' => $this->driver_rating,
-            'team_rating' => $this->team_rating,
-            'engine_rating' => $this->engine_rating,
-            'starting_bonus' => $this->starting_bonus,
-            'stints' => $this->stints ?? [],
-            'dnf' => $this->dnf,
-            'fastest_lap_roll' => $this->fastest_lap_roll,
-            'fastest_lap' => $this->fastest_lap,
+            'id' => $racer->id,
+            'entrant_id' => $racer->entrant_id,
+            'full_name' => $racer->driver->full_name,
+            'number' => $racer->number,
+            'team' => $this->getTeamDetails($racer),
+            'ratings' => $this->getRatings($racer, $result),
+            'result' => $this->getResultDetails($result),
+        ];
+    }
+
+    private function getResultDetails(?RaceResult $result): array
+    {
+        return [
+            'starting_position' => $result?->starting_position,
+            'bonus' => $result?->starting_bonus,
+            'position' => $result?->position,
+            'dnf' => $result?->dnf,
+            'fastest_lap_roll' => $result?->fastest_lap_roll,
+            'fastest_lap' => $result?->fastest_lap ?? false,
+            'stints' => $result->stints ?? [],
         ];
     }
 }

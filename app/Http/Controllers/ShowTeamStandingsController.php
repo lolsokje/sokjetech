@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\GeneralSeasonResource;
+use App\Http\Resources\SeasonStandingResource;
 use App\Http\Resources\TeamStandingsResource;
 use App\Models\Season;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inertia\Inertia;
 
 class ShowTeamStandingsController extends Controller
@@ -12,9 +13,12 @@ class ShowTeamStandingsController extends Controller
     public function __invoke(Season $season)
     {
         $season->load([
-            'races' => ['circuit'],
+            'pointDistribution',
+            'races' => function (HasMany $query) {
+                $query->orderBy('order')->with('circuit');
+            },
             'entrants' => [
-                'allRacers',
+                'racersWithParticipation',
                 'raceResults' => [
                     'race',
                     'racer' => [
@@ -25,7 +29,7 @@ class ShowTeamStandingsController extends Controller
         ]);
 
         return Inertia::render('Standings/Teams', [
-            'season' => GeneralSeasonResource::make($season)->toArray(request()),
+            'season' => SeasonStandingResource::make($season)->toArray(request()),
             'races' => $season->races,
             'teams' => TeamStandingsResource::collection($season->entrants)->toArray(request()),
         ]);

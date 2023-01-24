@@ -1,0 +1,25 @@
+@import 'dark';
+@import 'f1-base';
+
+body {
+  --base-100: #15151E;
+  --base-200: #1F1F27;
+  --base-300: #3A3A41;
+
+  --primary-color: var(--color);
+  --secondary: #F7F4F1;
+  --secondary-hover: #DEDCD9;
+  --secondary-color: var(--base-100);
+  --success-color: var(--base-100);
+  --warning-color: var(--base-100);
+  --danger-color: var(--color);
+}
+
+.table {
+  --table-color-header: var(--color);
+
+  --table-bg-body: var(--base-100);
+
+  --bg-odd: var(--base-200);
+  --bg-even: var(--base-300);
+}

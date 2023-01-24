@@ -24,7 +24,7 @@
         </thead>
         <tbody>
         <tr v-for="entrant in season.entrants" :key="entrant.id">
-            <BackgroundColourCell :backgroundColour="entrant.primary_colour"/>
+            <BackgroundColourCell :backgroundColour="entrant.accent_colour"/>
             <td class="padded-left">{{ entrant.full_name }}</td>
             <td class="padded-left">{{ entrant.short_name }}</td>
             <td class="padded-left">{{ entrant.team_principal }}</td>
@@ -55,29 +55,28 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
-import BackLink from '@/Shared/BackLink';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+<script setup lang="ts">
+import BackLink from '@/Shared/BackLink.vue';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { Inertia } from '@inertiajs/inertia';
+import SeasonInterface from '@/Interfaces/Season';
+import Permission from '@/Interfaces/Permission';
+import Entrant from '@/Interfaces/Entrant';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    can: {
-        type: Object,
-        required: true,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    can: Permission,
+}
+
+const props = defineProps<Props>();
 
 const hasActiveRace = props.season.has_active_race;
 const canEdit = props.can.edit && !hasActiveRace;
 const canDeleteTeam = props.can.edit && !props.season.started;
 
-const deleteEntrant = (entrant) => {
+const deleteEntrant = (entrant: Entrant): void => {
     if (!confirm(`Are you sure you want to remove "${entrant.full_name}"? This will also delete any associated drivers`)) {
         return;
     }
@@ -86,8 +85,8 @@ const deleteEntrant = (entrant) => {
 };
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

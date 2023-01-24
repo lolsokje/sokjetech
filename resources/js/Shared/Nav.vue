@@ -14,6 +14,11 @@
                 <li class="nav-item">
                     <InertiaLink :href="route('tutorials')" class="nav-link">Tutorials</InertiaLink>
                 </li>
+                <li class="nav-item" v-if="user">
+                    <InertiaLink :href="route('database.index')" class="nav-link">
+                        Database
+                    </InertiaLink>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <template v-if="user">

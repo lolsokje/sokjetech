@@ -2,27 +2,27 @@ const ASCENDING = 'asc';
 const DESCENDING = 'desc';
 
 export function getRoll (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export function getBestRun (runs) {
-    return Math.max(...runs);
+    return runs ? Math.max(...runs) : null;
 }
 
 export function getSessionTotal (driver) {
-    return driver.best_stint + driver.total_rating;
+    return driver.result.best_stint + driver.ratings.total_rating;
 }
 
 export function sortDriversByTotalRating (drivers) {
-    return sortDrivers(drivers, 'total_rating');
+    return sortDrivers(drivers, 'ratings.total_rating');
 }
 
 export function sortDriversByPosition (drivers) {
-    return sortDrivers(drivers, 'position', ASCENDING);
+    return sortDrivers(drivers, 'result.position', ASCENDING);
 }
 
 export function sortDriversByTotal (drivers) {
-    return sortDrivers(drivers, 'total');
+    return sortDrivers(drivers, 'result.total');
 }
 
 /**
@@ -43,39 +43,33 @@ export function sortDriversByTotalAndStintCount (drivers) {
     });
 }
 
-export function fillDriverRuns (drivers, currentSession, results) {
-    if (results.length) {
-        results.forEach(result => {
-            const driver = drivers.find(d => d.id === result.driver_id);
-            if (!driver) {
-                return;
-            }
+export function calculateDriverTotals (drivers, currentSession) {
+    drivers.forEach(driver => {
+        driver.result.best_stint = getBestRun(driver.result.runs[currentSession]);
+        driver.result.total = getSessionTotal(driver);
+    });
 
-            driver.runs = result.runs;
-            driver.position = result.position;
-            driver.driver_rating = result.driver_rating;
-            driver.team_rating = result.team_rating;
-            driver.engine_rating = result.engine_rating;
-            driver.total_rating = driver.driver_rating + driver.team_rating + driver.engine_rating;
-            driver.best_stint = getBestRun(driver.runs[currentSession]);
-            driver.total = getSessionTotal(driver);
-        });
-
+    if (drivers[0].result.runs.length) {
         sortDriversByPosition(drivers);
     } else {
-        drivers.forEach(driver => {
-            driver.runs = [];
-            driver.runs[currentSession] = [];
-        });
-
         sortDriversByTotalRating(drivers);
     }
 }
 
 export function performQualifyingRun (store, participationCheck = null) {
+    const currentSessionIndex = store.getCurrentSessionIndex();
+    const currentSessionRunCount = store.getCurrentSessionRunCount();
     store.getDrivers().forEach((driver, index) => {
+        if (driver.result.runs[currentSessionIndex] === undefined) {
+            driver.result.runs[currentSessionIndex] = [];
+        }
+
+        if (driver.result.runs[currentSessionIndex][currentSessionRunCount] === undefined) {
+            driver.result.runs[currentSessionIndex][currentSessionRunCount] = [];
+        }
+
         if (participationCheck === null || participationCheck(index)) {
-            driver.runs[store.getCurrentSessionIndex()][store.getCurrentSessionRunCount()] = getRoll(store.getMinRng(), store.getMaxRng());
+            driver.result.runs[currentSessionIndex][currentSessionRunCount] = getRoll(store.getMinRng(), store.getMaxRng());
             calculateSessionBestAndTotal(driver, store.getCurrentSessionIndex());
         }
     });
@@ -84,21 +78,30 @@ export function performQualifyingRun (store, participationCheck = null) {
 }
 
 export function calculateSessionBestAndTotal (driver, currentSession) {
-    if (!driver.runs[currentSession].length) {
-        driver.best_stint = null;
-        driver.total = null;
+    if (!driver.result.runs[currentSession].length) {
+        driver.result.best_stint = null;
+        driver.result.total = null;
     } else {
-        driver.best_stint = getBestRun(driver.runs[currentSession]);
-        driver.total = getSessionTotal(driver);
+        driver.result.best_stint = getBestRun(driver.result.runs[currentSession]);
+        driver.result.total = getSessionTotal(driver);
     }
 }
 
 function sortDrivers (drivers, key, direction = DESCENDING) {
+    const path = key.split('.');
     return drivers.sort((driverOne, driverTwo) => {
+        let driverOneSort = driverOne;
+        let driverTwoSort = driverTwo;
+
+        for (key of path) {
+            driverOneSort = driverOneSort[key];
+            driverTwoSort = driverTwoSort[key];
+        }
+
         if (direction === ASCENDING) {
-            return driverOne[key] - driverTwo[key];
+            return driverOneSort - driverTwoSort;
         } else {
-            return driverTwo[key] - driverOne[key];
+            return driverTwoSort - driverOneSort;
         }
     });
 }

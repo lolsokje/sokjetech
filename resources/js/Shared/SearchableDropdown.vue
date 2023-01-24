@@ -121,7 +121,7 @@ export default { name: 'SearchableDropdown' };
         width: 50%;
         max-height: 350px;
         overflow: auto;
-        z-index: 1;
+        z-index: 3;
 
         .dropdown-item {
             color: black;

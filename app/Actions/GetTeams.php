@@ -18,8 +18,8 @@ class GetTeams
     {
         return Team::query()
             ->forUniverse($this->universe)
-            ->sort($this->request->validated('field'), $this->request->validated('direction'))
-            ->when($this->request->validated('search'), function (TeamBuilder $builder, string $search) {
+            ->sort($this->request->field(), $this->request->direction())
+            ->when($this->request->search(), function (TeamBuilder $builder, string $search) {
                 $builder->search($search);
             })
             ->paginate(20);

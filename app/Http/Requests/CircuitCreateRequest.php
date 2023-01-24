@@ -24,8 +24,17 @@ class CircuitCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'country' => 'required',
+            'name' => ['required'],
+            'country' => ['required'],
+            'shared' => ['nullable', 'boolean'],
         ];
+    }
+
+    public function data(): array
+    {
+        return array_merge(
+            $this->validated(),
+            ['shared' => $this->request->has('shared')],
+        );
     }
 }

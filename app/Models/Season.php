@@ -50,6 +50,7 @@ class Season extends SnowflakeModel
         return Race::query()
             ->where('completed', false)
             ->where('season_id', $this->id)
+            ->orderBy('order')
             ->first();
     }
 
@@ -78,6 +79,11 @@ class Season extends SnowflakeModel
         return $this->hasMany(Racer::class);
     }
 
+    public function driversWithParticipation(): HasMany
+    {
+        return $this->drivers()->whereHas('raceResults');
+    }
+
     public function activeRacers(): HasMany
     {
         return $this->drivers()->where('active', true);
@@ -93,8 +99,7 @@ class Season extends SnowflakeModel
         return $this->universe->drivers()
             ->whereNotIn('id', $this->drivers()
                 ->where('active', true)
-                ->pluck('driver_id'))
-            ->orderBy('first_name')
+                ->get('driver_id'))
             ->get();
     }
 
@@ -184,5 +189,10 @@ class Season extends SnowflakeModel
                 'entrant',
             ],
         ])->where('position', 1);
+    }
+
+    public function lastPointPayingPosition(): ?int
+    {
+        return $this->pointDistribution->sortByDesc('position')->first()?->position;
     }
 }

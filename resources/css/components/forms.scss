@@ -1,0 +1,40 @@
+.form-control,
+.form-select {
+  background-color: var(--input-background-color);
+  border: 1px solid var(--input-border-color);
+  color: var(--color);
+
+  &:focus {
+    background-color: var(--input-background-color);
+    color: var(--color);
+    border-color: var(--primary-hover);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    background-color: var(--input-background-disabled);
+    cursor: not-allowed;
+  }
+}
+
+.form-narrow {
+  width: 50%;
+}
+
+@media (max-width: 1920px) {
+  .form-narrow {
+    width: 75%;
+  }
+}
+
+@media (max-width: 1536px) {
+  .form-narrow {
+    width: 85%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .form-narrow {
+    width: 100%;
+  }
+}

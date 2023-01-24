@@ -6,7 +6,7 @@
 
         <div class="mb-3">
             <label class="form-label" for="name">Name</label>
-            <input id="name" v-model="form.name" class="form-control" type="text">
+            <input id="name" v-model="form.name" class="form-control" type="text" :placeholder="placeholder">
         </div>
 
         <SearchableDropdown
@@ -16,7 +16,11 @@
 
         <h4>Stints</h4>
 
-        <button class="btn btn-primary my-3" @click.prevent="addStint">Add stint</button>
+        <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
+
+        <button class="btn btn-link text-decoration-underline" @click.prevent="showDialog()">
+            or search for existing stints
+        </button>
 
         <table class="table">
             <thead>
@@ -28,7 +32,7 @@
                 <th>Use team rating</th>
                 <th>Use driver rating</th>
                 <th>Use engine rating</th>
-                <th></th>
+                <th colspan="2"></th>
             </tr>
             </thead>
             <tbody>
@@ -40,23 +44,36 @@
                 <td><input v-model="stint.use_team_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_driver_rating" type="checkbox"></td>
                 <td><input v-model="stint.use_engine_rating" type="checkbox"></td>
-                <td class="big-centered"><span
-                    v-if="form.stints.length > 1" class="text-primary" role="button"
-                    @click="deleteStint(stint.order)"
-                >delete stint</span></td>
+                <td class="small-centered">
+                    <span v-if="form.stints.length > 1" class="btn btn-link" role="button"
+                          @click="deleteStint(stint.order)"
+                    >delete
+                    </span>
+                </td>
+                <td class="small-centered">
+                    <button class="btn btn-link" @click.prevent="copyStint(stint.order, form.stints)">
+                        copy
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
 
         <button class="btn btn-primary" type="submit">Save race</button>
     </form>
+
+    <StintFilterModal ref="stintFilterModal" @selected="selected"/>
 </template>
 
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
-import SearchableDropdown from '@/Shared/SearchableDropdown';
-import Errors from '@/Shared/Errors';
-import BackLink from '@/Shared/BackLink';
+import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
+import Errors from '@/Shared/Errors.vue';
+import BackLink from '@/Shared/BackLink.vue';
+import { onMounted, ref } from 'vue';
+import { defaultStint } from '@/Composables/useDefaultStint';
+import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
+import StintFilterModal from '@/Components/StintFilterModal.vue';
 
 const props = defineProps({
     season: {
@@ -75,6 +92,8 @@ const props = defineProps({
 
 const placeholder = `${props.season.year} Example Grand Prix`;
 
+const stintFilterModal = ref();
+
 const form = useForm({
     name: props.race.name,
     circuit_id: props.race.circuit_id,
@@ -82,19 +101,6 @@ const form = useForm({
 });
 
 const selectedCircuit = props.circuits.find((circuit) => circuit.id === form.circuit_id);
-
-function addStint () {
-    const lastOrder = form.stints[form.stints.length - 1].order;
-    form.stints.push({
-        order: lastOrder + 1,
-        min_rng: 0,
-        max_rng: 30,
-        reliability: false,
-        use_team_rating: false,
-        use_driver_rating: false,
-        use_engine_rating: false,
-    });
-}
 
 function deleteStint (order) {
     form.stints = form.stints.filter((stint) => stint.order !== order);
@@ -107,10 +113,25 @@ function deleteStint (order) {
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 }
+
+const showDialog = () => {
+    stintFilterModal.value.showDialog();
+};
+
+const selected = (stint) => {
+    stint.order = getLastStintOrder(form.stints) + 1;
+    form.stints.push(stint);
+};
+
+onMounted(async () => {
+    if (form.stints.length === 0) {
+        form.stints.push(defaultStint);
+    }
+});
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

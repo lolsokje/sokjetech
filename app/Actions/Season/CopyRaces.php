@@ -16,6 +16,9 @@ class CopyRaces extends BaseCopyAction
         $this->oldSeason = Season::find($this->request->validated('season_id'));
     }
 
+    /**
+     * @throws InvalidSeasonRequirements
+     */
     public function handle(): void
     {
         $this->validateSeasonOwnership($this->oldSeason);

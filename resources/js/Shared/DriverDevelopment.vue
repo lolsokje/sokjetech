@@ -1,6 +1,7 @@
 <template>
     <ActiveRaceWarning v-if="season.has_active_race"/>
     <template v-else-if="drivers.length">
+        <Errors :errors="form.errors"/>
         <p v-if="state.error" class="text-danger">{{ state.error }}</p>
         <div class="row row-cols-lg-auto mb-3">
             <div class="col-4">
@@ -52,11 +53,13 @@
                 </thead>
                 <tbody>
                 <tr v-for="driver in form.drivers" :key="driver.id">
-                    <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+                    <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
                     <td class="padded-left align-middle">{{ driver.full_name }}</td>
                     <td :style="driver.team_style" class="small-centered">{{ driver.number }}</td>
                     <td class="padded-left align-middle">{{ driver.team_name }}</td>
-                    <td class="small-centered">{{ driver.rating }}</td>
+                    <td class="small-centered bg-accent-odd">
+                        {{ development.isReliability() ? driver.reliability : driver.rating }}
+                    </td>
                     <td v-if="inputsHidden" class="big-centered">
                         <input v-model="driver.min" class="form-control" type="number">
                     </td>
@@ -64,7 +67,7 @@
                         <input v-model="driver.max" class="form-control" type="number">
                     </td>
                     <td class="small-centered">{{ driver.dev }}</td>
-                    <td class="small-centered">
+                    <td class="bg-accent-even" :class="state.editRatings ? 'medium-centered' : 'small-centered'">
                         <template v-if="!state.editRatings">{{ driver.new }}</template>
                         <template v-else>
                             <input type="number" class="form-control" v-model="driver.new">
@@ -85,36 +88,28 @@
     <p v-else>No drivers have been added to any entrants yet</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import Development from '../Utilities/Development';
-import DevelopmentDriver from '../Utilities/DevelopmentDriver';
-import CopyScreenshotButton from './CopyScreenshotButton';
-import ActiveRaceWarning from '@/Shared/ActiveRaceWarning';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from './CopyScreenshotButton.vue';
+import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import Errors from '@/Shared/Errors.vue';
+import DevelopmentState from '@/Interfaces/Development';
+import Season from '@/Interfaces/Season';
+import Development from '@/Utilities/Development';
+import DevelopmentDriver from '@/Interfaces/DevelopmentDriver';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    drivers: {
-        type: Array,
-        required: true,
-    },
-    type: {
-        type: String,
-        required: false,
-        default: 'development',
-    },
-    formRoute: {
-        type: String,
-        required: true,
-    },
-});
+interface Props {
+    season: Season,
+    type?: string,
+    formRoute: string,
+    drivers: DevelopmentDriver[],
+}
 
-const state = reactive({
+const props = defineProps<Props>();
+
+const state: DevelopmentState = reactive({
     error: null,
     completed: false,
     hideInputs: false,
@@ -124,43 +119,41 @@ const state = reactive({
 });
 
 const form = useForm({
-    drivers: [],
+    drivers: props.drivers,
 });
 
-function applyDevRanges () {
+const development = new Development(props.type);
+
+const applyDevRanges = (): void => {
     state.error = null;
-    if (Development.validateDevRange(state)) {
-        Development.applyDevRangesToItems(form.drivers, state);
+    if (development.validateDevRange(state.min, state.max)) {
+        development.applyDevRangesToItems(form.drivers, state);
     } else {
         state.error = 'The minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function runDev () {
+const runDev = (): void => {
     state.error = null;
-    if (Development.performDev(form.drivers)) {
-        state.devCompleted = true;
+    if (development.performDev(form.drivers)) {
+        state.completed = true;
     } else {
         state.error = 'One of the drivers\' dev ranges are invalid, the minimum bound must be equal to or lower than the maximum bound.';
     }
-}
+};
 
-function store () {
-    Development.storeDev(form, props.formRoute, state);
-}
+const store = (): void => {
+    development.storeDev(form, props.formRoute, state);
+};
 
-const devCompleted = computed(() => !state.devCompleted);
-const inputsHidden = computed(() => !state.hideInputs);
+const devCompleted = computed((): boolean => !state.completed);
+const inputsHidden = computed((): boolean => !state.hideInputs);
 
 onMounted(() => {
-    props.drivers.forEach((driver) => {
-        form.drivers.push(new DevelopmentDriver(driver, props.type === 'reliability'));
-    });
-
     form.drivers.sort((a, b) => a.team_name.localeCompare(b.team_name));
 });
 </script>
 
-<script>
+<script lang="ts">
 export default { name: 'DriverDevelopment' };
 </script>

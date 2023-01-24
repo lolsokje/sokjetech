@@ -1,20 +1,24 @@
 <template>
     <h3>Qualifying - Q{{ store.getCurrentSessionIndex() + 1 }}</h3>
     <div class="d-flex my-3">
-        <button class="btn btn-info" @click="viewPreviousSession()" v-if="canViewPreviousSession">
+        <button class="btn btn-info" @click="viewPreviousSession()" v-if="canViewPreviousSession" :disabled="saving">
             Previous session
         </button>
         <div class="ms-auto">
             <div v-if="canRunQualifying">
-                <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun">
+                <button @click.prevent="performRun()" class="btn btn-primary" v-if="canPerformRun" :disabled="saving">
                     Perform Run
                 </button>
-                <button @click.prevent="completeQualifying()" class="btn btn-success" v-if="canCompleteQualifying">
+                <button @click.prevent="completeQualifying()"
+                        class="btn btn-success"
+                        v-if="canCompleteQualifying"
+                        :disabled="saving"
+                >
                     Complete qualifying
                 </button>
             </div>
             <button @click.prevent="viewNextSession()" v-if="!canPerformRun && canContinueToNextSession"
-                    class="btn btn-secondary"
+                    class="btn btn-secondary" :disabled="saving"
             >
                 Next session
             </button>
@@ -38,23 +42,23 @@
         <tbody>
         <template v-for="(driver, position) in drivers" :key="driver.id">
             <tr v-if="canDriverParticipateInCurrentSession(position)">
-                <td class="small-centered" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
+                <td class="smallest-centered" :class="isDriverBelowSessionCutoff(position + 1) ? 'bg-danger' : ''">
                     {{ position + 1 }}
                 </td>
-                <BackgroundColourCell :backgroundColour="driver.primary_colour"/>
+                <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="small-centered" :style="driver.style_string">{{ driver.number }}</td>
-                <td class="padded-left">{{ driver.team_name }}</td>
-                <td class="small-centered bg-accent-odd">{{ driver.total_rating }}</td>
+                <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
+                <td class="padded-left">{{ driver.team.team_name }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.ratings.total_rating }}</td>
                 <td v-for="i in runsPerSession"
                     :key="i"
                     class="small-centered"
                     :class="{ 'bg-accent-even': isEven(i) }"
                 >
-                    {{ driver.runs ? driver.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
+                    {{ driver.result.runs.length ? driver.result.runs[store.getCurrentSessionIndex()][i - 1] : '' }}
                 </td>
-                <td class="small-centered">{{ driver.best_stint }}</td>
-                <td class="small-centered bg-accent-odd">{{ driver.total }}</td>
+                <td class="small-centered">{{ driver.result.best_stint }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.result.total }}</td>
             </tr>
         </template>
         </tbody>
@@ -65,15 +69,15 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted } from 'vue';
 import {
+    calculateDriverTotals,
     calculateSessionBestAndTotal,
-    fillDriverRuns,
     performQualifyingRun,
     sortDriversByPosition,
     sortDriversByTotal,
 } from '@/Composables/useRunQualifying';
 import { threeSessionEliminationStore as store } from '@/Stores/threeSessionEliminationStore';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton';
-import BackgroundColourCell from '@/Components/BackgroundColourCell';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
 
 const props = defineProps({
@@ -102,6 +106,7 @@ const props = defineProps({
         required: false,
     },
     showError: Boolean,
+    saving: Boolean,
 });
 
 const emit = defineEmits([ 'runPerformed', 'completeQualifying' ]);
@@ -140,8 +145,8 @@ const viewNextSession = () => {
     store.incrementCurrentSession();
 
     store.getDrivers().forEach(driver => {
-        if (!driver.runs[store.getCurrentSessionIndex()]) {
-            driver.runs[store.getCurrentSessionIndex()] = [];
+        if (!driver.result.runs[store.getCurrentSessionIndex()]) {
+            driver.result.runs[store.getCurrentSessionIndex()] = [];
         }
         calculateSessionBestAndTotal(driver, store.getCurrentSessionIndex());
     });
@@ -190,7 +195,7 @@ onMounted(() => {
     store.setMinRng(props.formatDetails.min_rng);
     store.setMaxRng(props.formatDetails.max_rng);
 
-    fillDriverRuns(store.getDrivers(), store.getCurrentSessionIndex(), props.results);
+    calculateDriverTotals(store.getDrivers(), store.getCurrentSessionIndex());
 });
 
 onBeforeUnmount(() => {

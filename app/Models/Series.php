@@ -11,6 +11,11 @@ class Series extends SnowflakeModel
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function universe(): BelongsTo
     {
         return $this->belongsTo(Universe::class);

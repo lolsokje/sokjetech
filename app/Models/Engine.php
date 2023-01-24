@@ -10,6 +10,10 @@ class Engine extends SnowflakeModel
 {
     use HasFactory;
 
+    protected $casts = [
+        'shared' => 'boolean',
+    ];
+
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class);

@@ -13,7 +13,8 @@
         <div class="mb-3 w-25">
             <label for="amount_of_point_scorers" class="form-label">Amount of point scorers</label>
             <input type="number" id="amount_of_point_scorers" v-model="amountOfPointScorers" class="form-control"
-                   @change="setPointScorerInputs" required :disabled="hasSeasonStarted()">
+                   @change="setPointScorerInputs" required :disabled="hasSeasonStarted()"
+            >
         </div>
 
         <div class="row">
@@ -30,7 +31,8 @@
                 <div class="row mb-3">
                     <div>
                         <input type="checkbox" class="form-check-input me-1" v-model="form.fastest_lap_point_awarded"
-                               id="point_for_fastest_lap" :disabled="hasSeasonStarted()">
+                               id="point_for_fastest_lap" :disabled="hasSeasonStarted()"
+                        >
                         <label for="point_for_fastest_lap" class="form-check-label">Point for fastest lap</label>
                     </div>
 
@@ -38,14 +40,16 @@
                         <div class="my-3">
                             <label for="fastest_lap_points" class="form-label">Fastest lap points</label>
                             <input type="number" class="form-control" v-model="form.fastest_lap_point_amount"
-                                   :required="form.fastest_lap_point_awarded" :disabled="hasSeasonStarted()">
+                                   :required="form.fastest_lap_point_awarded" :disabled="hasSeasonStarted()"
+                            >
                         </div>
 
                         <div class="my-3">
                             <label for="fastestLapDetermination" class="form-label">Fastest lap determination</label>
                             <select id="fastestLapDetermination" class="form-control"
                                     v-model="form.fastest_lap_determination" :required="form.fastest_lap_point_awarded"
-                                    :disabled="hasSeasonStarted()">
+                                    :disabled="hasSeasonStarted()"
+                            >
                                 <option value="">Pick an option</option>
                                 <option :value="FastestLapDetermination.BEST_LAST_STINT">Best last stint RNG</option>
                                 <option :value="FastestLapDetermination.SEPARATE_STINT">Separate stint</option>
@@ -56,13 +60,15 @@
                             <div class="col-6">
                                 <label for="fastest_lap_min_rng" class="form-label">Fastest lap min RNG</label>
                                 <input type="number" class="form-control" v-model="form.fastest_lap_min_rng"
-                                       :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()">
+                                       :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()"
+                                >
                             </div>
 
                             <div class="col-6">
                                 <label for="fastest_lap_max_rng" class="form-label">Fastest lap max RNG</label>
                                 <input type="number" class="form-control" v-model="form.fastest_lap_max_rng"
-                                       :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()">
+                                       :required="fastestLapIsSeparateStint" :disabled="hasSeasonStarted()"
+                                >
                             </div>
                         </div>
                     </div>
@@ -73,7 +79,8 @@
                 <div class="row mb-3">
                     <div>
                         <input type="checkbox" class="form-check-input me-1" v-model="form.pole_position_point_awarded"
-                               id="point_for_pole_position" :disabled="hasSeasonStarted()">
+                               id="point_for_pole_position" :disabled="hasSeasonStarted()"
+                        >
                         <label for="point_for_pole_position" class="form-check-label">Point for pole position</label>
                     </div>
 
@@ -82,7 +89,8 @@
                             <label for="amount_of_points_for_pole" class="form-label">Amount of points for pole
                                 position</label>
                             <input type="number" class="form-control" v-model="form.pole_position_point_amount"
-                                   :required="form.pole_position_point_awarded" :disabled="hasSeasonStarted()">
+                                   :required="form.pole_position_point_awarded" :disabled="hasSeasonStarted()"
+                            >
                         </div>
                     </div>
                 </div>
@@ -93,26 +101,24 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/inertia-vue3';
-import { computed, onMounted, ref } from 'vue';
-import FastestLapDetermination from '@/Enums/FastestLapDetermination';
-import Errors from '@/Shared/Errors';
-import BackLink from '@/Shared/BackLink';
+import { computed, ComputedRef, onMounted, Ref, ref } from 'vue';
+import { FastestLapDetermination } from '@/Enums/FastestLapDetermination';
+import Errors from '@/Shared/Errors.vue';
+import BackLink from '@/Shared/BackLink.vue';
+import SeasonInterface from '@/Interfaces/Season';
+import PointDistribution from '@/Interfaces/PointDistribution';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: false,
-    },
-    points: {
-        type: Array,
-        required: false,
-    },
-});
+interface Props {
+    season: SeasonInterface,
+    points: PointDistribution[],
+}
 
-const amountOfPointScorers = ref(props.points.length ? props.points.length : 10);
-const fastestLapIsSeparateStint = computed(() => form.fastest_lap_determination === FastestLapDetermination.SEPARATE_STINT);
+const props = defineProps<Props>();
+
+const amountOfPointScorers: Ref<number> = ref(props.points.length ? props.points.length : 10);
+const fastestLapIsSeparateStint: ComputedRef<boolean> = computed(() => form.fastest_lap_determination === FastestLapDetermination.SEPARATE_STINT);
 
 const form = useForm({
     points: props?.points,
@@ -125,8 +131,32 @@ const form = useForm({
     fastest_lap_max_rng: 0,
 });
 
+const setPointScorerInputs = (): void => {
+    const amount = amountOfPointScorers.value;
+
+    if (amount === form.points?.length) {
+        return;
+    }
+
+    if (amount > form.points?.length) {
+        for (let i = form.points?.length + 1; i <= amount; i++) {
+            addToPointsArray(i, 0);
+        }
+    } else {
+        form.points = form.points?.slice(0, amount);
+    }
+};
+
+const addToPointsArray = (position: number, points: number): void => {
+    form.points?.push({ position, points } as PointDistribution);
+};
+
+const hasSeasonStarted = (): boolean => {
+    return props.season.started;
+};
+
 onMounted(() => {
-    if (!form.points.length) {
+    if (!form.points?.length) {
         let remainingPoints = amountOfPointScorers.value;
         for (let position = 1; position <= amountOfPointScorers.value; position++) {
             addToPointsArray(position, remainingPoints);
@@ -137,34 +167,10 @@ onMounted(() => {
     // fill the form's point system with an existing point system, if present
     Object.assign(form, props.season?.point_system);
 });
-
-const setPointScorerInputs = () => {
-    const amount = amountOfPointScorers.value;
-
-    if (amount === form.points.length) {
-        return;
-    }
-
-    if (amount > form.points.length) {
-        for (let i = form.points.length + 1; i <= amount; i++) {
-            addToPointsArray(i, 0);
-        }
-    } else {
-        form.points = form.points.slice(0, amount);
-    }
-};
-
-const addToPointsArray = (position, points) => {
-    form.points.push({ position, points });
-};
-
-const hasSeasonStarted = () => {
-    return props.season.started;
-};
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

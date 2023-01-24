@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink';
+import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import CopySeasonSetupItem from '@/Utilities/CopySeasonSetupItem';
 import CopySeasonSetupItemDependency from '@/Utilities/CopySeasonSetupItemDependency';
@@ -105,14 +105,16 @@ const startCopying = async () => {
             data[item.dependency.name] = true;
         }
 
-        await axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+        axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+            .then(() => {
+                item.completed = true;
+                completedItems.value++;
+            })
             .catch((error) => {
                 item.fail = true;
-                item.error = error.response.data.message;
-            });
-        item.copying = false;
-        item.completed = true;
-        completedItems.value++;
+                item.error = error.response.data.error;
+            })
+            .finally(() => item.copying = false);
     }
 };
 
@@ -122,7 +124,7 @@ onMounted(() => {
 </script>
 
 <script>
-import Season from '@/Layouts/Season';
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

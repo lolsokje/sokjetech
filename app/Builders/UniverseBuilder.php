@@ -12,7 +12,7 @@ class UniverseBuilder extends Builder
         return $this->where(function (UniverseBuilder $query) {
             if (auth()->check()) {
                 $query->where('visibility', UniverseVisibility::AUTH)
-                    ->orWhere('user_id', auth()->user()->id);
+                    ->orWhere('user_id', (int) auth()->user()->id);
             }
             return $query->orWhere('visibility', UniverseVisibility::PUBLIC);
         });

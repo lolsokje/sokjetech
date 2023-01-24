@@ -1,6 +1,5 @@
 <?php
 
-use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\QualifyingFormats\SingleSession;
 use App\Models\QualifyingFormats\ThreeSessionElimination;
 use App\Models\Season;
@@ -57,7 +56,6 @@ test('the source season needs to be owned by the universe owner', function () {
 })->throws(UnauthorizedException::class);
 
 test('a source season needs a qualifying format before copying', function () {
-    withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $newSeason = createSeasonForUser($user);
@@ -65,8 +63,9 @@ test('a source season needs a qualifying format before copying', function () {
     actingAs($user)
         ->post(route('seasons.settings.copy.qualifying', [$newSeason]), [
             'season_id' => $season->id,
-        ]);
-})->throws(InvalidSeasonRequirements::class);
+        ])
+        ->assertJson(['error' => 'No qualifying format configured for the selected season']);
+});
 
 it('clears the existing qualifying format from the new season', function () {
     $user = User::factory()->create();

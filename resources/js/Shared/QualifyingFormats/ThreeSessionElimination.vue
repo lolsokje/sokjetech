@@ -29,33 +29,39 @@
         <div class="col-4">
             <label for="min_rng" class="form-label">Min RNG per run</label>
             <input type="number" id="min_rng" class="form-control" v-model="formatDetails.min_rng" required
-                   :disabled="seasonStarted">
+                   :disabled="seasonStarted"
+            >
         </div>
 
         <div class="col-4">
             <label for="max_rng" class="form-label">Max RNG per run</label>
             <input type="number" id="max_rng" class="form-control" v-model="formatDetails.max_rng" required
-                   :disabled="seasonStarted">
+                   :disabled="seasonStarted"
+            >
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, watch } from 'vue';
-import { assignFormatDetails } from '@/Composables/useQualifyingFormat';
+import { assignFormatDetails } from '@/Composables/useQualifyingFormat.js';
 
-const props = defineProps({
-    existingFormatDetails: {
-        type: Object,
-        required: false,
-    },
-    seasonStarted: {
-        type: Boolean,
-        required: false,
-    },
-});
+interface FormatDetails {
+    q2_driver_count: number | null,
+    q3_driver_count: number | null,
+    runs_per_session: number | null,
+    min_rng: number | null,
+    max_rng: number | null,
+}
 
-const formatDetails = reactive({
+interface Props {
+    existingFormatDetails?: FormatDetails,
+    seasonStarted: boolean,
+}
+
+const props = defineProps<Props>();
+
+const formatDetails: FormatDetails = reactive({
     q2_driver_count: null,
     q3_driver_count: null,
     runs_per_session: null,
@@ -63,23 +69,23 @@ const formatDetails = reactive({
     max_rng: null,
 });
 
-onMounted(() => {
-    assignFormatDetails(formatDetails, props.existingFormatDetails);
-});
-
 const emit = defineEmits([ 'updateFormatDetails' ]);
 
-const handleFormatDetailsUpdate = () => {
+const handleFormatDetailsUpdate = (): void => {
     emit('updateFormatDetails', formatDetails);
 };
 
 watch(formatDetails, () => {
     handleFormatDetailsUpdate();
 });
+
+onMounted(() => {
+    assignFormatDetails(formatDetails, props.existingFormatDetails);
+});
 </script>
 
-<script>
-import Season from '@/Layouts/Season';
+<script lang="ts">
+import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
 </script>

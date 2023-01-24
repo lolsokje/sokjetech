@@ -1,0 +1,83 @@
+body {
+  --base-100: #F4F4F2;
+  --base-200: #E8E8E8;
+  --base-300: #BBBFCA;
+  --color: #000000;
+
+  --primary: #005B96;
+  --primary-hover: #337CAB;
+  --primary-color: var(--base-100);
+
+  --secondary: #009686;
+  --secondary-hover: #00786B;
+  --secondary-color: var(--base-100);
+
+  --success: #76BA1B;
+  --success-hover: #5E9516;
+  --success-color: var(--base-100);
+
+  --danger: #C80000;
+  --danger-hover: #A00000;
+  --danger-color: var(--base-100);
+
+  --warning: #FA8C00;
+  --warning-hover: #C87000;
+  --warning-color: var(--base-100);
+
+  --body-font-family: 'roboto-regular';
+}
+
+.form-control,
+.form-select {
+  --input-background-color: var(--base-100);
+  --input-background-disabled: var(--base-300);
+  --input-border-color: var(--base-300);
+}
+
+.btn {
+  transition: all .15s ease-in-out;
+
+  --border-top-left-radius: 0;
+  --border-top-right-radius: 0;
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: 0;
+
+  --border-top-left-hover-radius: 0;
+  --border-top-right-hover-radius: 0;
+  --border-bottom-left-hover-radius: 0;
+  --border-bottom-right-hover-radius: 0;
+}
+
+.table {
+  --table-bg-header: var(--base-100);
+  --table-border-color-header: var(--base-100);
+  --table-color-header: var(--color);
+  --table-padding-header: 1rem;
+  --table-font-size-header: 1.1rem;
+
+  --table-border-color-body: var(--base-300);
+  --table-font-size-body: 1.1rem;
+  --table-bg-body: var(--base-200);
+  --table-color-body: var(--color);
+
+  --position-first-background: #FFD966;
+  --position-first-color: var(--color);
+
+  --position-second-background: #BFBFBF;
+  --position-second-color: var(--color);
+
+  --position-third-background: #C8980A;
+  --position-third-color: var(--color);
+
+  --position-points-background: #92D050;
+  --position-points-color: var(--color);
+
+  --position-other-background: #5B9BD5;
+  --position-other-color: var(--color);
+
+  --position-dnf-background: #DC3545;
+  --position-dnf-color: var(--color);
+
+  --bg-odd: var(--base-100);
+  --bg-even: var(--base-300);
+}

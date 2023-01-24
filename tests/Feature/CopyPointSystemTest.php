@@ -1,6 +1,5 @@
 <?php
 
-use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\PointDistribution;
 use App\Models\PointSystem;
 use App\Models\Season;
@@ -59,7 +58,6 @@ test('the source season needs to be owned by the universe owner', function () {
 })->throws(UnauthorizedException::class);
 
 test('a source season needs a point system before copying', function () {
-    withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $newSeason = createSeasonForUser($user);
@@ -67,13 +65,14 @@ test('a source season needs a point system before copying', function () {
     actingAs($user)
         ->post(route('seasons.settings.copy.points', [$newSeason]), [
             'season_id' => $season->id,
-        ]);
+        ])
+        ->assertJson(['error' => 'No point system added to the selected season']);
 
     $newSeason = $newSeason->fresh();
 
     assertNull($newSeason->pointSystem);
     assertCount(0, $newSeason->pointDistribution);
-})->throws(InvalidSeasonRequirements::class);
+});
 
 it('clears an existing point system before copying', function () {
     $user = User::factory()->create();

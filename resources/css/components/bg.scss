@@ -1,0 +1,21 @@
+@import '../mixins';
+
+.bg-primary {
+  @include background(var(--primary), var(--primary-color));
+}
+
+.bg-secondary {
+  @include background(var(--secondary), var(--secondary-color));
+}
+
+.bg-success {
+  @include background(var(--success), var(--success-color));
+}
+
+.bg-danger {
+  @include background(var(--danger), var(--danger-color));
+}
+
+.bg-warning {
+  @include background(var(--warning), var(--warning-color));
+}

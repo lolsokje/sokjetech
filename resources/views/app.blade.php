@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,10 +10,12 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
     <title>{{ config('app.name') }}</title>
-    <link href="{{ mix('/css/app.css') }}" rel="stylesheet"/>
-    <script src="{{ mix('/js/app.js') }}" defer></script>
+    @vite('resources/js/app.js')
     @routes
 
+    <script>
+        document.querySelector('[data-theme]').dataset.theme = localStorage.getItem('theme') ?? 'dark';
+    </script>
 </head>
 <body>
 @inertia
