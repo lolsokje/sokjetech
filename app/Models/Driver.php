@@ -54,6 +54,11 @@ class Driver extends SnowflakeModel
         return $this->hasMany(Racer::class);
     }
 
+    public function results(): HasManyThrough
+    {
+        return $this->hasManyThrough(RaceResult::class, Racer::class);
+    }
+
     public static function query(): DriverBuilder
     {
         return parent::query();

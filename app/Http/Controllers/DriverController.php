@@ -48,6 +48,14 @@ class DriverController extends Controller
             ->with('notice', 'Driver created');
     }
 
+    public function show(Universe $universe, Driver $driver): Response
+    {
+        return Inertia::render('Drivers/Show', [
+            'universe' => $universe,
+            'driver' => $driver,
+        ]);
+    }
+
     public function edit(Universe $universe, Driver $driver): Response
     {
         return Inertia::render('Drivers/Edit', [

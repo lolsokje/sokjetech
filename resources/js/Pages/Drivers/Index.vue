@@ -37,7 +37,7 @@
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="dob"/>
                 </th>
                 <th class="text-center">Country</th>
-                <th></th>
+                <th colspan="2"></th>
             </tr>
             </thead>
             <tbody>
@@ -50,6 +50,11 @@
                 <td class="small-centered">
                     <InertiaLink v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">
                         edit
+                    </InertiaLink>
+                </td>
+                <td class="small-centered">
+                    <InertiaLink :href="route('universes.drivers.show', [universe, driver])">
+                        view
                     </InertiaLink>
                 </td>
             </tr>
@@ -68,6 +73,9 @@ import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import Filters from '@/Interfaces/Filters';
 import PaginationLink from '@/Interfaces/PaginationLink';
+import Universe from '@/Interfaces/Universe';
+import Driver from '@/Interfaces/Driver';
+import Permission from '@/Interfaces/Permission';
 
 interface Props {
     universe: Universe,
@@ -91,7 +99,7 @@ watch(params, (): void => {
 </script>
 
 <script lang="ts">
-import Universe from '@/Layouts/Universe.vue';
+import UniverseLayout from '@/Layouts/Universe.vue';
 
-export default { layout: Universe };
+export default { layout: UniverseLayout };
 </script>

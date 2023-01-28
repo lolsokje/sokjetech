@@ -12,6 +12,8 @@ use App\Http\Controllers\CopyEngineController;
 use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\Drivers\GenerateDriversController;
+use App\Http\Controllers\Drivers\GetBaseStatsController;
+use App\Http\Controllers\Drivers\GetCombinedCareerStatsController;
 use App\Http\Controllers\Drivers\PersistGeneratedDriversController;
 use App\Http\Controllers\Drivers\ShowDriverGenerationPage;
 use App\Http\Controllers\EngineController;
@@ -178,6 +180,9 @@ Route::group([
     Route::post('race/results', StoreRaceResultsController::class)->name('race.store');
     Route::post('race/complete', CompleteRaceController::class)->name('race.complete');
 });
+
+Route::get('drivers/{driver}/stats/base', GetBaseStatsController::class)->name('drivers.stats.base');
+Route::get('drivers/{driver}/stats/combined', GetCombinedCareerStatsController::class)->name('drivers.stats.combined');
 
 Route::group([
     'prefix' => 'database',
