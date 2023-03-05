@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Actions\Season\Standings;
 
 use App\Actions\CalculateDriverTieBreaker;
+use App\Contracts\CalculateDriverChampionshipContract;
 use App\Models\Season;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
-class CalculateDriverChampionshipStandingsJob implements ShouldQueue
+class CalculateDriverChampionshipStandingsAction extends CalculateChampionshipStandingsAction implements
+    CalculateDriverChampionshipContract
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -21,27 +22,18 @@ class CalculateDriverChampionshipStandingsJob implements ShouldQueue
     private array $results = [];
     private Collection $drivers;
 
-    public function __construct(private readonly Season $season)
+    public function __construct(protected readonly Season $season)
     {
-        $this->season->load('raceResults');
-        $this->drivers = $this->season->drivers->load('raceResults')->keyBy('id');
+        $this->season->load('driversWithParticipation.raceResults', 'raceResults');
+        $this->drivers = $this->season->driversWithParticipation->keyBy('id');
     }
 
-    public function handle(): void
+    public function clearExistingStandings(): void
     {
-        if (! count($this->season->raceResults)) {
-            return;
-        }
-
         $this->season->driverChampionshipStandings()->delete();
-
-        $this->cacheResults();
-        $this->sortResults();
-        $this->addPositionToResults();
-        $this->storeStandings();
     }
 
-    private function cacheResults(): void
+    public function cacheResults(): void
     {
         foreach ($this->season->raceResults as $result) {
             $racerId = $result->racer_id;
@@ -57,7 +49,7 @@ class CalculateDriverChampionshipStandingsJob implements ShouldQueue
         }
     }
 
-    private function sortResults(): void
+    public function sortResults(): void
     {
         $action = new CalculateDriverTieBreaker($this->season);
 
@@ -73,7 +65,7 @@ class CalculateDriverChampionshipStandingsJob implements ShouldQueue
         });
     }
 
-    private function addPositionToResults(): void
+    public function addPositionToResults(): void
     {
         $position = 1;
 
@@ -83,7 +75,7 @@ class CalculateDriverChampionshipStandingsJob implements ShouldQueue
         }
     }
 
-    private function storeStandings(): void
+    public function storeStandings(): void
     {
         foreach ($this->results as $result) {
             $this->season->driverChampionshipStandings()->create($result);

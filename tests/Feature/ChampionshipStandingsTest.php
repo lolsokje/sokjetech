@@ -1,7 +1,7 @@
 <?php
 
-use App\Jobs\CalculateDriverChampionshipStandingsJob;
-use App\Jobs\CalculateTeamChampionshipStandingsJob;
+use App\Actions\Season\Standings\CalculateDriverChampionshipStandingsAction;
+use App\Jobs\CalculateChampionshipStandingsJob;
 use App\Models\PointSystem;
 use App\Models\Race;
 use App\Models\Racer;
@@ -19,8 +19,7 @@ it('dispatches the championship standings job when completing a race', function 
     $this->actingAs(User::factory()->create(['is_admin' => true]))
         ->post(route('weekend.race.complete', $race));
 
-    Queue::assertPushed(CalculateDriverChampionshipStandingsJob::class);
-    Queue::assertPushed(CalculateTeamChampionshipStandingsJob::class);
+    Queue::assertPushed(CalculateChampionshipStandingsJob::class, 2);
 });
 
 it('calculates driver championship standings', function () {
@@ -42,7 +41,9 @@ it('calculates driver championship standings', function () {
 
     storeRaceResults($season, $results);
 
-    (new CalculateDriverChampionshipStandingsJob($season))->handle();
+    (new CalculateChampionshipStandingsJob(
+        new CalculateDriverChampionshipStandingsAction($season),
+    ))->handle();
 
     $this->assertDatabaseCount('driver_championship_standings', 2);
     $this->assertDatabaseHas('driver_championship_standings', [
@@ -77,7 +78,9 @@ it('correctly determines tie breakers based on position', function () {
 
     storeRaceResults($season, $results);
 
-    (new CalculateDriverChampionshipStandingsJob($season))->handle();
+    (new CalculateChampionshipStandingsJob(
+        new CalculateDriverChampionshipStandingsAction($season),
+    ))->handle();
 
     $this->assertDatabaseCount('driver_championship_standings', 2);
 
@@ -98,11 +101,15 @@ it('overwrites existing standings', function () {
     $season = Season::factory()->create();
     RaceResult::factory(3)->for($season)->create();
 
-    (new CalculateDriverChampionshipStandingsJob($season))->handle();
+    (new CalculateChampionshipStandingsJob(
+        new CalculateDriverChampionshipStandingsAction($season),
+    ))->handle();
 
     $this->assertDatabaseCount('driver_championship_standings', 3);
 
-    (new CalculateDriverChampionshipStandingsJob($season))->handle();
+    (new CalculateChampionshipStandingsJob(
+        new CalculateDriverChampionshipStandingsAction($season),
+    ))->handle();
 
     $this->assertDatabaseCount('driver_championship_standings', 3);
 });

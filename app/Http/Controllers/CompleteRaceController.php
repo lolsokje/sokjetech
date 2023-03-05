@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\Races\CalculatePointsScored;
 use App\Actions\Races\CompleteRace;
-use App\Jobs\CalculateDriverChampionshipStandingsJob;
-use App\Jobs\CalculateTeamChampionshipStandingsJob;
+use App\Actions\Season\Standings\CalculateDriverChampionshipStandingsAction;
+use App\Actions\Season\Standings\CalculateTeamChampionshipStandingsAction;
+use App\Jobs\CalculateChampionshipStandingsJob;
 use App\Models\Race;
 use Illuminate\Http\RedirectResponse;
 
@@ -18,8 +19,12 @@ class CompleteRaceController extends Controller
         (new CompleteRace($race))->handle();
         (new CalculatePointsScored($race))->handle();
 
-        CalculateDriverChampionshipStandingsJob::dispatch($race->season);
-        CalculateTeamChampionshipStandingsJob::dispatch($race->season);
+        CalculateChampionshipStandingsJob::dispatch(
+            new CalculateDriverChampionshipStandingsAction($race->season),
+        );
+        CalculateChampionshipStandingsJob::dispatch(
+            new CalculateTeamChampionshipStandingsAction($race->season),
+        );
 
         return to_route('weekend.results', [$race]);
     }
