@@ -17,6 +17,7 @@ class CalculateDriverChampionshipStandingsAction extends CalculateChampionshipSt
     use Queueable;
     use SerializesModels;
 
+    // TODO combine results across different entrants within the same season
     public function __construct(protected Season $season)
     {
         parent::__construct($season, 'racer_id');

@@ -12,7 +12,7 @@
             <div class="col-1"></div>
             <div class="col-9">
                 <div class="row">
-                    <div class="col-3 mb-3" v-for="(stat, index) in baseStats" :key="index">
+                    <div class="col-4 mb-3" v-for="(stat, index) in baseStats" :key="index">
                         <p class="text-muted mb-0 text-uppercase">{{ stat.label }}</p>
                         <div class="driver-stat py-2">
                             {{ stat.value }}
@@ -27,15 +27,16 @@
         <h2>Career results</h2>
     </div>
 
+    <!-- TODO per-entrant results -->
     <div v-for="(seriesResults, series) in combinedStats" :key="series">
-        <div class="container">
+        <div class="text-center my-3">
             <h4>{{ series }}</h4>
         </div>
         <table class="table driver-stat-container">
             <thead>
             <tr>
                 <th class="text-center">Year</th>
-                <!-- TODO Get the season with most results to fill table header row -->
+                <th class="text-center">Pos</th>
                 <th class="text-center"
                     v-for="round in [...Array(getHighestRoundCountForSeries(seriesResults)).keys()]"
                     :key="round"
@@ -48,16 +49,16 @@
             <tbody>
             <tr v-for="(seasonResults, year) in seriesResults" :key="year">
                 <td class="small-centered">{{ year }}</td>
+                <td class="smallest-centered">{{ seasonResults.position }}</td>
                 <!-- TODO get result per round -->
                 <td v-for="round in [...Array(getHighestRoundCountForSeries(seriesResults)).keys()]"
                     :key="round"
                     class="small-centered"
-                    :class="getResultDisplayClasses(seasonResults[round +1])"
+                    :class="getResultDisplayClasses(seasonResults.races[round +1])"
                 >
-                    {{ getResultForRound(seasonResults[round + 1]) }}
+                    {{ getResultForRound(seasonResults.races[round + 1]) }}
                 </td>
-                <!-- TODO get total points scored -->
-                <td class="small-centered">{{ getTotalPointsScoredInSeason(seasonResults) }}</td>
+                <td class="small-centered">{{ seasonResults.points }}</td>
             </tr>
             </tbody>
         </table>
@@ -138,7 +139,9 @@ const getHighestRoundCountForSeries = (results) => {
     let mostRounds = 0;
 
     Object.values(results).forEach((r: SeasonResult[]) => {
-        const highest = Object.values(r).reduce((prev, current) => prev.round > current.round ? prev : current);
+        const highest = Object.values(r.races).reduce((prev, current) => {
+            return prev.round > current.round ? prev : current;
+        });
 
         mostRounds = highest.round > mostRounds ? highest.round : mostRounds;
     });
@@ -162,5 +165,9 @@ onMounted(() => {
 .driver-stat-container {
     max-width: 2000px;
     margin: 0 auto;
+}
+
+.table {
+    width: auto;
 }
 </style>
