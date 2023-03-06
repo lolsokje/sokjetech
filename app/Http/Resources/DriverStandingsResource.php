@@ -2,16 +2,15 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Racer;
+use App\Models\DriverChampionshipStanding;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin DriverChampionshipStanding */
 class DriverStandingsResource extends JsonResource
 {
     public function toArray($request): array
     {
         $results = $this->getResultsPerRace();
-
-        /** @var Racer $racer */
         $racer = $this->racer;
 
         return [
