@@ -25,8 +25,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(driver, index) in drivers" :key="driver.id">
-            <td class="small-centered">{{ index + 1 }}</td>
+        <tr v-for="driver in drivers" :key="driver.id">
+            <td class="small-centered">{{ driver.position }}</td>
             <BackgroundColourCell :backgroundColour="driver.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
@@ -45,20 +45,37 @@
 
 <script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
-import { onMounted } from 'vue';
 import { getResultClasses } from '@/Composables/useResultPage.js';
-import { getDriverPoints, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import SeasonInterface from '@/Interfaces/Season';
 import { Race } from '@/Interfaces/Race';
 import RaceResult from '@/Interfaces/RaceResult';
-import Racer from '@/Interfaces/Racer';
+
+interface RaceResult {
+    dnf: string | null,
+    fastest_lap: boolean,
+    points: number,
+    position: number | string,
+    starting_position: number;
+}
+
+interface DriverChampionshipStandings {
+    id: string,
+    full_name: string,
+    position: number,
+    points: number,
+    number: number,
+    team_name: string,
+    background_colour: string,
+    style_string: string,
+    results: RaceResult[],
+}
 
 interface Props {
     season: SeasonInterface,
     races: Race[],
-    drivers: Racer[],
+    drivers: DriverChampionshipStandings[],
 }
 
 const props = defineProps<Props>();
@@ -68,12 +85,6 @@ const lastPointPayingPosition = props.season.last_point_paying_position;
 const getResultDisplayClasses = (result: RaceResult): string => {
     return getResultClasses(result, lastPointPayingPosition);
 };
-
-onMounted(() => {
-    getDriverPoints(props.drivers);
-
-    sortResults(props.drivers);
-});
 </script>
 
 <script lang="ts">

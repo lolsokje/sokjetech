@@ -14,21 +14,24 @@ class ShowDriverStandingsController extends Controller
     public function __invoke(Season $season): Response
     {
         $season->load([
-            'pointDistribution',
-            'races' => function (HasMany $query) {
-                $query->orderBy('order')->with('circuit');
+            'pointSystem',
+            'races' => fn (HasMany $query) => $query->orderBy('order')->with('circuit'),
+            'driverChampionshipStandings' => function (HasMany $query) {
+                $query->orderBy('position')->with([
+                    'racer' => [
+                        'driver',
+                        'entrant',
+                        'raceResults' => ['race'],
+                    ],
+                ]);
             },
-            'driversWithParticipation' => [
-                'driver',
-                'entrant',
-                'raceResults' => ['race'],
-            ],
         ]);
 
         return Inertia::render('Standings/Drivers', [
             'season' => SeasonStandingResource::make($season)->toArray(request()),
             'races' => $season->races,
-            'drivers' => DriverStandingsResource::collection($season->driversWithParticipation)->toArray(request()),
+            'drivers' => DriverStandingsResource::collection($season->driverChampionshipStandings)
+                ->toArray(request()),
         ]);
     }
 }

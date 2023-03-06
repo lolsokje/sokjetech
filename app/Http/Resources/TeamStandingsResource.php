@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Entrant;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TeamStandingsResource extends JsonResource
@@ -9,15 +10,19 @@ class TeamStandingsResource extends JsonResource
     public function toArray($request): array
     {
         $results = $this->getResultsPerRace();
+        /** @var Entrant $entrant */
+        $entrant = $this->entrant;
 
         return [
-            'id' => $this->id,
-            'full_name' => $this->full_name,
-            'team_name' => $this->short_name,
-            'team_principal' => $this->team_principal,
-            'background_colour' => $this->accent_colour,
-            'style_string' => $this->style_string,
-            'driver_count' => count($this->racersWithParticipation),
+            'id' => $entrant->id,
+            'full_name' => $entrant->full_name,
+            'points' => $this->points,
+            'position' => $this->position,
+            'team_name' => $entrant->short_name,
+            'team_principal' => $entrant->team_principal,
+            'background_colour' => $entrant->accent_colour,
+            'style_string' => $entrant->style_string,
+            'driver_count' => count($entrant->racersWithParticipation),
             'results' => $results,
         ];
     }
@@ -26,14 +31,14 @@ class TeamStandingsResource extends JsonResource
     {
         $results = [];
 
-        foreach ($this->racersWithParticipation as $racer) {
+        foreach ($this->entrant->racersWithParticipation as $racer) {
             $results[$racer->id] = [
                 'number' => $racer->number,
                 'results' => [],
             ];
         }
 
-        foreach ($this->raceResults as $result) {
+        foreach ($this->entrant->raceResults as $result) {
             $results[$result->racer->id]['results'][$result->race->order] = [
                 'starting_position' => $result->starting_position,
                 'dnf' => $result->dnf,
