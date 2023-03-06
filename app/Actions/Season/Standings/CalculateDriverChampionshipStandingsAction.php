@@ -2,30 +2,27 @@
 
 namespace App\Actions\Season\Standings;
 
-use App\Actions\CalculateDriverTieBreaker;
-use App\Contracts\CalculateDriverChampionshipContract;
+use App\Contracts\CalculateChampionshipStandingsContract;
 use App\Models\Season;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 
 class CalculateDriverChampionshipStandingsAction extends CalculateChampionshipStandingsAction implements
-    CalculateDriverChampionshipContract
+    CalculateChampionshipStandingsContract
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
 
-    private array $results = [];
-    private Collection $drivers;
-
-    public function __construct(protected readonly Season $season)
+    public function __construct(protected Season $season)
     {
+        parent::__construct($season, 'racer_id');
+
         $this->season->load('driversWithParticipation.raceResults', 'raceResults');
-        $this->drivers = $this->season->driversWithParticipation->keyBy('id');
+        $this->models = $this->season->driversWithParticipation->keyBy('id');
     }
 
     public function clearExistingStandings(): void
@@ -46,32 +43,6 @@ class CalculateDriverChampionshipStandingsAction extends CalculateChampionshipSt
             }
 
             $this->results[$racerId]['points'] += $result->points;
-        }
-    }
-
-    public function sortResults(): void
-    {
-        $action = new CalculateDriverTieBreaker($this->season);
-
-        uasort($this->results, function ($driverOne, $driverTwo) use ($action) {
-            if ($driverOne['points'] === $driverTwo['points']) {
-                return $action->handle(
-                    $this->drivers[$driverTwo['racer_id']],
-                    $this->drivers[$driverOne['racer_id']],
-                );
-            }
-
-            return $driverOne['points'] < $driverTwo['points'];
-        });
-    }
-
-    public function addPositionToResults(): void
-    {
-        $position = 1;
-
-        foreach ($this->results as $key => $result) {
-            $this->results[$key]['position'] = $position;
-            $position++;
         }
     }
 

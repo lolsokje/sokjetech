@@ -156,6 +156,11 @@ class Season extends SnowflakeModel
         return $this->hasMany(DriverChampionshipStanding::class);
     }
 
+    public function teamChampionshipStandings(): HasMany
+    {
+        return $this->hasMany(TeamChampionshipStandings::class);
+    }
+
     public function canStart(): Attribute
     {
         return Attribute::get(function () {

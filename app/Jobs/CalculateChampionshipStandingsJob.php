@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Contracts\CalculateDriverChampionshipContract;
+use App\Contracts\CalculateChampionshipStandingsContract;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,7 +17,7 @@ class CalculateChampionshipStandingsJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        private readonly CalculateDriverChampionshipContract $action,
+        private readonly CalculateChampionshipStandingsContract $action,
     ) {
     }
 

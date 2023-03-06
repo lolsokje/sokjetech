@@ -4,7 +4,7 @@ namespace App\Contracts;
 
 use App\Models\Season;
 
-interface CalculateDriverChampionshipContract
+interface CalculateChampionshipStandingsContract
 {
     public function __construct(Season $season);
 
