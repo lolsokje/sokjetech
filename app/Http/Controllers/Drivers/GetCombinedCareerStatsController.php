@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Drivers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Standings\RaceResultResource;
 use App\Models\Driver;
 use App\Models\DriverChampionshipStanding;
 
@@ -20,28 +21,11 @@ class GetCombinedCareerStatsController extends Controller
 
         $results = [];
 
-        // TODO per-entrant results
-        // driver_id 50662012769931264
-        // universe_id 50653958636703744
         foreach ($driver->results as $result) {
             $series = $result->season->series;
             $race = $result->race;
 
-            $data = [
-                'id' => $result->id,
-                'race_id' => $race->id,
-                'name' => $race->name,
-                'round' => $race->order,
-                'year' => $result->season->year,
-                'circuit_country' => $race->circuit->country,
-                'starting_position' => $result->starting_position,
-                'position' => $result->position,
-                'fastest_lap' => $result->fastest_lap,
-                'dnf' => $result->dnf,
-                'points' => $result->points,
-            ];
-
-            $results[$series->name][$result->season->year]['races'][$race->order] = $data;
+            $results[$series->name][$result->season->year]['races'][$race->order] = RaceResultResource::array($result);
         }
 
         $driver->championshipResults->each(function (DriverChampionshipStanding $result) use (&$results) {

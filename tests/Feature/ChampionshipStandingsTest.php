@@ -53,13 +53,13 @@ it('calculates driver championship standings', function () {
 
     $this->assertDatabaseCount('driver_championship_standings', 2);
     $this->assertDatabaseHas('driver_championship_standings', [
-        'racer_id' => $driverOne->id,
+        'driver_id' => $driverOne->entrant->allRacers->first()->driver_id,
         'points' => 51,
         'position' => 2,
     ]);
 
     $this->assertDatabaseHas('driver_championship_standings', [
-        'racer_id' => $driverTwo->id,
+        'driver_id' => $driverTwo->entrant->allRacers->first()->driver_id,
         'points' => 58,
         'position' => 1,
     ]);
@@ -152,13 +152,13 @@ it('correctly determines tie breakers based on position', function () {
     $this->assertDatabaseCount('team_championship_standings', 2);
 
     $this->assertDatabaseHas('driver_championship_standings', [
-        'racer_id' => $driverOne->id,
+        'driver_id' => $driverOne->entrant->allRacers->first()->driver_id,
         'points' => 4,
         'position' => 2,
     ]);
 
     $this->assertDatabaseHas('driver_championship_standings', [
-        'racer_id' => $driverTwo->id,
+        'driver_id' => $driverTwo->entrant->allRacers->first()->driver_id,
         'points' => 4,
         'position' => 1,
     ]);

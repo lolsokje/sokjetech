@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Race;
+use App\Support\Http\CustomJsonResource;
 
-class GeneralRaceResource extends JsonResource
+/** @mixin Race */
+class GeneralRaceResource extends CustomJsonResource
 {
     public function toArray($request): array
     {

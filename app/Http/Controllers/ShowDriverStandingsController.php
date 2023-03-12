@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DriverStandingsResource;
+use App\Actions\Season\Standings\Driver\GenerateStandingsAction;
 use App\Http\Resources\SeasonStandingResource;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,24 +14,17 @@ class ShowDriverStandingsController extends Controller
     public function __invoke(Season $season): Response
     {
         $season->load([
+            'driverChampionshipStandings' => fn (HasMany $query) => $query->orderBy('position')->with('driver'),
+            'driversWithParticipation' => ['entrant'],
             'pointSystem',
+            'raceResults' => ['racer', 'race'],
             'races' => fn (HasMany $query) => $query->orderBy('order')->with('circuit'),
-            'driverChampionshipStandings' => function (HasMany $query) {
-                $query->orderBy('position')->with([
-                    'racer' => [
-                        'driver',
-                        'entrant',
-                        'raceResults' => ['race'],
-                    ],
-                ]);
-            },
         ]);
 
         return Inertia::render('Standings/Drivers', [
             'season' => SeasonStandingResource::make($season)->toArray(request()),
             'races' => $season->races,
-            'drivers' => DriverStandingsResource::collection($season->driverChampionshipStandings)
-                ->toArray(request()),
+            'standings' => (new GenerateStandingsAction($season))->handle(),
         ]);
     }
 }

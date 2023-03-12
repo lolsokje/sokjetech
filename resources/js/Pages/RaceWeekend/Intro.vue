@@ -99,8 +99,6 @@
 
 <script setup lang="ts">
 import BackLink from '@/Shared/BackLink.vue';
-import { onMounted } from 'vue';
-import { getDriverPoints, getTeamPoints, getTopPerformers, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import { Race } from '@/Interfaces/Race';
@@ -120,16 +118,6 @@ const props = defineProps<Props>();
 const getIcon = (boolean: boolean): string => {
     return boolean ? 'check' : 'times';
 };
-
-onMounted(() => {
-    getDriverPoints(props.driverStandings);
-    sortResults(props.driverStandings);
-    getTopPerformers(props.driverStandings, 3);
-
-    getTeamPoints(props.teamStandings);
-    sortResults(props.teamStandings);
-    getTopPerformers(props.teamStandings, 3);
-});
 </script>
 
 <script lang="ts">

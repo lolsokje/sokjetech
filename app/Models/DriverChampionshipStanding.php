@@ -11,8 +11,8 @@ class DriverChampionshipStanding extends SnowflakeModel
         return $this->belongsTo(Season::class);
     }
 
-    public function racer(): BelongsTo
+    public function driver(): BelongsTo
     {
-        return $this->belongsTo(Racer::class);
+        return $this->belongsTo(Driver::class);
     }
 }

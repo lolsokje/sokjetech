@@ -137,14 +137,9 @@ const getResultDisplayClasses = (result) => {
 
 const getHighestRoundCountForSeries = (results) => {
     let mostRounds = 0;
-
-    Object.values(results).forEach((r: SeasonResult[]) => {
-        const highest = Object.values(r.races).reduce((prev, current) => {
-            return prev.round > current.round ? prev : current;
-        });
-
-        mostRounds = highest.round > mostRounds ? highest.round : mostRounds;
-    });
+    for (const season of Object.values(results)) {
+        mostRounds = Math.max(Object.keys(season.races).length, mostRounds);
+    }
 
     return mostRounds;
 };

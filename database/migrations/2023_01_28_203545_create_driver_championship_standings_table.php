@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('driver_championship_standings', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
-            $table->foreignId('racer_id')->constrained();
+            $table->foreignId('driver_id')->constrained();
             $table->foreignId('season_id')->constrained();
             $table->unsignedInteger('position');
             $table->unsignedInteger('points');
