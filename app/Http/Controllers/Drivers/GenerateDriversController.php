@@ -9,7 +9,7 @@ use App\Support\DriverGenerator\Generator;
 
 class GenerateDriversController extends Controller
 {
-    public function __invoke(GenerateDriversRequest $request, Universe $universe)
+    public function __invoke(GenerateDriversRequest $request, Universe $universe): array
     {
         $generator = new Generator($request->language(), $request->gender());
 
