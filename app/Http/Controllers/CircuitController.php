@@ -37,7 +37,7 @@ class CircuitController extends Controller
 
     public function store(CircuitCreateRequest $request): RedirectResponse
     {
-        $request->user()->circuits()->create($request->data());
+        $request->user()->circuits()->create($request->validated());
 
         return redirect(route('circuits.index'))
             ->with('notice', 'Circuit created');
@@ -56,7 +56,7 @@ class CircuitController extends Controller
     {
         $this->authorize('alter', $circuit);
 
-        $circuit->update($request->data());
+        $circuit->update($request->validated());
 
         return redirect(route('circuits.index'))
             ->with('notice', 'Circuit updated');

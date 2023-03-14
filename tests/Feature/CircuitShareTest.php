@@ -3,6 +3,7 @@
 use App\Models\Circuit;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertFalse;
@@ -30,6 +31,7 @@ test('an authenticated user can unshare circuits', function () {
         ->put(route('circuits.update', $circuit), [
             'name' => $circuit->name,
             'country' => $circuit->country,
+            'shared' => false,
         ])
         ->assertRedirect();
 
