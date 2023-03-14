@@ -31,15 +31,15 @@
                 <fa icon="check" class="me-3" v-if="item.completed"/>
                 <label :for="index" class="form-label">{{ item.label }}</label>
 
-                <div v-if="item.dependency">
+                <div v-for="(dependency, index) in item.dependencies" :key="index">
                     <input type="checkbox"
-                           v-model="item.dependency.checked"
+                           v-model="dependency.checked"
                            class="form-check-inline"
-                           :id="item.dependency.name"
+                           :id="dependency.name"
                            :disabled="!item.checked || isCopying"
                     >
-                    <fa icon="check" class="me-3" v-if="item.dependency.checked && item.completed"/>
-                    <label :for="item.dependency.name">{{ item.dependency.label }}</label>
+                    <fa icon="check" class="me-3" v-if="dependency.checked && item.completed"/>
+                    <label :for="dependency.name">{{ dependency.label }}</label>
                 </div>
 
                 <p class="text-danger" v-if="item.fail">{{ item.error }}</p>
@@ -75,8 +75,18 @@ const completedItems = ref(0);
 
 const state = reactive({
     copyEntrants: new CopySeasonSetupItem(
-        'Copy teams, drivers and engines?',
+        'Copy teams?',
         'teams',
+        new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
+    ),
+    copyDrivers: new CopySeasonSetupItem(
+        'Copy drivers?',
+        'drivers',
+        new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
+    ),
+    copyEngines: new CopySeasonSetupItem(
+        'Copy engines?',
+        'engines',
         new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
     ),
     copyRaces: new CopySeasonSetupItem('Copy races?', 'races', new CopySeasonSetupItemDependency('copy_stints', 'Copy race stints?')),

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\CopyLineups;
+use App\Actions\Season\CopyTeams;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyTeamSetupRequest;
@@ -15,7 +15,7 @@ class Teams extends Controller
     public function __invoke(CopyTeamSetupRequest $request, Season $season): Response
     {
         try {
-            (new CopyLineups($request, $season))->handle();
+            (new CopyTeams($request, $season))->handle();
 
             return response()->json(null, Response::HTTP_CREATED);
         } catch (InvalidSeasonRequirements $e) {

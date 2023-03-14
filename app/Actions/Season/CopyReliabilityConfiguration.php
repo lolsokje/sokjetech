@@ -3,18 +3,9 @@
 namespace App\Actions\Season;
 
 use App\Exceptions\InvalidSeasonRequirements;
-use App\Http\Requests\CopyReliabilityConfigurationRequest;
-use App\Models\Season;
 
 class CopyReliabilityConfiguration extends BaseCopyAction
 {
-    private Season $oldSeason;
-
-    public function __construct(protected CopyReliabilityConfigurationRequest $request, protected Season $newSeason)
-    {
-        $this->oldSeason = Season::find($this->request->validated('season_id'));
-    }
-
     /**
      * @throws InvalidSeasonRequirements
      */
@@ -51,7 +42,7 @@ class CopyReliabilityConfiguration extends BaseCopyAction
 
     private function validateSeasonRequirementsMet(): void
     {
-        if (!$this->oldSeason->reliabilityConfiguration()->first() ||
+        if (! $this->oldSeason->reliabilityConfiguration()->first() ||
             $this->oldSeason->reliabilityReasons()->count() === 0
         ) {
             throw new InvalidSeasonRequirements('No reliability configuration found');

@@ -3,19 +3,10 @@
 namespace App\Actions\Season;
 
 use App\Exceptions\InvalidSeasonRequirements;
-use App\Http\Requests\CopyRaceSetupRequest;
 use App\Models\Race;
-use App\Models\Season;
 
 class CopyRaces extends BaseCopyAction
 {
-    private Season $oldSeason;
-
-    public function __construct(protected CopyRaceSetupRequest $request, protected Season $newSeason)
-    {
-        $this->oldSeason = Season::find($this->request->validated('season_id'));
-    }
-
     /**
      * @throws InvalidSeasonRequirements
      */

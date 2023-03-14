@@ -6,6 +6,7 @@ use App\Models\Racer;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Validation\UnauthorizedException;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\post;
 use function Pest\Laravel\withoutExceptionHandling;
@@ -193,7 +194,9 @@ it('copies engine, team and driver ratings when instructed to do so', function (
 
     foreach ($newSeason->engines as $newEngine) {
         // Since each engine is created with its own base engine, we can use that to fetch the old engine from the old season
-        $oldEngine = EngineSeason::where('season_id', $season->id)->where('base_engine_id', $newEngine->base_engine_id)->first();
+        $oldEngine = EngineSeason::where('season_id', $season->id)
+            ->where('base_engine_id', $newEngine->base_engine_id)
+            ->first();
         assertEquals($oldEngine->rating, $newEngine->rating);
         assertEquals($oldEngine->reliability, $newEngine->reliability);
     }
@@ -216,8 +219,9 @@ it('copies engine, team and driver ratings when instructed to do so', function (
 function prepareSeasonLineups(Season $season): void
 {
     $engines = EngineSeason::factory(ENGINE_COUNT)->for($season)->create();
-    $engines->each(fn (EngineSeason $engine,
-    ) => Entrant::factory(TEAM_COUNT)->for($season)->create(['engine_id' => $engine->id]));
+    $engines->each(fn (EngineSeason $engine) => Entrant::factory(TEAM_COUNT)
+        ->for($season)
+        ->create(['engine_id' => $engine->id]));
     $entrants = $season->entrants;
     $entrants->each(fn (Entrant $entrant) => Racer::factory(DRIVER_COUNT)->for($entrant)->for($season)->create());
 }

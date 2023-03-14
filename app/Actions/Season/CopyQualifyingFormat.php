@@ -3,18 +3,9 @@
 namespace App\Actions\Season;
 
 use App\Exceptions\InvalidSeasonRequirements;
-use App\Http\Requests\CopyQualifyingFormatRequest;
-use App\Models\Season;
 
 class CopyQualifyingFormat extends BaseCopyAction
 {
-    protected Season $oldSeason;
-
-    public function __construct(protected CopyQualifyingFormatRequest $request, protected Season $newSeason)
-    {
-        $this->oldSeason = Season::find($this->request->validated('season_id'));
-    }
-
     /**
      * @throws InvalidSeasonRequirements
      */
