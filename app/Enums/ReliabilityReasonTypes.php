@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 enum ReliabilityReasonTypes: int
 {

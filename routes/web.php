@@ -131,13 +131,14 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
     Route::group(['prefix' => 'configuration', 'as' => 'configuration.'], function () {
         Route::get('qualifying', ShowQualifyingSettingsPage::class)->name('qualifying');
-        Route::post('qualifying', StoreQualifyingSettingsController::class)->name('qualifying.store');
-
         Route::get('points', ShowPointsConfigurationController::class)->name('points');
-        Route::post('points', StorePointsConfigurationController::class)->name('points.store');
-
         Route::get('reliability', ShowReliabilityConfigurationController::class)->name('reliability');
-        Route::post('reliability', StoreReliabilityConfigurationController::class)->name('reliability.store');
+
+        Route::middleware('season_started')->group(function () {
+            Route::post('qualifying', StoreQualifyingSettingsController::class)->name('qualifying.store');
+            Route::post('points', StorePointsConfigurationController::class)->name('points.store');
+            Route::post('reliability', StoreReliabilityConfigurationController::class)->name('reliability.store');
+        });
     });
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
