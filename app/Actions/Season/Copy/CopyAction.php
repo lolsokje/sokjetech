@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Actions\Season;
+namespace App\Actions\Season\Copy;
 
 use App\Models\Season;
 use Gate;
 use Illuminate\Validation\UnauthorizedException;
 
-class BaseCopyAction
+abstract class CopyAction
 {
     protected ?array $columnsNotToCopy;
 
     public function __construct(
         protected readonly Season $oldSeason,
         protected readonly Season $newSeason,
-        protected readonly bool $copyRatings,
     ) {
         $this->validateSeasonOwnership($this->oldSeason);
-        $this->columnsNotToCopy = $this->copyRatings ? null : ['rating', 'reliability'];
     }
 
     protected function validateSeasonOwnership(Season $season): void
@@ -25,4 +23,17 @@ class BaseCopyAction
             throw new UnauthorizedException;
         }
     }
+
+    public function handle(): void
+    {
+        $this->validateSeasonRequirementsMet();
+        $this->removeExistingModels();
+        $this->copyModels();
+    }
+
+    abstract protected function validateSeasonRequirementsMet(): void;
+
+    abstract protected function removeExistingModels(): void;
+
+    abstract protected function copyModels(): void;
 }

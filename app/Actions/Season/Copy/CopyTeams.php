@@ -1,22 +1,12 @@
 <?php
 
-namespace App\Actions\Season;
+namespace App\Actions\Season\Copy;
 
 use App\Exceptions\InvalidSeasonRequirements;
 
-class CopyTeams extends BaseCopyAction
+class CopyTeams extends CopyWithRatingsAction
 {
-    /**
-     * @throws InvalidSeasonRequirements
-     */
-    public function handle(): void
-    {
-        $this->validateSeasonRequirementsMet();
-        $this->clearExistingTeams();
-        $this->copyTeams();
-    }
-
-    private function copyTeams(): void
+    protected function copyModels(): void
     {
         foreach ($this->oldSeason->entrants->load('activeRacers', 'engine') as $oldEntrant) {
             $newEntrant = $oldEntrant->replicate($this->columnsNotToCopy);
@@ -25,7 +15,7 @@ class CopyTeams extends BaseCopyAction
         }
     }
 
-    private function clearExistingTeams(): void
+    protected function removeExistingModels(): void
     {
         $this->newSeason->drivers()->delete();
         $this->newSeason->entrants()->delete();
@@ -34,7 +24,7 @@ class CopyTeams extends BaseCopyAction
     /**
      * @throws InvalidSeasonRequirements
      */
-    private function validateSeasonRequirementsMet(): void
+    protected function validateSeasonRequirementsMet(): void
     {
         if ($this->oldSeason->entrants->count() === 0) {
             throw new InvalidSeasonRequirements('No entrants added to the selected season');

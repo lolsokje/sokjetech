@@ -1,27 +1,21 @@
 <?php
 
-namespace App\Actions\Season;
+namespace App\Actions\Season\Copy;
 
 use App\Exceptions\InvalidSeasonRequirements;
 
-class CopyReliabilityConfiguration extends BaseCopyAction
+class CopyReliabilityConfiguration extends CopyAction
 {
-    /**
-     * @throws InvalidSeasonRequirements
-     */
-    public function handle(): void
-    {
-        $this->validateSeasonOwnership($this->oldSeason);
-        $this->validateSeasonRequirementsMet();
-        $this->clearExistingConfiguration();
-        $this->copyReliabilityConfiguration();
-        $this->copyReliabilityReasons();
-    }
-
-    private function clearExistingConfiguration(): void
+    protected function removeExistingModels(): void
     {
         $this->newSeason->reliabilityConfiguration()?->delete();
         $this->newSeason->reliabilityReasons()->each(fn ($reason) => $reason->delete());
+    }
+
+    protected function copyModels(): void
+    {
+        $this->copyReliabilityConfiguration();
+        $this->copyReliabilityReasons();
     }
 
     private function copyReliabilityReasons(): void
@@ -40,7 +34,7 @@ class CopyReliabilityConfiguration extends BaseCopyAction
         $newConfiguration->save();
     }
 
-    private function validateSeasonRequirementsMet(): void
+    protected function validateSeasonRequirementsMet(): void
     {
         if (! $this->oldSeason->reliabilityConfiguration()->first() ||
             $this->oldSeason->reliabilityReasons()->count() === 0

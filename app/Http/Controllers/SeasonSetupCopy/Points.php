@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\CopyPoints;
+use App\Actions\Season\Copy\CopyPoints;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyPointsSystemRequest;

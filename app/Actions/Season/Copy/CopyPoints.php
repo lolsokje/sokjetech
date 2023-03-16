@@ -1,34 +1,19 @@
 <?php
 
-namespace App\Actions\Season;
+namespace App\Actions\Season\Copy;
 
 use App\Exceptions\InvalidSeasonRequirements;
-use App\Models\PointDistribution;
 use App\Models\PointSystem;
 
-class CopyPoints extends BaseCopyAction
+class CopyPoints extends CopyAction
 {
-    /**
-     * @throws InvalidSeasonRequirements
-     */
-    public function handle(): void
+    protected function removeExistingModels(): void
     {
-        $this->validateSeasonOwnership($this->oldSeason);
-        $this->validateSeasonRequirementsMet();
-        $this->removeExistingPointSystem();
-        $this->copyPointSystem();
+        $this->newSeason->pointDistribution()->delete();
+        $this->newSeason->pointSystem()?->delete();
     }
 
-    private function removeExistingPointSystem(): void
-    {
-        $this->newSeason
-            ->pointSystem
-            ?->pointDistributions
-            ->each(fn (PointDistribution $distribution) => $distribution->delete());
-        $this->newSeason->pointSystem?->delete();
-    }
-
-    private function copyPointSystem(): void
+    protected function copyModels(): void
     {
         $newSystem = $this->oldSeason->pointSystem->replicate();
         $newSystem->season()->associate($this->newSeason);
@@ -46,7 +31,7 @@ class CopyPoints extends BaseCopyAction
         }
     }
 
-    private function validateSeasonRequirementsMet(): void
+    protected function validateSeasonRequirementsMet(): void
     {
         if ($this->oldSeason->pointSystem === null) {
             throw new InvalidSeasonRequirements('No point system added to the selected season');

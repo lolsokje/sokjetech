@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\CopyReliabilityConfiguration;
+use App\Actions\Season\Copy\CopyReliabilityConfiguration;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyReliabilityConfigurationRequest;

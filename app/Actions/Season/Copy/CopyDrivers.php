@@ -1,27 +1,17 @@
 <?php
 
-namespace App\Actions\Season;
+namespace App\Actions\Season\Copy;
 
 use App\Exceptions\InvalidSeasonRequirements;
 
-class CopyDrivers extends BaseCopyAction
+class CopyDrivers extends CopyWithRatingsAction
 {
-    /**
-     * @throws InvalidSeasonRequirements
-     */
-    public function handle()
-    {
-        $this->validateSeasonRequirementsMet();
-        $this->clearExistingDrivers();
-        $this->copyDrivers();
-    }
-
-    private function clearExistingDrivers(): void
+    protected function removeExistingModels(): void
     {
         $this->newSeason->drivers()->delete();
     }
 
-    private function copyDrivers(): void
+    protected function copyModels(): void
     {
         $this->newSeason->load('entrants');
         $this->oldSeason->drivers->load('driver', 'entrant');
@@ -39,7 +29,7 @@ class CopyDrivers extends BaseCopyAction
     /**
      * @throws InvalidSeasonRequirements
      */
-    private function validateSeasonRequirementsMet(): void
+    protected function validateSeasonRequirementsMet(): void
     {
         if ($this->oldSeason->drivers->count() === 0) {
             throw new InvalidSeasonRequirements('No drivers added to the selected season');

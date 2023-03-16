@@ -1,13 +1,14 @@
 <?php
 
-use App\Actions\Season\CopyTeams;
+use App\Actions\Season\Copy\CopyTeams;
+use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\Entrant;
 use App\Models\User;
 
 it('copies teams', function () {
     [$season, $newSeason] = prepareTeams();
 
-    (new CopyTeams($season, $newSeason, false))->handle();
+    (new CopyTeams($season, $newSeason))->handle();
 
     $this->assertDatabaseCount('entrants', 6);
 
@@ -15,10 +16,20 @@ it('copies teams', function () {
     $this->assertDatabaseHas('entrants', ['season_id' => $newSeason->id]);
 });
 
+test('teams must exist in the old season before copying', function () {
+    [$season, $newSeason] = prepareTeams();
+
+    $season->entrants()->delete();
+
+    $this->assertDatabaseCount('entrants', 0);
+
+    (new CopyTeams($season, $newSeason))->handle();
+})->throws(InvalidSeasonRequirements::class);
+
 it('does not copy ratings when not requested to', function () {
     [$season, $newSeason] = prepareTeams();
 
-    (new CopyTeams($season, $newSeason, false))->handle();
+    (new CopyTeams($season, $newSeason))->handle();
 
     $this->assertDatabaseCount('entrants', 6);
 
@@ -38,7 +49,7 @@ it('does not copy ratings when not requested to', function () {
 it('copies ratings when requested to', function () {
     [$season, $newSeason] = prepareTeams();
 
-    (new CopyTeams($season, $newSeason, true))->handle();
+    (new CopyTeams($season, $newSeason))->handle(copyRatings: true);
 
     $this->assertDatabaseCount('entrants', 6);
 
@@ -58,8 +69,8 @@ it('copies ratings when requested to', function () {
 it('removes existing teams from the new season before creating new teams', function () {
     [$season, $newSeason] = prepareTeams();
 
-    (new CopyTeams($season, $newSeason, true))->handle();
-    (new CopyTeams($season, $newSeason, true))->handle();
+    (new CopyTeams($season, $newSeason))->handle(copyRatings: true);
+    (new CopyTeams($season, $newSeason))->handle(copyRatings: true);
 
     $this->assertDatabaseCount('entrants', 6);
 

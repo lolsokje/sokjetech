@@ -1,54 +1,61 @@
 <?php
 
-namespace App\Actions\Season;
+namespace App\Actions\Season\Copy;
 
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Models\Race;
 
-class CopyRaces extends BaseCopyAction
+class CopyRaces extends CopyAction
 {
+    private ?bool $copyStints;
+
+    protected ?array $columnsNotToCopy = [
+        'qualifying_started',
+        'qualifying_completed',
+        'started',
+        'completed',
+        'completed_at',
+        'qualifying_details',
+        'race_details',
+    ];
+
     /**
      * @throws InvalidSeasonRequirements
      */
-    public function handle(): void
-    {
-        $this->validateSeasonOwnership($this->oldSeason);
-        $this->validateSeasonHasRaces();
-        $this->clearExistingRaces();
-        $this->copyRaces();
+    public function handle(
+        ?bool $copyStints = false,
+    ): void {
+        $this->copyStints = $copyStints;
+
+        $this->validateSeasonRequirementsMet();
+        $this->removeExistingModels();
+        $this->copyModels();
     }
 
-    private function clearExistingRaces(): void
+    protected function removeExistingModels(): void
     {
         $this->newSeason->races()->each(fn (Race $race) => $race->stints()->delete());
         $this->newSeason->races()->delete();
     }
 
-    private function copyRaces(): void
+    protected function copyModels(): void
     {
+        $this->oldSeason->load('races.stints');
+
         foreach ($this->oldSeason->races as $oldRace) {
-            $newRace = $oldRace->replicate([
-                'qualifying_started',
-                'qualifying_completed',
-                'started',
-                'completed',
-                'completed_at',
-                'qualifying_details',
-                'race_details',
-            ]);
+            $newRace = $oldRace->replicate($this->columnsNotToCopy);
             $newRace->season()->associate($this->newSeason);
             $newRace->name = $this->getRaceName($oldRace);
             $newRace->save();
 
-            if ($this->request->copyStints()) {
+            if ($this->copyStints) {
                 $this->copyStints($oldRace, $newRace);
             }
         }
     }
 
-    private function copyStints(Race $oldRace, Race $newRace): void
+    protected function copyStints(Race $oldRace, Race $newRace): void
     {
-        $oldRace->load('stints');
         foreach ($oldRace->stints as $oldStint) {
             $newStint = $oldStint->replicate();
             $newStint->race()->associate($newRace);
@@ -56,7 +63,7 @@ class CopyRaces extends BaseCopyAction
         }
     }
 
-    private function validateSeasonHasRaces(): void
+    protected function validateSeasonRequirementsMet(): void
     {
         if ($this->oldSeason->races->count() === 0) {
             throw new InvalidSeasonRequirements('No races added to the selected season');

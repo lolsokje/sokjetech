@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\CopyRaces;
+use App\Actions\Season\Copy\CopyRaces;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyRaceSetupRequest;
