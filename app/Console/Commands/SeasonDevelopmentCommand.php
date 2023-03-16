@@ -24,6 +24,11 @@ class SeasonDevelopmentCommand extends Command
      */
     protected $description = 'Runs team, driver and engine development for a newly created season';
 
+    private array $developmentEnvironments = [
+        'local',
+        'testing',
+    ];
+
     protected ?Season $season = null;
 
     /**
@@ -33,19 +38,22 @@ class SeasonDevelopmentCommand extends Command
      */
     public function handle()
     {
-        if (config('app.env') !== 'local' || !config('app.debug')) {
+        if (! in_array(config('app.env'), $this->developmentEnvironments) && ! config('app.debug')) {
             $this->error('Not in a local development environment, aborting');
-            return 0;
+
+            return 1;
         }
 
-        if (!$this->confirm('Are you sure you want to completely reset and re-run dev?')) {
+        if (! $this->confirm('Are you sure you want to completely reset and re-run dev?')) {
             $this->info('Aborting');
-            return 0;
+
+            return 1;
         }
 
-        if (count(Season::all()) > 1) {
-            $this->error('More than one season exists in the database, aborting');
-            return 0;
+        if (count(Season::all()) !== 1) {
+            $this->error('More or less than one season exists in the database, aborting');
+
+            return 1;
         }
 
         $this->season = Season::first();
@@ -57,6 +65,7 @@ class SeasonDevelopmentCommand extends Command
         $this->driverDevelopment();
 
         $this->info('Development applied');
+
         return 0;
     }
 
@@ -100,6 +109,7 @@ class SeasonDevelopmentCommand extends Command
         $this->season->drivers()->each(function (Racer $driver) {
             $driver->update([
                 'rating' => rand(40, 60),
+                'reliability' => rand(90, 100),
             ]);
         });
     }
