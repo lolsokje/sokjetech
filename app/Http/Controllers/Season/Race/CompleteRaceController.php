@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Season\Race;
 
 use App\Actions\Races\CalculatePointsScored;
 use App\Actions\Races\CompleteRace;
 use App\Actions\Season\Standings\CalculateDriverChampionshipStandingsAction;
 use App\Actions\Season\Standings\CalculateTeamChampionshipStandingsAction;
+use App\Http\Controllers\Controller;
 use App\Jobs\CalculateChampionshipStandingsJob;
 use App\Models\Race;
 use Illuminate\Http\RedirectResponse;
