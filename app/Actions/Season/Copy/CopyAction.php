@@ -17,18 +17,18 @@ abstract class CopyAction
         $this->validateSeasonOwnership($this->oldSeason);
     }
 
-    protected function validateSeasonOwnership(Season $season): void
-    {
-        if (! Gate::check('owns-universe', $season->universe)) {
-            throw new UnauthorizedException;
-        }
-    }
-
     public function handle(): void
     {
         $this->validateSeasonRequirementsMet();
         $this->removeExistingModels();
         $this->copyModels();
+    }
+
+    protected function validateSeasonOwnership(Season $season): void
+    {
+        if (! Gate::check('owns-universe', $season->universe)) {
+            throw new UnauthorizedException;
+        }
     }
 
     abstract protected function validateSeasonRequirementsMet(): void;

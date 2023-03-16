@@ -24,6 +24,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SeasonSetupCopy\Drivers;
+use App\Http\Controllers\SeasonSetupCopy\Engines;
 use App\Http\Controllers\SeasonSetupCopy\Points;
 use App\Http\Controllers\SeasonSetupCopy\Qualifying;
 use App\Http\Controllers\SeasonSetupCopy\Races;
@@ -119,6 +121,8 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     Route::group(['prefix' => 'settings/copy', 'as' => 'settings.copy.'], function () {
         Route::get('', ShowCopySeasonSettingsPageController::class)->name('index');
         Route::post('teams', Teams::class)->name('teams');
+        Route::post('drivers', Drivers::class)->name('drivers');
+        Route::post('engines', Engines::class)->name('engines');
         Route::post('races', Races::class)->name('races');
         Route::post('qualifying', Qualifying::class)->name('qualifying');
         Route::post('points', Points::class)->name('points');

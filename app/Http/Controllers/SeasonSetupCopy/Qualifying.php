@@ -15,7 +15,7 @@ class Qualifying extends Controller
     public function __invoke(CopyQualifyingFormatRequest $request, Season $season): Response
     {
         try {
-            (new CopyQualifyingFormat($request, $season))->handle();
+            (new CopyQualifyingFormat($request->getSourceSeason(), $season))->handle();
 
             return response()->json([], Response::HTTP_CREATED);
         } catch (InvalidSeasonRequirements $e) {

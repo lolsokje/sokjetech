@@ -7,8 +7,6 @@ use App\Models\Race;
 
 class CopyRaces extends CopyAction
 {
-    private ?bool $copyStints;
-
     protected ?array $columnsNotToCopy = [
         'qualifying_started',
         'qualifying_completed',
@@ -19,13 +17,15 @@ class CopyRaces extends CopyAction
         'race_details',
     ];
 
+    private CopyStintsAction $copyStintsAction;
+
     /**
      * @throws InvalidSeasonRequirements
      */
     public function handle(
         ?bool $copyStints = false,
     ): void {
-        $this->copyStints = $copyStints;
+        $this->copyStintsAction = new CopyStintsAction($copyStints);
 
         $this->validateSeasonRequirementsMet();
         $this->removeExistingModels();
@@ -48,18 +48,7 @@ class CopyRaces extends CopyAction
             $newRace->name = $this->getRaceName($oldRace);
             $newRace->save();
 
-            if ($this->copyStints) {
-                $this->copyStints($oldRace, $newRace);
-            }
-        }
-    }
-
-    protected function copyStints(Race $oldRace, Race $newRace): void
-    {
-        foreach ($oldRace->stints as $oldStint) {
-            $newStint = $oldStint->replicate();
-            $newStint->race()->associate($newRace);
-            $newStint->save();
+            $this->copyStintsAction->handle($oldRace, $newRace);
         }
     }
 

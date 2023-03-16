@@ -21,12 +21,19 @@
         </div>
 
         <template v-if="selectedSeason">
+            <div v-if="driversOrEnginesChecked">
+                <p class="text-danger w-25">
+                    When copying drivers or engines, copying of teams is mandatory to ensure all copied drivers/engines
+                    actually belong to a team in the new season.
+                </p>
+            </div>
+
             <div class="mb-5" v-for="(item, index) in state" :key="index">
                 <input type="checkbox"
                        v-model="item.checked"
                        class="form-check-inline"
                        :id="index"
-                       :disabled="isCopying"
+                       :disabled="isCopying || (item.entity === 'teams' && driversOrEnginesChecked)"
                 >
                 <fa icon="check" class="me-3" v-if="item.completed"/>
                 <label :for="index" class="form-label">{{ item.label }}</label>
@@ -58,7 +65,7 @@
 
 <script setup>
 import BackLink from '@/Shared/BackLink.vue';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import CopySeasonSetupItem from '@/Utilities/CopySeasonSetupItem';
 import CopySeasonSetupItemDependency from '@/Utilities/CopySeasonSetupItemDependency';
 import axios from 'axios';
@@ -115,7 +122,7 @@ const startCopying = async () => {
             data[item.dependency.name] = true;
         }
 
-        axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+        await axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
             .then(() => {
                 item.completed = true;
                 completedItems.value++;
@@ -124,9 +131,22 @@ const startCopying = async () => {
                 item.fail = true;
                 item.error = error.response.data.error;
             })
-            .finally(() => item.copying = false);
+            .finally(() => {
+                item.copying = false;
+            });
     }
 };
+
+const driversOrEnginesChecked = computed(() => {
+    return state.copyDrivers.checked || state.copyEngines.checked;
+});
+
+watch(state, () => {
+    // make sure entrants are always copied when copying drivers and/or engines
+    if (driversOrEnginesChecked.value) {
+        state.copyEntrants.checked = true;
+    }
+});
 
 onMounted(() => {
     availableSeasons.value = seasons.filter(season => season.id !== props.season.id);

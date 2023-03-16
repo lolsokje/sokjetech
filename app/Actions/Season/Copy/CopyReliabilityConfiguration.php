@@ -18,6 +18,15 @@ class CopyReliabilityConfiguration extends CopyAction
         $this->copyReliabilityReasons();
     }
 
+    protected function validateSeasonRequirementsMet(): void
+    {
+        if (! $this->oldSeason->reliabilityConfiguration()->first() ||
+            $this->oldSeason->reliabilityReasons()->count() === 0
+        ) {
+            throw new InvalidSeasonRequirements('No reliability configuration found');
+        }
+    }
+
     private function copyReliabilityReasons(): void
     {
         foreach ($this->oldSeason->reliabilityReasons as $reason) {
@@ -32,14 +41,5 @@ class CopyReliabilityConfiguration extends CopyAction
         $newConfiguration = $this->oldSeason->reliabilityConfiguration->replicate();
         $newConfiguration->season()->associate($this->newSeason);
         $newConfiguration->save();
-    }
-
-    protected function validateSeasonRequirementsMet(): void
-    {
-        if (! $this->oldSeason->reliabilityConfiguration()->first() ||
-            $this->oldSeason->reliabilityReasons()->count() === 0
-        ) {
-            throw new InvalidSeasonRequirements('No reliability configuration found');
-        }
     }
 }

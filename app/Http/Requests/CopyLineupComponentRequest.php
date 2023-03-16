@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Gate;
-use Illuminate\Foundation\Http\FormRequest;
 
-class CopyTeamSetupRequest extends FormRequest
+class CopyLineupComponentRequest extends SeasonCopyRequest
 {
     public function authorize(): bool
     {
@@ -18,5 +17,10 @@ class CopyTeamSetupRequest extends FormRequest
             'season_id' => ['required', 'exists:seasons,id'],
             'copy_ratings' => ['boolean', 'nullable'],
         ];
+    }
+
+    public function copyRatings(): bool
+    {
+        return (bool) $this->validated('copy_ratings');
     }
 }

@@ -15,7 +15,7 @@ class Points extends Controller
     public function __invoke(CopyPointsSystemRequest $request, Season $season): Response
     {
         try {
-            (new CopyPoints($request, $season))->handle();
+            (new CopyPoints($request->getSourceSeason(), $season))->handle();
 
             return response()->json([], Response::HTTP_CREATED);
         } catch (InvalidSeasonRequirements $e) {

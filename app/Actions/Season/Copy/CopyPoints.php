@@ -22,15 +22,6 @@ class CopyPoints extends CopyAction
         $this->copyPointDistributions($newSystem);
     }
 
-    private function copyPointDistributions(PointSystem $newSystem): void
-    {
-        foreach ($this->oldSeason->pointSystem->pointDistributions as $oldDistribution) {
-            $newDistribution = $oldDistribution->replicate();
-            $newDistribution->pointSystem()->associate($newSystem);
-            $newDistribution->save();
-        }
-    }
-
     protected function validateSeasonRequirementsMet(): void
     {
         if ($this->oldSeason->pointSystem === null) {
@@ -39,6 +30,15 @@ class CopyPoints extends CopyAction
 
         if ($this->oldSeason->pointDistribution->count() === 0) {
             throw new InvalidSeasonRequirements('No point distribution configured for the selected season');
+        }
+    }
+
+    private function copyPointDistributions(PointSystem $newSystem): void
+    {
+        foreach ($this->oldSeason->pointSystem->pointDistributions as $oldDistribution) {
+            $newDistribution = $oldDistribution->replicate();
+            $newDistribution->pointSystem()->associate($newSystem);
+            $newDistribution->save();
         }
     }
 }

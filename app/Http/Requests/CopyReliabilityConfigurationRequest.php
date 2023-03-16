@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Gate;
-use Illuminate\Foundation\Http\FormRequest;
 
-class CopyReliabilityConfigurationRequest extends FormRequest
+class CopyReliabilityConfigurationRequest extends SeasonCopyRequest
 {
     public function authorize(): bool
     {

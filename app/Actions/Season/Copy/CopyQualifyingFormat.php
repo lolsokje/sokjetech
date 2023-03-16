@@ -11,7 +11,6 @@ class CopyQualifyingFormat extends CopyAction
         $formatId = $this->newSeason->format_id;
         $formatType = $this->newSeason->format_type;
 
-
         if (! $formatId || ! $formatType) {
             return;
         }
