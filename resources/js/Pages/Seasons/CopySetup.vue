@@ -42,11 +42,11 @@
                     <input type="checkbox"
                            v-model="dependency.checked"
                            class="form-check-inline"
-                           :id="dependency.name"
+                           :id="`${item.entity}_${dependency.name}`"
                            :disabled="!item.checked || isCopying"
                     >
                     <fa icon="check" class="me-3" v-if="dependency.checked && item.completed"/>
-                    <label :for="dependency.name">{{ dependency.label }}</label>
+                    <label :for="`${item.entity}_${dependency.name}`">{{ dependency.label }}</label>
                 </div>
 
                 <p class="text-danger" v-if="item.fail">{{ item.error }}</p>
@@ -118,9 +118,9 @@ const startCopying = async () => {
             season_id: selectedSeason.value,
         };
 
-        if (item.dependency && item.dependency.checked) {
-            data[item.dependency.name] = true;
-        }
+        item.dependencies.forEach((dependency) => {
+            data[dependency.name] = dependency.checked;
+        });
 
         await axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
             .then(() => {
