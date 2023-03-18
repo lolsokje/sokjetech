@@ -8,6 +8,7 @@ use App\Models\Season;
 use App\Models\Series;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\put;
 use function PHPUnit\Framework\assertFalse;
@@ -26,6 +27,23 @@ test('a universe owner can create seasons', function () {
 
     $this->assertDatabaseCount('seasons', 1);
     $this->assertCount(1, $series->seasons);
+});
+
+it('stores the season name correctly when creating a season', function () {
+    $user = User::factory()->create();
+    $series = createSeriesForUser($user);
+
+    $this->actingAs($user)
+        ->post(route('series.seasons.store', [$series]), [
+            'year' => 2021,
+            'name' => 'Test',
+        ]);
+
+    $this->assertDatabaseHas('seasons', [
+        'year' => 2021,
+        'name' => 'Test',
+        'series_id' => $series->id,
+    ]);
 });
 
 test('an unauthenticated user can\'t create seasons', function () {
