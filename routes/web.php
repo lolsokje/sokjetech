@@ -101,7 +101,7 @@ Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], functio
 
 Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
     Route::resource('engines', EngineController::class)->except('destroy', 'show');
-    Route::resource('seasons', SeasonController::class)->except('destroy');
+    Route::resource('seasons', SeasonController::class);
 });
 
 Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {

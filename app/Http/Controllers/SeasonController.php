@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Season\DeleteSeason;
 use App\Http\Requests\SeasonCreateRequest;
 use App\Models\Season;
 use App\Models\Series;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SeasonController extends Controller
 {
@@ -70,5 +72,16 @@ class SeasonController extends Controller
 
         return redirect(route('series.seasons.index', [$series]))
             ->with('notice', 'Season updated');
+    }
+
+    public function destroy(Series $series, Season $season): JsonResponse
+    {
+        $this->authorize('update', $series->universe);
+
+        (new DeleteSeason($season))->handle();
+
+        return response()->json([
+            'notice' => 'Season deleted',
+        ], \Symfony\Component\HttpFoundation\Response::HTTP_OK);
     }
 }
