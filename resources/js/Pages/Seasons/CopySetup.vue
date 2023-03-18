@@ -21,9 +21,9 @@
         </div>
 
         <template v-if="selectedSeason">
-            <div v-if="driversOrEnginesChecked">
+            <div v-if="driversChecked">
                 <p class="text-danger w-25">
-                    When copying drivers or engines, copying of teams is mandatory to ensure all copied drivers/engines
+                    When copying drivers, copying of teams is mandatory to ensure all copied drivers
                     actually belong to a team in the new season.
                 </p>
             </div>
@@ -33,7 +33,7 @@
                        v-model="item.checked"
                        class="form-check-inline"
                        :id="index"
-                       :disabled="isCopying || (item.entity === 'teams' && driversOrEnginesChecked)"
+                       :disabled="isCopying || (item.entity === 'teams' && driversChecked)"
                 >
                 <fa icon="check" class="me-3" v-if="item.completed"/>
                 <label :for="index" class="form-label">{{ item.label }}</label>
@@ -76,24 +76,19 @@ const props = defineProps({
 
 const seasons = props.season.series.seasons;
 const availableSeasons = ref([]);
-const selectedSeason = ref("");
+const selectedSeason = ref("114827460440365405");
 const totalItems = ref(0);
 const completedItems = ref(0);
 
 const state = reactive({
     copyEntrants: new CopySeasonSetupItem(
-        'Copy teams?',
+        'Copy teams and engines?',
         'teams',
         new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
     ),
     copyDrivers: new CopySeasonSetupItem(
         'Copy drivers?',
         'drivers',
-        new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
-    ),
-    copyEngines: new CopySeasonSetupItem(
-        'Copy engines?',
-        'engines',
         new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
     ),
     copyRaces: new CopySeasonSetupItem('Copy races?', 'races', new CopySeasonSetupItemDependency('copy_stints', 'Copy race stints?')),
@@ -137,13 +132,13 @@ const startCopying = async () => {
     }
 };
 
-const driversOrEnginesChecked = computed(() => {
-    return state.copyDrivers.checked || state.copyEngines.checked;
+const driversChecked = computed(() => {
+    return state.copyDrivers.checked;
 });
 
 watch(state, () => {
-    // make sure entrants are always copied when copying drivers and/or engines
-    if (driversOrEnginesChecked.value) {
+    // make sure entrants are always copied when copying drivers
+    if (driversChecked.value) {
         state.copyEntrants.checked = true;
     }
 });

@@ -2,36 +2,46 @@
 
 namespace App\Actions\Season\Copy;
 
-use App\Exceptions\InvalidSeasonRequirements;
+use App\Models\EngineSeason;
+use App\Models\Entrant;
+use App\Models\Season;
 
-class CopyEngines extends CopyWithRatingsAction
+class CopyEngines
 {
-    protected function copyModels(): void
-    {
-        $this->oldSeason->engines->load('baseEngine');
+    private array $engines = [];
 
+    public function __construct(
+        protected readonly Season $oldSeason,
+        protected readonly Season $newSeason,
+    ) {
+    }
+
+    public function handle(?array $columnsNotToCopy): void
+    {
         foreach ($this->oldSeason->engines as $engine) {
-            $newEngine = $engine->replicate($this->columnsNotToCopy);
-            $newEngine->baseEngine()->associate($engine->baseEngine);
+            $newEngine = $engine->replicate($columnsNotToCopy);
             $newEngine->season()->associate($this->newSeason);
 
             $newEngine->save();
+
+            $this->cacheEngine($engine, $newEngine);
         }
     }
 
-    protected function removeExistingModels(): void
+    public function copyEngineToEntrant(Entrant $oldEntrant, Entrant $newEntrant): void
     {
-        $this->newSeason->engines()->delete();
-        $this->newSeason->engines()->delete();
+        $newEngine = $this->engines[$oldEntrant->engine_id] ?? null;
+
+        if (! $newEngine) {
+            return;
+        }
+
+        $newEntrant->engine()->associate($newEngine);
+        $newEntrant->save();
     }
 
-    /**
-     * @throws InvalidSeasonRequirements
-     */
-    protected function validateSeasonRequirementsMet(): void
+    private function cacheEngine(EngineSeason $oldEngine, EngineSeason $newEngine): void
     {
-        if ($this->oldSeason->engines->count() === 0) {
-            throw new InvalidSeasonRequirements('No engines added to the selected season');
-        }
+        $this->engines[$oldEngine->id] = $newEngine;
     }
 }

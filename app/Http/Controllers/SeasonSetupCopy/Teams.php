@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\Copy\CopyTeams;
+use App\Actions\Season\Copy\CopyTeamsAndEngines;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyLineupComponentRequest;
@@ -15,7 +15,7 @@ class Teams extends Controller
     public function __invoke(CopyLineupComponentRequest $request, Season $season): Response
     {
         try {
-            (new CopyTeams($request->getSourceSeason(), $season))->handle(
+            (new CopyTeamsAndEngines($request->getSourceSeason(), $season))->handle(
                 copyRatings: $request->copyRatings(),
             );
 
