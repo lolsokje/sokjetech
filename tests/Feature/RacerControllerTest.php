@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UniverseVisibility;
 use App\Models\Driver;
 use App\Models\Entrant;
 use App\Models\Racer;
@@ -279,4 +280,42 @@ test('a universe owner can remove drivers from entrants', function () {
 
     $this->assertCount(2, $entrant->allRacers);
     $this->assertCount(1, $entrant->activeRacers);
+});
+
+it('shows the racer index page for universe owners', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    Racer::factory(3)->for($season)->create();
+
+    $this->actingAs($user)
+        ->get(route('seasons.racers.index', $season))
+        ->assertOk();
+});
+
+it('does not show the racer index page for unauthorised users', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user, UniverseVisibility::PRIVATE);
+
+    $this->get(route('seasons.racers.index', $season))
+        ->assertForbidden();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('seasons.racers.index', $season))
+        ->assertForbidden();
+});
+
+it('shows all active racers on the racer index page', function () {
+    $user = User::factory()->create();
+    $season = createSeasonForUser($user);
+    Racer::factory(3)->for($season)->create();
+
+    $this->actingAs($user)
+        ->get(route('seasons.racers.index', $season))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Racers/Index')
+            ->has('season', fn (Assert $prop) => $prop
+                ->where('has_active_race', false)
+                ->etc())
+            ->has('racers', 3));
 });

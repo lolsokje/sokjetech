@@ -113,7 +113,8 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
     Route::resource('engines', EngineSeasonController::class)->except('destroy', 'show');
     Route::resource('entrants', EntrantController::class)->except('show');
-    Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
+
+    Route::get('', [RacerController::class, 'index'])->name('racers.index');
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
     Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
 
