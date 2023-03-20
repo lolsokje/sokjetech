@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import { computed, onMounted } from 'vue';
@@ -108,7 +108,7 @@ const hasSeasonStarted = (): boolean => {
 };
 
 const validForm = computed(() => {
-    return form.max_rng > form.min_rng && !invalidReasons.value;
+    return form.max_rng > form.min_rng && ! invalidReasons.value;
 });
 
 const invalidReasons = computed(() => {

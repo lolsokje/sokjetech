@@ -55,19 +55,6 @@
             </button>
         </template>
     </CustomModal>
-    <!--    <div class="modal fade bd-example-modal-sm"-->
-    <!--         tabindex="-1"-->
-    <!--         role="dialog"-->
-    <!--         id="deleteSeasonModal"-->
-    <!--         aria-hidden="true"-->
-    <!--         ref="deleteModal"-->
-    <!--    >-->
-    <!--        <div class="modal-dialog modal-sm">-->
-    <!--            <div class="modal-content" v-if="seasonToDelete">-->
-    <!--                <p>Are you sure you want to delete "{{ seasonToDelete.name }}?</p>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
 </template>
 
 <script setup lang="ts">
@@ -76,8 +63,8 @@ import Season from '@/Interfaces/Season';
 import { onMounted, ref, Ref } from 'vue';
 import { Modal } from 'bootstrap';
 import CustomModal from '@/Components/Modal.vue';
-import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 interface Props {
     series: Series,
@@ -99,7 +86,7 @@ const deleteSeason = (season: Season): void => {
 const confirmDeletion = (): void => {
     axios.delete(route('series.seasons.destroy', [ props.series, seasonToDelete.value.id ]))
         .then(() => {
-            Inertia.reload({ only: [ 'series' ] });
+            router.reload({ only: [ 'series' ] });
             closeModal();
         });
 };

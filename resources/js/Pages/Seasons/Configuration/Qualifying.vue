@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { markRaw, onMounted, Ref, ref, watch } from 'vue';
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import ThreeSessionElimination from '@/Shared/QualifyingFormats/ThreeSessionElimination.vue';
 import SingleSession from '@/Shared/QualifyingFormats/SingleSession.vue';
@@ -83,7 +83,7 @@ watch(format, (newFormat) => {
 });
 
 onMounted(() => {
-    if (!props.season.format_type) {
+    if (! props.season.format_type) {
         return;
     }
 

@@ -1,4 +1,4 @@
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 export const sortTable = (params, field = null) => {
     if (field) {
@@ -9,7 +9,7 @@ export const sortTable = (params, field = null) => {
 
 export const filter = (params, route) => {
     const requestParams = getRequestParams(params);
-    Inertia.get(route, requestParams, { replace: true, preserveState: true });
+    router.get(route, requestParams, { replace: true, preserveState: true });
 };
 
 export const getRequestParams = (params) => {

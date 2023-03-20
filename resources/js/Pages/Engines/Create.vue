@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import BackLink from '@/Shared/BackLink.vue';
 
 interface Props {

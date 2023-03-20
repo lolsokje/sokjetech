@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import SeasonEngine from '@/Interfaces/SeasonEngine';
@@ -91,7 +91,7 @@ const form: InertiaForm<Form> = useForm({
 
 const showSubmitButton = computed((): boolean => {
     if (form.base_engine_id) {
-        return !(form.rebadge && form.name.length < 3);
+        return ! (form.rebadge && form.name.length < 3);
     }
     return false;
 });

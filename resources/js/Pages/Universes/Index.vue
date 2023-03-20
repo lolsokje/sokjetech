@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
-import { usePage } from '@inertiajs/inertia-vue3';
+import { usePage } from '@inertiajs/vue3';
 import BackLink from '@/Shared/BackLink.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
@@ -64,7 +64,7 @@ const params = reactive({
     mine: props.filters.mine ?? false,
 });
 
-const user = computed((): User => usePage().props.value.auth.user);
+const user = computed((): User => usePage().props.auth.user);
 
 watch(params, (): void => {
     filter(params, route('universes.index'));

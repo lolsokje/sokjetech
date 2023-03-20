@@ -15,7 +15,8 @@
             </thead>
             <tbody>
             <tr v-for="race in form.races" :key="race.id" :data-race="race.id" draggable="true" role="button"
-                @dragstart="dragStart($event, race.id)" @dragover.prevent="" @drop.prevent="drop">
+                @dragstart="dragStart($event, race.id)" @dragover.prevent="" @drop.prevent="drop"
+            >
                 <td class="small-centered">{{ race.order }}</td>
                 <td class="padded-left">{{ race.name }}</td>
             </tr>
@@ -27,7 +28,7 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import BackLink from '@/Shared/BackLink.vue';
 
 const props = defineProps({

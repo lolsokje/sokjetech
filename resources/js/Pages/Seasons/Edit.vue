@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import BackLink from '@/Shared/BackLink.vue';
 

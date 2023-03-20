@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
 import BackLink from '@/Shared/BackLink.vue';

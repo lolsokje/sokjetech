@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import CopyScreenshotButton from './CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
@@ -146,8 +146,8 @@ const store = (): void => {
     development.storeDev(form, props.formRoute, state);
 };
 
-const devCompleted = computed((): boolean => !state.completed);
-const inputsHidden = computed((): boolean => !state.hideInputs);
+const devCompleted = computed((): boolean => ! state.completed);
+const inputsHidden = computed((): boolean => ! state.hideInputs);
 
 onMounted(() => {
     form.drivers.sort((a, b) => a.team_name.localeCompare(b.team_name));

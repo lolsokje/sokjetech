@@ -50,7 +50,7 @@
 import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import SeasonInterface from '@/Interfaces/Season';
 import Entrant from '@/Interfaces/Entrant';
 import { onMounted, reactive, ref, Ref } from 'vue';
@@ -100,7 +100,7 @@ const setDriver = (driver: Driver): void => {
 const addDriver = (): void => {
     hasError.value = false;
 
-    if (!state.driver) {
+    if (! state.driver) {
         return;
     }
 
@@ -129,7 +129,7 @@ const addDriver = (): void => {
 const removeDriver = (id: string): void => {
     const driver = form.drivers.find((driver: FormDriver) => driver.driver_id === id);
 
-    if (!driver) {
+    if (! driver) {
         return;
     }
 

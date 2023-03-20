@@ -102,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { computed, ComputedRef, onMounted, Ref, ref } from 'vue';
 import { FastestLapDetermination } from '@/Enums/FastestLapDetermination';
 import Errors from '@/Shared/Errors.vue';
@@ -156,7 +156,7 @@ const hasSeasonStarted = (): boolean => {
 };
 
 onMounted(() => {
-    if (!form.points?.length) {
+    if (! form.points?.length) {
         let remainingPoints = amountOfPointScorers.value;
         for (let position = 1; position <= amountOfPointScorers.value; position++) {
             addToPointsArray(position, remainingPoints);

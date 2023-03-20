@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';

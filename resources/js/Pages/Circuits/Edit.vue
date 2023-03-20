@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Circuit from '@/Interfaces/Circuit';

@@ -1,6 +1,6 @@
 import { getRoll } from '@/Composables/useRunQualifying.js';
 import DevelopmentState from '@/Interfaces/Development';
-import { InertiaForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm } from '@inertiajs/vue3';
 import DevelopmentItem from '@/Interfaces/DevelopmentItem';
 
 class Development {
@@ -11,7 +11,7 @@ class Development {
     }
 
     performDev = (items: DevelopmentItem[]): boolean => {
-        if (!this.areDevRangesValid(items)) {
+        if (! this.areDevRangesValid(items)) {
             return false;
         }
 
@@ -32,7 +32,7 @@ class Development {
     };
 
     areDevRangesValid = (items: DevelopmentItem[]): boolean => {
-        return !items.some((item: DevelopmentItem) => !this.validateDevRange(item.min, item.max));
+        return ! items.some((item: DevelopmentItem) => ! this.validateDevRange(item.min, item.max));
     };
 
     validateDevRange = (min: number, max: number): boolean => {

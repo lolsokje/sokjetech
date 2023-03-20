@@ -25,7 +25,7 @@ import { markRaw, onMounted, ref } from 'vue';
 import { getQualifyingFormatComponentName } from '@/Composables/useQualifyingFormat';
 import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination.vue';
 import SingleSession from '@/Components/RaceWeekend/SingleSession.vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
 
@@ -78,7 +78,7 @@ const storeQualifyingResult = (data) => {
             runs: result.result.runs,
         });
     });
-    
+
     drivers.forEach((driver, index) => {
         driver.position = index + 1;
     });
@@ -90,7 +90,7 @@ const storeQualifyingResult = (data) => {
 
 const completeQualifying = () => {
     raceWeekendStore.completeQualifying();
-    Inertia.post(route('weekend.qualifying.complete', [ props.race ]));
+    router.post(route('weekend.qualifying.complete', [ props.race ]));
 };
 </script>
 

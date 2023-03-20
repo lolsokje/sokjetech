@@ -60,10 +60,10 @@ import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
-import { Inertia } from '@inertiajs/inertia';
 import SeasonInterface from '@/Interfaces/Season';
 import Permission from '@/Interfaces/Permission';
 import Entrant from '@/Interfaces/Entrant';
+import { router } from '@inertiajs/vue3';
 
 interface Props {
     season: SeasonInterface,
@@ -73,15 +73,15 @@ interface Props {
 const props = defineProps<Props>();
 
 const hasActiveRace = props.season.has_active_race;
-const canEdit = props.can.edit && !hasActiveRace;
-const canDeleteTeam = props.can.edit && !props.season.started;
+const canEdit = props.can.edit && ! hasActiveRace;
+const canDeleteTeam = props.can.edit && ! props.season.started;
 
 const deleteEntrant = (entrant: Entrant): void => {
-    if (!confirm(`Are you sure you want to remove "${entrant.full_name}"? This will also delete any associated drivers`)) {
+    if (! confirm(`Are you sure you want to remove "${entrant.full_name}"? This will also delete any associated drivers`)) {
         return;
     }
 
-    Inertia.delete(route('seasons.entrants.destroy', [ props.season, entrant ]));
+    router.delete(route('seasons.entrants.destroy', [ props.season, entrant ]));
 };
 </script>
 
