@@ -13,6 +13,8 @@ class ShowDriverStandingsController extends Controller
 {
     public function __invoke(Season $season): Response
     {
+        $this->authorize('view', $season->universe);
+
         $season->load([
             'driverChampionshipStandings' => fn (HasMany $query) => $query->orderBy('position')->with('driver'),
             'driversWithParticipation' => ['entrant'],
