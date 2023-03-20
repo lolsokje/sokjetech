@@ -29,6 +29,7 @@ class DriverCreateRequest extends FormRequest
             'dob' => ['nullable', 'date'],
             'country' => ['required'],
             'shared' => ['nullable'],
+            'retired' => ['nullable', 'boolean'],
         ];
     }
 }

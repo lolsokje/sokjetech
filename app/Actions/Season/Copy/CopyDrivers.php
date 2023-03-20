@@ -17,6 +17,10 @@ class CopyDrivers extends CopyWithRatingsAction
         $this->oldSeason->drivers->load('driver', 'entrant');
 
         foreach ($this->oldSeason->drivers->load('driver') as $driver) {
+            if ($driver->driver->retired) {
+                continue;
+            }
+
             $newDriver = $driver->replicate($this->columnsNotToCopy);
             $newEntrant = $this->newSeason->entrants->where('team_id', $driver->entrant->team_id)->first();
             $newDriver->entrant()->associate($newEntrant);

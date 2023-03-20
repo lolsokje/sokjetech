@@ -97,6 +97,7 @@ class Season extends SnowflakeModel
     public function availableDrivers(): Collection
     {
         return $this->universe->drivers()
+            ->where('retired', false)
             ->whereNotIn(
                 'id',
                 $this->drivers()

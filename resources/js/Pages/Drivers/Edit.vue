@@ -30,6 +30,11 @@
             <label for="shared" class="form-check-label">Share with others</label>
         </div>
 
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-inline" v-model="form.retired" id="retired">
+            <label for="retired" class="form-check-label">Retired?</label>
+        </div>
+
         <button class="btn btn-primary" type="submit">Save driver</button>
     </form>
 </template>
@@ -53,6 +58,7 @@ const form = useForm({
     dob: props.driver.edit_dob,
     country: props.driver.country,
     shared: props.driver.shared,
+    retired: props.driver.retired,
 });
 
 const setCountry = (country: string): void => {

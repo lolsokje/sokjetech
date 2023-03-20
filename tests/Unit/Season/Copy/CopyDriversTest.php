@@ -2,6 +2,7 @@
 
 use App\Actions\Season\Copy\CopyDrivers;
 use App\Exceptions\InvalidSeasonRequirements;
+use App\Models\Driver;
 use App\Models\Racer;
 use App\Models\User;
 
@@ -76,6 +77,19 @@ it('removes existing drivers from the new season before creating new teams', fun
 
     $this->assertDatabaseHas('racers', ['season_id' => $season->id]);
     $this->assertDatabaseHas('racers', ['season_id' => $newSeason->id]);
+});
+
+it('does not copy retired drivers to new seasons', function () {
+    [$season, $newSeason] = prepareDrivers();
+
+    Driver::first()->update(['retired' => true]);
+
+    (new CopyDrivers($season, $newSeason))->handle();
+
+    $this->assertDatabaseCount('racers', 5);
+
+    $this->assertCount(3, $season->drivers);
+    $this->assertCount(2, $newSeason->drivers);
 });
 
 function prepareDrivers(): array

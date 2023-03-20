@@ -8,7 +8,7 @@ class DriverFilterRequest extends FilterRequest
     {
         return [
             'search' => ['nullable'],
-            'field' => ['nullable', 'in:first_name,dob'],
+            'field' => ['nullable', 'in:first_name,dob,retired'],
             'direction' => ['nullable', 'in:asc,desc'],
         ];
     }

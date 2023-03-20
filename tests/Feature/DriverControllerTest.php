@@ -75,6 +75,24 @@ test('a universe owner can edit drivers', function () {
     $this->assertEquals('AL', $driver->fresh()->country);
 });
 
+test('a driver can be marked as retired', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->create(['user_id' => $user->id]);
+    $driver = Driver::factory()->create(['universe_id' => $universe->id]);
+
+    $this->actingAs($user)
+        ->put(route('universes.drivers.update', [$universe, $driver]), [
+            'first_name' => $driver->first_name,
+            'last_name' => $driver->last_name,
+            'dob' => $driver->dob,
+            'country' => $driver->country,
+            'retired' => true,
+        ])
+        ->assertRedirect(route('universes.drivers.index', $universe));
+
+    $this->assertTrue($driver->fresh()->retired);
+});
+
 test('an authenticated user can\'t update drivers', function () {
     $universe = Universe::factory()->create();
     $driver = Driver::factory()->create(['universe_id' => $universe->id]);

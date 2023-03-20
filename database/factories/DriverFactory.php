@@ -32,4 +32,12 @@ class DriverFactory extends Factory
         });
     }
 
+    public function retired(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'retired' => true,
+            ];
+        });
+    }
 }

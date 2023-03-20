@@ -11,4 +11,5 @@ export default interface Driver {
     edit_dob?: string,
     country: string,
     shared?: boolean,
+    retired?: boolean,
 }

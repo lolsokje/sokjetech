@@ -37,6 +37,10 @@
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="dob"/>
                 </th>
                 <th class="text-center">Country</th>
+                <th class="text-center" role="button" @click.prevent="sortTable(params, 'retired')">
+                    Retired
+                    <OrderIcon :current-field="params.field" :direction="params.direction" required-field="retired"/>
+                </th>
                 <th colspan="2"></th>
             </tr>
             </thead>
@@ -46,6 +50,9 @@
                 <td class="padded-left">{{ driver.readable_dob }}</td>
                 <td class="small-centered">
                     <CountryFlag :country="driver.country"/>
+                </td>
+                <td class="small-centered">
+                    {{ driver.retired ? 'Yes' : 'No' }}
                 </td>
                 <td class="small-centered">
                     <InertiaLink v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">
