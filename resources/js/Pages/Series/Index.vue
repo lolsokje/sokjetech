@@ -23,7 +23,7 @@
                 </InertiaLink>
             </td>
             <td class="small-centered">
-                <InertiaLink :href="route('universes.series.show', [universe, series])">view</InertiaLink>
+                <InertiaLink :href="route('series.seasons.index', series)">view</InertiaLink>
             </td>
         </tr>
         </tbody>

@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.series.show', [series.universe, series])" label="series overview"/>
+    <BackLink :backTo="route('series.seasons.index', series)" label="series overview"/>
 
     <h3>Engines</h3>
 

@@ -94,7 +94,7 @@ Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], functio
     Route::post('drivers/persist', PersistGeneratedDriversController::class)->name('drivers.persist');
 
     Route::resource('drivers', DriverController::class)->except('destroy');
-    Route::resource('series', SeriesController::class)->except('destroy');
+    Route::resource('series', SeriesController::class)->except('destroy', 'show');
     Route::resource('teams', TeamController::class)->except('destroy');
 });
 
