@@ -50,6 +50,8 @@ class DriverController extends Controller
 
     public function show(Universe $universe, Driver $driver): Response
     {
+        $this->authorize('view', $universe);
+
         return Inertia::render('Drivers/Show', [
             'universe' => $universe,
             'driver' => $driver,

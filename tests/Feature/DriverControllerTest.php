@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UniverseVisibility;
 use App\Models\Driver;
 use App\Models\Universe;
 use App\Models\User;
@@ -175,4 +176,31 @@ it('shows all drivers in the selected universe on the index page', function () {
                 ->component('Drivers/Index')
                 ->has('drivers', 5),
         );
+});
+
+it('shows the driver detail page for authorised users', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->for($user)->create();
+    $driver = Driver::factory()->for($universe)->create();
+
+    $this->actingAs($user)
+        ->get(route('universes.drivers.show', [$universe, $driver]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Drivers/Show')
+            ->has('driver', fn (Assert $prop) => $prop
+                ->where('id', $driver->id)
+                ->etc()));
+});
+
+it('does not show the driver detail page for unauthorised users', function () {
+    $universe = Universe::factory()->create(['visibility' => UniverseVisibility::PRIVATE]);
+    $driver = Driver::factory()->for($universe)->create();
+
+    $this->get(route('universes.drivers.show', [$universe, $driver]))
+        ->assertForbidden();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('universes.drivers.show', [$universe, $driver]))
+        ->assertForbidden();
 });
