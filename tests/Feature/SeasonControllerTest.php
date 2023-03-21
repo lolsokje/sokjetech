@@ -23,7 +23,7 @@ test('a universe owner can create seasons', function () {
             'year' => 2021,
             'name' => 'Test',
         ])
-        ->assertRedirect(route('series.seasons.index', [$series]));
+        ->assertRedirect(route('seasons.races.index', Season::first()));
 
     $this->assertDatabaseCount('seasons', 1);
     $this->assertCount(1, $series->seasons);

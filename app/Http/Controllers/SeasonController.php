@@ -41,9 +41,9 @@ class SeasonController extends Controller
 
     public function store(SeasonCreateRequest $request, Series $series): RedirectResponse
     {
-        $series->seasons()->create($request->validated());
+        $season = $series->seasons()->create($request->validated());
 
-        return redirect(route('series.seasons.index', [$series]))
+        return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Season created');
     }
 
