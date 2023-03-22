@@ -18,6 +18,8 @@ class CopyEngines
 
     public function handle(?array $columnsNotToCopy): void
     {
+        $this->newSeason->engines()->delete();
+
         foreach ($this->oldSeason->engines as $engine) {
             $newEngine = $engine->replicate($columnsNotToCopy);
             $newEngine->season()->associate($this->newSeason);

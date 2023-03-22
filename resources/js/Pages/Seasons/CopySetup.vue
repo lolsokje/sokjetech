@@ -76,7 +76,7 @@ const props = defineProps({
 
 const seasons = props.season.series.seasons;
 const availableSeasons = ref([]);
-const selectedSeason = ref("114827460440365405");
+const selectedSeason = ref("");
 const totalItems = ref(0);
 const completedItems = ref(0);
 

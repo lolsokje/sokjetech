@@ -38,6 +38,7 @@ it('does not duplicate engines', function () {
     ]);
 
     (new CopyTeamsAndEngines($season, $newSeason))->handle();
+    (new CopyTeamsAndEngines($season, $newSeason))->handle();
 
     $this->assertDatabaseCount('engine_seasons', 6);
 
