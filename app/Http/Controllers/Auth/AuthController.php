@@ -39,7 +39,7 @@ class AuthController extends Controller
             'is_admin' => $this->isAdmin($discordUser),
         ]);
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         return $this->handleRedirect();
     }
