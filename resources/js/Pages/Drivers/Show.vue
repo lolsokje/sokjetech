@@ -1,6 +1,10 @@
 <template>
     <div class="container pb-3 mb-3 border-bottom border-secondary">
-        <BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
+        <Breadcrumb :link="route('universes.drivers.index', universe)"
+                    :linkText="universe.name"
+                    :label="driver.full_name"
+                    append="Career"
+        />
 
         <div class="row">
             <div class="col-2">
@@ -66,12 +70,12 @@
 </template>
 
 <script lang="ts" setup>
-import BackLink from '@/Shared/BackLink.vue';
 import Universe from '@/Interfaces/Universe';
 import Driver from '@/Interfaces/Driver';
 import axios from 'axios';
 import { onMounted, Ref, ref } from 'vue';
 import { getResultClasses } from '@/Composables/useResultPage.js';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

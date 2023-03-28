@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.series.index', [universe])" label="series overview"/>
+    <Breadcrumb :link="route('universes.series.index', universe)" :linkText="universe.name" label="Create series"/>
 
     <form @submit.prevent="form.post(route('universes.series.store', [universe]))" class="form-narrow">
         <Errors :errors="form.errors"/>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

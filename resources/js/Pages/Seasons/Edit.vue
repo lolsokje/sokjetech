@@ -1,7 +1,9 @@
 <template>
-    <h3>Editing {{ season.full_name }}</h3>
-
-    <BackLink :backTo="route('series.seasons.index', [series])" label="season index"/>
+    <Breadcrumb :link="route('series.seasons.index', series)"
+                :linkText="series.name"
+                :label="season.full_name"
+                append="Edit season"
+    />
 
     <form @submit.prevent="form.put(route('series.seasons.update', [series, season]))" class="form-narrow">
         <Errors :errors="form.errors"/>
@@ -28,7 +30,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     series: Series,

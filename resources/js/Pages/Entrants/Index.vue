@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-
-    <h3>Entrants</h3>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Entrants"
+    />
 
     <InertiaLink v-if="can.edit" :href="route('seasons.entrants.create', [season])" class="btn btn-primary mb-3">
         Add entrant
@@ -56,7 +59,6 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
@@ -64,6 +66,7 @@ import SeasonInterface from '@/Interfaces/Season';
 import Permission from '@/Interfaces/Permission';
 import Entrant from '@/Interfaces/Entrant';
 import { router } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

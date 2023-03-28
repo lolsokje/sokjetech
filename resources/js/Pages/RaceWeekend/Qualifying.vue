@@ -1,6 +1,4 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
-
     <div class="alert bg-danger text-white container w-50" v-if="showError">
         Something went wrong saving your runs. Please refresh the page and try again.
     </div>
@@ -14,13 +12,13 @@
         :completed="race.qualifying_completed"
         :showError="showError"
         :saving="saving"
+        :race="race"
         @runPerformed="storeQualifyingResult"
         @completeQualifying="completeQualifying"
     />
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink.vue';
 import { markRaw, onMounted, ref } from 'vue';
 import { getQualifyingFormatComponentName } from '@/Composables/useQualifyingFormat';
 import ThreeSessionElimination from '@/Components/RaceWeekend/ThreeSessionElimination.vue';

@@ -1,5 +1,9 @@
 <template>
-    <BackLink :backTo="route('seasons.engines.index', [season])" label="season overview"/>
+    <Breadcrumb :link="route('seasons.engines.index', season)"
+                :linkText="season.full_name"
+                :label="engine.name"
+                append="Edit engine"
+    />
 
     <form @submit.prevent="form.put(route('seasons.engines.update', [season, engine]))">
         <Errors :errors="form.errors"/>
@@ -51,10 +55,10 @@
 <script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import SeasonEngine from '@/Interfaces/SeasonEngine';
 import { Engine } from '@/Interfaces/Engine';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonEngine,

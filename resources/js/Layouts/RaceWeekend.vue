@@ -5,7 +5,6 @@
         </div>
 
         <div class="st-card p-4">
-            <h1>{{ race.name }}</h1>
             <slot/>
         </div>
     </Base>

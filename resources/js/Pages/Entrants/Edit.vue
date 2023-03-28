@@ -1,5 +1,9 @@
 <template>
-    <BackLink :backTo="route('seasons.entrants.index', [season])" label="team entries overview"/>
+    <Breadcrumb :link="route('seasons.entrants.index', season)"
+                :linkText="season.full_name"
+                :label="entrant.full_name"
+                append="Edit entrant"
+    />
 
     <form class="form-narrow" @submit.prevent="form.put(route('seasons.entrants.update', [season, entrant]))">
         <SearchableDropdown :items="teams" :selected-item="selectedTeam" label="Select a base team" text-key="full_name"
@@ -67,7 +71,7 @@ import Team from '@/Interfaces/Team';
 import { Engine } from '@/Interfaces/Engine';
 import Entrant from '@/Interfaces/Entrant';
 import Permission from '@/Interfaces/Permission';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

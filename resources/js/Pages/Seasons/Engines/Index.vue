@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-
-    <h3>Engines</h3>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Engines"
+    />
 
     <InertiaLink v-if="canEdit" :href="route('seasons.engines.create', [season])" class="btn btn-primary my-3">
         Add engine to season
@@ -44,11 +47,11 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import Permission from '@/Interfaces/Permission';
 import SeasonEngine from '@/Interfaces/SeasonEngine';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: Season,
@@ -59,7 +62,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const hasActiveRace = props.season.has_active_race;
-const canEdit = props.can.edit && !hasActiveRace;
+const canEdit = props.can.edit && ! hasActiveRace;
 </script>
 
 <script lang="ts">

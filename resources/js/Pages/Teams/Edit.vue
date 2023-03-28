@@ -1,5 +1,9 @@
 <template>
-    <BackLink :backTo="route('universes.teams.index', [universe])" label="team overview"/>
+    <Breadcrumb :link="route('universes.teams.index', universe)"
+                :linkText="universe.name"
+                :label="team.full_name"
+                append="Edit team"
+    />
 
     <form class="form-narrow" @submit.prevent="form.put(route('universes.teams.update', [universe, team]))">
         <Errors :errors="form.errors"/>
@@ -48,9 +52,9 @@
 import { useForm } from '@inertiajs/vue3';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
 import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
 import ColourPicker from '@/Components/ColourPicker.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

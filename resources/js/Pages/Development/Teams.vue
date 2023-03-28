@@ -1,16 +1,19 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-
-    <h2>Team development</h2>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Team development"
+    />
 
     <TeamDevelopment :season="season" :teams="teams" :form-route="route('seasons.development.teams.store', [season])"/>
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import TeamDevelopment from '@/Shared/TeamDevelopment.vue';
 import SeasonInterface from '@/Interfaces/Season';
 import DevelopmentTeam from '@/Interfaces/DevelopmentTeam';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

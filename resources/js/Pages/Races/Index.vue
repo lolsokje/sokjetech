@@ -1,4 +1,10 @@
 <template>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                append="Calendar"
+    />
+
     <div class="my-4" v-if="canEdit && !season.started">
         <div class="d-flex">
             <button class="btn btn-success" @click.prevent="confirmSeasonStart()" :disabled="!canStart">
@@ -17,9 +23,9 @@
         <button class="btn btn-success" @click.prevent="confirmSeasonComplete()">Complete season</button>
     </div>
 
-    <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>
+    <!--    <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>-->
 
-    <h3>Races</h3>
+    <!--    <h3>Races</h3>-->
 
     <InertiaLink v-if="canAddRace()" :href="route('seasons.races.create', [season])" class="btn btn-primary my-3">
         Add race
@@ -100,7 +106,6 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { computed, onMounted, Ref, ref, watch } from 'vue';
@@ -108,6 +113,7 @@ import axios from 'axios';
 import { Participant, Race } from '@/Interfaces/Race';
 import SeasonInterface from '@/Interfaces/Season';
 import { router } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

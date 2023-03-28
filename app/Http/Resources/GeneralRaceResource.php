@@ -13,6 +13,7 @@ class GeneralRaceResource extends CustomJsonResource
         return [
             'id' => $this->id,
             'season' => $this->season_id,
+            'season_name' => $this->season->full_name,
             'name' => $this->name,
             'qualifying_started' => $this->qualifying_started,
             'qualifying_completed' => $this->qualifying_completed,

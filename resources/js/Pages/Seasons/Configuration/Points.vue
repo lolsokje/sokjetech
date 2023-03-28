@@ -1,7 +1,10 @@
 <template>
-    <h3>Points configuration</h3>
-
-    <BackLink :backTo="route('seasons.races.index', [season])" label="season overview"/>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Points configuration"
+    />
 
     <form @submit.prevent="form.post(route('seasons.configuration.points.store', [season]))">
         <Errors v-if="form.errors" :errors="form.errors"/>
@@ -106,9 +109,9 @@ import { useForm } from '@inertiajs/vue3';
 import { computed, ComputedRef, onMounted, Ref, ref } from 'vue';
 import { FastestLapDetermination } from '@/Enums/FastestLapDetermination';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
 import SeasonInterface from '@/Interfaces/Season';
 import PointDistribution from '@/Interfaces/PointDistribution';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

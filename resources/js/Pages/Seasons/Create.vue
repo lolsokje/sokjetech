@@ -1,7 +1,5 @@
 <template>
-    <h3>Create season</h3>
-
-    <BackLink :backTo="route('series.seasons.index', [series])" label="season index"/>
+    <Breadcrumb :link="route('series.seasons.index', series)" :linkText="series.name" label="Create season"/>
 
     <form @submit.prevent="form.post(route('series.seasons.store', [series]))" class="form-narrow">
         <Errors :errors="form.errors"/>
@@ -28,7 +26,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     series: Series,

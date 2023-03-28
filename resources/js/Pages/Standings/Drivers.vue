@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="season overview"/>
-
-    <h3>Driver Standings</h3>
+    <Breadcrumb :link="route('series.seasons.index', series)"
+                :linkText="series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Driver standings"
+    />
 
     <table class="table" id="screenshot-target">
         <thead>
@@ -54,7 +57,6 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import { getResultClasses } from '@/Composables/useResultPage.js';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import SeasonInterface from '@/Interfaces/Season';
@@ -62,6 +64,8 @@ import { Race } from '@/Interfaces/Race';
 import RaceResult from '@/Interfaces/RaceResult';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { onMounted } from 'vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
+import Series from '@/Interfaces/Series';
 
 interface Results {
     [key: number]: RaceResult;
@@ -94,6 +98,7 @@ interface Standings {
 
 interface Props {
     season: SeasonInterface,
+    series: Series,
     races: Race[],
     standings: Standings,
 }

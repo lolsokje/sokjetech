@@ -1,12 +1,15 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
+    <Breadcrumb :link="route('seasons.races.index', race.season)"
+                :linkText="race.season.full_name"
+                :label="race.name"
+                append="Race"
+    />
 
     <div class="alert bg-danger text-white container w-50" v-if="raceStore.error">
         Something went wrong saving your stints. Please refresh the page and try again.
     </div>
 
     <div class="d-flex mb-3">
-        <h3>Race</h3>
         <div class="ms-auto" v-if="can.edit">
             <button v-if="canPerformStint"
                     class="btn btn-primary"
@@ -84,7 +87,6 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
@@ -99,6 +101,7 @@ import {
     sortDrivers,
 } from '@/Composables/useRunRace';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying.js';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     race: Object,

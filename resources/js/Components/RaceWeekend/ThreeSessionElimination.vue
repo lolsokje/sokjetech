@@ -1,5 +1,10 @@
 <template>
-    <h3>Qualifying - Q{{ store.getCurrentSessionIndex() + 1 }}</h3>
+    <Breadcrumb :link="route('seasons.races.index', race.season)"
+                :linkText="race.season.full_name"
+                :label="race.name"
+                :append="`Qualifying - Q${store.getCurrentSessionIndex() + 1}`"
+    />
+
     <div class="d-flex my-3">
         <button class="btn btn-info" @click="viewPreviousSession()" v-if="canViewPreviousSession" :disabled="saving">
             Previous session
@@ -79,6 +84,7 @@ import { threeSessionEliminationStore as store } from '@/Stores/threeSessionElim
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     formatDetails: {
@@ -104,6 +110,10 @@ const props = defineProps({
     completed: {
         type: Boolean,
         required: false,
+    },
+    race: {
+        type: Object,
+        required: true,
     },
     showError: Boolean,
     saving: Boolean,
@@ -145,7 +155,7 @@ const viewNextSession = () => {
     store.incrementCurrentSession();
 
     store.getDrivers().forEach(driver => {
-        if (!driver.result.runs[store.getCurrentSessionIndex()]) {
+        if (! driver.result.runs[store.getCurrentSessionIndex()]) {
             driver.result.runs[store.getCurrentSessionIndex()] = [];
         }
         calculateSessionBestAndTotal(driver, store.getCurrentSessionIndex());
@@ -179,10 +189,10 @@ const isDriverBelowSessionCutoff = (position) => {
 };
 
 const hasError = computed(() => props.showError === true);
-const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < runsPerSession) && !hasError.value);
-const canContinueToNextSession = computed(() => (store.getCurrentSessionNumber() < totalSessions) && !hasError.value);
+const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < runsPerSession) && ! hasError.value);
+const canContinueToNextSession = computed(() => (store.getCurrentSessionNumber() < totalSessions) && ! hasError.value);
 const canViewPreviousSession = computed(() => store.getCurrentSessionIndex() > 0);
-const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === totalSessions && store.getCurrentSessionRunCount() === runsPerSession && !props.completed);
+const canCompleteQualifying = computed(() => store.getCurrentSessionNumber() === totalSessions && store.getCurrentSessionRunCount() === runsPerSession && ! props.completed);
 
 onMounted(() => {
     store.setDrivers(props.drivers);

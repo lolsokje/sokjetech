@@ -1,12 +1,17 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
+    <div class="d-flex justify-content-between align-items-center">
+        <Breadcrumb :link="route('seasons.races.index', race.season)"
+                    :linkText="race.season_name"
+                    :label="race.name"
+                    append="Weekend intro"
+        />
 
-    <InertiaLink :href="route('weekend.qualifying', race)" class="btn btn-primary">
-        Go to qualifying
-    </InertiaLink>
+        <InertiaLink :href="route('weekend.qualifying', race)" class="btn btn-primary mb-3">
+            Go to qualifying
+        </InertiaLink>
+    </div>
+
     <div id="screenshot-target">
-        <h3>Weekend intro</h3>
-
         <h4>Stints</h4>
 
         <table class="table">
@@ -98,13 +103,13 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import { Race } from '@/Interfaces/Race';
 import RaceStint from '@/Interfaces/RaceStint';
 import DriverResults from '@/Interfaces/DriverResults';
 import TeamResults from '@/Interfaces/TeamResults';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     race: Race,

@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="season overview"/>
+    <Breadcrumb :link="route('seasons.races.index', season)" :linkText="season.full_name" label="Copy setup"/>
 
     <div class="alert alert-danger mb-3">
         Copying configuration from another season will completely overwrite that specific configuration from the current
@@ -64,11 +64,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import CopySeasonSetupItem from '@/Utilities/CopySeasonSetupItem';
 import CopySeasonSetupItemDependency from '@/Utilities/CopySeasonSetupItemDependency';
 import axios from 'axios';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     season: Object,

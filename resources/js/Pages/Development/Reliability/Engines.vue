@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-
-    <h2>Engine reliability</h2>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Engine reliability"
+    />
 
     <EngineDevelopment :season="season" :engines="engines"
                        :form-route="route('seasons.development.reliability.engines.store', [season])"
@@ -13,6 +16,7 @@
 import EngineDevelopment from '@/Shared/EngineDevelopment.vue';
 import SeasonInterface from '@/Interfaces/Season';
 import DevelopmentEngine from '@/Interfaces/DevelopmentEngine';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

@@ -25,6 +25,7 @@ class ShowDriverStandingsController extends Controller
 
         return Inertia::render('Standings/Drivers', [
             'season' => SeasonStandingResource::make($season)->toArray(request()),
+            'series' => $season->series,
             'races' => $season->races,
             'standings' => (new GenerateStandingsAction($season))->handle(),
         ]);

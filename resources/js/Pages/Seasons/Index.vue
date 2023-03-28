@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.series.index', [series.universe])" label="series overview"/>
-
-    <h3>Seasons</h3>
+    <Breadcrumb :link="route('universes.series.index', series)" :linkText="series.name" label="Seasons"/>
 
     <InertiaLink v-if="can.edit" :href="route('series.seasons.create', [series])" class="btn btn-primary my-3">
         Create season
@@ -58,13 +56,13 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import Season from '@/Interfaces/Season';
 import { onMounted, ref, Ref } from 'vue';
 import { Modal } from 'bootstrap';
 import CustomModal from '@/Components/Modal.vue';
 import axios from 'axios';
 import { router } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     series: Series,

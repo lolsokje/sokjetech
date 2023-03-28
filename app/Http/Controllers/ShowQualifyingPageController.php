@@ -14,8 +14,8 @@ class ShowQualifyingPageController extends Controller
         $this->authorize('view', $race->season->universe);
 
         return Inertia::render('RaceWeekend/Qualifying', [
-            'race' => $race,
-            'drivers' => (new GetQualifyingResults())->handle($race),
+            'race' => $race->load('season'),
+            'drivers' => (new GetQualifyingResults)->handle($race),
         ]);
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <h1>Circuits</h1>
+    <Breadcrumb :link="route('index')" linkText="Home" label="Circuits"/>
 
     <InertiaLink :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</InertiaLink>
 
@@ -55,6 +55,7 @@ import Circuit from '@/Interfaces/Circuit';
 import Filters from '@/Interfaces/Filters';
 import PaginationLink from '@/Interfaces/PaginationLink';
 import { router } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     circuits: Array<Circuit>,

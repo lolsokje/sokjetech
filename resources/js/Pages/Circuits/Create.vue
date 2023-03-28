@@ -1,5 +1,5 @@
 <template>
-    <h1>Create circuit</h1>
+    <Breadcrumb :link="route('circuits.index')" linkText="Circuits" label="Create circuit"/>
 
     <form class="form-narrow" @submit.prevent="form.post(route('circuits.store'))">
         <Errors :errors="form.errors"/>
@@ -24,6 +24,7 @@
 import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const form: InertiaForm<{
     name: string | null,

@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
-
-    <h3>Generate drivers for "{{ universe.name }}"</h3>
+    <Breadcrumb :link="route('universes.drivers.index', universe)" :linkText="universe.name" label="Generate drivers"/>
 
     <form @submit.prevent="generateDrivers">
         <Errors :errors="form.errors"/>
@@ -82,10 +80,10 @@
 
 <script setup lang="ts">
 import { InertiaForm, router, useForm } from '@inertiajs/vue3';
-import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import { computed, onMounted, Ref, ref } from 'vue';
 import axios from 'axios';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Language {
     [key: string]: string,

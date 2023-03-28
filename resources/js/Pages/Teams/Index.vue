@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.index')" label="universe overview"/>
-
-    <h3>Teams</h3>
+    <Breadcrumb :link="route('universes.index')" linkText="Universes" :label="universe.name" append="Teams"/>
 
     <template v-if="can.edit">
         <InertiaLink :href="route('universes.teams.create', [universe])" class="btn btn-primary my-3">
@@ -60,7 +58,6 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { reactive, watch } from 'vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
@@ -68,6 +65,7 @@ import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import PaginationLink from '@/Interfaces/PaginationLink';
 import Filters from '@/Interfaces/Filters';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

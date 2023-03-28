@@ -1,7 +1,9 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [race.season])" label="calendar"/>
-
-    <h3>Results</h3>
+    <Breadcrumb :link="route('seasons.races.index', race.season)"
+                :linkText="race.season.full_name"
+                :label="race.name"
+                append="Results"
+    />
 
     <div id="screenshot-target">
         <p>
@@ -41,11 +43,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     race: Object,

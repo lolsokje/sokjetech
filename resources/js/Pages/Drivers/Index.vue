@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.index')" label="universe overview"/>
-
-    <h3>Drivers</h3>
+    <Breadcrumb :link="route('universes.index')" linkText="Universes" :label="universe.name" append="Drivers"/>
 
     <template v-if="can.edit">
         <div>
@@ -73,7 +71,6 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import { reactive, watch } from 'vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import OrderIcon from '@/Shared/OrderIcon.vue';
@@ -83,6 +80,7 @@ import PaginationLink from '@/Interfaces/PaginationLink';
 import Universe from '@/Interfaces/Universe';
 import Driver from '@/Interfaces/Driver';
 import Permission from '@/Interfaces/Permission';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

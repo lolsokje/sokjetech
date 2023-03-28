@@ -1,7 +1,10 @@
 <template>
-    <h1>Update {{ universe.name }}</h1>
-
-    <BackLink :backTo="route('universes.index')" label="universe overview"/>
+    <Breadcrumb :link="route('universes.index')"
+                linkText="Universes"
+                :label="universe.name"
+                :labelLink="route('universes.series.index', universe)"
+                append="Edit universe"
+    />
 
     <form class="form-narrow" @submit.prevent="form.put(route('universes.update', universe))">
         <Errors :errors="form.errors"/>
@@ -26,7 +29,7 @@
 <script setup lang="ts">
 import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

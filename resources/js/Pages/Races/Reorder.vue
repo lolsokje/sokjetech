@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="race overview"/>
+    <Breadcrumb :link="route('seasons.races.index', season)" :linkText="season.full_name" label="Reorder races"/>
 
     <form class="form-narrow" @submit.prevent="form.put(route('seasons.races.order', [season]))">
         <p>
@@ -29,7 +29,7 @@
 
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     season: {

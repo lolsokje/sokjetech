@@ -1,5 +1,9 @@
 <template>
-    <BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
+    <Breadcrumb :link="route('universes.drivers.index', universe)"
+                :linkText="universe.name"
+                :label="driver.full_name"
+                append="Edit driver"
+    />
 
     <form class="form-narrow" @submit.prevent="form.put(route('universes.drivers.update', [universe, driver]))">
         <Errors :errors="form.errors"/>
@@ -43,7 +47,7 @@
 import { useForm } from '@inertiajs/vue3';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

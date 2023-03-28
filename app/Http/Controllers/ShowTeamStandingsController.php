@@ -12,6 +12,18 @@ class ShowTeamStandingsController extends Controller
 {
     public function __invoke(Season $season)
     {
+        $this->eagerLoadSeason($season);
+
+        return Inertia::render('Standings/Teams', [
+            'season' => SeasonStandingResource::make($season)->toArray(request()),
+            'series' => $season->series,
+            'races' => $season->races,
+            'teams' => TeamStandingsResource::collection($season->teamChampionshipStandings)->toArray(request()),
+        ]);
+    }
+
+    private function eagerLoadSeason(Season $season): void
+    {
         $season->load([
             'pointDistribution',
             'races' => fn (HasMany $query) => $query->orderBy('order')->with('circuit'),
@@ -26,12 +38,6 @@ class ShowTeamStandingsController extends Controller
                     ],
                 ]);
             },
-        ]);
-
-        return Inertia::render('Standings/Teams', [
-            'season' => SeasonStandingResource::make($season)->toArray(request()),
-            'races' => $season->races,
-            'teams' => TeamStandingsResource::collection($season->teamChampionshipStandings)->toArray(request()),
         ]);
     }
 }
