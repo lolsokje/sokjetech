@@ -17,6 +17,8 @@ class AuthController extends Controller
 {
     public function redirect(): RedirectResponse
     {
+        session(['redirect' => url()->previous()]);
+
         return Socialite::driver('discord')->redirect();
     }
 
@@ -37,9 +39,9 @@ class AuthController extends Controller
             'is_admin' => $this->isAdmin($discordUser),
         ]);
 
-        Auth::login($user);
+        Auth::login($user, true);
 
-        return redirect(route('index'));
+        return $this->handleRedirect();
     }
 
     public function logout(): RedirectResponse
@@ -67,6 +69,19 @@ class AuthController extends Controller
         }
 
         $stagingUser = in_array($user->getId(), config('services.discord.staging_ids'));
-        throw_if(!$stagingUser, new Exception('No access to the staging environment'));
+        throw_if(! $stagingUser, new Exception('No access to the staging environment'));
+    }
+
+    private function handleRedirect(): Redirect
+    {
+        $redirect = session()->get('redirect');
+
+        if ($redirect) {
+            session()->forget('redirect');
+
+            return redirect($redirect);
+        }
+
+        return redirect()->route('index');
     }
 }
