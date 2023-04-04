@@ -18,22 +18,26 @@ class GenerateDriversRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start' => ['required', 'date'],
-            'end' => ['required', 'date'],
+            'start' => ['nullable', 'date'],
+            'end' => ['nullable', 'date'],
             'amount' => ['required', 'min:1'],
             'language' => ['present', 'nullable', 'string'],
             'gender' => ['present', 'nullable', 'in:null,male,female'],
         ];
     }
 
-    public function start(): DateTimeImmutable
+    public function start(): ?DateTimeImmutable
     {
-        return DateTimeImmutable::createFromFormat('Y-m-d', $this->get('start'));
+        $start = $this->get('start');
+
+        return $start ? DateTimeImmutable::createFromFormat('Y-m-d', $this->get('start')) : null;
     }
 
-    public function end(): DateTimeImmutable
+    public function end(): ?DateTimeImmutable
     {
-        return DateTimeImmutable::createFromFormat('Y-m-d', $this->get('end'));
+        $end = $this->get('end');
+
+        return $end ? DateTimeImmutable::createFromFormat('Y-m-d', $this->get('end')) : null;
     }
 
     public function amount(): Amount

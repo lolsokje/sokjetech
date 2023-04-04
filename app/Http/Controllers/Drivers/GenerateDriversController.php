@@ -13,7 +13,7 @@ class GenerateDriversController extends Controller
     {
         $generator = Factory::createWithRandomLocale($request->language());
 
-        return $generator->persons(
+        return $generator->people(
             amount: $request->amount(),
             startDate: $request->start(),
             endDate: $request->end(),

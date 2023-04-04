@@ -112,12 +112,21 @@ const props = defineProps<Props>();
 const sortedLanguages: Ref<Array<SortedLanguage>> = ref([]);
 const drivers: Ref<Array<Driver>> = ref([]);
 const processing = ref(false);
+const today = new Date();
+const start = new Date();
+
+today.setFullYear(today.getFullYear() - 20);
+start.setFullYear(today.getFullYear() - 15);
+
+const formatDateForInput = (date: Date): string => {
+    return date.toLocaleDateString('en-GB').split('/').reverse().join('-');
+};
 
 const form: InertiaForm<Form> = useForm({
     language: null,
     gender: null,
-    start: null,
-    end: null,
+    start: formatDateForInput(today),
+    end: formatDateForInput(start),
     amount: 10,
 });
 
