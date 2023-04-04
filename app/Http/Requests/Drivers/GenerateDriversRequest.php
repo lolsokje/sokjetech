@@ -28,16 +28,12 @@ class GenerateDriversRequest extends FormRequest
 
     public function start(): ?DateTimeImmutable
     {
-        $start = $this->get('start');
-
-        return $start ? DateTimeImmutable::createFromFormat('Y-m-d', $this->get('start')) : null;
+        return $this->parseDate($this->get('start'));
     }
 
     public function end(): ?DateTimeImmutable
     {
-        $end = $this->get('end');
-
-        return $end ? DateTimeImmutable::createFromFormat('Y-m-d', $this->get('end')) : null;
+        return $this->parseDate($this->get('end'));
     }
 
     public function amount(): Amount
@@ -53,5 +49,10 @@ class GenerateDriversRequest extends FormRequest
     public function gender(): ?Gender
     {
         return $this->get('gender') === 'null' ? null : Gender::tryFrom($this->get('gender'));
+    }
+
+    private function parseDate(?string $date): ?DateTimeImmutable
+    {
+        return $date ? DateTimeImmutable::createFromFormat('Y-m-d', $date) : null;
     }
 }
