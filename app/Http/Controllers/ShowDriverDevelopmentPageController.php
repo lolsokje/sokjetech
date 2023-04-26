@@ -13,7 +13,7 @@ class ShowDriverDevelopmentPageController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $drivers = $season->activeRacers()->with(['driver', 'entrant'])->get();
+        $drivers = $season->activeRacers()->with(['driver', 'entrant', 'season'])->get();
         $drivers = DriverResource::collection($drivers)->toArray(request());
 
         return Inertia::render('Development/Drivers', [

@@ -12,7 +12,7 @@
 
         <p v-if="hasError" class="text-danger">This driver or number has already been selected</p>
         <SearchableDropdown :items="availableDrivers" :selected-item="state.driver"
-                            label="Select a driver" text-key="full_name" @selected="setDriver"
+                            label="Select a driver" text-key="full_name_with_age" @selected="setDriver"
         />
 
         <div class="mb-3 col-6">
@@ -27,6 +27,7 @@
             <thead>
             <tr>
                 <th>Driver</th>
+                <th>Age</th>
                 <th>Number</th>
                 <th></th>
             </tr>
@@ -34,6 +35,7 @@
             <tbody>
             <tr v-for="driver in form.drivers" :key="driver.driver_id">
                 <td class="padded-left">{{ driver.full_name }}</td>
+                <td class="smallest-centered">{{ driver.age }}</td>
                 <td class="small-centered">
                     <input type="number" class="form-control text-center" v-model="driver.number">
                 </td>
@@ -57,9 +59,9 @@ import { InertiaForm, useForm } from '@inertiajs/vue3';
 import SeasonInterface from '@/Interfaces/Season';
 import Entrant from '@/Interfaces/Entrant';
 import { onMounted, reactive, ref, Ref } from 'vue';
-import Racer from '@/Interfaces/Racer';
 import Driver from '@/Interfaces/Driver';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import Racer from '@/Interfaces/Racer';
 
 interface FormDriver {
     driver_id: string,
@@ -83,9 +85,9 @@ interface State {
 const props = defineProps<Props>();
 
 const form: InertiaForm<{
-    drivers: FormDriver[],
+    drivers: Racer[],
 }> = useForm({
-    drivers: [],
+    drivers: props.entrant.active_racers,
 });
 
 const state: State = reactive({
@@ -120,6 +122,7 @@ const addDriver = (): void => {
     form.drivers.push({
         driver_id: state.driver.id,
         full_name: state.driver.full_name,
+        age: state.driver.age,
         number: state.number,
         active: true,
     });
@@ -137,6 +140,8 @@ const removeDriver = (id: string): void => {
         return;
     }
 
+    driver.full_name_with_age = `${driver.full_name} (${driver.age})`;
+
     form.drivers = form.drivers.filter((driver: FormDriver) => driver.driver_id !== id);
     availableDrivers.value.push(driver as Driver);
 
@@ -153,15 +158,6 @@ const setUsedDriverNumbers = () => {
 };
 
 onMounted(() => {
-    form.drivers = props.entrant.active_racers.map((driver: Racer) => {
-        return {
-            driver_id: driver.driver.id,
-            full_name: driver.driver.full_name,
-            number: driver.number,
-            active: true,
-        };
-    });
-
     setUsedDriverNumbers();
 });
 </script>

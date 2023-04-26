@@ -74,4 +74,9 @@ class Driver extends SnowflakeModel
     {
         return new DriverBuilder($query);
     }
+
+    public function age(Season $season): int
+    {
+        return $season->year - $this->dob->year;
+    }
 }

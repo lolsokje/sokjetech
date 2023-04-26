@@ -44,6 +44,7 @@
                     <th>Driver</th>
                     <th class="text-center">#</th>
                     <th>Team</th>
+                    <th class="text-center">Age</th>
                     <th class="text-center">Current</th>
                     <th v-if="inputsHidden" class="text-center">Min</th>
                     <th v-if="inputsHidden" class="text-center">Max</th>
@@ -57,6 +58,7 @@
                     <td class="padded-left align-middle">{{ driver.full_name }}</td>
                     <td :style="driver.team_style" class="small-centered">{{ driver.number }}</td>
                     <td class="padded-left align-middle">{{ driver.team_name }}</td>
+                    <td class="small-centered">{{ driver.age }}</td>
                     <td class="small-centered bg-accent-odd">
                         {{ development.isReliability() ? driver.reliability : driver.rating }}
                     </td>

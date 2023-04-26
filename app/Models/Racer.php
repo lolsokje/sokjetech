@@ -39,4 +39,9 @@ class Racer extends SnowflakeModel
     {
         return $this->hasMany(RaceResult::class);
     }
+
+    public function age(): int
+    {
+        return $this->driver->age($this->season);
+    }
 }

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Actions\StoreEntrantRacers;
 use App\Http\Requests\RacerCreateRequest;
+use App\Http\Resources\Season\AvailableDriversCollection;
+use App\Http\Resources\Season\CreateRacerEntrantResource;
 use App\Models\Entrant;
 use App\Models\Season;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,16 +36,17 @@ class RacerController extends Controller
     {
         $this->authorize('update', $season->universe);
 
+        $entrant->load([
+            'activeRacers' => [
+                'season',
+                'driver',
+            ],
+        ]);
+
         return Inertia::render('Racers/Create', [
             'season' => $season,
-            'entrant' => $entrant->load([
-                'activeRacers' => function (HasMany $query) {
-                    return $query
-                        ->orderBy('active', 'DESC')
-                        ->with('driver:id,first_name,last_name,dob');
-                },
-            ]),
-            'drivers' => $season->availableDrivers(),
+            'entrant' => CreateRacerEntrantResource::array($entrant),
+            'drivers' => (new AvailableDriversCollection($season->availableDrivers(), $season))->toArray(request()),
             'numbers' => $season->pickedNumbers(),
         ]);
     }
