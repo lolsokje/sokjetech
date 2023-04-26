@@ -1,8 +1,8 @@
 export default class CopySeasonSetupItem {
-    constructor (label, entity, dependency = null) {
+    constructor (label, entity, ...dependencies) {
         this.label = label;
         this.entity = entity;
-        this.dependency = dependency;
+        this.dependencies = dependencies;
         this.checked = false;
         this.copying = false;
         this.completed = false;

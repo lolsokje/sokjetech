@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import Errors from '@/Shared/Errors.vue';
 import { feedbackTypes } from '@/Composables/useFeedbackTypes';

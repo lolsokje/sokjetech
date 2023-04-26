@@ -1,4 +1,10 @@
 <template>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                append="Calendar"
+    />
+
     <div class="my-4" v-if="canEdit && !season.started">
         <div class="d-flex">
             <button class="btn btn-success" @click.prevent="confirmSeasonStart()" :disabled="!canStart">
@@ -17,9 +23,9 @@
         <button class="btn btn-success" @click.prevent="confirmSeasonComplete()">Complete season</button>
     </div>
 
-    <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>
+    <!--    <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>-->
 
-    <h3>Races</h3>
+    <!--    <h3>Races</h3>-->
 
     <InertiaLink v-if="canAddRace()" :href="route('seasons.races.create', [season])" class="btn btn-primary my-3">
         Add race
@@ -100,14 +106,14 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { computed, onMounted, Ref, ref, watch } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
 import { Participant, Race } from '@/Interfaces/Race';
 import SeasonInterface from '@/Interfaces/Season';
+import { router } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,
@@ -132,7 +138,7 @@ const stages: { [key: string]: string } = {
 };
 
 const deleteRace = async (race: Race) => {
-    if (!confirm("Are you sure you want to delete this race from the calendar?")) {
+    if (! confirm("Are you sure you want to delete this race from the calendar?")) {
         return;
     }
 
@@ -152,7 +158,7 @@ const canRunRaces = (): boolean => {
 };
 
 const canAddRace = (): boolean => {
-    return <boolean>canEdit && !props.season.started;
+    return <boolean>canEdit && ! props.season.started;
 };
 
 const canReorderRaces = (): boolean => {
@@ -168,25 +174,25 @@ const getCurrentRaceStage = (race: Race): string => {
         return stages.RESULTS;
     }
 
-    if (!race.qualifying_started) {
+    if (! race.qualifying_started) {
         return stages.INTRO;
     }
 
-    if (race.qualifying_started && !race.qualifying_completed) {
+    if (race.qualifying_started && ! race.qualifying_completed) {
         return stages.QUALIFYING;
     }
 
-    if (race.qualifying_completed && !race.started) {
+    if (race.qualifying_completed && ! race.started) {
         return stages.GRID;
     }
 
-    if (race.started && !race.completed) {
+    if (race.started && ! race.completed) {
         return stages.RACE;
     }
 };
 
-const getRaceLink = (race: Race): string | null => {
-    if (canRunRaces() && !props.season.started) {
+const getRaceLink = (race: Race): string => {
+    if (canRunRaces() && ! props.season.started) {
         return route('seasons.races.edit', [ props.season, race ]);
     }
 
@@ -195,8 +201,8 @@ const getRaceLink = (race: Race): string | null => {
         return route('weekend.results', [ race ]);
     }
 
-    if (!isNextRace(race)) {
-        return null;
+    if (! isNextRace(race)) {
+        return 'null';
     }
 
     if (currentStage === stages.INTRO) {
@@ -219,7 +225,7 @@ const getRaceLink = (race: Race): string | null => {
 
 const getRaceLinkText = (race: Race): string | null => {
     const canRunRace = canRunRaces();
-    if (canRunRace && !props.season.started) {
+    if (canRunRace && ! props.season.started) {
         return 'edit';
     }
 
@@ -229,7 +235,7 @@ const getRaceLinkText = (race: Race): string | null => {
         return 'results';
     }
 
-    if (!isNextRace(race)) {
+    if (! isNextRace(race)) {
         return null;
     }
 
@@ -255,19 +261,19 @@ const attachPoleAndWinner = (race: Race): void => {
 };
 
 const confirmSeasonStart = (): void => {
-    if (!confirm('Are you sure you want to start the season? You will no longer be able to modify the calendar, qualifying format and point system')) {
+    if (! confirm('Are you sure you want to start the season? You will no longer be able to modify the calendar, qualifying format and point system')) {
         return;
     }
 
-    Inertia.put(route('seasons.start', [ props.season ]));
+    router.put(route('seasons.start', [ props.season ]));
 };
 
 const confirmSeasonComplete = (): void => {
-    if (!confirm("Are you sure you want to mark the current season as completed?")) {
+    if (! confirm("Are you sure you want to mark the current season as completed?")) {
         return;
     }
 
-    Inertia.put(route('seasons.complete', [ props.season ]));
+    router.put(route('seasons.complete', [ props.season ]));
 };
 
 const canStart = computed(() => props.season.can_start && canEdit);

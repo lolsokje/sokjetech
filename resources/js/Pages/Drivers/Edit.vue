@@ -1,5 +1,9 @@
 <template>
-    <BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
+    <Breadcrumb :link="route('universes.drivers.index', universe)"
+                :linkText="universe.name"
+                :label="driver.full_name"
+                append="Edit driver"
+    />
 
     <form class="form-narrow" @submit.prevent="form.put(route('universes.drivers.update', [universe, driver]))">
         <Errors :errors="form.errors"/>
@@ -30,15 +34,20 @@
             <label for="shared" class="form-check-label">Share with others</label>
         </div>
 
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-inline" v-model="form.retired" id="retired">
+            <label for="retired" class="form-check-label">Retired?</label>
+        </div>
+
         <button class="btn btn-primary" type="submit">Save driver</button>
     </form>
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,
@@ -53,6 +62,7 @@ const form = useForm({
     dob: props.driver.edit_dob,
     country: props.driver.country,
     shared: props.driver.shared,
+    retired: props.driver.retired,
 });
 
 const setCountry = (country: string): void => {

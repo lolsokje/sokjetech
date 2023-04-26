@@ -2,7 +2,7 @@ import { getRoll } from '@/Composables/useRunQualifying';
 import { raceStore } from '@/Stores/raceStore';
 import axios from 'axios';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 export const performNextStint = () => {
     const currentStintIndex = raceStore.currentStint;
@@ -61,7 +61,7 @@ export const fastestLapRoll = () => {
             return driver.result.fastest_lap_roll = null;
         }
 
-        if (!raceStore.fastestLapIsSeparateStint) {
+        if (! raceStore.fastestLapIsSeparateStint) {
             return driver.result.fastest_lap_roll = driver.result.stints.at(-1);
         } else {
             return driver.result.fastest_lap_roll = driver.ratings.driver_rating + getRoll(raceStore.fastestLapMinRng, raceStore.fastestLapMaxRng);
@@ -78,7 +78,7 @@ export const fastestLapRoll = () => {
 export const completeRace = () => {
     raceStore.setRaceCompleted(true);
     raceWeekendStore.completeRace();
-    Inertia.post(route('weekend.race.complete', [ raceStore.raceId ]));
+    router.post(route('weekend.race.complete', [ raceStore.raceId ]));
 };
 
 export const getTotal = (driver) => {
@@ -89,7 +89,7 @@ export const getTotal = (driver) => {
 
 export const sortDrivers = () => {
     raceStore.drivers.sort((driverOne, driverTwo) => {
-        if (driverOne.result.stints.length === 0 && !driverOne.result.dnf) {
+        if (driverOne.result.stints.length === 0 && ! driverOne.result.dnf) {
             return driverOne.result.starting_position - driverTwo.result.starting_position;
         }
         return driverTwo.result.total - driverOne.result.total;

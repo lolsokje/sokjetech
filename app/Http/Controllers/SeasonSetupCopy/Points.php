@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\CopyPoints;
+use App\Actions\Season\Copy\CopyPoints;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyPointsSystemRequest;
@@ -15,7 +15,7 @@ class Points extends Controller
     public function __invoke(CopyPointsSystemRequest $request, Season $season): Response
     {
         try {
-            (new CopyPoints($request, $season))->handle();
+            (new CopyPoints($request->getSourceSeason(), $season))->handle();
 
             return response()->json([], Response::HTTP_CREATED);
         } catch (InvalidSeasonRequirements $e) {

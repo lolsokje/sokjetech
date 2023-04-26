@@ -12,14 +12,16 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
-uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature', 'Unit');
+uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature', 'Unit', 'Commands');
 
 function createSeriesForUser(User $user, ?UniverseVisibility $visibility = UniverseVisibility::PUBLIC): Series
 {
     return Series::factory()
-        ->for(Universe::factory()->for($user)->create([
-            'visibility' => $visibility,
-        ]))
+        ->for(
+            Universe::factory()->for($user)->create([
+                'visibility' => $visibility,
+            ]),
+        )
         ->create();
 }
 

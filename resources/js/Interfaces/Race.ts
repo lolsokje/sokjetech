@@ -8,6 +8,8 @@ export interface Race {
     qualifying_completed: boolean,
     started: boolean,
     completed: boolean,
+    season: string,
+    season_name: string,
     circuit: Circuit
     pole?: Participant,
     winner?: Participant

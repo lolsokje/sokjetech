@@ -45,13 +45,6 @@ class SeriesController extends Controller
             ->with('notice', 'Series created');
     }
 
-    public function show(Universe $universe, Series $series): RedirectResponse
-    {
-        $this->authorize('view', $universe);
-
-        return redirect(route('series.seasons.index', [$series]));
-    }
-
     public function edit(Universe $universe, Series $series): Response
     {
         $this->authorize('update', $universe);

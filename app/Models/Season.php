@@ -97,9 +97,13 @@ class Season extends SnowflakeModel
     public function availableDrivers(): Collection
     {
         return $this->universe->drivers()
-            ->whereNotIn('id', $this->drivers()
-                ->where('active', true)
-                ->get('driver_id'))
+            ->where('retired', false)
+            ->whereNotIn(
+                'id',
+                $this->drivers()
+                    ->where('active', true)
+                    ->get('driver_id'),
+            )
             ->get();
     }
 
@@ -148,10 +152,20 @@ class Season extends SnowflakeModel
         return $this->hasMany(RaceResult::class);
     }
 
+    public function driverChampionshipStandings(): HasMany
+    {
+        return $this->hasMany(DriverChampionshipStanding::class);
+    }
+
+    public function teamChampionshipStandings(): HasMany
+    {
+        return $this->hasMany(TeamChampionshipStandings::class);
+    }
+
     public function canStart(): Attribute
     {
         return Attribute::get(function () {
-            return !$this->started &&
+            return ! $this->started &&
                 $this->qualifyingFormat !== null &&
                 $this->pointSystem !== null &&
                 $this->reliabilityConfiguration !== null &&
@@ -161,7 +175,7 @@ class Season extends SnowflakeModel
 
     public function canComplete(): Attribute
     {
-        return Attribute::get(fn () => !$this->completed && $this->started && !$this->nextRace());
+        return Attribute::get(fn () => ! $this->completed && $this->started && ! $this->nextRace());
     }
 
     public function hasActiveRace(): Attribute

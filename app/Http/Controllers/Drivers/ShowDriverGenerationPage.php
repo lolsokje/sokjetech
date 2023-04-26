@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Drivers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Universe;
-use App\Support\DriverGenerator\Locales;
 use Inertia\Inertia;
 use Inertia\Response;
+use LilPecky\RandomPersonGenerator\Languages;
 
 class ShowDriverGenerationPage extends Controller
 {
@@ -16,7 +16,7 @@ class ShowDriverGenerationPage extends Controller
 
         return Inertia::render('Drivers/Generate', [
             'universe' => $universe,
-            'languages' => Locales::getLanguages(),
+            'languages' => Languages::getLanguages(),
         ]);
     }
 }

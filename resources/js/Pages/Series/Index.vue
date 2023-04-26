@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.index')" label="universe overview"/>
-
-    <h3>Series</h3>
+    <Breadcrumb :link="route('universes.index')" linkText="Universes" :label="universe.name" append="Series"/>
 
     <InertiaLink v-if="can.edit" :href="route('universes.series.create', [universe])" class="btn btn-primary my-3">
         Add series
@@ -23,7 +21,7 @@
                 </InertiaLink>
             </td>
             <td class="small-centered">
-                <InertiaLink :href="route('universes.series.show', [universe, series])">view</InertiaLink>
+                <InertiaLink :href="route('series.seasons.index', series)">view</InertiaLink>
             </td>
         </tr>
         </tbody>
@@ -31,7 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
+
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

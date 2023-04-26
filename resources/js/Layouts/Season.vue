@@ -5,7 +5,6 @@
         </div>
 
         <div class="st-card p-4">
-            <h1>{{ season.full_name }}</h1>
             <slot/>
         </div>
     </Base>
@@ -49,8 +48,8 @@ const developmentLink = new TabLink(null, 'Development', [], showLink);
 
 if (developmentLink.show) {
     developmentLink.addChildren(
-        new TabLink('seasons.development.drivers', 'Drivers', [ props.season ]),
         new TabLink('seasons.development.teams', 'Teams', [ props.season ]),
+        new TabLink('seasons.development.drivers', 'Drivers', [ props.season ]),
         new TabLink('seasons.development.engines', 'Engines', [ props.season ]),
     );
 }
@@ -59,8 +58,8 @@ const reliabilityLink = new TabLink(null, 'Reliability', [], showLink);
 
 if (reliabilityLink.show) {
     reliabilityLink.addChildren(
-        new TabLink('seasons.development.reliability.drivers', 'Drivers', [ props.season ]),
         new TabLink('seasons.development.reliability.teams', 'Teams', [ props.season ]),
+        new TabLink('seasons.development.reliability.drivers', 'Drivers', [ props.season ]),
         new TabLink('seasons.development.reliability.engines', 'Engines', [ props.season ]),
     );
 }

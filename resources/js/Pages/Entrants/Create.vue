@@ -1,5 +1,10 @@
 <template>
-    <BackLink :backTo="route('seasons.entrants.index', [season])" label="team entries overview"/>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :labelLink="route('seasons.entrants.index', season)"
+                :label="season.full_name"
+                append="Create entrant"
+    />
 
     <form class="form-narrow" @submit.prevent="form.post(route('seasons.entrants.store', [season]))">
         <SearchableDropdown :items="teams" label="Select a base team" text-key="full_name" value-key="id"
@@ -53,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import TeamNamePreview from '@/Shared/TeamNamePreview.vue';
@@ -62,7 +67,7 @@ import { Engine } from '@/Interfaces/Engine';
 import SeasonInterface from '@/Interfaces/Season';
 import Team from '@/Interfaces/Team';
 import Permission from '@/Interfaces/Permission';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

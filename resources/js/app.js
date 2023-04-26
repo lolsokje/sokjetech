@@ -1,10 +1,9 @@
 import { createApp, h } from 'vue';
-import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';
+import { createInertiaApp, Link } from '@inertiajs/vue3';
 import 'bootstrap';
 import '../css/app.scss';
 import Default from './Layouts/Default.vue';
 import FontAwesomeIcon from './Utilities/FontAwesome';
-import { InertiaProgress } from '@inertiajs/progress';
 import CountryFlagEsm from 'vue-country-flag-next';
 import Tutorial from '@/Layouts/Tutorial.vue';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -36,5 +35,3 @@ createInertiaApp({
             .mount(el);
     },
 });
-
-InertiaProgress.init();

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SeasonSetupCopy;
 
-use App\Actions\Season\CopyQualifyingFormat;
+use App\Actions\Season\Copy\CopyQualifyingFormat;
 use App\Exceptions\InvalidSeasonRequirements;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CopyQualifyingFormatRequest;
@@ -15,7 +15,7 @@ class Qualifying extends Controller
     public function __invoke(CopyQualifyingFormatRequest $request, Season $season): Response
     {
         try {
-            (new CopyQualifyingFormat($request, $season))->handle();
+            (new CopyQualifyingFormat($request->getSourceSeason(), $season))->handle();
 
             return response()->json([], Response::HTTP_CREATED);
         } catch (InvalidSeasonRequirements $e) {

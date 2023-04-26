@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-
-    <h2>Driver development</h2>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Driver development"
+    />
 
     <DriverDevelopment :form-route="route('seasons.development.drivers.store', [season])" :drivers="drivers"
                        :season="season"
@@ -9,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import DriverDevelopment from '@/Shared/DriverDevelopment.vue';
 import SeasonInterface from '@/Interfaces/Season';
 import DevelopmentDriver from '@/Interfaces/DevelopmentDriver';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

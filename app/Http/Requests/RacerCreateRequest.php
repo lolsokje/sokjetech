@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\DriverNotRetiredRule;
 use App\Rules\UniqueActiveDriversInSeason;
 use App\Rules\UniqueDriversInRequest;
 use App\Rules\UniqueNumbersInRequest;
@@ -21,13 +22,18 @@ class RacerCreateRequest extends FormRequest
         $parameters = $this->route()->parameters;
 
         return [
-            'drivers' => ['required', 'array', new UniqueNumbersInRequest(), new UniqueDriversInRequest()],
-            'drivers.*.driver_id' => ['required', 'exists:drivers,id', new UniqueActiveDriversInSeason($parameters)],
+            'drivers' => ['required', 'array', new UniqueNumbersInRequest, new UniqueDriversInRequest],
+            'drivers.*.driver_id' => [
+                'required',
+                'exists:drivers,id',
+                new UniqueActiveDriversInSeason($parameters),
+                new DriverNotRetiredRule,
+            ],
             'drivers.*.number' => ['required', 'integer', new UniqueNumbersInSeason($parameters), 'min:0', 'max:9999'],
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'drivers.*.number.min' => 'Driver numbers must not be less than 0',

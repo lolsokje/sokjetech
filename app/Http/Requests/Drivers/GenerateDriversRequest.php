@@ -5,6 +5,8 @@ namespace App\Http\Requests\Drivers;
 use DateTimeImmutable;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use LilPecky\RandomPersonGenerator\Amount;
+use LilPecky\RandomPersonGenerator\Support\Gender;
 
 class GenerateDriversRequest extends FormRequest
 {
@@ -16,27 +18,27 @@ class GenerateDriversRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start' => ['required', 'date'],
-            'end' => ['required', 'date'],
+            'start' => ['nullable', 'date'],
+            'end' => ['nullable', 'date'],
             'amount' => ['required', 'min:1'],
             'language' => ['present', 'nullable', 'string'],
             'gender' => ['present', 'nullable', 'in:null,male,female'],
         ];
     }
 
-    public function start(): DateTimeImmutable
+    public function start(): ?DateTimeImmutable
     {
-        return DateTimeImmutable::createFromFormat('Y-m-d', $this->get('start'));
+        return $this->parseDate($this->get('start'));
     }
 
-    public function end(): DateTimeImmutable
+    public function end(): ?DateTimeImmutable
     {
-        return DateTimeImmutable::createFromFormat('Y-m-d', $this->get('end'));
+        return $this->parseDate($this->get('end'));
     }
 
-    public function amount(): int
+    public function amount(): Amount
     {
-        return (int) $this->get('amount');
+        return new Amount((int) $this->get('amount'));
     }
 
     public function language(): ?string
@@ -44,8 +46,13 @@ class GenerateDriversRequest extends FormRequest
         return $this->get('language') === 'null' ? null : $this->get('language');
     }
 
-    public function gender(): ?string
+    public function gender(): ?Gender
     {
-        return $this->get('gender') === 'null' ? null : $this->get('gender');
+        return $this->get('gender') === 'null' ? null : Gender::tryFrom($this->get('gender'));
+    }
+
+    private function parseDate(?string $date): ?DateTimeImmutable
+    {
+        return $date ? DateTimeImmutable::createFromFormat('Y-m-d', $date) : null;
     }
 }

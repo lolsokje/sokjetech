@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="season overview"/>
-
-    <h3>Team standings</h3>
+    <Breadcrumb :link="route('series.seasons.index', series)"
+                :linkText="series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Team standings"
+    />
 
     <table class="table" id="screenshot-target">
         <thead>
@@ -25,11 +28,11 @@
         </tr>
         </thead>
         <tbody>
-        <template v-for="(team, index) in teams" :key="team.id">
+        <template v-for="team in teams" :key="team.id">
             <tr v-for="(driver, driverIndex) in team.results" :key="driver.id">
                 <template v-if="isFirstResult(team, driverIndex)">
                     <td class="smallest-centered" :rowspan="team.driver_count">
-                        {{ index + 1 }}
+                        {{ team.position }}
                     </td>
                     <BackgroundColourCell :backgroundColour="team.background_colour" :rowspan="team.driver_count"/>
                     <td class="padded-left" :rowspan="team.driver_count">{{ team.full_name }}</td>
@@ -50,43 +53,63 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
-import { onMounted } from 'vue';
 import { getResultClasses } from '@/Composables/useResultPage.js';
-import { getTeamPoints, sortResults } from '@/Composables/useChampionshipStandings';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import SeasonInterface from '@/Interfaces/Season';
 import { Race } from '@/Interfaces/Race';
-import Entrant from '@/Interfaces/Entrant';
-import RaceResult from '@/Interfaces/RaceResult';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
+import Series from '@/Interfaces/Series';
+
+interface DriverRaceResult {
+    dnf: string | null,
+    fastest_lap: boolean,
+    points: number,
+    position: number | string,
+    starting_position: number,
+}
+
+interface Racer {
+    number: number,
+    results: DriverRaceResult[],
+}
+
+interface TeamChampionshipStanding {
+    id: string,
+    full_name: string,
+    points: number,
+    position: number,
+    team_name: string,
+    team_principal: string,
+    background_colour: string,
+    style_string: string,
+    driver_count: number,
+    results: {
+        [key: string]: Racer
+    }
+}
 
 interface Props {
     season: SeasonInterface,
+    series: Series,
     races: Race[],
-    teams: Entrant[],
+    teams: TeamChampionshipStanding[],
 }
 
 const props = defineProps<Props>();
 
 const lastPointPayingPosition = props.season.last_point_paying_position;
 
-const isFirstResult = (team: Entrant, resultId: string): boolean => {
+const isFirstResult = (team: TeamChampionshipStanding, resultId: string): boolean => {
     const results = team.results;
     const firstResultId = Object.keys(results)[0];
 
     return firstResultId === resultId;
 };
 
-const getResultDisplayClasses = (result: RaceResult): string => {
+const getResultDisplayClasses = (result: DriverRaceResult): string => {
     return getResultClasses(result, lastPointPayingPosition);
 };
-
-onMounted(() => {
-    getTeamPoints(props.teams);
-
-    sortResults(props.teams);
-});
 </script>
 
 <script lang="ts">

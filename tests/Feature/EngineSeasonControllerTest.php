@@ -6,41 +6,33 @@ use App\Models\Season;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\assertDatabaseCount;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\put;
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertEquals;
-
 test('a universe owner can add engines to a season', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $engine = Engine::factory()->for($season->series)->create();
 
-    actingAs($user)
+    $this->actingAs($user)
         ->post(route('seasons.engines.store', [$season]), [
             'base_engine_id' => $engine->id,
             'name' => $engine->name,
         ])
         ->assertRedirect(route('seasons.engines.index', [$season]));
 
-    assertDatabaseCount('engine_seasons', 1);
-    assertCount(1, $season->engines);
+    $this->assertDatabaseCount('engine_seasons', 1);
+    $this->assertCount(1, $season->engines);
 });
 
 test('unauthorized users cannot add engines to seasons', function () {
     $season = Season::factory()->create();
     $engine = Engine::factory()->for($season->series)->create();
 
-    post(route('seasons.engines.store', [$season]), [
+    $this->post(route('seasons.engines.store', [$season]), [
         'base_engine_id' => $engine->id,
         'name' => $engine->name,
     ])
         ->assertForbidden();
 
-    actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->post(route('seasons.engines.store', [$season]), [
             'base_engine_id' => $engine->id,
             'name' => $engine->name,
@@ -53,7 +45,7 @@ test('a universe owner can update a seasons engines', function () {
     $season = createSeasonForUser($user);
     $engine = EngineSeason::factory()->for($season)->create();
 
-    actingAs($user)
+    $this->actingAs($user)
         ->put(route('seasons.engines.update', [$season, $engine]), [
             'base_engine_id' => $engine->baseEngine->id,
             'rebadge' => true,
@@ -61,23 +53,23 @@ test('a universe owner can update a seasons engines', function () {
         ])
         ->assertRedirect(route('seasons.engines.index', [$season]));
 
-    assertEquals(true, $engine->fresh()->rebadge);
-    assertEquals('Test', $engine->fresh()->name);
+    $this->assertEquals(true, $engine->fresh()->rebadge);
+    $this->assertEquals('Test', $engine->fresh()->name);
 });
 
 test('an authenticated user cannot add engines to another users season', function () {
     $season = Season::factory()->create();
     $engine = Engine::factory()->for($season->series)->create();
 
-    actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->post(route('seasons.engines.store', [$season]), [
             'base_engine_id' => $engine->id,
-            'name' => $engine->name
+            'name' => $engine->name,
         ])
         ->assertForbidden();
 
-    assertDatabaseCount('engine_seasons', 0);
-    assertCount(0, $season->engines);
+    $this->assertDatabaseCount('engine_seasons', 0);
+    $this->assertCount(0, $season->engines);
 });
 
 test('unauthorized users cannot update a seasons engines', function () {
@@ -85,23 +77,23 @@ test('unauthorized users cannot update a seasons engines', function () {
     $engine = EngineSeason::factory()->for($season)->create();
     $name = $engine->name;
 
-    put(route('seasons.engines.update', [$season, $engine]), [
+    $this->put(route('seasons.engines.update', [$season, $engine]), [
         'base_engine_id' => $engine->baseEngine->id,
         'rebadge' => true,
-        'name' => 'Test'
+        'name' => 'Test',
     ])
         ->assertForbidden();
 
-    actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->put(route('seasons.engines.update', [$season, $engine]), [
             'base_engine_id' => $engine->baseEngine->id,
             'rebadge' => true,
-            'name' => 'Test'
+            'name' => 'Test',
         ])
         ->assertForbidden();
 
-    assertEquals(false, $engine->fresh()->rebadge);
-    assertEquals($name, $engine->fresh()->name);
+    $this->assertEquals(false, $engine->fresh()->rebadge);
+    $this->assertEquals($name, $engine->fresh()->name);
 });
 
 test('an authenticated user cannot update another users season engines', function () {
@@ -109,32 +101,36 @@ test('an authenticated user cannot update another users season engines', functio
     $engine = EngineSeason::factory()->for($season)->create();
     $name = $engine->name;
 
-    actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->put(route('seasons.engines.update', [$season, $engine]), [
             'base_engine_id' => $engine->baseEngine->id,
             'name' => 'New',
         ])
         ->assertForbidden();
 
-    assertEquals($name, $engine->fresh()->name);
+    $this->assertEquals($name, $engine->fresh()->name);
 });
 
 test('a season owner can view the add engine to season page', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
+    Engine::factory(3)->for($season->series)->create();
 
-    actingAs($user)
-        ->get(route('seasons.engines.index', [$season]))
-        ->assertOk();
+    $this->actingAs($user)
+        ->get(route('seasons.engines.create', [$season]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Seasons/Engines/Create')
+            ->has('engines', 3));
 });
 
 test('unauthorized users cannot view the add engine to season page', function () {
     $season = Season::factory()->create();
 
-    get(route('seasons.engines.create', [$season]))
+    $this->get(route('seasons.engines.create', [$season]))
         ->assertRedirect(route('index'));
 
-    actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->get(route('seasons.engines.create', [$season]))
         ->assertForbidden();
 });
@@ -142,20 +138,24 @@ test('unauthorized users cannot view the add engine to season page', function ()
 test('a universe owner can view the update season engine page', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
-    $engine = EngineSeason::factory()->for($season)->create();
+    $baseEngine = Engine::factory()->for($season->series)->create();
+    $engine = EngineSeason::factory()->for($season)->create(['base_engine_id' => $baseEngine->id]);
 
-    actingAs($user)
+    $this->actingAs($user)
         ->get(route('seasons.engines.edit', [$season, $engine]))
-        ->assertOk();
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Seasons/Engines/Edit')
+            ->has('engines', 1));
 });
 
 test('an unauthorized user cannot view the update season engine page', function () {
     $engine = EngineSeason::factory()->create();
 
-    get(route('seasons.engines.edit', [$engine->season, $engine]))
+    $this->get(route('seasons.engines.edit', [$engine->season, $engine]))
         ->assertRedirect(route('index'));
 
-    actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->create())
         ->get(route('seasons.engines.edit', [$engine->season, $engine]))
         ->assertForbidden();
 });
@@ -164,11 +164,11 @@ it('shows all engines added to a season on the index page', function () {
     $season = Season::factory()->create();
     EngineSeason::factory(3)->for($season)->create();
 
-    get(route('seasons.engines.index', [$season]))
+    $this->get(route('seasons.engines.index', [$season]))
         ->assertOk()
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Seasons/Engines/Index')
-                ->has('engines', 3)
+                ->has('engines', 3),
         );
 });

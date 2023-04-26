@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { computed, reactive } from 'vue';
 import CopyScreenshotButton from '../Shared/CopyScreenshotButton.vue';
 import Development from '../Utilities/Development';
@@ -142,8 +142,8 @@ const store = (): void => {
     development.storeDev(form, props.formRoute, state);
 };
 
-const devCompleted = computed((): boolean => !state.completed);
-const inputsHidden = computed((): boolean => !state.hideInputs);
+const devCompleted = computed((): boolean => ! state.completed);
+const inputsHidden = computed((): boolean => ! state.hideInputs);
 </script>
 
 <script lang="ts">

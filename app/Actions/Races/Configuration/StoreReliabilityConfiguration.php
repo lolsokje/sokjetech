@@ -2,15 +2,17 @@
 
 namespace App\Actions\Races\Configuration;
 
+use App\DataTransferObjects\Configuration\ReliabilityConfiguration;
 use App\Enums\ReliabilityReasonTypes;
-use App\Http\Requests\StoreReliabilityConfigurationRequest;
 use App\Models\ReliabilityReason;
 use App\Models\Season;
 
 class StoreReliabilityConfiguration
 {
-    public function __construct(protected StoreReliabilityConfigurationRequest $request, protected Season $season)
-    {
+    public function __construct(
+        protected readonly ReliabilityConfiguration $configuration,
+        protected Season $season,
+    ) {
     }
 
     public function handle(): void
@@ -24,7 +26,7 @@ class StoreReliabilityConfiguration
     {
         $this->season->reliabilityConfiguration()->updateOrCreate(
             ['season_id' => $this->season->id],
-            ['min_rng' => $this->request->validated('min_rng'), 'max_rng' => $this->request->validated('max_rng')],
+            ['min_rng' => $this->configuration->minRng, 'max_rng' => $this->configuration->maxRng],
         );
     }
 
@@ -35,7 +37,7 @@ class StoreReliabilityConfiguration
 
     private function storeReliabilityReasons(): void
     {
-        foreach ($this->request->validated('reasons') as $type => $reasons) {
+        foreach ($this->configuration->reasons as $type => $reasons) {
             $this->storeReasonsForType($type, $reasons);
         }
     }

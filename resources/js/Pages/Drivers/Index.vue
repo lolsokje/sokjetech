@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.index')" label="universe overview"/>
-
-    <h3>Drivers</h3>
+    <Breadcrumb :link="route('universes.index')" linkText="Universes" :label="universe.name" append="Drivers"/>
 
     <template v-if="can.edit">
         <div>
@@ -37,7 +35,11 @@
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="dob"/>
                 </th>
                 <th class="text-center">Country</th>
-                <th></th>
+                <th class="text-center" role="button" @click.prevent="sortTable(params, 'retired')">
+                    Retired
+                    <OrderIcon :current-field="params.field" :direction="params.direction" required-field="retired"/>
+                </th>
+                <th colspan="2"></th>
             </tr>
             </thead>
             <tbody>
@@ -48,8 +50,16 @@
                     <CountryFlag :country="driver.country"/>
                 </td>
                 <td class="small-centered">
+                    {{ driver.retired ? 'Yes' : 'No' }}
+                </td>
+                <td class="small-centered">
                     <InertiaLink v-if="can.edit" :href="route('universes.drivers.edit', [universe, driver])">
                         edit
+                    </InertiaLink>
+                </td>
+                <td class="small-centered">
+                    <InertiaLink :href="route('universes.drivers.show', [universe, driver])">
+                        view
                     </InertiaLink>
                 </td>
             </tr>
@@ -61,13 +71,16 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import { reactive, watch } from 'vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import Filters from '@/Interfaces/Filters';
 import PaginationLink from '@/Interfaces/PaginationLink';
+import Universe from '@/Interfaces/Universe';
+import Driver from '@/Interfaces/Driver';
+import Permission from '@/Interfaces/Permission';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,
@@ -91,7 +104,7 @@ watch(params, (): void => {
 </script>
 
 <script lang="ts">
-import Universe from '@/Layouts/Universe.vue';
+import UniverseLayout from '@/Layouts/Universe.vue';
 
-export default { layout: Universe };
+export default { layout: UniverseLayout };
 </script>

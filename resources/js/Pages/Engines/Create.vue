@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('series.engines.index', [series])" label="engine overview"/>
+    <Breadcrumb :link="route('series.engines.index', series)" :linkText="series.name" label="Create engine"/>
 
     <form @submit.prevent="form.post(route('series.engines.store', [series]))" class="form-narrow">
         <div class="mb-3">
@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import { useForm } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     series: Series,

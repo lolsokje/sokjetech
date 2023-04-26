@@ -32,12 +32,11 @@
 </template>
 
 <script setup>
-
-import { Inertia } from '@inertiajs/inertia';
 import { reactive, watch } from 'vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     circuits: Array,
@@ -52,11 +51,11 @@ const params = reactive({
 });
 
 const copy = (circuit) => {
-    if (!confirm('Are you sure you want to copy this circuit so you can use it for yourself?')) {
+    if (! confirm('Are you sure you want to copy this circuit so you can use it for yourself?')) {
         return;
     }
 
-    Inertia.post(route('database.circuits.copy', circuit), {}, {
+    router.post(route('database.circuits.copy', circuit), {}, {
         preserveScroll: true,
     });
 };

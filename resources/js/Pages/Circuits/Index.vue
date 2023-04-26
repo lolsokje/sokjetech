@@ -1,5 +1,5 @@
 <template>
-    <h1>Circuits</h1>
+    <Breadcrumb :link="route('index')" linkText="Home" label="Circuits"/>
 
     <InertiaLink :href="route('circuits.create')" class="btn btn-primary my-3">Add circuit</InertiaLink>
 
@@ -51,10 +51,11 @@ import { reactive, watch } from 'vue';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
-import { Inertia } from '@inertiajs/inertia';
 import Circuit from '@/Interfaces/Circuit';
 import Filters from '@/Interfaces/Filters';
 import PaginationLink from '@/Interfaces/PaginationLink';
+import { router } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     circuits: Array<Circuit>,
@@ -71,11 +72,11 @@ const params = reactive({
 });
 
 const deleteCircuit = (id: string): void => {
-    if (!confirm("Are you sure you want to delete this circuit?")) {
+    if (! confirm("Are you sure you want to delete this circuit?")) {
         return;
     }
 
-    Inertia.delete(route('circuits.destroy', id));
+    router.delete(route('circuits.destroy', id));
 };
 
 watch(params, (): void => {

@@ -1,7 +1,11 @@
 <template>
-    <BackLink :backTo="route('seasons.entrants.index', [season])" label="entrant overview"/>
+    <Breadcrumb :link="route('seasons.entrants.index', season)"
+                :linkText="season.full_name"
+                :label="entrant.full_name"
+                :labelLink="route('seasons.entrants.edit', [season, entrant])"
+                append="Drivers"
+    />
 
-    <h2>{{ entrant.full_name }}'s drivers</h2>
 
     <form class="form-narrow" @submit.prevent="form.post(route('seasons.racers.store', [season, entrant]))">
         <Errors :errors="form.errors"/>
@@ -47,15 +51,15 @@
 </template>
 
 <script setup lang="ts">
-import BackLink from '@/Shared/BackLink.vue';
 import Errors from '@/Shared/Errors.vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import SeasonInterface from '@/Interfaces/Season';
 import Entrant from '@/Interfaces/Entrant';
 import { onMounted, reactive, ref, Ref } from 'vue';
 import Racer from '@/Interfaces/Racer';
 import Driver from '@/Interfaces/Driver';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface FormDriver {
     driver_id: string,
@@ -100,7 +104,7 @@ const setDriver = (driver: Driver): void => {
 const addDriver = (): void => {
     hasError.value = false;
 
-    if (!state.driver) {
+    if (! state.driver) {
         return;
     }
 
@@ -129,7 +133,7 @@ const addDriver = (): void => {
 const removeDriver = (id: string): void => {
     const driver = form.drivers.find((driver: FormDriver) => driver.driver_id === id);
 
-    if (!driver) {
+    if (! driver) {
         return;
     }
 

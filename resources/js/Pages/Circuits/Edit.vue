@@ -1,5 +1,5 @@
 <template>
-    <h1>Edit "{{ circuit.name }}"</h1>
+    <Breadcrumb :link="route('circuits.index')" linkText="Circuits" :label="circuit.name" append="Edit circuit"/>
 
     <form class="form-narrow" @submit.prevent="form.put(route('circuits.update', circuit))">
         <Errors :errors="form.errors"/>
@@ -21,10 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
 import Circuit from '@/Interfaces/Circuit';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps<{
     circuit: Circuit,

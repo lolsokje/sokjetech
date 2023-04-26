@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Drivers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Drivers\GenerateDriversRequest;
 use App\Models\Universe;
-use App\Support\DriverGenerator\Generator;
+use LilPecky\RandomPersonGenerator\Factory;
 
 class GenerateDriversController extends Controller
 {
-    public function __invoke(GenerateDriversRequest $request, Universe $universe)
+    public function __invoke(GenerateDriversRequest $request, Universe $universe): array
     {
-        $generator = new Generator($request->language(), $request->gender());
+        $generator = Factory::createWithRandomLocale($request->language());
 
-        return $generator->generate($request->start(), $request->end(), $request->amount());
+        return $generator->people(
+            amount: $request->amount(),
+            startDate: $request->start(),
+            endDate: $request->end(),
+            gender: $request->gender(),
+        );
     }
 }

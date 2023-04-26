@@ -2,21 +2,26 @@
 
 namespace App\Http\Resources;
 
+use App\Models\DriverChampionshipStanding;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin DriverChampionshipStanding */
 class DriverStandingsResource extends JsonResource
 {
     public function toArray($request): array
     {
         $results = $this->getResultsPerRace();
+        $racer = $this->racer;
 
         return [
-            'id' => $this->id,
-            'full_name' => $this->driver->full_name,
-            'number' => $this->number,
-            'team_name' => $this->entrant->short_name,
-            'background_colour' => $this->entrant->accent_colour,
-            'style_string' => $this->entrant->style_string,
+            'id' => $racer->id,
+            'full_name' => $racer->driver->full_name,
+            'position' => $this->position,
+            'points' => $this->points,
+            'number' => $racer->number,
+            'team_name' => $racer->entrant->short_name,
+            'background_colour' => $racer->entrant->accent_colour,
+            'style_string' => $racer->entrant->style_string,
             'results' => $results,
         ];
     }
@@ -25,7 +30,7 @@ class DriverStandingsResource extends JsonResource
     {
         $results = [];
 
-        foreach ($this->raceResults as $result) {
+        foreach ($this->racer->raceResults as $result) {
             $results[$result->race->order] = [
                 'starting_position' => $result->starting_position,
                 'dnf' => $result->dnf,

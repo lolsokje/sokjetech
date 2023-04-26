@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="race overview"/>
+    <Breadcrumb :link="route('seasons.races.index', season)" :linkText="season.full_name" label="Reorder races"/>
 
     <form class="form-narrow" @submit.prevent="form.put(route('seasons.races.order', [season]))">
         <p>
@@ -15,7 +15,8 @@
             </thead>
             <tbody>
             <tr v-for="race in form.races" :key="race.id" :data-race="race.id" draggable="true" role="button"
-                @dragstart="dragStart($event, race.id)" @dragover.prevent="" @drop.prevent="drop">
+                @dragstart="dragStart($event, race.id)" @dragover.prevent="" @drop.prevent="drop"
+            >
                 <td class="small-centered">{{ race.order }}</td>
                 <td class="padded-left">{{ race.name }}</td>
             </tr>
@@ -27,8 +28,8 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import { useForm } from '@inertiajs/vue3';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     season: {

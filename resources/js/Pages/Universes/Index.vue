@@ -1,7 +1,5 @@
 <template>
-    <h1>Universes</h1>
-
-    <BackLink :backTo="route('index')" label="index page"/>
+    <Breadcrumb :link="route('index')" linkText="Home" label="Universes"/>
 
     <InertiaLink :href="route('universes.create')" class="btn btn-primary my-3" v-if="user">Add universe</InertiaLink>
 
@@ -42,13 +40,13 @@
 
 <script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
-import { usePage } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Shared/Pagination.vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import PaginationLink from '@/Interfaces/PaginationLink';
 import Filters from '@/Interfaces/Filters';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     links: Array<PaginationLink>,
@@ -64,7 +62,7 @@ const params = reactive({
     mine: props.filters.mine ?? false,
 });
 
-const user = computed((): User => usePage().props.value.auth.user);
+const user = computed((): User => usePage().props.auth.user);
 
 watch(params, (): void => {
     filter(params, route('universes.index'));

@@ -1,7 +1,5 @@
 <template>
-    <h1>Create universe</h1>
-
-    <BackLink :backTo="route('universes.index')" label="universe overview"/>
+    <Breadcrumb :link="route('universes.index')" linkText="Universes" label="Create universe"/>
 
     <form @submit.prevent="form.post(route('universes.store'))" class="form-narrow">
         <Errors :errors="form.errors"/>
@@ -24,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     visibilities: { [key: number]: string };

@@ -10,7 +10,6 @@ use App\Models\Series;
 use App\Models\Team;
 use App\Models\Universe;
 use App\Models\User;
-use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use stdClass;
@@ -31,11 +30,17 @@ class SeedSeasonCommand extends Command
      */
     protected $description = 'Clears the database and seeds an entire season including calendar, teams and drivers';
 
+
     protected ?User $user;
     protected array $stints;
     protected Universe $universe;
     protected Series $series;
     protected Season $season;
+
+    private array $developmentEnvironments = [
+        'local',
+        'testing',
+    ];
 
     private function setup(): void
     {
@@ -46,7 +51,7 @@ class SeedSeasonCommand extends Command
                 'username' => 'lolsokje',
                 'avatar' => $avatar,
                 'is_admin' => true,
-            ]
+            ],
         );
 
         $this->stints = $this->getStintsData()->toArray();
@@ -57,24 +62,22 @@ class SeedSeasonCommand extends Command
 
     public function handle(): int
     {
-        if (config('app.env') !== 'local' && !config('app.debug')) {
+        if (! in_array(config('app.env'), $this->developmentEnvironments) && ! config('app.debug')) {
             $this->error('Not in a local development environment, aborting');
-            return 0;
+
+            return 1;
         }
 
-        if (!$this->confirm('This will clear the entire database, are you sure you want to continue?')) {
+        if (! $this->confirm('This will clear the entire database, are you sure you want to continue?')) {
             $this->info('Seeding aborted');
-            return 0;
+
+            return 1;
         }
 
         $this->call('migrate:fresh');
 
-        if (Universe::all()->count() !== 0) {
-            throw new Exception('Database already contains data');
-        }
-
         $this->setup();
-        $this->setupStints();
+        $this->setupEngines();
         $this->setupCircuits();
         $this->setupTeams();
         $this->setupDrivers();
@@ -84,7 +87,7 @@ class SeedSeasonCommand extends Command
         return 0;
     }
 
-    private function setupStints(): void
+    private function setupEngines(): void
     {
         $this->getEngineData()->each(function (stdClass $engine) {
             $createdEngine = $this->series->engines()->create([
@@ -141,6 +144,7 @@ class SeedSeasonCommand extends Command
             'team_principal' => $team->team_principal,
             'primary_colour' => $team->primary_colour,
             'secondary_colour' => $team->secondary_colour,
+            'accent_colour' => $team->accent_colour,
             'country' => $team->country,
         ]);
     }
@@ -155,6 +159,7 @@ class SeedSeasonCommand extends Command
             'team_principal' => $team->team_principal,
             'primary_colour' => $team->primary_colour,
             'secondary_colour' => $team->secondary_colour,
+            'accent_colour' => $team->accent_colour,
             'country' => $team->country,
         ]);
     }

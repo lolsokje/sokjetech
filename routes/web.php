@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BugController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\CompleteQualifyingController;
-use App\Http\Controllers\CompleteRaceController;
 use App\Http\Controllers\CompleteSeasonController;
 use App\Http\Controllers\CopyCircuitController;
 use App\Http\Controllers\CopyDriverController;
@@ -12,6 +11,8 @@ use App\Http\Controllers\CopyEngineController;
 use App\Http\Controllers\CopyTeamController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\Drivers\GenerateDriversController;
+use App\Http\Controllers\Drivers\GetBaseStatsController;
+use App\Http\Controllers\Drivers\GetCombinedCareerStatsController;
 use App\Http\Controllers\Drivers\PersistGeneratedDriversController;
 use App\Http\Controllers\Drivers\ShowDriverGenerationPage;
 use App\Http\Controllers\EngineController;
@@ -21,7 +22,9 @@ use App\Http\Controllers\FilterStintsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
+use App\Http\Controllers\Season\Race\CompleteRaceController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SeasonSetupCopy\Drivers;
 use App\Http\Controllers\SeasonSetupCopy\Points;
 use App\Http\Controllers\SeasonSetupCopy\Qualifying;
 use App\Http\Controllers\SeasonSetupCopy\Races;
@@ -59,7 +62,6 @@ use App\Http\Controllers\StoreRaceResultsController;
 use App\Http\Controllers\StoreReliabilityConfigurationController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TeamController;
-use App\Http\Controllers\TempController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UpdateDriverRatingsController;
 use App\Http\Controllers\UpdateDriverReliabilityController;
@@ -92,13 +94,13 @@ Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], functio
     Route::post('drivers/persist', PersistGeneratedDriversController::class)->name('drivers.persist');
 
     Route::resource('drivers', DriverController::class)->except('destroy');
-    Route::resource('series', SeriesController::class)->except('destroy');
+    Route::resource('series', SeriesController::class)->except('destroy', 'show');
     Route::resource('teams', TeamController::class)->except('destroy');
 });
 
 Route::group(['prefix' => 'series/{series}', 'as' => 'series.'], function () {
     Route::resource('engines', EngineController::class)->except('destroy', 'show');
-    Route::resource('seasons', SeasonController::class)->except('destroy');
+    Route::resource('seasons', SeasonController::class);
 });
 
 Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
@@ -111,13 +113,15 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
     Route::resource('engines', EngineSeasonController::class)->except('destroy', 'show');
     Route::resource('entrants', EntrantController::class)->except('show');
-    Route::resource('racers', RacerController::class)->except('destroy', 'create', 'store');
+
+    Route::get('', [RacerController::class, 'index'])->name('racers.index');
     Route::get('/{entrant}/racer/create', [RacerController::class, 'create'])->name('racers.create');
     Route::post('/{entrant}/racers', [RacerController::class, 'store'])->name('racers.store');
 
     Route::group(['prefix' => 'settings/copy', 'as' => 'settings.copy.'], function () {
         Route::get('', ShowCopySeasonSettingsPageController::class)->name('index');
         Route::post('teams', Teams::class)->name('teams');
+        Route::post('drivers', Drivers::class)->name('drivers');
         Route::post('races', Races::class)->name('races');
         Route::post('qualifying', Qualifying::class)->name('qualifying');
         Route::post('points', Points::class)->name('points');
@@ -126,13 +130,14 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
 
     Route::group(['prefix' => 'configuration', 'as' => 'configuration.'], function () {
         Route::get('qualifying', ShowQualifyingSettingsPage::class)->name('qualifying');
-        Route::post('qualifying', StoreQualifyingSettingsController::class)->name('qualifying.store');
-
         Route::get('points', ShowPointsConfigurationController::class)->name('points');
-        Route::post('points', StorePointsConfigurationController::class)->name('points.store');
-
         Route::get('reliability', ShowReliabilityConfigurationController::class)->name('reliability');
-        Route::post('reliability', StoreReliabilityConfigurationController::class)->name('reliability.store');
+
+        Route::middleware('season_started')->group(function () {
+            Route::post('qualifying', StoreQualifyingSettingsController::class)->name('qualifying.store');
+            Route::post('points', StorePointsConfigurationController::class)->name('points.store');
+            Route::post('reliability', StoreReliabilityConfigurationController::class)->name('reliability.store');
+        });
     });
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
@@ -179,6 +184,9 @@ Route::group([
     Route::post('race/results', StoreRaceResultsController::class)->name('race.store');
     Route::post('race/complete', CompleteRaceController::class)->name('race.complete');
 });
+
+Route::get('drivers/{driver}/stats/base', GetBaseStatsController::class)->name('drivers.stats.base');
+Route::get('drivers/{driver}/stats/combined', GetCombinedCareerStatsController::class)->name('drivers.stats.combined');
 
 Route::group([
     'prefix' => 'database',

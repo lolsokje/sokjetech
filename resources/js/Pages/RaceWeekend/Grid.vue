@@ -1,10 +1,11 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [race.season])" label="race overview"/>
+    <InertiaLink :href="route('weekend.race', race)" class="btn btn-primary mb-3">Go to race</InertiaLink>
 
-    <div class="d-flex col-6 mb-3">
-        <h3>{{ race.name }} Starting Grid</h3>
-        <InertiaLink :href="route('weekend.race', race)" class="btn btn-primary ms-auto">Go to race</InertiaLink>
-    </div>
+    <Breadcrumb :link="route('seasons.races.index', race.season)"
+                :linkText="race.season.full_name"
+                :label="race.name"
+                append="Starting grid"
+    />
 
     <table class="table table-narrow" id="screenshot-target">
         <thead>
@@ -30,11 +31,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink.vue';
 import { onMounted } from 'vue';
 import { sortDriversByPosition } from '@/Composables/useRunQualifying';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     race: {

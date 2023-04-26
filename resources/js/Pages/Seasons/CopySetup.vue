@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="season overview"/>
+    <Breadcrumb :link="route('seasons.races.index', season)" :linkText="season.full_name" label="Copy setup"/>
 
     <div class="alert alert-danger mb-3">
         Copying configuration from another season will completely overwrite that specific configuration from the current
@@ -21,25 +21,32 @@
         </div>
 
         <template v-if="selectedSeason">
+            <div v-if="driversChecked">
+                <p class="text-danger w-25">
+                    When copying drivers, copying of teams is mandatory to ensure all copied drivers
+                    actually belong to a team in the new season.
+                </p>
+            </div>
+
             <div class="mb-5" v-for="(item, index) in state" :key="index">
                 <input type="checkbox"
                        v-model="item.checked"
                        class="form-check-inline"
                        :id="index"
-                       :disabled="isCopying"
+                       :disabled="isCopying || (item.entity === 'teams' && driversChecked)"
                 >
                 <fa icon="check" class="me-3" v-if="item.completed"/>
                 <label :for="index" class="form-label">{{ item.label }}</label>
 
-                <div v-if="item.dependency">
+                <div v-for="(dependency, index) in item.dependencies" :key="index">
                     <input type="checkbox"
-                           v-model="item.dependency.checked"
+                           v-model="dependency.checked"
                            class="form-check-inline"
-                           :id="item.dependency.name"
+                           :id="`${item.entity}_${dependency.name}`"
                            :disabled="!item.checked || isCopying"
                     >
-                    <fa icon="check" class="me-3" v-if="item.dependency.checked && item.completed"/>
-                    <label :for="item.dependency.name">{{ item.dependency.label }}</label>
+                    <fa icon="check" class="me-3" v-if="dependency.checked && item.completed"/>
+                    <label :for="`${item.entity}_${dependency.name}`">{{ dependency.label }}</label>
                 </div>
 
                 <p class="text-danger" v-if="item.fail">{{ item.error }}</p>
@@ -57,11 +64,11 @@
 </template>
 
 <script setup>
-import BackLink from '@/Shared/BackLink.vue';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import CopySeasonSetupItem from '@/Utilities/CopySeasonSetupItem';
 import CopySeasonSetupItemDependency from '@/Utilities/CopySeasonSetupItemDependency';
 import axios from 'axios';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     season: Object,
@@ -75,8 +82,13 @@ const completedItems = ref(0);
 
 const state = reactive({
     copyEntrants: new CopySeasonSetupItem(
-        'Copy teams, drivers and engines?',
+        'Copy teams and engines?',
         'teams',
+        new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
+    ),
+    copyDrivers: new CopySeasonSetupItem(
+        'Copy drivers?',
+        'drivers',
         new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
     ),
     copyRaces: new CopySeasonSetupItem('Copy races?', 'races', new CopySeasonSetupItemDependency('copy_stints', 'Copy race stints?')),
@@ -101,11 +113,11 @@ const startCopying = async () => {
             season_id: selectedSeason.value,
         };
 
-        if (item.dependency && item.dependency.checked) {
-            data[item.dependency.name] = true;
-        }
+        item.dependencies.forEach((dependency) => {
+            data[dependency.name] = dependency.checked;
+        });
 
-        axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
+        await axios.post(route(`seasons.settings.copy.${item.entity}`, [ props.season ]), data)
             .then(() => {
                 item.completed = true;
                 completedItems.value++;
@@ -114,9 +126,22 @@ const startCopying = async () => {
                 item.fail = true;
                 item.error = error.response.data.error;
             })
-            .finally(() => item.copying = false);
+            .finally(() => {
+                item.copying = false;
+            });
     }
 };
+
+const driversChecked = computed(() => {
+    return state.copyDrivers.checked;
+});
+
+watch(state, () => {
+    // make sure entrants are always copied when copying drivers
+    if (driversChecked.value) {
+        state.copyEntrants.checked = true;
+    }
+});
 
 onMounted(() => {
     availableSeasons.value = seasons.filter(season => season.id !== props.season.id);

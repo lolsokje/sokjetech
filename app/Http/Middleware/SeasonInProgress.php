@@ -19,6 +19,7 @@ class SeasonInProgress
         if ($season->started) {
             return $next($request);
         }
+
         return to_route('seasons.races.index', [$season])
             ->with('error', 'Season not started yet');
     }

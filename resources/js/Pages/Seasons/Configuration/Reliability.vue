@@ -1,7 +1,10 @@
 <template>
-    <h3>Reliability configuration</h3>
-
-    <BackLink :backTo="route('seasons.races.index', [season])" label="season overview"/>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Reliability configuration"
+    />
 
     <form @submit.prevent="form.post(route('seasons.configuration.reliability.store', [season]))">
         <Errors v-if="form.errors" :errors="form.errors"/>
@@ -66,11 +69,11 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import { computed, onMounted } from 'vue';
 import SeasonInterface from '@/Interfaces/Season';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface ReliabilityConfiguration {
     min_rng: number,
@@ -108,7 +111,7 @@ const hasSeasonStarted = (): boolean => {
 };
 
 const validForm = computed(() => {
-    return form.max_rng > form.min_rng && !invalidReasons.value;
+    return form.max_rng > form.min_rng && ! invalidReasons.value;
 });
 
 const invalidReasons = computed(() => {

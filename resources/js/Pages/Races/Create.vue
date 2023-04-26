@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('seasons.races.index', [season])" label="race overview"/>
+    <Breadcrumb :link="route('seasons.races.index', season)" :linkText="season.full_name" label="Create race"/>
 
     <form @submit.prevent="form.post(route('seasons.races.store', [season]))">
         <Errors :errors="form.errors"/>
@@ -63,14 +63,14 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
-import BackLink from '@/Shared/BackLink.vue';
 import { defaultStint } from '@/Composables/useDefaultStint';
 import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
 import StintFilterModal from '@/Components/StintFilterModal.vue';
 import { ref } from 'vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     season: {

@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class CopyQualifyingFormatRequest extends FormRequest
+class CopyQualifyingFormatRequest extends SeasonCopyRequest
 {
     public function authorize(): bool
     {

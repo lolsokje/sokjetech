@@ -1,7 +1,10 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
-
-    <h3>Drivers</h3>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Drivers"
+    />
 
     <template v-if="can.edit && !hasActiveRace">
         <input id="edit-mode" v-model="editMode" class="mb-3 form-check-inline" type="checkbox">
@@ -59,7 +62,6 @@
 
 <script setup lang="ts">
 import { onMounted, Ref, ref, watch } from 'vue';
-import BackLink from '@/Shared/BackLink.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
@@ -67,6 +69,7 @@ import SeasonInterface from '@/Interfaces/Season';
 import Racer from '@/Interfaces/Racer';
 import Permission from '@/Interfaces/Permission';
 import Entrant from '@/Interfaces/Entrant';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,

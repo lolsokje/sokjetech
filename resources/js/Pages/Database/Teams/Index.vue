@@ -76,7 +76,7 @@ import { filter, sortTable } from '@/Composables/useTableFiltering';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { Modal } from 'bootstrap';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import CustomModal from '@/Components/Modal.vue';
 
 const props = defineProps({

@@ -1,4 +1,11 @@
 <template>
+    <Breadcrumb :link="route('series.seasons.index', season.series)"
+                :linkText="season.series.name"
+                :label="season.full_name"
+                :labelLink="route('seasons.races.index', season)"
+                append="Qualifying configuration"
+    />
+
     <form @submit.prevent="form.post(route('seasons.configuration.qualifying.store', [season]));">
         <Errors :errors="form.errors"/>
 
@@ -24,11 +31,12 @@
 
 <script setup lang="ts">
 import { markRaw, onMounted, Ref, ref, watch } from 'vue';
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import ThreeSessionElimination from '@/Shared/QualifyingFormats/ThreeSessionElimination.vue';
 import SingleSession from '@/Shared/QualifyingFormats/SingleSession.vue';
 import SeasonInterface from '@/Interfaces/Season';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonInterface,
@@ -83,7 +91,7 @@ watch(format, (newFormat) => {
 });
 
 onMounted(() => {
-    if (!props.season.format_type) {
+    if (! props.season.format_type) {
         return;
     }
 

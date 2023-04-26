@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Actions\StoreEntrantRacers;
 use App\Http\Requests\RacerCreateRequest;
 use App\Models\Entrant;
-use App\Models\Racer;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
@@ -22,6 +21,8 @@ class RacerController extends Controller
 
     public function index(Season $season): Response
     {
+        $this->authorize('view', $season->universe);
+
         return Inertia::render('Racers/Index', [
             'season' => $season->append('has_active_race'),
             'racers' => $season->activeRacers()
@@ -56,29 +57,5 @@ class RacerController extends Controller
 
         return redirect(route('seasons.racers.create', [$season, $entrant]))
             ->with('notice', 'Driver added to team and season');
-    }
-
-    public function show(Season $season, Racer $racer): Response
-    {
-        $this->authorize('view', $season->universe);
-
-        return Inertia::render('Racers/Show', [$season, $racer]);
-    }
-
-    public function edit(Season $season, Racer $racer): Response
-    {
-        $this->authorize('update', $season->universe);
-
-        return Inertia::render('Racers/Edit', [$season, $racer]);
-    }
-
-    public function update(RacerCreateRequest $request, Season $season, Racer $racer): RedirectResponse
-    {
-        $this->authorize('update', $season->universe);
-
-        $racer->update($request->validated());
-
-        return redirect(route('seasons.racers.index', [$season]))
-            ->with('notice', 'Driver updated');
     }
 }

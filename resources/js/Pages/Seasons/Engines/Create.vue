@@ -1,5 +1,5 @@
 <template>
-    <BackLink :backTo="route('series.seasons.show', [season.series, season])" label="season overview"/>
+    <Breadcrumb :link="route('seasons.engines.index', season)" :linkText="season.full_name" label="Create engine"/>
 
     <form @submit.prevent="form.post(route('seasons.engines.store', [season]))">
         <Errors :errors="form.errors"/>
@@ -50,11 +50,11 @@
 
 <script setup lang="ts">
 import { computed, reactive, watch } from 'vue';
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import { InertiaForm, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import SeasonEngine from '@/Interfaces/SeasonEngine';
 import { Engine } from '@/Interfaces/Engine';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     season: SeasonEngine,
@@ -91,7 +91,7 @@ const form: InertiaForm<Form> = useForm({
 
 const showSubmitButton = computed((): boolean => {
     if (form.base_engine_id) {
-        return !(form.rebadge && form.name.length < 3);
+        return ! (form.rebadge && form.name.length < 3);
     }
     return false;
 });

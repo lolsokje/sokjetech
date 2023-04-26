@@ -1,5 +1,8 @@
 <template>
-    <BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
+    <Breadcrumb :link="route('universes.drivers.index', universe)"
+                :linkText="universe.name"
+                label="Create driver"
+    />
 
     <form class="form-narrow" @submit.prevent="form.post(route('universes.drivers.store', universe))">
         <Errors :errors="form.errors"/>
@@ -35,10 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import CountrySelect from '@/Shared/CountrySelect.vue';
-import BackLink from '@/Shared/BackLink.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Props {
     universe: Universe,

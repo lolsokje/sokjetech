@@ -2,27 +2,27 @@
 
 namespace App\Actions\Races\Configuration;
 
+use App\DataTransferObjects\Configuration\QualifyingFormatConfiguration;
 use App\Enums\QualifyingFormat;
-use App\Http\Requests\QualifyingConfigurationRequest;
 use App\Models\Season;
 
 class StoreQualifyingFormat
 {
-    public function __construct(protected Season $season, protected QualifyingConfigurationRequest $request)
-    {
+    public function __construct(
+        protected readonly QualifyingFormatConfiguration $configuration,
+        protected readonly Season $season,
+    ) {
     }
 
     public function handle(): void
     {
-        $validated = $this->request->validated();
-
-        $format = QualifyingFormat::tryFrom($validated['selected_format']);
+        $format = QualifyingFormat::tryFrom($this->configuration->selectedFormat);
 
         $this->season->qualifyingFormat?->delete();
 
         $class = $format->modelFullyQualifiedClassName();
 
-        $savedFormat = $class::create($this->request->validated(['format_details']));
+        $savedFormat = $class::create($this->configuration->formatDetails);
 
         $savedFormat->season()->save($this->season);
     }

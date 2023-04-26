@@ -20,13 +20,4 @@ class SeasonCreateRequest extends FormRequest
             'name' => ['required', 'max:255'],
         ];
     }
-
-    public function data(): array
-    {
-        $name = "{$this->route('series')->name} season";
-        return array_merge(
-            $this->validated(),
-            ['name' => $name],
-        );
-    }
 }

@@ -2,8 +2,11 @@
 
 use App\Models\Universe;
 use App\Models\User;
-use App\Support\DriverGenerator\Locales;
 use Inertia\Testing\AssertableInertia as Assert;
+use LilPecky\RandomPersonGenerator\Amount;
+use LilPecky\RandomPersonGenerator\Factory;
+use LilPecky\RandomPersonGenerator\Languages;
+use LilPecky\RandomPersonGenerator\Support\Gender;
 
 test('universe owners can view the driver generation page', function () {
     $user = User::factory()->create();
@@ -17,7 +20,7 @@ test('universe owners can view the driver generation page', function () {
             ->has('universe', fn (Assert $prop) => $prop
                 ->where('id', $universe->id)
                 ->etc())
-            ->has('languages', count(Locales::getLanguages())));
+            ->has('languages', count(Languages::getLanguages())));
 });
 
 test('unauthorised users cannot view the driver generation page', function () {
@@ -59,22 +62,25 @@ test('unauthorised users cannot generate random drivers', function () {
 });
 
 test('universe owners can persist generated drivers', function () {
+    $this->withoutExceptionHandling();
     $user = User::factory()->create();
     $universe = Universe::factory()->for($user)->create();
 
-    $drivers = $this->actingAs($user)
-        ->post(route('universes.drivers.generate', $universe), [
-            'start' => '1987-01-01',
-            'end' => '1999-12-31',
-            'amount' => 10,
-            'language' => null,
-            'gender' => null,
-        ])
-        ->getOriginalContent();
+    $generator = Factory::createWithRandomLocale();
 
-    $this->post(route('universes.drivers.persist', $universe), [
-        'drivers' => $drivers,
-    ])
+    $drivers = $generator->people(
+        new Amount(10),
+        '1987-01-01',
+        '1999-12-31',
+        Gender::MALE,
+    );
+
+    $drivers = json_decode(json_encode($drivers), true);
+
+    $this->actingAs($user)
+        ->post(route('universes.drivers.persist', $universe), [
+            'drivers' => $drivers,
+        ])
         ->assertRedirect(route('universes.drivers.generate.show', $universe));
 
     $this->assertDatabaseCount('drivers', 10);

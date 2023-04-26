@@ -29,12 +29,4 @@ class CircuitCreateRequest extends FormRequest
             'shared' => ['nullable', 'boolean'],
         ];
     }
-
-    public function data(): array
-    {
-        return array_merge(
-            $this->validated(),
-            ['shared' => $this->request->has('shared')],
-        );
-    }
 }

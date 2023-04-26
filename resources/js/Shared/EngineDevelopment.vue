@@ -106,7 +106,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import Development from '@/Utilities/Development';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import ActiveRaceWarning from '@/Shared/ActiveRaceWarning.vue';
@@ -159,10 +159,10 @@ const runDev = (): void => {
 };
 
 const updateEnginesUsingParentRating = (): void => {
-    form.engines.filter(e => !e.individual_rating).forEach(engine => {
-        const parentEngine = form.engines.find(e => e.base_engine_id === engine.base_engine_id && !e.rebadge);
+    form.engines.filter(e => ! e.individual_rating).forEach(engine => {
+        const parentEngine = form.engines.find(e => e.base_engine_id === engine.base_engine_id && ! e.rebadge);
 
-        if (!parentEngine) {
+        if (! parentEngine) {
             return;
         }
 
@@ -176,11 +176,11 @@ const store = (): void => {
 };
 
 const showEngineInput = (engine): boolean => {
-    return !engine.rebadge || engine.rebadge && engine.individual_rating;
+    return ! engine.rebadge || engine.rebadge && engine.individual_rating;
 };
 
-const devCompleted = computed((): boolean => !state.completed);
-const inputsHidden = computed((): boolean => !state.hideInputs);
+const devCompleted = computed((): boolean => ! state.completed);
+const inputsHidden = computed((): boolean => ! state.hideInputs);
 
 onMounted(() => {
     form.engines.sort((a, b) => a.name.localeCompare(b.name));

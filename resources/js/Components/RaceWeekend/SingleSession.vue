@@ -1,5 +1,9 @@
 <template>
-    <h3>Qualifying</h3>
+    <Breadcrumb :link="route('seasons.races.index', race.season)"
+                :linkText="race.season.full_name"
+                :label="race.name"
+                append="Qualifying"
+    />
 
     <div class="d-flex my-3" v-if="canRunQualifying">
         <div class="ms-auto">
@@ -62,6 +66,7 @@ import { computed, onBeforeUnmount, onMounted } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 const props = defineProps({
     formatDetails: Object,
@@ -69,6 +74,7 @@ const props = defineProps({
     canRunQualifying: Boolean,
     results: Object,
     sessionDetails: Object,
+    race: Object,
     completed: Boolean,
     showError: Boolean,
     saving: Boolean,
@@ -93,8 +99,8 @@ const completeQualifying = () => {
 };
 
 const hasError = computed(() => props.showError === true);
-const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session) && !hasError.value);
-const canCompleteQualifying = computed(() => store.getCurrentSessionRunCount() === props.formatDetails.runs_per_session && !props.completed);
+const canPerformRun = computed(() => (store.getCurrentSessionRunCount() < props.formatDetails.runs_per_session) && ! hasError.value);
+const canCompleteQualifying = computed(() => store.getCurrentSessionRunCount() === props.formatDetails.runs_per_session && ! props.completed);
 
 onMounted(() => {
     store.setDrivers(props.drivers);

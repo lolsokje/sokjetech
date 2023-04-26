@@ -1,7 +1,5 @@
 <template>
-    <BackLink :backTo="route('universes.drivers.index', [universe])" label="driver overview"/>
-
-    <h3>Generate drivers for "{{ universe.name }}"</h3>
+    <Breadcrumb :link="route('universes.drivers.index', universe)" :linkText="universe.name" label="Generate drivers"/>
 
     <form @submit.prevent="generateDrivers">
         <Errors :errors="form.errors"/>
@@ -81,12 +79,11 @@
 </template>
 
 <script setup lang="ts">
-import { InertiaForm, useForm } from '@inertiajs/inertia-vue3';
-import BackLink from '@/Shared/BackLink.vue';
+import { InertiaForm, router, useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import { computed, onMounted, Ref, ref } from 'vue';
 import axios from 'axios';
-import { Inertia, RequestPayload } from '@inertiajs/inertia';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
 interface Language {
     [key: string]: string,
@@ -115,12 +112,21 @@ const props = defineProps<Props>();
 const sortedLanguages: Ref<Array<SortedLanguage>> = ref([]);
 const drivers: Ref<Array<Driver>> = ref([]);
 const processing = ref(false);
+const today = new Date();
+const start = new Date();
+
+today.setFullYear(today.getFullYear() - 20);
+start.setFullYear(today.getFullYear() - 15);
+
+const formatDateForInput = (date: Date): string => {
+    return date.toLocaleDateString('en-GB').split('/').reverse().join('-');
+};
 
 const form: InertiaForm<Form> = useForm({
     language: null,
     gender: null,
-    start: null,
-    end: null,
+    start: formatDateForInput(today),
+    end: formatDateForInput(start),
     amount: 10,
 });
 
@@ -141,9 +147,9 @@ const rejectDriver = (index: number): void => {
 const persistDrivers = async () => {
     processing.value = true;
 
-    const payload: RequestPayload = { drivers: drivers.value } as RequestPayload;
+    const payload: RequestPayload = { drivers: drivers.value } as RequestPaylod;
 
-    Inertia.post(route('universes.drivers.persist', [ props.universe ]), payload, {
+    router.post(route('universes.drivers.persist', [ props.universe ]), payload, {
         preserveState: true,
         preserveScroll: true,
     });

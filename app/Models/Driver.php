@@ -22,6 +22,7 @@ class Driver extends SnowflakeModel
     protected $casts = [
         'dob' => 'datetime',
         'shared' => 'boolean',
+        'retired' => 'boolean',
     ];
 
     public function readableDob(): Attribute
@@ -52,6 +53,16 @@ class Driver extends SnowflakeModel
     public function racers(): HasMany
     {
         return $this->hasMany(Racer::class);
+    }
+
+    public function results(): HasManyThrough
+    {
+        return $this->hasManyThrough(RaceResult::class, Racer::class);
+    }
+
+    public function championshipResults(): HasMany
+    {
+        return $this->hasMany(DriverChampionshipStanding::class);
     }
 
     public static function query(): DriverBuilder

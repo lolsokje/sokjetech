@@ -2,15 +2,18 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Race;
+use App\Support\Http\CustomJsonResource;
 
-class GeneralRaceResource extends JsonResource
+/** @mixin Race */
+class GeneralRaceResource extends CustomJsonResource
 {
     public function toArray($request): array
     {
         return [
             'id' => $this->id,
             'season' => $this->season_id,
+            'season_name' => $this->season->full_name,
             'name' => $this->name,
             'qualifying_started' => $this->qualifying_started,
             'qualifying_completed' => $this->qualifying_completed,
