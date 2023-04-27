@@ -5,19 +5,26 @@
                 <li class="nav-item">
                     <InertiaLink :href="route('index')" class="nav-link">Home</InertiaLink>
                 </li>
-                <li class="nav-item" v-if="user">
-                    <InertiaLink :href="route('circuits.index')" class="nav-link">Circuits</InertiaLink>
-                </li>
                 <li class="nav-item">
                     <InertiaLink :href="route('universes.index')" class="nav-link">Universes</InertiaLink>
                 </li>
                 <li class="nav-item">
                     <InertiaLink :href="route('tutorials')" class="nav-link">Tutorials</InertiaLink>
                 </li>
-                <li class="nav-item" v-if="user">
-                    <InertiaLink :href="route('database.index')" class="nav-link">
-                        Database
-                    </InertiaLink>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                        Content
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item" v-if="user">
+                            <InertiaLink :href="route('database.index')" class="nav-link">
+                                Database
+                            </InertiaLink>
+                        </li>
+                        <li class="nav-item" v-if="user">
+                            <InertiaLink :href="route('circuits.index')" class="nav-link">Circuits</InertiaLink>
+                        </li>
+                    </ul>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">

@@ -82,6 +82,14 @@ ul.navbar-nav {
   }
 }
 
+.dropdown-menu {
+  background-color: var(--base-100);
+
+  .nav-item:hover {
+    background-color: var(--base-300);
+  }
+}
+
 .pagination {
   .page-item {
     &.active {
