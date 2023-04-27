@@ -19,6 +19,16 @@
             or search for existing stints
         </button>
 
+        <div class="mb-3">
+            <input type="checkbox"
+                   class="form-check-inline"
+                   id="select_all"
+                   v-model="selectAll"
+                   @change.prevent="selectAllRolls()"
+            >
+            <label for="select_all" class="form-check-label">Select all RNG rolls for all stints</label>
+        </div>
+
         <table class="table">
             <thead>
             <tr class="text-center">
@@ -33,14 +43,34 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="stint in form.stints" :key="stint.number" class="text-center">
+            <tr v-for="stint in form.stints" :key="stint.order" class="text-center">
                 <td class="small-centered">{{ stint.order }}</td>
-                <td><input v-model="stint.min_rng" class="form-control-sm" type="number"></td>
-                <td><input v-model="stint.max_rng" class="form-control-sm" type="number"></td>
-                <td><input v-model="stint.reliability" type="checkbox"></td>
-                <td><input v-model="stint.use_team_rating" type="checkbox"></td>
-                <td><input v-model="stint.use_driver_rating" type="checkbox"></td>
-                <td><input v-model="stint.use_engine_rating" type="checkbox"></td>
+                <td class="small-centered"><input v-model="stint.min_rng" class="form-control" type="number"></td>
+                <td class="small-centered"><input v-model="stint.max_rng" class="form-control" type="number"></td>
+                <td>
+                    <input v-model="stint.reliability"
+                           type="checkbox"
+                           @change.prevent="checkSelectAllRollsCheckbox(stint.reliability)"
+                    >
+                </td>
+                <td>
+                    <input v-model="stint.use_team_rating"
+                           type="checkbox"
+                           @change.prevent="checkSelectAllRollsCheckbox(stint.use_team_rating)"
+                    >
+                </td>
+                <td>
+                    <input v-model="stint.use_driver_rating"
+                           type="checkbox"
+                           @change.prevent="checkSelectAllRollsCheckbox(stint.use_driver_rating)"
+                    >
+                </td>
+                <td>
+                    <input v-model="stint.use_engine_rating"
+                           type="checkbox"
+                           @change.prevent="checkSelectAllRollsCheckbox(stint.use_engine_rating)"
+                    >
+                </td>
                 <td class="small-centered">
                     <span v-if="form.stints.length > 1" class="btn btn-link" role="button"
                           @click="deleteStint(stint.order)"
@@ -93,6 +123,8 @@ const form = useForm({
     stints: [ defaultStint ],
 });
 
+const selectAll = ref(false);
+
 function deleteStint (number) {
     form.stints = form.stints.filter((stint) => stint.order !== number);
 
@@ -112,6 +144,21 @@ const showDialog = () => {
 const selected = (stint) => {
     stint.order = getLastStintOrder(form.stints) + 1;
     form.stints.push(stint);
+};
+
+const selectAllRolls = () => {
+    form.stints.forEach((stint) => {
+        stint.reliability = true;
+        stint.use_team_rating = true;
+        stint.use_driver_rating = true;
+        stint.use_engine_rating = true;
+    });
+};
+
+const checkSelectAllRollsCheckbox = (checked) => {
+    if (! checked) {
+        selectAll.value = false;
+    }
 };
 </script>
 
