@@ -20,7 +20,8 @@ class ClimateSeeder extends Seeder
 
         $climates = [
             [
-                'name' => 'EU, NA',
+                'short_name' => 'EU, NA',
+                'long_name' => 'Europe, North America',
                 'conditions' => [
                     $clear => 30,
                     $partlyOvercast => 20,
@@ -32,7 +33,8 @@ class ClimateSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'SA, AS',
+                'short_name' => 'SA, AS',
+                'long_name' => 'South America, Asia',
                 'conditions' => [
                     $clear => 30,
                     $partlyOvercast => 20,
@@ -44,7 +46,8 @@ class ClimateSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'SA, AS (Monsoon)',
+                'short_name' => 'SA, AS (Monsoon)',
+                'long_name' => 'South America, Asia (Monsoon)',
                 'conditions' => [
                     $clear => 15,
                     $partlyOvercast => 15,
@@ -56,7 +59,8 @@ class ClimateSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'OC',
+                'short_name' => 'OC',
+                'long_name' => 'Oceania',
                 'conditions' => [
                     $clear => 40,
                     $partlyOvercast => 15,
@@ -67,7 +71,8 @@ class ClimateSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'ME, AF',
+                'short_name' => 'ME, AF',
+                'long_name' => 'Middle East, Africa',
                 'conditions' => [
                     $clear => 50,
                     $partlyOvercast => 20,
@@ -80,7 +85,8 @@ class ClimateSeeder extends Seeder
 
         foreach ($climates as $climateDate) {
             $climate = Climate::query()->create([
-                'name' => $climateDate['name'],
+                'short_name' => $climateDate['short_name'],
+                'long_name' => $climateDate['long_name'],
             ]);
 
             foreach ($climateDate['conditions'] as $condition => $chance) {

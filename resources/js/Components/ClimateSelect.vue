@@ -6,7 +6,7 @@
                 class="form-select"
                 @change.prevent="updateClimate($event)"
         >
-            <option v-for="climate in climates" :key="climate.id" :value="climate.id">{{ climate.name }}</option>
+            <option v-for="climate in climates" :key="climate.id" :value="climate.id">{{ climate.long_name }}</option>
         </select>
     </div>
 

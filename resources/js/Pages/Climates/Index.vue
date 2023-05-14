@@ -5,7 +5,7 @@
         <thead>
         <tr>
             <th></th>
-            <th class="text-center" v-for="climate in climates">{{ climate.name }}</th>
+            <th class="text-center" v-for="climate in climates">{{ climate.short_name }}</th>
         </tr>
         </thead>
         <tbody>

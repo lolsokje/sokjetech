@@ -31,7 +31,7 @@
                 <td class="small-centered">
                     <CountryFlag :country="circuit.country"/>
                 </td>
-                <td class="small-centered">{{ circuit.default_climate.name }}</td>
+                <td class="small-centered">{{ circuit.default_climate.short_name }}</td>
                 <td class="small-centered">
                     <InertiaLink :href="route('circuits.edit', circuit)">edit</InertiaLink>
                 </td>

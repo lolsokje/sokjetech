@@ -12,7 +12,8 @@ class ClimateFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'short_name' => $this->faker->word(),
+            'long_name' => $this->faker->word(),
         ];
     }
 }

@@ -23,7 +23,7 @@
             <td class="smallest-centered">
                 <CountryFlag :country="circuit.country"/>
             </td>
-            <td class="small-centered">{{ circuit.default_climate.name }}</td>
+            <td class="small-centered">{{ circuit.default_climate.short_name }}</td>
             <td class="small-centered">
                 <button class="btn btn-link" @click.prevent="copy(circuit)">copy</button>
             </td>
