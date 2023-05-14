@@ -1,4 +1,6 @@
-interface Team {
+import RaceResult from '@/Interfaces/RaceResult';
+
+export interface RaceWeekendTeam {
     team_name: string,
     short_team_name: string,
     style_string: string,
@@ -7,7 +9,7 @@ interface Team {
     accent_colour: string,
 }
 
-interface QualifyingRatings {
+export interface RaceWeekendRatings {
     driver_rating: number,
     team_rating: number,
     engine_rating: number,
@@ -30,12 +32,22 @@ interface QualifyingResult {
     total?: number,
 }
 
-export default interface QualifyingDriver {
+export interface QualifyingDriver {
     id: string,
     entrant_id: string,
     full_name: string,
     number: number,
-    team: Team,
-    ratings: QualifyingRatings,
+    team: RaceWeekendTeam,
+    ratings: RaceWeekendRatings,
     result: QualifyingResult,
+}
+
+export interface RaceDriver {
+    id: string,
+    entrant_id: string,
+    full_name: string,
+    number: number,
+    team: RaceWeekendTeam,
+    ratings: RaceWeekendRatings,
+    result: RaceResult,
 }

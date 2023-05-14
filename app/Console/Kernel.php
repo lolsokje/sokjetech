@@ -3,6 +3,8 @@
 namespace App\Console;
 
 use App\Console\Commands\CreateStandingsCommand;
+use App\Console\Commands\ResetRaceCommand;
+use App\Console\Commands\ResetSeasonCommand;
 use App\Console\Commands\UpdateQualifyingDetailsCommand;
 use App\Console\Commands\UpdateQualifyingRunsCommand;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,6 +21,8 @@ class Kernel extends ConsoleKernel
         CreateStandingsCommand::class,
         UpdateQualifyingRunsCommand::class,
         UpdateQualifyingDetailsCommand::class,
+        ResetRaceCommand::class,
+        ResetSeasonCommand::class,
     ];
 
     /**
