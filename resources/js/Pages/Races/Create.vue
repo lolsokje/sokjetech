@@ -11,6 +11,8 @@
 
         <SearchableDropdown :items="circuits" label="Select a circuit" text-key="name" @selected="setCircuit"/>
 
+        <ClimateSelect :climates="climates" v-model="form.climate_id"/>
+
         <h4>Stints</h4>
 
         <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
@@ -101,6 +103,7 @@ import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditSti
 import StintFilterModal from '@/Components/StintFilterModal.vue';
 import { ref } from 'vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import ClimateSelect from '@/Components/ClimateSelect.vue';
 
 const props = defineProps({
     season: {
@@ -111,6 +114,7 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    climates: Array,
 });
 
 const placeholder = `${props.season.year} Example Grand Prix`;
@@ -121,6 +125,7 @@ const form = useForm({
     name: '',
     circuit_id: '',
     stints: [ defaultStint ],
+    climate_id: '',
 });
 
 const selectAll = ref(false);
@@ -135,6 +140,8 @@ function deleteStint (number) {
 
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
+
+    form.climate_id = circuit.default_climate_id;
 }
 
 const showDialog = () => {

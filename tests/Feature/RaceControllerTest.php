@@ -1,11 +1,13 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\Climate;
 use App\Models\Race;
 use App\Models\Season;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\delete;
@@ -54,6 +56,7 @@ test('a universe owner can update races', function () {
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$season, $race]), [
             'circuit_id' => $race->circuit->id,
+            'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
             'stints' => $race->stints->toArray(),
             'order' => $race->order,
@@ -86,6 +89,7 @@ test('an authenticated user can\'t update another user\'s race', function () {
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$race->season, $race]), [
             'circuit_id' => $race->circuit->id,
+            'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
             'stints' => $race->stints,
             'order' => $race->order,
@@ -103,6 +107,7 @@ it('adds new races after already existing races', function () {
     $this->actingAs($user)
         ->post(route('seasons.races.store', [$season]), [
             'circuit_id' => Circuit::factory()->create()->id,
+            'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
             'stints' => [['min_rng' => 0, 'max_rng' => 30]],
         ]);
@@ -123,6 +128,7 @@ it('adds new races after reordered races', function () {
     $this->actingAs($user)
         ->post(route('seasons.races.store', [$season]), [
             'circuit_id' => Circuit::factory()->create()->id,
+            'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
             'stints' => [['min_rng' => 0, 'max_rng' => 30]],
         ]);
@@ -449,12 +455,13 @@ it('correctly determines the next race after reordering races', function () {
 
 function getRaceCreationData(Season $season, ?User $user = null): array
 {
-    if (!$user) {
+    if (! $user) {
         $user = User::factory()->create();
     }
 
     return [
         'circuit_id' => Circuit::factory()->for($user)->create()->id,
+        'climate_id' => Climate::factory()->create()->id,
         'name' => "$season->year Test Grand Prix",
         'stints' => [['min_rng' => 0, 'max_rng' => 30]],
         'order' => 1,

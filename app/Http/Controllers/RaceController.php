@@ -10,6 +10,7 @@ use App\Actions\Races\UpdateRaceOrderAction;
 use App\Http\Requests\RaceCreateRequest;
 use App\Http\Resources\RaceOverviewPoleResource;
 use App\Http\Resources\RaceOverviewWinnerResource;
+use App\Models\Climate;
 use App\Models\Race;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,6 +51,7 @@ class RaceController extends Controller
         return Inertia::render('Races/Create', [
             'season' => $season,
             'circuits' => auth()->user()->circuits,
+            'climates' => Climate::with('conditions')->get(),
         ]);
     }
 
@@ -81,6 +83,7 @@ class RaceController extends Controller
             'season' => $season,
             'race' => $race->load('stints'),
             'circuits' => auth()->user()->circuits,
+            'climates' => Climate::with('conditions')->get(),
         ]);
     }
 

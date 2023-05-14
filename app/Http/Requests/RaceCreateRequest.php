@@ -41,7 +41,8 @@ class RaceCreateRequest extends FormRequest
         return [
             'circuit_id' => ['required', 'exists:circuits,id'],
             'name' => ['required'],
-            'stints' => ['required', new StintRngValid()],
+            'stints' => ['required', new StintRngValid],
+            'climate_id' => ['required', 'exists:climates,id'],
         ];
     }
 }

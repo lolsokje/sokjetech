@@ -18,6 +18,8 @@
                 @selected="setCircuit"
         />
 
+        <ClimateSelect :climates="climates" v-model="form.climate_id"/>
+
         <h4>Stints</h4>
 
         <button class="btn btn-primary my-3" @click.prevent="addStint(form.stints)">Add stint</button>
@@ -108,6 +110,7 @@ import { defaultStint } from '@/Composables/useDefaultStint';
 import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
 import StintFilterModal from '@/Components/StintFilterModal.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import ClimateSelect from '@/Components/ClimateSelect.vue';
 
 const props = defineProps({
     season: {
@@ -122,6 +125,7 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    climates: Array,
 });
 
 const placeholder = `${props.season.year} Example Grand Prix`;
@@ -132,6 +136,7 @@ const form = useForm({
     name: props.race.name,
     circuit_id: props.race.circuit_id,
     stints: props.race.stints,
+    climate_id: props.race.climate_id,
 });
 
 const selectAll = ref(false);
@@ -148,6 +153,8 @@ function deleteStint (order) {
 
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
+
+    form.climate_id = circuit.default_climate_id;
 }
 
 const showDialog = () => {
