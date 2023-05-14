@@ -7,6 +7,7 @@ use App\Http\Requests\CircuitCreateRequest;
 use App\Http\Requests\CircuitFilterRequest;
 use App\Http\Resources\CircuitResource;
 use App\Models\Circuit;
+use App\Models\Climate;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -32,7 +33,9 @@ class CircuitController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Circuits/Create');
+        return Inertia::render('Circuits/Create', [
+            'climates' => Climate::with('conditions')->get(),
+        ]);
     }
 
     public function store(CircuitCreateRequest $request): RedirectResponse
@@ -49,6 +52,7 @@ class CircuitController extends Controller
 
         return Inertia::render('Circuits/Edit', [
             'circuit' => $circuit,
+            'climates' => Climate::with('conditions')->get(),
         ]);
     }
 

@@ -21,20 +21,9 @@
 
 <script lang="ts" setup>
 import Breadcrumb from '@/Components/Breadcrumb.vue';
-
-interface WeatherCondition {
-    [key: number]: string,
-}
-
-interface Condition {
-    condition: number,
-    chance: number,
-}
-
-interface Climate {
-    name: string,
-    conditions: Condition[],
-}
+import WeatherCondition from '@/Interfaces/WeatherCondition';
+import Condition from '@/Interfaces/Condition';
+import Climate from '@/Interfaces/Climate';
 
 interface Props {
     climates: Climate[],

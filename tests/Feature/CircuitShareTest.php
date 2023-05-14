@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\Climate;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -15,6 +16,7 @@ test('an authenticated user can share circuits with others', function () {
         ->post(route('circuits.store'), [
             'name' => 'Test',
             'country' => 'nl',
+            'default_climate_id' => Climate::factory()->create()->id,
             'shared' => true,
         ])
         ->assertRedirect();
@@ -31,6 +33,7 @@ test('an authenticated user can unshare circuits', function () {
         ->put(route('circuits.update', $circuit), [
             'name' => $circuit->name,
             'country' => $circuit->country,
+            'default_climate_id' => Climate::factory()->create()->id,
             'shared' => false,
         ])
         ->assertRedirect();

@@ -1,9 +1,11 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\Climate;
 use App\Models\Race;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\assertDatabaseCount;
 
 test('an authenticated user can create a circuit', function () {
@@ -12,6 +14,7 @@ test('an authenticated user can create a circuit', function () {
         ->post(route('circuits.store'), [
             'name' => 'Zandvoort',
             'country' => 'nl',
+            'default_climate_id' => Climate::factory()->create()->id,
         ])
         ->assertRedirect(route('circuits.index'));
 
@@ -37,6 +40,7 @@ test('an authenticated user can update their own circuits', function () {
         ->put(route('circuits.update', [$circuit]), [
             'name' => 'New name',
             'country' => 'NC',
+            'default_climate_id' => Climate::factory()->create()->id,
         ])->assertRedirect(route('circuits.index'));
 
     $this->assertEquals('New name', $circuit->fresh()->name);
@@ -53,6 +57,7 @@ test('an authenticated user can\'t update someone else\'s circuits', function ()
         ->put(route('circuits.update', [$circuit]), [
             'name' => 'New name',
             'country' => 'NC',
+            'default_climate_id' => Climate::factory()->create()->id,
         ])->assertForbidden();
 
     $this->assertEquals($name, $circuit->fresh()->name);

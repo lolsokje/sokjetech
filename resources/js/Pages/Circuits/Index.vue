@@ -21,6 +21,7 @@
                     <span>Country</span>
                     <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
                 </th>
+                <th>Climate</th>
                 <th colspan="2"></th>
             </tr>
             </thead>
@@ -30,6 +31,7 @@
                 <td class="small-centered">
                     <CountryFlag :country="circuit.country"/>
                 </td>
+                <td class="small-centered">{{ circuit.default_climate.name }}</td>
                 <td class="small-centered">
                     <InertiaLink :href="route('circuits.edit', circuit)">edit</InertiaLink>
                 </td>

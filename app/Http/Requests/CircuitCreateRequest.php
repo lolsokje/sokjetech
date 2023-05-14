@@ -26,6 +26,7 @@ class CircuitCreateRequest extends FormRequest
         return [
             'name' => ['required'],
             'country' => ['required'],
+            'default_climate_id' => ['required', 'exists:climates,id'],
             'shared' => ['nullable', 'boolean'],
         ];
     }

@@ -30,6 +30,11 @@ class Circuit extends SnowflakeModel
         return $this->hasMany(Race::class);
     }
 
+    public function defaultClimate(): BelongsTo
+    {
+        return $this->belongsTo(Climate::class);
+    }
+
     public static function query(): CircuitBuilder
     {
         return parent::query();
