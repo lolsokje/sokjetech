@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\RaceResultPageResource;
+use App\Http\Resources\RaceWeekend\RaceResultResource;
 use App\Models\Race;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -12,7 +13,7 @@ class ShowRaceResultPageController extends Controller
 {
     public function __invoke(Race $race): Response|RedirectResponse
     {
-        if (!$race->completed) {
+        if (! $race->completed) {
             return to_route('weekend.race', [$race]);
         }
 
@@ -29,7 +30,7 @@ class ShowRaceResultPageController extends Controller
         ]);
 
         return Inertia::render('RaceWeekend/Results', [
-            'race' => $race,
+            'race' => RaceResultResource::array($race),
             'drivers' => RaceResultPageResource::collection($race->raceResults)->toArray(request()),
         ]);
     }

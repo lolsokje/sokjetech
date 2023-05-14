@@ -67,7 +67,7 @@
                         <td class="smallest-centered">{{ index + 1 }}</td>
                         <BackgroundColourCell :backgroundColour="driver.background_colour"/>
                         <td class="padded-left">{{ driver.full_name }}</td>
-                        <td class="smallest-centered" :style="driver.style_string">{{ driver.number }}</td>
+                        <DriverNumberCell :number="driver.number" :styleString="driver.style_string"/>
                         <td class="padded-left">{{ driver.team_name }}</td>
                         <td class="smallest-centered">{{ driver.points }}</td>
                     </tr>
@@ -110,6 +110,7 @@ import RaceStint from '@/Interfaces/RaceStint';
 import DriverResults from '@/Interfaces/DriverResults';
 import TeamResults from '@/Interfaces/TeamResults';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 interface Props {
     race: Race,

@@ -22,7 +22,7 @@
             <td class="small-centered">{{ driver.result.position }}</td>
             <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
-            <td :style="driver.team.style_string" class="small-centered">{{ driver.number }}</td>
+            <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
             <td class="padded-left">{{ driver.team.team_name }}</td>
         </tr>
         </tbody>
@@ -36,6 +36,7 @@ import { sortDriversByPosition } from '@/Composables/useRunQualifying';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 const props = defineProps({
     race: {

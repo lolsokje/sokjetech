@@ -16,7 +16,7 @@ class RaceResultPageResource extends JsonResource
             'full_name' => $driver->full_name,
             'number' => $racer->number,
             'team' => [
-                'background_colour' => $entrant->accent_colour,
+                'accent_colour' => $entrant->accent_colour,
                 'style_string' => $entrant->style_string,
                 'team_name' => $entrant->full_name,
             ],
