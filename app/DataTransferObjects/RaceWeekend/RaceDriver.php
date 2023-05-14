@@ -2,7 +2,7 @@
 
 namespace App\DataTransferObjects\RaceWeekend;
 
-readonly class RaceDriver extends RaceWeekendDriver
+class RaceDriver extends RaceWeekendDriver
 {
     public RaceDriverResult $result;
 

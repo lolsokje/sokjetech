@@ -12,7 +12,7 @@ it('returns all active racers if qualifying has not started', function () {
 
     $racers->last()->update(['active' => false]);
 
-    $results = (new GetQualifyingResults())->handle($race);
+    $results = (new GetQualifyingResults)->handle($race);
 
     $this->assertCount(4, $results);
 
@@ -33,7 +33,7 @@ it('returns all qualifying participants if qualifying has started', function () 
     $this->assertCount(5, $season->drivers);
     $this->assertCount(4, $season->activeRacers);
 
-    $results = (new GetQualifyingResults())->handle($race);
+    $results = (new GetQualifyingResults)->handle($race);
 
     $this->assertCount(5, $results);
 });
@@ -47,7 +47,7 @@ it('combines drivers with their qualifying result', function () {
 
     $this->assertDatabaseCount('qualifying_results', 1);
 
-    $qualifyingResults = (new GetQualifyingResults())->handle($race);
+    $qualifyingResults = (new GetQualifyingResults)->handle($race);
     $driverResults = $qualifyingResults[0];
 
     $driverRating = $racer->rating;
@@ -77,7 +77,7 @@ it('combines drivers with their qualifying result', function () {
             'accent_colour' => $racer->entrant->accent_colour,
         ],
         'result' => [
-            'runs' => [
+            'sessions' => [
                 [10, 15],
                 [20, 25],
             ],

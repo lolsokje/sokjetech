@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Collection;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
@@ -151,11 +152,15 @@ function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCou
         $runs[] = [
             'id' => $driver->id,
             'entrant_id' => $driver->entrant->id,
-            'driver_rating' => $driver->rating,
-            'team_rating' => $driver->entrant->rating,
-            'engine_rating' => $driver->entrant->engine->rating,
-            'position' => $key + 1,
-            'runs' => $driverRuns,
+            'ratings' => [
+                'driver_rating' => $driver->rating,
+                'team_rating' => $driver->entrant->rating,
+                'engine_rating' => $driver->entrant->engine->rating,
+            ],
+            'result' => [
+                'position' => $key + 1,
+                'sessions' => $driverRuns,
+            ],
         ];
     }
 
@@ -163,7 +168,7 @@ function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCou
 
     for ($sessionIndex = 0; $sessionIndex < $sessionCount; $sessionIndex++) {
         for ($runIndex = 0; $runIndex < $runCount; $runIndex++) {
-            if (!isset($details[$sessionIndex])) {
+            if (! isset($details[$sessionIndex])) {
                 $details[$sessionIndex] = 0;
             }
 

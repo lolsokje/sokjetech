@@ -2,7 +2,7 @@
 
 namespace App\DataTransferObjects\RaceWeekend;
 
-readonly class DriverRatings
+class DriverRatings
 {
     public int $driverRating;
 

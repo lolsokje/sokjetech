@@ -2,7 +2,7 @@
 
 namespace App\DataTransferObjects\RaceWeekend;
 
-readonly class QualifyingDriverResult
+class QualifyingDriverResult
 {
     public ?int $position;
 

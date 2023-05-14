@@ -2,7 +2,7 @@
 
 namespace App\DataTransferObjects\RaceWeekend;
 
-readonly class RaceWeekendDriver
+class RaceWeekendDriver
 {
     public int $id;
 

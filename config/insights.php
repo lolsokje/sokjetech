@@ -16,6 +16,7 @@ use PhpCsFixer\Fixer\Comment\NoEmptyCommentFixer;
 use PhpCsFixer\Fixer\Operator\NewWithBracesFixer;
 use PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
+use SlevomatCodingStandard\Sniffs\Classes\ForbiddenPublicPropertySniff;
 use SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff;
 use SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff;
 use SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff;
@@ -138,6 +139,12 @@ return [
             // as useless overrides, when they're actually used for IDE type hinting and thus aren't useless
             'exclude' => [
                 'app/Models',
+            ],
+        ],
+        ForbiddenPublicPropertySniff::class => [
+            // Data transfer objects need public properties
+            'exclude' => [
+                'app/DataTransferObjects',
             ],
         ],
     ],

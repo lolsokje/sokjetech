@@ -2,7 +2,7 @@
 
 namespace App\DataTransferObjects\RaceWeekend;
 
-readonly class RaceDriverResult
+class RaceDriverResult
 {
     public int $position;
 
