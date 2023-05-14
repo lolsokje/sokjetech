@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DataTransferObjects;
+namespace App\DataTransferObjects\RaceWeekend;
 
-readonly class QualifyingDriverRating
+readonly class DriverRatings
 {
     public int $driverRating;
 

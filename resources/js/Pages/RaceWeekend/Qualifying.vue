@@ -94,7 +94,7 @@ import { computed, ComputedRef, onMounted, Ref, ref } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { isEven } from '@/Utilities/IsEven.js';
 import FormatDetails from '@/Interfaces/RaceWeekend/FormatDetails';
-import QualifyingDriver from '@/Interfaces/RaceWeekend/QualifyingDriver';
+import { QualifyingDriver } from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
 import { getRoll } from '@/Composables/useRng';
 import {
     setDriverPositions,

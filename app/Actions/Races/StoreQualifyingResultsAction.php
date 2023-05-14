@@ -2,7 +2,7 @@
 
 namespace App\Actions\Races;
 
-use App\DataTransferObjects\QualifyingDriver;
+use App\DataTransferObjects\RaceWeekend\QualifyingDriver;
 use App\Models\QualifyingResult;
 use App\Models\Race;
 use Illuminate\Support\Collection;

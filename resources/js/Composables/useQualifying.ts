@@ -1,4 +1,4 @@
-import QualifyingDriver from '@/Interfaces/RaceWeekend/QualifyingDriver';
+import QualifyingDriver from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
 
 export const sortDriversByPosition = (drivers: QualifyingDriver[], currentSession: number): void => {
     drivers.sort((a, b) => a.result.sessions[currentSession].position - b.result.sessions[currentSession].position);

@@ -1,6 +1,6 @@
 import RaceResult from '@/Interfaces/RaceResult';
 
-export interface RaceWeekendTeam {
+interface RaceWeekendTeam {
     team_name: string,
     short_team_name: string,
     style_string: string,
@@ -9,7 +9,7 @@ export interface RaceWeekendTeam {
     accent_colour: string,
 }
 
-export interface RaceWeekendRatings {
+interface RaceWeekendRatings {
     driver_rating: number,
     team_rating: number,
     engine_rating: number,

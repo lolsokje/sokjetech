@@ -112,6 +112,13 @@ ul.navbar-nav {
   }
 }
 
+.race-details {
+  display: flex;
+  padding: 1rem;
+  text-transform: uppercase;
+  background-color: var(--base-200);
+}
+
 .modal-content {
   background-color: var(--base-100);
 

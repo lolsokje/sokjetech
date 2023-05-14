@@ -67,6 +67,7 @@
     color: var(--table-color-body);
     padding: 1rem 0.5rem;
 
+
     &.position-first {
       background-color: var(--position-first-background);
       color: var(--position-first-color);
@@ -95,6 +96,26 @@
     &.position-dnf {
       background-color: var(--position-dnf-background);
       color: var(--position-dnf-color);
+    }
+
+    &.driver-dnf {
+      color: var(--position-dnf-background);
+    }
+
+    &.positions-gained {
+      color: var(--success);
+    }
+
+    &.positions-lost {
+      color: var(--danger);
+    }
+
+    &.positions-unchanged {
+      color: var(--warning);
+    }
+
+    &.fastest-lap {
+      color: var(--purple);
     }
 
     &.smallest-centered {

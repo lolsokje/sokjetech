@@ -2,6 +2,7 @@
 
 namespace App\Actions\Races;
 
+use App\DataTransferObjects\RaceWeekend\RaceDriver;
 use App\Http\Requests\StoreRaceResultsRequest;
 use App\Models\Race;
 use App\Models\RaceResult;
@@ -15,7 +16,10 @@ class StoreRaceResultsAction
     public function handle(): void
     {
         $this->updateRaceDetails();
-        $this->updateRaceResults();
+
+        foreach ($this->request->drivers() as $driver) {
+            $this->updateRaceResults(new RaceDriver($driver));
+        }
     }
 
     private function updateRaceDetails(): void
@@ -29,23 +33,22 @@ class StoreRaceResultsAction
         $this->race->update($updateArray);
     }
 
-    private function updateRaceResults(): void
+    private function updateRaceResults(RaceDriver $driver): void
     {
-        $this->request->drivers()->each(function (array $driver) {
-            RaceResult::updateOrCreate(
-                ['race_id' => $this->race->id, 'racer_id' => $driver['id']],
-                [
-                    'stints' => $driver['stints'],
-                    'position' => $driver['position'],
-                    'starting_bonus' => $driver['starting_bonus'],
-                    'driver_rating' => $driver['driver_rating'],
-                    'team_rating' => $driver['team_rating'],
-                    'engine_rating' => $driver['engine_rating'],
-                    'dnf' => $driver['dnf'],
-                    'fastest_lap_roll' => $driver['fastest_lap_roll'] ?? null,
-                    'fastest_lap' => $driver['fastest_lap'] ?? false,
-                ],
-            );
-        });
+        RaceResult::updateOrCreate(
+            ['race_id' => $this->race->id, 'racer_id' => $driver->id],
+            [
+                'driver_rating' => $driver->rating->driverRating,
+                'team_rating' => $driver->rating->teamRating,
+                'engine_rating' => $driver->rating->engineRating,
+                'position' => $driver->result->position,
+                'starting_position' => $driver->result->startingPosition,
+                'starting_bonus' => $driver->result->startingBonus,
+                'dnf' => $driver->result->dnf,
+                'fastest_lap' => $driver->result->fastestLap,
+                'fastest_lap_roll' => $driver->result->fastestLapRoll,
+                'stints' => $driver->result->stints,
+            ],
+        );
     }
 }
