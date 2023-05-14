@@ -28,6 +28,7 @@ class CircuitBuilder extends Builder
     {
         return $this->where('shared', true)
             ->groupBy('name')
-            ->groupBy('country');
+            ->groupBy('country')
+            ->groupBy('default_climate_id');
     }
 }

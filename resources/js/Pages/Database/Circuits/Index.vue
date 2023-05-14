@@ -13,6 +13,7 @@
                 Country
                 <OrderIcon :current-field="params.field" :direction="params.direction" required-field="country"/>
             </th>
+            <th>Climate</th>
             <th></th>
         </tr>
         </thead>
@@ -22,6 +23,7 @@
             <td class="smallest-centered">
                 <CountryFlag :country="circuit.country"/>
             </td>
+            <td class="small-centered">{{ circuit.default_climate.name }}</td>
             <td class="small-centered">
                 <button class="btn btn-link" @click.prevent="copy(circuit)">copy</button>
             </td>

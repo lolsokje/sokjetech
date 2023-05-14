@@ -21,7 +21,7 @@ class GetSharedCircuits
                 $builder->search($search);
             })
             ->shared()
-            ->with('user')
+            ->with('user', 'defaultClimate')
             ->paginate(20)
             ->withQueryString();
     }
