@@ -3,6 +3,8 @@
 namespace App\Console;
 
 use App\Console\Commands\CreateStandingsCommand;
+use App\Console\Commands\UpdateQualifyingDetailsCommand;
+use App\Console\Commands\UpdateQualifyingRunsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,6 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         CreateStandingsCommand::class,
+        UpdateQualifyingRunsCommand::class,
+        UpdateQualifyingDetailsCommand::class,
     ];
 
     /**
