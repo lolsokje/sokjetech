@@ -36,6 +36,9 @@ class UpdateQualifyingRunsCommand extends Command
                 $sessions = $result->runs;
 
                 foreach ($sessions as $session => $runs) {
+                    if (in_array([], $runs)) {
+                        continue;
+                    }
                     $data['runs'][$session + 1] = [
                         'position' => null,
                         'runs' => $runs,
