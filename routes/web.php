@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BugController;
 use App\Http\Controllers\CircuitController;
+use App\Http\Controllers\ClimateController;
 use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteSeasonController;
 use App\Http\Controllers\CopyCircuitController;
@@ -80,6 +81,8 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logou
 Route::get('tutorials/{page?}', ShowTutorialPageController::class)->name('tutorials')->where('page', '.*');
 
 Route::resource('circuits', CircuitController::class);
+
+Route::get('climates', [ClimateController::class, 'index'])->name('climates.index');
 
 Route::resource('universes', UniverseController::class)->except('destroy');
 

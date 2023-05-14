@@ -15,14 +15,17 @@
                     <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
                         Content
                     </a>
-                    <ul class="dropdown-menu">
-                        <li class="nav-item" v-if="user">
+                    <ul class="dropdown-menu" v-if="user">
+                        <li class="nav-item">
                             <InertiaLink :href="route('database.index')" class="nav-link">
                                 Database
                             </InertiaLink>
                         </li>
-                        <li class="nav-item" v-if="user">
+                        <li class="nav-item">
                             <InertiaLink :href="route('circuits.index')" class="nav-link">Circuits</InertiaLink>
+                        </li>
+                        <li class="nav-item">
+                            <InertiaLink :href="route('climates.index')" class="nav-link">Climates</InertiaLink>
                         </li>
                     </ul>
                 </li>
