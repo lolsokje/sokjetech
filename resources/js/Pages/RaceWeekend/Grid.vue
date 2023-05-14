@@ -7,26 +7,34 @@
                 append="Starting grid"
     />
 
-    <table class="table table-narrow" id="screenshot-target">
-        <thead>
-        <tr>
-            <th class="text-center">Pos</th>
-            <th class="colour-accent"></th>
-            <th>Driver</th>
-            <th class="text-center">#</th>
-            <th>Team</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="driver in drivers" :key="driver.id">
-            <td class="small-centered">{{ driver.result.position }}</td>
-            <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
-            <td class="padded-left">{{ driver.full_name }}</td>
-            <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
-            <td class="padded-left">{{ driver.team.team_name }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="screenshot-target">
+        <div class="race-details">
+            <h2>Round {{ race.order }} - {{ race.name }}</h2>
+            <h2 class="ms-auto">
+                Starting Grid
+            </h2>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center">Pos</th>
+                <th class="colour-accent"></th>
+                <th>Driver</th>
+                <th class="text-center">#</th>
+                <th>Team</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="driver in drivers" :key="driver.id">
+                <td class="small-centered">{{ driver.result.position }}</td>
+                <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
+                <td class="padded-left">{{ driver.full_name }}</td>
+                <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
+                <td class="padded-left">{{ driver.team.team_name }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <CopyScreenshotButton/>
 </template>
 

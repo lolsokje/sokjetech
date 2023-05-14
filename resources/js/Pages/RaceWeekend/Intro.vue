@@ -12,6 +12,12 @@
     </div>
 
     <div id="screenshot-target">
+        <div class="race-details">
+            <h2>Round {{ race.order }} - {{ race.name }}</h2>
+            <h2 class="ms-auto">
+                Intro
+            </h2>
+        </div>
         <h4>Stints</h4>
 
         <table class="table">

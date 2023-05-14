@@ -40,7 +40,7 @@
     </div>
 
     <div id="screenshot-target">
-        <div class="d-flex text-uppercase mb-3">
+        <div class="race-details">
             <h2>Round {{ race.order }} - {{ race.name }}</h2>
             <h2 class="ms-auto">
                 <span v-if="isMultiSession">Qualifying {{ currentSession }}</span>

@@ -6,6 +6,12 @@
     />
 
     <div id="screenshot-target">
+        <div class="race-details">
+            <h2>Round {{ race.order }} - {{ race.name }}</h2>
+            <h2 class="ms-auto">
+                Results
+            </h2>
+        </div>
         <p>
             <span class="fst-italic">italic = pole position</span>
         </p>
