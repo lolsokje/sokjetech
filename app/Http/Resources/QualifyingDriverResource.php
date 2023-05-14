@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\RaceWeekend\QualifyingResultResource;
 use App\Models\Driver;
 use App\Models\QualifyingResult;
 use App\Models\Racer;
@@ -10,11 +11,7 @@ use Illuminate\Http\Request;
 /** @mixin Driver */
 class QualifyingDriverResource extends BaseResultResource
 {
-    /**
-     * @param Request $request
-     * @return array
-     */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         /** @var Racer $racer */
         $racer = $this->resource['racer'];
@@ -28,10 +25,7 @@ class QualifyingDriverResource extends BaseResultResource
             'number' => $racer->number,
             'ratings' => $this->getRatings($racer, $result),
             'team' => $this->getTeamDetails($racer),
-            'result' => [
-                'runs' => $result ? $result->runs : [],
-                'position' => $result?->position,
-            ],
+            'result' => $result ? QualifyingResultResource::array($result) : QualifyingResultResource::default(),
         ];
     }
 }
