@@ -25,11 +25,26 @@
     }
   }
 
-  .colour-accent {
+  .colour-accent-wrapper {
+    width: 10px;
+    text-align: center;
+
+    .colour-accent {
+      padding: 7px 3px;
+      border-radius: 3px;
+    }
+  }
+
+  .driver-number-wrapper {
     padding: 0;
-    width: 8px;
-    min-width: 8px;
-    max-width: 8px;
+
+    .driver-number {
+      display: inline-block;
+      width: 54px;
+      padding: 5px 0;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
   }
 
   th,
@@ -50,6 +65,7 @@
     background-color: var(--table-bg-body);
     font-size: var(--table-font-size-body);
     color: var(--table-color-body);
+    padding: 1rem 0.5rem;
 
     &.position-first {
       background-color: var(--position-first-background);

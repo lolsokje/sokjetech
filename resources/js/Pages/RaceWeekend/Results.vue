@@ -17,7 +17,6 @@
             <tr>
                 <th class="text-center">POS</th>
                 <th class="colour-accent"></th>
-                <th class="colour-accent"></th>
                 <th class="padded-left">DRIVER</th>
                 <th></th>
                 <th class="padded-left">TEAM</th>
@@ -27,7 +26,6 @@
             <tbody>
             <tr v-for="driver in drivers" :key="driver.id">
                 <td class="smallest-centered">{{ driver.result.position }}</td>
-                <td class="colour-accent"></td>
                 <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
                 <td class="padded-left">{{ driver.full_name }}</td>
                 <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>

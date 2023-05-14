@@ -42,7 +42,6 @@
             <th class="text-center">GRID</th>
             <th></th>
             <th class="colour-accent"></th>
-            <th class="colour-accent"></th>
             <th>DRIVER</th>
             <th></th>
             <th>TEAM</th>
@@ -60,7 +59,6 @@
             <td class="smallest-centered" :class="getPositionChangeDisplayClasses(driver)">
                 {{ getPositionChange(driver) }}
             </td>
-            <td class="colour-accent"></td>
             <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
             <td class="padded-left">{{ driver.full_name }}</td>
             <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>

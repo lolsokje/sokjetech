@@ -39,42 +39,53 @@
         </button>
     </div>
 
-    <table class="table" id="screenshot-target">
-        <thead>
-        <tr>
-            <th class="text-center">Pos</th>
-            <th class="colour-accent"></th>
-            <th>Driver</th>
-            <th class="text-center">#</th>
-            <th>Team</th>
-            <th class="text-center">Rating</th>
-            <th v-for="i in formatDetails.runs_per_session" :key="i" class="text-center">{{ i }}</th>
-            <th class="text-center">Best</th>
-            <th class="text-center">Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(driver, position) in driversInSession" :key="driver.id">
-            <td class="smallest-centered" :class="isDriverBelowSessionCutoff(position) ? 'bg-danger' : ''">
-                {{ position + 1 }}
-            </td>
-            <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
-            <td class="padded-left">{{ driver.full_name }}</td>
-            <td class="smallest-centered" :style="driver.team.style_string">{{ driver.number }}</td>
-            <td class="padded-left">{{ driver.team.team_name }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.ratings.total_rating }}</td>
-            <td v-for="i in formatDetails.runs_per_session"
-                :key="i"
-                class="small-centered"
-                :class="{ 'bg-accent-even': isEven(i) }"
-            >
-                {{ driver.result.sessions ? driver.result.sessions[currentSession].runs[i - 1] : '' }}
-            </td>
-            <td class="small-centered">{{ driver.result.best_stint }}</td>
-            <td class="small-centered bg-accent-odd">{{ driver.result.total }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="screenshot-target">
+        <div class="d-flex text-uppercase mb-3">
+            <h2>Round {{ race.order }} - {{ race.name }}</h2>
+            <h2 class="ms-auto">
+                <span v-if="isMultiSession">Qualifying {{ currentSession }}</span>
+                <span v-else>Qualifying</span>
+            </h2>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center">Pos</th>
+                <th class="colour-accent"></th>
+                <th>Driver</th>
+                <th class="text-center">#</th>
+                <th>Team</th>
+                <th class="text-center">Rating</th>
+                <th v-for="i in formatDetails.runs_per_session" :key="i" class="text-center">{{ i }}</th>
+                <th class="text-center">Best</th>
+                <th class="text-center">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(driver, position) in driversInSession" :key="driver.id">
+                <td class="smallest-centered" :class="isDriverBelowSessionCutoff(position) ? 'bg-danger' : ''">
+                    {{ position + 1 }}
+                </td>
+                <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
+                <td class="padded-left">{{ driver.full_name }}</td>
+                <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
+                <td class="padded-left">{{ driver.team.team_name }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.ratings.total_rating }}</td>
+                <td v-for="i in formatDetails.runs_per_session"
+                    :key="i"
+                    class="small-centered"
+                    :class="{ 'bg-accent-even': isEven(i) }"
+                >
+                    {{ driver.result.sessions ? driver.result.sessions[currentSession].runs[i - 1] : '' }}
+                </td>
+                <td class="small-centered">{{ driver.result.best_stint }}</td>
+                <td class="small-centered bg-accent-odd">{{ driver.result.total }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <CopyScreenshotButton/>
 </template>
 
 <script setup lang="ts">
@@ -96,6 +107,8 @@ import Breadcrumb from '@/Components/Breadcrumb.vue';
 import axios from 'axios';
 import { router } from '@inertiajs/vue3';
 import { raceWeekendStore } from '@/Stores/raceWeekendStore.js';
+import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 interface SessionDrivers {
     [key: number]: QualifyingDriver[];
