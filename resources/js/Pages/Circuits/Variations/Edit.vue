@@ -31,8 +31,8 @@
 import Circuit from '@/Interfaces/Circuit';
 import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
-import CircuitVariation from '@/Interfaces/CircuitVariation';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import CircuitVariation from '@/Interfaces/Circuit/CircuitVariation';
 
 interface Props {
     circuit: Circuit,
@@ -49,7 +49,7 @@ const props = defineProps<Props>();
 
 const form = useForm<Form>({
     name: props.variation.name,
-    length: props.variation.length,
-    base_laptime: props.variation.readable_laptime,
+    length: props.variation.length.default,
+    base_laptime: props.variation.laptime.readable,
 });
 </script>

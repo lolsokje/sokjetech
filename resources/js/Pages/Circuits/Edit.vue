@@ -29,10 +29,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="variation in variations" :key="variation.id">
+            <tr v-for="variation in variations.data" :key="variation.id">
                 <td class="padded-left">{{ variation.name }}</td>
-                <td class="medium-centered">{{ variation.length }}</td>
-                <td class="medium-centered">{{ variation.readable_laptime }}</td>
+                <td class="big-centered">{{ variation.length.km }}km/{{ variation.length.m }}m</td>
+                <td class="medium-centered">{{ variation.laptime.readable }}</td>
                 <td class="smallest-centered">
                     <InertiaLink :href="route('circuits.variations.edit', [circuit, variation])">
                         edit
@@ -59,11 +59,11 @@ import Circuit from '@/Interfaces/Circuit';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import Climate from '@/Interfaces/Climate';
 import ClimateSelect from '@/Components/ClimateSelect.vue';
-import CircuitVariation from '@/Interfaces/CircuitVariation';
+import CircuitVariationResource from '@/Interfaces/Circuit/CircuitVariationResource';
 
 const props = defineProps<{
     circuit: Circuit,
-    variations: CircuitVariation[],
+    variations: CircuitVariationResource,
     climates: Climate[],
 }>();
 

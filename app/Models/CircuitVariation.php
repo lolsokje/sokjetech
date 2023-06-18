@@ -13,8 +13,20 @@ class CircuitVariation extends Model
     use HasFactory;
 
     protected $appends = [
+        'length_in_kilometers',
+        'length_in_miles',
         'readable_laptime',
     ];
+
+    public function lengthInKilometers(): Attribute
+    {
+        return Attribute::get(fn (): float => (float) $this->length / 1000);
+    }
+
+    public function lengthInMiles(): Attribute
+    {
+        return Attribute::get(fn () => round(($this->length * 0.000621), 3));
+    }
 
     public function baseLapTime(): Attribute
     {

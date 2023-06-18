@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Circuits;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CircuitVariationRequest;
+use App\Http\Resources\Circuit\CircuitVariationResource;
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +38,7 @@ class CircuitVariationController extends Controller
 
         return Inertia::render('Circuits/Variations/Edit', [
             'circuit' => $circuit,
-            'variation' => $variation,
+            'variation' => new CircuitVariationResource($variation),
         ]);
     }
 

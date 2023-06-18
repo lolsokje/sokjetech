@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\GetCircuits;
 use App\Http\Requests\CircuitCreateRequest;
 use App\Http\Requests\CircuitFilterRequest;
+use App\Http\Resources\Circuit\CircuitVariationResource;
 use App\Http\Resources\CircuitResource;
 use App\Models\Circuit;
 use App\Models\Climate;
@@ -52,7 +53,7 @@ class CircuitController extends Controller
 
         return Inertia::render('Circuits/Edit', [
             'circuit' => $circuit,
-            'variations' => $circuit->variations,
+            'variations' => CircuitVariationResource::collection($circuit->variations),
             'climates' => Climate::with('conditions')->get(),
         ]);
     }
