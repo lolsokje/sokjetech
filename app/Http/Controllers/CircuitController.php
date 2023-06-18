@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\GetCircuits;
-use App\Http\Requests\CircuitCreateRequest;
+use App\Http\Requests\Circuit\CircuitCreateRequest;
+use App\Http\Requests\Circuit\CircuitUpdateRequest;
 use App\Http\Requests\CircuitFilterRequest;
 use App\Http\Resources\Circuit\CircuitVariationResource;
 use App\Http\Resources\CircuitResource;
@@ -41,7 +42,10 @@ class CircuitController extends Controller
 
     public function store(CircuitCreateRequest $request): RedirectResponse
     {
-        $request->user()->circuits()->create($request->validated());
+        /** @var Circuit $circuit */
+        $circuit = $request->user()->circuits()->create($request->circuitData());
+
+        $circuit->variations()->create($request->variationData());
 
         return redirect(route('circuits.index'))
             ->with('notice', 'Circuit created');
@@ -58,7 +62,7 @@ class CircuitController extends Controller
         ]);
     }
 
-    public function update(CircuitCreateRequest $request, Circuit $circuit): RedirectResponse
+    public function update(CircuitUpdateRequest $request, Circuit $circuit): RedirectResponse
     {
         $this->authorize('alter', $circuit);
 
