@@ -13,6 +13,35 @@
 
         <ClimateSelect :climates="climates" v-model="form.default_climate_id"/>
 
+        <h5>Track variations</h5>
+
+        <InertiaLink :href="route('circuits.variations.create', circuit)" class="btn btn-secondary my-3">
+            Add variation
+        </InertiaLink>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th class="text-center">Length</th>
+                <th class="text-center">Laptime</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="variation in variations" :key="variation.id">
+                <td class="padded-left">{{ variation.name }}</td>
+                <td class="medium-centered">{{ variation.length }}</td>
+                <td class="medium-centered">{{ variation.readable_laptime }}</td>
+                <td class="smallest-centered">
+                    <InertiaLink :href="route('circuits.variations.edit', [circuit, variation])">
+                        edit
+                    </InertiaLink>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
         <div class="mb-3">
             <input type="checkbox" class="form-check-inline" id="shared" v-model="form.shared">
             <label for="shared" class="form-check-label">Share with others</label>
@@ -30,9 +59,11 @@ import Circuit from '@/Interfaces/Circuit';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import Climate from '@/Interfaces/Climate';
 import ClimateSelect from '@/Components/ClimateSelect.vue';
+import CircuitVariation from '@/Interfaces/CircuitVariation';
 
 const props = defineProps<{
     circuit: Circuit,
+    variations: CircuitVariation[],
     climates: Climate[],
 }>();
 
