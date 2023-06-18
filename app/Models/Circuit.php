@@ -25,6 +25,11 @@ class Circuit extends SnowflakeModel
         return $this->belongsTo(User::class);
     }
 
+    public function variations(): HasMany
+    {
+        return $this->hasMany(CircuitVariation::class);
+    }
+
     public function races(): HasMany
     {
         return $this->hasMany(Race::class);
