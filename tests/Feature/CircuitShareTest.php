@@ -3,6 +3,7 @@
 use App\Models\Circuit;
 use App\Models\Climate;
 use App\Models\User;
+use App\Support\LaptimeFormatter;
 use Inertia\Testing\AssertableInertia as Assert;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -18,6 +19,8 @@ test('an authenticated user can share circuits with others', function () {
             'country' => 'nl',
             'default_climate_id' => Climate::factory()->create()->id,
             'shared' => true,
+            'length' => fake()->numberBetween(4500, 7000),
+            'base_laptime' => LaptimeFormatter::toString(fake()->numberBetween(66000, 106000)),
         ])
         ->assertRedirect();
 

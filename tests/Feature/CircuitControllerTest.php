@@ -1,9 +1,11 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\CircuitVariation;
 use App\Models\Climate;
 use App\Models\Race;
 use App\Models\User;
+use App\Support\LaptimeFormatter;
 use Inertia\Testing\AssertableInertia as Assert;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -12,9 +14,11 @@ test('an authenticated user can create a circuit', function () {
     $user = User::factory()->create();
     $this->actingAs($user)
         ->post(route('circuits.store'), [
-            'name' => 'Zandvoort',
-            'country' => 'nl',
+            'name' => fake()->city(),
+            'country' => fake()->countryCode(),
             'default_climate_id' => Climate::factory()->create()->id,
+            'length' => fake()->numberBetween(4500, 7000),
+            'base_laptime' => LaptimeFormatter::toString(fake()->numberBetween(66000, 106000)),
         ])
         ->assertRedirect(route('circuits.index'));
 
@@ -154,3 +158,16 @@ test('a circuit cannot be removed once it has been used for a race', function ()
 
     assertDatabaseCount('circuits', 1);
 })->throws(Exception::class);
+
+it('creates a variation when creating a circuit', function () {
+    $this->actingAs(User::factory()->create())
+        ->post(route('circuits.store'), [
+            'name' => fake()->city(),
+            'country' => fake()->countryCode(),
+            'default_climate_id' => Climate::factory()->create()->id,
+            'length' => fake()->numberBetween(4500, 7000),
+            'base_laptime' => LaptimeFormatter::toString(fake()->numberBetween(66000, 106000)),
+        ]);
+
+    $this->assertCount(1, CircuitVariation::all());
+});
