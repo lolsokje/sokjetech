@@ -52,6 +52,7 @@ class CircuitController extends Controller
 
         return Inertia::render('Circuits/Edit', [
             'circuit' => $circuit,
+            'variations' => $circuit->variations,
             'climates' => Climate::with('conditions')->get(),
         ]);
     }
