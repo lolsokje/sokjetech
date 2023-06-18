@@ -18,6 +18,16 @@
             <label for="shared" class="form-check-label">Share with others</label>
         </div>
 
+        <div class="mb-3">
+            <label for="length" class="form-label">Length (in meters)</label>
+            <input id="length" type="number" v-model="form.length" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="base_laptime" class="form-label">Base laptime (in the format mm:ss.xxx)</label>
+            <input id="base_laptime" type="text" v-model="form.base_laptime" class="form-control" required>
+        </div>
+
         <button class="btn btn-primary">Create</button>
     </form>
 </template>
@@ -34,18 +44,24 @@ interface Props {
     climates: Climate[],
 }
 
-const props = defineProps<Props>();
-
-const form: InertiaForm<{
+interface Form {
     name: string | null,
     country: string | null,
     shared: boolean,
     default_climate_id: number | null,
-}> = useForm({
+    length: number,
+    base_laptime: string,
+}
+
+const props = defineProps<Props>();
+
+const form: InertiaForm<Form> = useForm({
     name: null,
     country: null,
     shared: false,
     default_climate_id: props.climates[0].id,
+    length: 0,
+    base_laptime: '',
 });
 
 function setCountry (country: string) {
