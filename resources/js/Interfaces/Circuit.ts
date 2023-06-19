@@ -1,4 +1,5 @@
 import Climate from '@/Interfaces/Climate';
+import CircuitVariation from '@/Interfaces/Circuit/CircuitVariation';
 
 export default interface Circuit {
     id: string,
@@ -8,6 +9,7 @@ export default interface Circuit {
     default_climate_id: string,
     shared: boolean,
     races?: Array<object>,
-    default_climate?: Climate,
+    default_climate: Climate,
     races_count?: number,
+    variations: CircuitVariation[],
 }

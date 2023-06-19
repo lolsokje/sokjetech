@@ -112,53 +112,63 @@
     <StintFilterModal ref="stintFilterModal" @selected="selected"/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import SearchableDropdown from '@/Shared/SearchableDropdown.vue';
-import { defaultStint } from '@/Composables/useDefaultStint';
-import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint';
+import { defaultStint } from '@/Composables/useDefaultStint.js';
+import { addStint, copyStint, getLastStintOrder } from '@/Composables/useEditStint.js';
 import StintFilterModal from '@/Components/StintFilterModal.vue';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import ClimateSelect from '@/Components/ClimateSelect.vue';
+import Circuit from '@/Interfaces/Circuit';
+import Climate from '@/Interfaces/Climate';
+import SeasonInterface from '@/Interfaces/Season';
+import CircuitVariation from '@/Interfaces/Circuit/CircuitVariation';
+import RaceStint from '@/Interfaces/RaceStint';
+import CircuitCollection from '@/Interfaces/Circuit/CircuitCollection';
 
-const props = defineProps({
-    season: {
-        type: Object,
-        required: true,
-    },
-    circuits: {
-        type: Object,
-        required: true,
-    },
-    climates: Array,
-});
+interface Props {
+    season: SeasonInterface,
+    circuits: CircuitCollection,
+    climates: Climate[],
+}
+
+interface Form {
+    name: string,
+    circuit_id: string,
+    circuit_variation_id: string,
+    stints: RaceStint[],
+    climate_id: string,
+}
+
+const props = defineProps<Props>();
 
 const placeholder = `${props.season.year} Example Grand Prix`;
 
 const stintFilterModal = ref();
 
-const form = useForm({
+const form = useForm<Form>({
     name: '',
     circuit_id: '',
     circuit_variation_id: '',
-    stints: [ defaultStint ],
+    stints: [ defaultStint ] as RaceStint[],
     climate_id: '',
 });
 
-const variations = ref([]);
-const selectAll = ref(false);
+const variations: Ref<CircuitVariation[]> = ref([]);
+const selectAll: Ref<boolean> = ref(false);
 
-function deleteStint (number) {
+const deleteStint = (number: number): void => {
     form.stints = form.stints.filter((stint) => stint.order !== number);
 
     form.stints.forEach((stint, index) => {
         stint.order = index + 1;
     });
-}
+};
 
-function setCircuit (circuit) {
+const setCircuit = (circuit: Circuit): void => {
     form.circuit_id = circuit ? circuit.id : '';
 
     form.climate_id = circuit.default_climate.id;
@@ -166,18 +176,18 @@ function setCircuit (circuit) {
     variations.value = circuit.variations;
 
     form.circuit_variation_id = variations.value[0].id;
-}
+};
 
 const showDialog = () => {
     stintFilterModal.value.showDialog();
 };
 
-const selected = (stint) => {
+const selected = (stint: RaceStint): void => {
     stint.order = getLastStintOrder(form.stints) + 1;
     form.stints.push(stint);
 };
 
-const selectAllRolls = () => {
+const selectAllRolls = (): void => {
     form.stints.forEach((stint) => {
         stint.reliability = true;
         stint.use_team_rating = true;
@@ -186,14 +196,14 @@ const selectAllRolls = () => {
     });
 };
 
-const checkSelectAllRollsCheckbox = (checked) => {
+const checkSelectAllRollsCheckbox = (checked: boolean): void => {
     if (! checked) {
         selectAll.value = false;
     }
 };
 </script>
 
-<script>
+<script lang="ts">
 import Season from '@/Layouts/Season.vue';
 
 export default { layout: Season };
