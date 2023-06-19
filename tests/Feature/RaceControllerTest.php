@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\CircuitVariation;
 use App\Models\Climate;
 use App\Models\Race;
 use App\Models\Season;
@@ -56,6 +57,7 @@ test('a universe owner can update races', function () {
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$season, $race]), [
             'circuit_id' => $race->circuit->id,
+            'circuit_variation_id' => $race->variation->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
             'stints' => $race->stints->toArray(),
@@ -89,6 +91,7 @@ test('an authenticated user can\'t update another user\'s race', function () {
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$race->season, $race]), [
             'circuit_id' => $race->circuit->id,
+            'circuit_variation_id' => $race->variation->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
             'stints' => $race->stints,
@@ -107,6 +110,7 @@ it('adds new races after already existing races', function () {
     $this->actingAs($user)
         ->post(route('seasons.races.store', [$season]), [
             'circuit_id' => Circuit::factory()->create()->id,
+            'circuit_variation_id' => CircuitVariation::factory()->create()->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
             'stints' => [['min_rng' => 0, 'max_rng' => 30]],
@@ -128,6 +132,7 @@ it('adds new races after reordered races', function () {
     $this->actingAs($user)
         ->post(route('seasons.races.store', [$season]), [
             'circuit_id' => Circuit::factory()->create()->id,
+            'circuit_variation_id' => CircuitVariation::factory()->create()->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
             'stints' => [['min_rng' => 0, 'max_rng' => 30]],
@@ -459,8 +464,11 @@ function getRaceCreationData(Season $season, ?User $user = null): array
         $user = User::factory()->create();
     }
 
+    $circuit = Circuit::factory()->for($user)->create();
+
     return [
-        'circuit_id' => Circuit::factory()->for($user)->create()->id,
+        'circuit_id' => $circuit->id,
+        'circuit_variation_id' => CircuitVariation::factory()->for($circuit)->create()->id,
         'climate_id' => Climate::factory()->create()->id,
         'name' => "$season->year Test Grand Prix",
         'stints' => [['min_rng' => 0, 'max_rng' => 30]],

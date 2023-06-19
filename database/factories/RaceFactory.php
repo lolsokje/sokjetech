@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Circuit;
+use App\Models\CircuitVariation;
 use App\Models\Race;
 use App\Models\Season;
 use App\Models\Stint;
@@ -20,6 +21,7 @@ class RaceFactory extends Factory
         return [
             'season_id' => Season::factory(),
             'circuit_id' => Circuit::factory(),
+            'circuit_variation_id' => CircuitVariation::factory(),
             'name' => "{$this->faker->country()} Grand Prix",
             'order' => 1,
             'qualifying_started' => false,
