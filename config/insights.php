@@ -145,6 +145,7 @@ return [
             // Data transfer objects need public properties
             'exclude' => [
                 'app/DataTransferObjects',
+                'app/Http/Resources', // allow public static $wrap = false usage
             ],
         ],
     ],

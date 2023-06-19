@@ -27,7 +27,7 @@ class CircuitController extends Controller
         $circuits = (new GetCircuits($request))->handle();
 
         return Inertia::render('Circuits/Index', [
-            'circuits' => CircuitResource::collection($circuits)->toArray($request),
+            'circuits' => CircuitResource::collection($circuits),
             'links' => $circuits->linkCollection(),
             'filters' => $request->validated(),
         ]);

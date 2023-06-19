@@ -114,7 +114,7 @@ it('shows all circuits created by a user on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Circuits/Index')
-                ->has('circuits', 5)
+                ->has('circuits.data', 5)
                 ->has('filters'),
         );
 });

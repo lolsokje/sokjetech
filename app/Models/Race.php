@@ -37,6 +37,11 @@ class Race extends SnowflakeModel
         return $this->belongsTo(Circuit::class);
     }
 
+    public function variation(): BelongsTo
+    {
+        return $this->belongsTo(CircuitVariation::class, 'circuit_variation_id');
+    }
+
     public function stints(): HasMany
     {
         return $this->hasMany(Stint::class);

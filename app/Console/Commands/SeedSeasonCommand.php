@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Circuit;
+use App\Models\CircuitVariation;
 use App\Models\EngineSeason;
 use App\Models\Entrant;
 use App\Models\Season;
@@ -111,8 +112,14 @@ class SeedSeasonCommand extends Command
                 'country' => $circuit->country,
             ]);
 
+            $variation = CircuitVariation::factory()->for($createdCircuit)->create([
+                'length' => $circuit->length,
+                'base_laptime' => $circuit->base_laptime,
+            ]);
+
             $createdRace = $this->season->races()->create([
                 'circuit_id' => $createdCircuit->id,
+                'circuit_variation_id' => $variation->id,
                 'name' => $circuit->race_name,
                 'order' => $key + 1,
             ]);

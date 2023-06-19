@@ -9,7 +9,7 @@
 
     <input v-model="params.search" class="form-control mb-3 w-25" placeholder="Search" type="text">
 
-    <template v-if="circuits.length">
+    <template v-if="circuits.data.length">
         <table class="table">
             <thead>
             <tr>
@@ -26,7 +26,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="circuit in circuits" v-bind:key="circuit.id">
+            <tr v-for="circuit in circuits.data" v-bind:key="circuit.id">
                 <td class="padded-left">{{ circuit.name }}</td>
                 <td class="small-centered">
                     <CountryFlag :country="circuit.country"/>
@@ -53,14 +53,14 @@ import { reactive, watch } from 'vue';
 import OrderIcon from '@/Shared/OrderIcon.vue';
 import Pagination from '@/Shared/Pagination.vue';
 import { filter, sortTable } from '@/Composables/useTableFiltering.js';
-import Circuit from '@/Interfaces/Circuit';
 import Filters from '@/Interfaces/Filters';
 import PaginationLink from '@/Interfaces/PaginationLink';
 import { router } from '@inertiajs/vue3';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import CircuitCollection from '@/Interfaces/Circuit/CircuitCollection';
 
 interface Props {
-    circuits: Array<Circuit>,
+    circuits: CircuitCollection,
     links: Array<PaginationLink>,
     filters: Filters,
 }

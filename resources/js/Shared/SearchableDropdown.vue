@@ -1,13 +1,15 @@
 <template>
-    <label class="form-label">{{ label }}</label>
-    <div v-if="items" class="dropdown mb-3">
-        <input v-model="searchFilter" class="dropdown-input form-control" @blur="exit" @focus="showItems">
+    <div :class="classString">
+        <label class="form-label">{{ label }}</label>
+        <div v-if="items" class="dropdown mb-3">
+            <input v-model="searchFilter" class="dropdown-input form-control" @blur="exit" @focus="showItems">
 
-        <div v-show="itemsShown" class="dropdown-content">
-            <div v-for="(item, index) in filteredItems" :key="index" class="dropdown-item"
-                 @mousedown="selectItem(item)"
-            >
-                {{ item[textKey] }}
+            <div v-show="itemsShown" class="dropdown-content">
+                <div v-for="(item, index) in filteredItems" :key="index" class="dropdown-item"
+                     @mousedown="selectItem(item)"
+                >
+                    {{ item[textKey] }}
+                </div>
             </div>
         </div>
     </div>
@@ -42,6 +44,10 @@ const props = defineProps({
         required: false,
         default: 'Select an option',
     },
+    classString: {
+        type: String,
+        required: false,
+    },
 });
 
 const selected = ref(props.selectedItem);
@@ -75,7 +81,7 @@ function exit () {
         return;
     }
 
-    if (!selected.value[props.valueKey]) {
+    if (! selected.value[props.valueKey]) {
         selected.value = {};
         searchFilter.value = '';
     } else {
@@ -105,40 +111,40 @@ export default { name: 'SearchableDropdown' };
 
 <style lang="scss" scoped>
 .dropdown {
-    .dropdown-input {
-        //border: 1px solid #e7ecf5;
-        display: block;
-        width: 50%;
+  .dropdown-input {
+    //border: 1px solid #e7ecf5;
+    display: block;
+    //width: 50%;
 
-        &:hover {
-            //background: #f8f8fa;
-        }
+    &:hover {
+      //background: #f8f8fa;
     }
+  }
 
-    .dropdown-content {
-        position: absolute;
-        background-color: #fff;
-        width: 50%;
-        max-height: 350px;
-        overflow: auto;
-        z-index: 3;
+  .dropdown-content {
+    position: absolute;
+    background-color: #fff;
+    width: 50%;
+    max-height: 350px;
+    overflow: auto;
+    z-index: 3;
 
-        .dropdown-item {
-            color: black;
-            line-height: 1em;
-            padding: 8px;
-            text-decoration: none;
-            display: block;
-            cursor: pointer;
+    .dropdown-item {
+      color: black;
+      line-height: 1em;
+      padding: 8px;
+      text-decoration: none;
+      display: block;
+      cursor: pointer;
 
-            &:hover {
-                background-color: #e7ecf5;
-            }
-        }
+      &:hover {
+        background-color: #e7ecf5;
+      }
     }
+  }
 
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 }
 </style>

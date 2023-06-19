@@ -15,7 +15,7 @@ class ShowCircuitDatabaseIndexPageController extends Controller
 
         return Inertia::render('Database/Circuits/Index', [
             'links' => $circuits->linkCollection(),
-            'circuits' => CircuitResource::collection($circuits)->toArray($request),
+            'circuits' => CircuitResource::collection($circuits),
             'filters' => $request->validated(),
         ]);
     }
