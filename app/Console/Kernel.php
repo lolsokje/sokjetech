@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateDefaultCircuitVariationsCommand;
 use App\Console\Commands\CreateStandingsCommand;
 use App\Console\Commands\ResetRaceCommand;
 use App\Console\Commands\ResetSeasonCommand;
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
         UpdateQualifyingDetailsCommand::class,
         ResetRaceCommand::class,
         ResetSeasonCommand::class,
+        CreateDefaultCircuitVariationsCommand::class,
     ];
 
     /**
