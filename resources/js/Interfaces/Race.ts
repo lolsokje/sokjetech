@@ -4,6 +4,9 @@ import RaceStint from '@/Interfaces/RaceStint';
 
 export interface Race {
     id: string,
+    circuit_id: string,
+    circuit_variation_id: string,
+    climate_id: string,
     name: string,
     order: number,
     qualifying_started: boolean,
