@@ -9,7 +9,25 @@
             <input id="name" v-model="form.name" :placeholder="placeholder" class="form-control" type="text">
         </div>
 
-        <SearchableDropdown :items="circuits" label="Select a circuit" text-key="name" @selected="setCircuit"/>
+        <div class="row">
+            <SearchableDropdown
+                    class="col-6"
+                    :items="circuits.data"
+                    label="Select a circuit"
+                    text-key="name"
+                    @selected="setCircuit"
+            />
+
+            <div class="col-6">
+                <label for="variation" class="form-label">Select a variation</label>
+                <select id="variation" class="form-select" v-model="form.circuit_variation_id" required>
+                    <option v-for="variation in variations" :key="variation.id" :value="variation.id">
+                        {{ variation.name }} ({{ variation.length.km }}km/{{ variation.length.m }}m -
+                        {{ variation.laptime.readable }})
+                    </option>
+                </select>
+            </div>
+        </div>
 
         <ClimateSelect :climates="climates" v-model="form.climate_id"/>
 
@@ -111,7 +129,7 @@ const props = defineProps({
         required: true,
     },
     circuits: {
-        type: Array,
+        type: Object,
         required: true,
     },
     climates: Array,
@@ -124,10 +142,12 @@ const stintFilterModal = ref();
 const form = useForm({
     name: '',
     circuit_id: '',
+    circuit_variation_id: '',
     stints: [ defaultStint ],
     climate_id: '',
 });
 
+const variations = ref([]);
 const selectAll = ref(false);
 
 function deleteStint (number) {
@@ -141,7 +161,11 @@ function deleteStint (number) {
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 
-    form.climate_id = circuit.default_climate_id;
+    form.climate_id = circuit.default_climate.id;
+
+    variations.value = circuit.variations;
+
+    form.circuit_variation_id = variations.value[0].id;
 }
 
 const showDialog = () => {

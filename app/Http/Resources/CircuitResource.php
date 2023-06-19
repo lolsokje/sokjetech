@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Circuit\CircuitVariationResource;
 use App\Models\Circuit;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,6 +20,7 @@ class CircuitResource extends JsonResource
             'default_climate' => $climate,
             'shared' => $this->shared,
             'races_count' => $this->races_count ?? null,
+            'variations' => CircuitVariationResource::collection($this->whenLoaded('variations')),
         ];
     }
 }

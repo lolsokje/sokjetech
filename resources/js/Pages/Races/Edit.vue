@@ -13,10 +13,26 @@
             <input id="name" v-model="form.name" class="form-control" type="text" :placeholder="placeholder">
         </div>
 
-        <SearchableDropdown
-                :items="circuits" :selected-item="selectedCircuit" label="Select a circuit" text-key="name"
-                @selected="setCircuit"
-        />
+        <div class="row">
+            <SearchableDropdown
+                    class="col-6"
+                    :items="circuits.data"
+                    :selected-item="selectedCircuit"
+                    label="Select a circuit"
+                    text-key="name"
+                    @selected="setCircuit"
+            />
+
+            <div class="col-6">
+                <label for="variation" class="form-label">Select a variation</label>
+                <select id="variation" class="form-select" v-model="form.circuit_variation_id" required>
+                    <option v-for="variation in variations" :key="variation.id" :value="variation.id">
+                        {{ variation.name }} ({{ variation.length.km }}km/{{ variation.length.m }}m -
+                        {{ variation.laptime.readable }})
+                    </option>
+                </select>
+            </div>
+        </div>
 
         <ClimateSelect :climates="climates" v-model="form.climate_id"/>
 
@@ -118,7 +134,7 @@ const props = defineProps({
         required: true,
     },
     circuits: {
-        type: Array,
+        type: Object,
         required: true,
     },
     race: {
@@ -135,13 +151,15 @@ const stintFilterModal = ref();
 const form = useForm({
     name: props.race.name,
     circuit_id: props.race.circuit_id,
+    circuit_variation_id: props.race.circuit_variation_id,
     stints: props.race.stints,
     climate_id: props.race.climate_id,
 });
 
 const selectAll = ref(false);
 
-const selectedCircuit = props.circuits.find((circuit) => circuit.id === form.circuit_id);
+const selectedCircuit = props.circuits.data.find((circuit) => circuit.id === form.circuit_id);
+const variations = ref(selectedCircuit.variations);
 
 function deleteStint (order) {
     form.stints = form.stints.filter((stint) => stint.order !== order);
@@ -154,7 +172,11 @@ function deleteStint (order) {
 function setCircuit (circuit) {
     form.circuit_id = circuit ? circuit.id : '';
 
-    form.climate_id = circuit.default_climate_id;
+    form.climate_id = circuit.default_climate.id;
+
+    variations.value = circuit.variations;
+
+    form.circuit_variation_id = variations.value[0].id;
 }
 
 const showDialog = () => {

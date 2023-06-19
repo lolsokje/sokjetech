@@ -10,6 +10,7 @@
   "require": {
     "php": "^8.2",
     "bugsnag/bugsnag-laravel": "^2.0",
+    "doctrine/dbal": "^3.6",
     "friendsofphp/php-cs-fixer": "^3.3",
     "godruoyi/php-snowflake": "^2.0",
     "guzzlehttp/guzzle": "^7.0.1",

@@ -61,7 +61,7 @@ it('only shows shared circuits on the circuit database index page', function () 
         ->assertOk()
         ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Circuits/Index')
-            ->has('circuits', 5, fn(Assert $prop) => $prop
+            ->has('circuits.data', 5, fn(Assert $prop) => $prop
                 ->where('shared', true)
                 ->etc()),
         );
@@ -81,7 +81,7 @@ it('groups circuits by name, country and user', function () {
         ->assertOk()
         ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Circuits/Index')
-            ->has('circuits', 2));
+            ->has('circuits.data', 2));
 });
 
 test('an authenticated user can copy a circuit', function () {
@@ -113,7 +113,7 @@ it('paginates shared circuits', function () {
         ->assertOk()
         ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Circuits/Index')
-            ->has('circuits', 20)
+            ->has('circuits.data', 20)
             ->has('links', 4));
 });
 
@@ -127,7 +127,7 @@ test('shared circuits can be search', function () {
         ->get(route('database.circuits.index', ['search' => 'match']))
         ->assertOk()
         ->assertInertia(fn(Assert $assert) => $assert
-            ->has('circuits', 1, fn(Assert $prop) => $prop
+            ->has('circuits.data', 1, fn(Assert $prop) => $prop
                 ->where('name', 'match')
                 ->etc()));
 });

@@ -12,7 +12,7 @@ it('does not run if confirmation is denied', function () {
         ->assertFailed();
 });
 
-it('it seeds the database', function () {
+it('seeds the database', function () {
     $this->artisan('season:seed')
         ->expectsConfirmation('This will clear the entire database, are you sure you want to continue?', 'yes')
         ->assertOk();

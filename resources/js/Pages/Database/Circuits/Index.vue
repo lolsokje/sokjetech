@@ -18,7 +18,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="circuit in circuits" :key="circuit.id">
+        <tr v-for="circuit in circuits.data" :key="circuit.id">
             <td class="padded-left">{{ circuit.name }}</td>
             <td class="smallest-centered">
                 <CountryFlag :country="circuit.country"/>
@@ -41,7 +41,7 @@ import Pagination from '@/Shared/Pagination.vue';
 import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
-    circuits: Array,
+    circuits: Object,
     links: Array,
     filters: Object,
 });

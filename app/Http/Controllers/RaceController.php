@@ -8,6 +8,7 @@ use App\Actions\Races\Stints\UpdateStintsAction;
 use App\Actions\Races\StoreRaceAction;
 use App\Actions\Races\UpdateRaceOrderAction;
 use App\Http\Requests\RaceCreateRequest;
+use App\Http\Resources\CircuitResource;
 use App\Http\Resources\RaceOverviewPoleResource;
 use App\Http\Resources\RaceOverviewWinnerResource;
 use App\Models\Climate;
@@ -48,9 +49,11 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
+        $circuits = auth()->user()->circuits()->with('variations', 'defaultClimate')->get();
+
         return Inertia::render('Races/Create', [
             'season' => $season,
-            'circuits' => auth()->user()->circuits,
+            'circuits' => CircuitResource::collection($circuits),
             'climates' => Climate::with('conditions')->get(),
         ]);
     }
@@ -79,10 +82,12 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
+        $circuits = auth()->user()->circuits()->with('variations', 'defaultClimate')->get();
+
         return Inertia::render('Races/Edit', [
             'season' => $season,
             'race' => $race->load('stints'),
-            'circuits' => auth()->user()->circuits,
+            'circuits' => CircuitResource::collection($circuits),
             'climates' => Climate::with('conditions')->get(),
         ]);
     }

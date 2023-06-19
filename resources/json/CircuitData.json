@@ -1,112 +1,156 @@
 [
-  {
-    "circuit_name": "Bahrain International Circuit",
-    "country": "BH",
-    "race_name": "2022 Bahrain Grand Prix"
-  },
-  {
-    "circuit_name": "Jeddah Corniche Circuit",
-    "country": "SA",
-    "race_name": "2022 Saudi Arabian Grand Prix"
-  },
-  {
-    "circuit_name": "Albert Park Circuit",
-    "country": "AU",
-    "race_name": "2022 Australian Grand Prix"
-  },
-  {
-    "circuit_name": "Autodromo Internazionale Enzo e Dino Ferrari",
-    "country": "SM",
-    "race_name": "2022 Emilia Romagna Grand Prix"
-  },
-  {
-    "circuit_name": "Miami International Autodrome",
-    "country": "US",
-    "race_name": "2022 Miami Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit de Barcelona-Catalunya",
-    "country": "ES",
-    "race_name": "2022 Spanish Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit de Monaco",
-    "country": "MC",
-    "race_name": "2022 Monaco Grand Prix"
-  },
-  {
-    "circuit_name": "Baku City Circuit",
-    "country": "AZ",
-    "race_name": "2022 Azerbaijan Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit Gilles Villeneuve",
-    "country": "CA",
-    "race_name": "2022 Canadian Grand Prix"
-  },
-  {
-    "circuit_name": "Silverstone Circuit",
-    "country": "GB",
-    "race_name": "2022 British Grand Prix"
-  },
-  {
-    "circuit_name": "Red Bull Ring",
-    "country": "AT",
-    "race_name": "2022 Austrian Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit Paul Ricard",
-    "country": "FR",
-    "race_name": "2022 French Grand Prix"
-  },
-  {
-    "circuit_name": "Hungaroring",
-    "country": "HU",
-    "race_name": "2022 Hungarian Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit de Spa-Francorchamps",
-    "country": "BE",
-    "race_name": "2022 Belgian Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit Zandvoort",
-    "country": "NL",
-    "race_name": "2022 Dutch Grand Prix"
-  },
-  {
-    "circuit_name": "Monza Circuit",
-    "country": "IT",
-    "race_name": "2022 Italian Grand Prix"
-  },
-  {
-    "circuit_name": "Marina Bay Street Circuit",
-    "country": "SG",
-    "race_name": "2022 Singapore Grand Prix"
-  },
-  {
-    "circuit_name": "Suzuka International Racing Course",
-    "country": "JP",
-    "race_name": "2022 Japanese Grand Prix"
-  },
-  {
-    "circuit_name": "Circuit of the Americas",
-    "country": "US",
-    "race_name": "2022 United States Grand Prix"
-  },
-  {
-    "circuit_name": "Autoódromo Hermanos Rodríguez",
-    "country": "MX",
-    "race_name": "2022 Mexican Grand Prix"
-  },
-  {
-    "circuit_name": "Interlagos Circuit",
-    "country": "BR",
-    "race_name": "2022 Brazilian Grand Prix"
-  },
-  {
-    "circuit_name": "Yas Marina Circuit",
-    "country": "AE",
-    "race_name": "2022 Abu Dhabi Grand Prix"
-  }
+    {
+        "circuit_name": "Bahrain International Circuit",
+        "country": "BH",
+        "race_name": "2022 Bahrain Grand Prix",
+        "length": 5412,
+        "base_laptime": "1:30.558"
+    },
+    {
+        "circuit_name": "Jeddah Corniche Circuit",
+        "country": "SA",
+        "race_name": "2022 Saudi Arabian Grand Prix",
+        "length": 6174,
+        "base_laptime": "1:28.200"
+    },
+    {
+        "circuit_name": "Albert Park Circuit",
+        "country": "AU",
+        "race_name": "2022 Australian Grand Prix",
+        "length": 5278,
+        "base_laptime": "1:17.868"
+    },
+    {
+        "circuit_name": "Autodromo Internazionale Enzo e Dino Ferrari",
+        "country": "SM",
+        "race_name": "2022 Emilia Romagna Grand Prix",
+        "length": 4909,
+        "base_laptime": "1:18.793"
+    },
+    {
+        "circuit_name": "Miami International Autodrome",
+        "country": "US",
+        "race_name": "2022 Miami Grand Prix",
+        "length": 5412,
+        "base_laptime": "1:28.786"
+    },
+    {
+        "circuit_name": "Circuit de Barcelona-Catalunya",
+        "country": "ES",
+        "race_name": "2022 Spanish Grand Prix",
+        "length": 4675,
+        "base_laptime": "1:18.750"
+    },
+    {
+        "circuit_name": "Circuit de Monaco",
+        "country": "MC",
+        "race_name": "2022 Monaco Grand Prix",
+        "length": 3337,
+        "base_laptime": "1:11.376"
+    },
+    {
+        "circuit_name": "Baku City Circuit",
+        "country": "AZ",
+        "race_name": "2022 Azerbaijan Grand Prix",
+        "length": 6003,
+        "base_laptime": "1:41.359"
+    },
+    {
+        "circuit_name": "Circuit Gilles Villeneuve",
+        "country": "CA",
+        "race_name": "2022 Canadian Grand Prix",
+        "length": 4361,
+        "base_laptime": "1:10.240"
+    },
+    {
+        "circuit_name": "Silverstone Circuit",
+        "country": "GB",
+        "race_name": "2022 British Grand Prix",
+        "length": 5891,
+        "base_laptime": "1:26.134"
+    },
+    {
+        "circuit_name": "Red Bull Ring",
+        "country": "AT",
+        "race_name": "2022 Austrian Grand Prix",
+        "length": 4318,
+        "base_laptime": "1:04.984"
+    },
+    {
+        "circuit_name": "Circuit Paul Ricard",
+        "country": "FR",
+        "race_name": "2022 French Grand Prix",
+        "length": 5842,
+        "base_laptime": "1:30.872"
+    },
+    {
+        "circuit_name": "Hungaroring",
+        "country": "HU",
+        "race_name": "2022 Hungarian Grand Prix",
+        "length": 4381,
+        "base_laptime": "1:17.377"
+    },
+    {
+        "circuit_name": "Circuit de Spa-Francorchamps",
+        "country": "BE",
+        "race_name": "2022 Belgian Grand Prix",
+        "length": 7004,
+        "base_laptime": "1:43.665"
+    },
+    {
+        "circuit_name": "Circuit Zandvoort",
+        "country": "NL",
+        "race_name": "2022 Dutch Grand Prix",
+        "length": 4259,
+        "base_laptime": "1:10.342"
+    },
+    {
+        "circuit_name": "Monza Circuit",
+        "country": "IT",
+        "race_name": "2022 Italian Grand Prix",
+        "length": 5793,
+        "base_laptime": "1:20.161"
+    },
+    {
+        "circuit_name": "Marina Bay Street Circuit",
+        "country": "SG",
+        "race_name": "2022 Singapore Grand Prix",
+        "length": 5063,
+        "base_laptime": "1:36.217"
+    },
+    {
+        "circuit_name": "Suzuka International Racing Course",
+        "country": "JP",
+        "race_name": "2022 Japanese Grand Prix",
+        "length": 5807,
+        "base_laptime": "1:29.304"
+    },
+    {
+        "circuit_name": "Circuit of the Americas",
+        "country": "US",
+        "race_name": "2022 United States Grand Prix",
+        "length": 5513,
+        "base_laptime": "1:34.356"
+    },
+    {
+        "circuit_name": "Autoódromo Hermanos Rodríguez",
+        "country": "MX",
+        "race_name": "2022 Mexican Grand Prix",
+        "length": 4304,
+        "base_laptime": "1:17.775"
+    },
+    {
+        "circuit_name": "Interlagos Circuit",
+        "country": "BR",
+        "race_name": "2022 Brazilian Grand Prix",
+        "length": 4309,
+        "base_laptime": "1:08.372"
+    },
+    {
+        "circuit_name": "Yas Marina Circuit",
+        "country": "AE",
+        "race_name": "2022 Abu Dhabi Grand Prix",
+        "length": 5281,
+        "base_laptime": "1:23.824"
+    }
 ]
