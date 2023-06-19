@@ -13,7 +13,7 @@ export default interface Season {
     format_type: string,
     format: FormatDetails,
     name: string,
-    full_name?: string,
+    full_name: string,
     year: number,
     started: boolean,
     can_start?: boolean,
