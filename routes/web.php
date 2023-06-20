@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BugController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\Circuits\CircuitVariationController;
+use App\Http\Controllers\Circuits\GetCircuitVariationsForSharedCircuitController;
 use App\Http\Controllers\ClimateController;
 use App\Http\Controllers\CompleteQualifyingController;
 use App\Http\Controllers\CompleteSeasonController;
@@ -216,6 +217,8 @@ Route::group([
     Route::group(['prefix' => 'circuits', 'as' => 'circuits.'], function () {
         Route::get('', ShowCircuitDatabaseIndexPageController::class)->name('index');
         Route::post('copy/{circuit}', CopyCircuitController::class)->name('copy');
+
+        Route::get('variations', GetCircuitVariationsForSharedCircuitController::class)->name('variations.index');
     });
 
     Route::group(['prefix' => 'engines', 'as' => 'engines.'], function () {
