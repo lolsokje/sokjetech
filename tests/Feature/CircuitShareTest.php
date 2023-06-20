@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Circuit;
+use App\Models\CircuitVariation;
 use App\Models\Climate;
 use App\Models\User;
 use App\Support\LaptimeFormatter;
@@ -94,6 +95,48 @@ test('an authenticated user can copy a circuit', function () {
 
     assertDatabaseCount('circuits', 2);
     assertCount(1, $user->circuits()->get());
+});
+
+it('copies selected circuit variations', function () {
+    $circuit = Circuit::factory()->shared()->create();
+    [$v1, $v2, $v3] = CircuitVariation::factory(3)->for($circuit)->create();
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('database.circuits.copy', $circuit), [
+            'variations' => [
+                $v1->id,
+                $v3->id,
+            ],
+        ])
+        ->assertRedirectToRoute('database.circuits.index');
+
+    $circuit = $user->circuits()->first();
+
+    $this->assertCount(5, CircuitVariation::all());
+    $this->assertCount(2, $circuit->variations);
+
+    $newVariations = CircuitVariation::query()
+        ->orderBy('id', 'desc')
+        ->limit(2)
+        ->get();
+
+    foreach ($newVariations as $variation) {
+        $this->assertNotNull($circuit->variations()->find($variation->id));
+    }
+});
+
+it('does not copy circuit variations if none have been provided', function () {
+    $circuit = Circuit::factory()->shared()->create();
+    CircuitVariation::factory(3)->for($circuit)->create();
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('database.circuits.copy', $circuit))
+        ->assertRedirectToRoute('database.circuits.index');
+
+    $this->assertCount(3, CircuitVariation::all());
+    $this->assertCount(0, $user->circuits()->first()->variations);
 });
 
 test('an unauthenticated user cannot copy a circuit', function () {
