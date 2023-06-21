@@ -23,6 +23,10 @@
             <input id="base_laptime" type="text" v-model="form.base_laptime" class="form-control" required>
         </div>
 
+        <RatingMultipliers v-model:team="form.team_multiplier"
+                           v-model:engine="form.engine_multiplier"
+        />
+
         <button class="btn btn-primary">Save</button>
     </form>
 </template>
@@ -33,6 +37,7 @@ import { useForm } from '@inertiajs/vue3';
 import Errors from '@/Shared/Errors.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import CircuitVariation from '@/Interfaces/Circuit/CircuitVariation';
+import RatingMultipliers from '@/Components/Form/Circuit/RatingMultipliers.vue';
 
 interface Props {
     circuit: Circuit,
@@ -43,6 +48,8 @@ interface Form {
     name: string,
     length: number,
     base_laptime: string,
+    team_multiplier: number,
+    engine_multiplier: number,
 }
 
 const props = defineProps<Props>();
@@ -51,5 +58,7 @@ const form = useForm<Form>({
     name: props.variation.name,
     length: props.variation.length.default,
     base_laptime: props.variation.laptime.readable,
+    team_multiplier: props.variation.multipliers.team,
+    engine_multiplier: props.variation.multipliers.engine,
 });
 </script>

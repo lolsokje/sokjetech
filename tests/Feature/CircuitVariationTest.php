@@ -160,3 +160,68 @@ test('unauthorised users can not update circuit variations', function (?User $us
 
     $this->assertEquals($name, $variation->fresh()->name);
 })->with('unauthorised');
+
+test('the provided rating multipliers must be at least 0 when creating a circuit variation', function () {
+    $user = User::factory()->create();
+    $circuit = Circuit::factory()->for($user)->create();
+
+    $this->actingAs($user)
+        ->from(route('circuits.variations.create', $circuit))
+        ->post(route('circuits.variations.store', $circuit), [
+            'name' => 'New name',
+            'length' => fake()->numberBetween(4500, 7000),
+            'base_laptime' => LaptimeFormatter::toString(fake()->numberBetween(66000, 106000)),
+            'team_multiplier' => -1,
+            'engine_multiplier' => -1,
+        ])
+        ->assertRedirectToRoute('circuits.variations.create', $circuit)
+        ->assertSessionHasErrors([
+            'team_multiplier' => 'The team multiplier must be at least 0.',
+            'engine_multiplier' => 'The engine multiplier must be at least 0.',
+        ]);
+
+    $this->assertCount(0, $circuit->fresh()->variations);
+});
+
+test('the provided rating multipliers must be at least 0 when updating a circuit variation', function () {
+    $user = User::factory()->create();
+    $circuit = Circuit::factory()->for($user)->create();
+    $variation = CircuitVariation::factory()->for($circuit)->create();
+    $name = $variation->name;
+
+    $this->actingAs($user)
+        ->from(route('circuits.variations.edit', [$circuit, $variation]))
+        ->put(route('circuits.variations.update', [$circuit, $variation]), [
+            'name' => 'New name',
+            'length' => fake()->numberBetween(4500, 7000),
+            'base_laptime' => LaptimeFormatter::toString(fake()->numberBetween(66000, 106000)),
+            'team_multiplier' => -1,
+            'engine_multiplier' => -1,
+        ])
+        ->assertRedirectToRoute('circuits.variations.edit', [$circuit, $variation])
+        ->assertSessionHasErrors([
+            'team_multiplier' => 'The team multiplier must be at least 0.',
+            'engine_multiplier' => 'The engine multiplier must be at least 0.',
+        ]);
+
+    $this->assertEquals($name, $variation->fresh()->name);
+});
+
+it('sets the rating multipliers to 1 when not provided', function () {
+    $user = User::factory()->create();
+    $circuit = Circuit::factory()->for($user)->create();
+
+    $this->actingAs($user)
+        ->from(route('circuits.variations.create', $circuit))
+        ->post(route('circuits.variations.store', $circuit), [
+            'name' => 'New name',
+            'length' => fake()->numberBetween(4500, 7000),
+            'base_laptime' => LaptimeFormatter::toString(fake()->numberBetween(66000, 106000)),
+        ]);
+
+    $this->assertCount(1, $circuit->fresh()->variations);
+
+    $variation = $circuit->variations()->first();
+    $this->assertEquals(1.0, $variation->team_multiplier);
+    $this->assertEquals(1.0, $variation->engine_multiplier);
+});
