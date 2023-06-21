@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Builders\RaceBuilder;
+use App\Enums\RaceType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +14,7 @@ class Race extends SnowflakeModel
 
     protected $casts = [
         'order' => 'integer',
+        'race_type' => RaceType::class,
         'qualifying_started' => 'boolean',
         'qualifying_completed' => 'boolean',
         'started' => 'boolean',
