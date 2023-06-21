@@ -13,6 +13,8 @@ class CircuitVariationRequest extends FormRequest
             'name' => ['required'],
             'length' => ['required', 'numeric', 'min:1'],
             'base_laptime' => ['required', new ValidLaptimeRule],
+            'team_multiplier' => ['nullable', 'numeric', 'min:0'],
+            'engine_multiplier' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 }
