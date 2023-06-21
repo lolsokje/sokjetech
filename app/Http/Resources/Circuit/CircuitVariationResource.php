@@ -18,6 +18,7 @@ class CircuitVariationResource extends CustomJsonResource
             'name' => $this->name,
             'length' => new CircuitVariationLengthResource($this),
             'laptime' => new CircuitVariationLaptimeResource($this),
+            'multipliers' => new CircuitVariationRatingMultiplierResource($this),
         ];
     }
 }

@@ -9,5 +9,9 @@ export default interface CircuitVariation {
     laptime: {
         base: number,
         readable: string,
+    },
+    multipliers: {
+        team: number,
+        engine: number,
     }
 }
