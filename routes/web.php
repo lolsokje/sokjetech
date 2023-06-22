@@ -21,7 +21,6 @@ use App\Http\Controllers\Drivers\ShowDriverGenerationPage;
 use App\Http\Controllers\EngineController;
 use App\Http\Controllers\EngineSeasonController;
 use App\Http\Controllers\EntrantController;
-use App\Http\Controllers\FilterStintsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
@@ -94,8 +93,6 @@ Route::resource('universes', UniverseController::class)->except('destroy');
 
 Route::resource('bugs', BugController::class);
 Route::resource('suggestions', SuggestionController::class);
-
-Route::get('stints', FilterStintsController::class)->name('stints')->middleware('auth');
 
 Route::group(['prefix' => 'universes/{universe}', 'as' => 'universes.'], function () {
     Route::get('drivers/generate', ShowDriverGenerationPage::class)->name('drivers.generate.show');

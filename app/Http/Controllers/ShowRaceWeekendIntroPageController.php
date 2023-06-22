@@ -16,7 +16,6 @@ class ShowRaceWeekendIntroPageController extends Controller
 
         return Inertia::render('RaceWeekend/Intro', [
             'race' => GeneralRaceResource::array($race),
-            'stints' => $race->stints,
             'teamStandings' => $teamStandings,
             'driverStandings' => $driverStandings,
         ]);

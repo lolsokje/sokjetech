@@ -31,5 +31,4 @@ it('seeds the database', function () {
     $this->assertDatabaseCount('racers', 20);
     $this->assertDatabaseCount('engine_seasons', 4);
     $this->assertDatabaseCount('races', 22);
-    $this->assertDatabaseCount('stints', 22 * 3);
 });

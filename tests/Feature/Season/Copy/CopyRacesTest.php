@@ -2,11 +2,10 @@
 
 use App\Models\Race;
 use App\Models\Season;
-use App\Models\Stint;
 use App\Models\User;
 use Illuminate\Validation\UnauthorizedException;
+
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\post;
 use function Pest\Laravel\withoutExceptionHandling;
 use function PHPUnit\Framework\assertCount;
@@ -70,7 +69,6 @@ test('a source season needs races before copying', function () {
         ->assertJson(['error' => 'No races added to the selected season']);
 
     assertCount(0, $newSeason->fresh()->races);
-    assertDatabaseCount('stints', 0);
 });
 
 it('clears existing races before copying new races', function () {
@@ -94,7 +92,6 @@ it('clears existing races before copying new races', function () {
         ])
         ->assertCreated();
 
-    assertCount(RACE_COUNT * 3, Stint::all());
     assertCount(RACE_COUNT, $newSeason->fresh()->races);
 });
 
@@ -112,43 +109,6 @@ test('a universe owner can copy races to a new season', function () {
         ->assertCreated();
 
     assertCount(RACE_COUNT, $newSeason->fresh()->races);
-});
-
-it('copies race stints when instructed to do so', function () {
-    $user = User::factory()->create();
-    $season = createSeasonForUser($user);
-    prepareSeasonRaces($season);
-
-    $newSeason = createSeasonForUser($user);
-
-    actingAs($user)
-        ->post(route('seasons.settings.copy.races', [$newSeason]), [
-            'season_id' => $season->id,
-            'copy_stints' => true,
-        ])
-        ->assertCreated();
-
-    foreach ($newSeason->races->load('stints') as $race) {
-        assertCount(3, $race->stints);
-    }
-});
-
-it('does not copy stints when not instructed to do so', function () {
-    $user = User::factory()->create();
-    $season = createSeasonForUser($user);
-    prepareSeasonRaces($season);
-
-    $newSeason = createSeasonForUser($user);
-
-    actingAs($user)
-        ->post(route('seasons.settings.copy.races', [$newSeason]), [
-            'season_id' => $season->id,
-        ])
-        ->assertCreated();
-
-    foreach ($newSeason->races->load('stints') as $race) {
-        assertCount(0, $race->stints);
-    }
 });
 
 it('does not copy race status', function () {
@@ -187,7 +147,7 @@ it('does not copy race status', function () {
 
 it("updates a races' name if it includes the season year", function () {
     $user = User::factory()->create();
-    $oldSeason = tap(createSeasonForUser($user), fn (Season $season) => $season->update(['year' => 2021]));;
+    $oldSeason = tap(createSeasonForUser($user), fn (Season $season) => $season->update(['year' => 2021]));
     $oldSeason->update(['year' => 2021]);
     prepareSeasonRaces($oldSeason);
 
@@ -209,5 +169,5 @@ it("updates a races' name if it includes the season year", function () {
 
 function prepareSeasonRaces(Season $season): void
 {
-    Race::factory(RACE_COUNT)->for($season)->withStints()->create();
+    Race::factory(RACE_COUNT)->for($season)->create();
 }

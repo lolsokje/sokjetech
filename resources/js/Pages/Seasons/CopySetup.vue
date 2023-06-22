@@ -91,7 +91,7 @@ const state = reactive({
         'drivers',
         new CopySeasonSetupItemDependency('copy_ratings', 'Copy ratings (including reliability)?'),
     ),
-    copyRaces: new CopySeasonSetupItem('Copy races?', 'races', new CopySeasonSetupItemDependency('copy_stints', 'Copy race stints?')),
+    copyRaces: new CopySeasonSetupItem('Copy races?', 'races'),
     copyQualifyingFormat: new CopySeasonSetupItem('Copy qualifying format?', 'qualifying'),
     copyPointSystem: new CopySeasonSetupItem('Copy point system?', 'points'),
     copyReliabilityConfiguration: new CopySeasonSetupItem('Copy reliability configuration?', 'reliability'),

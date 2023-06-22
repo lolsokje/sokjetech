@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Races\DeleteRace;
-use App\Actions\Races\Stints\StoreStintsAction;
-use App\Actions\Races\Stints\UpdateStintsAction;
 use App\Actions\Races\StoreRaceAction;
 use App\Actions\Races\UpdateRaceOrderAction;
 use App\Http\Requests\RaceCreateRequest;
@@ -62,9 +60,7 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $race = (new StoreRaceAction($request, $season))->handle();
-
-        (new StoreStintsAction($race, $request->stints()))->handle();
+        (new StoreRaceAction($request, $season))->handle();
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race created');
@@ -86,7 +82,7 @@ class RaceController extends Controller
 
         return Inertia::render('Races/Edit', [
             'season' => $season,
-            'race' => $race->load('stints'),
+            'race' => $race,
             'circuits' => CircuitResource::collection($circuits),
             'climates' => Climate::with('conditions')->get(),
         ]);
@@ -97,8 +93,6 @@ class RaceController extends Controller
         $this->authorize('update', $season->universe);
 
         $race->update($request->raceData());
-
-        (new UpdateStintsAction($race, $request->stints()))->handle();
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race updated');
