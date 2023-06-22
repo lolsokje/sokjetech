@@ -15,12 +15,6 @@ class CopyRaceSetupRequest extends SeasonCopyRequest
     {
         return [
             'season_id' => ['required', 'exists:seasons,id'],
-            'copy_stints' => ['nullable', 'boolean'],
         ];
-    }
-
-    public function copyStints(): bool
-    {
-        return (bool) $this->validated('copy_stints');
     }
 }

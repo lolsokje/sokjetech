@@ -16,6 +16,7 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 
 test('a universe owner can create races', function () {
+    $this->withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
 
@@ -52,7 +53,7 @@ test('an authenticated user can\'t create races in another user\'s universe', fu
 test('a universe owner can update races', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
-    $race = Race::factory()->for($season)->withStints()->create();
+    $race = Race::factory()->for($season)->create();
 
     $this->actingAs($user)
         ->put(route('seasons.races.update', [$season, $race]), [
@@ -60,7 +61,6 @@ test('a universe owner can update races', function () {
             'circuit_variation_id' => $race->variation->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
-            'stints' => $race->stints->toArray(),
             'order' => $race->order,
         ])
         ->assertRedirect(route('seasons.races.index', [$season]));
@@ -75,7 +75,6 @@ test('an unauthenticated user can\'t update races', function () {
     $this->put(route('seasons.races.update', [$race->season, $race]), [
         'circuit_id' => $race->circuit->id,
         'name' => 'New name',
-        'stints' => $race->stints,
         'order' => $race->order,
     ])
         ->assertForbidden();
@@ -85,7 +84,7 @@ test('an unauthenticated user can\'t update races', function () {
 
 test('an authenticated user can\'t update another user\'s race', function () {
     $user = User::factory()->create();
-    $race = Race::factory()->withStints()->create();
+    $race = Race::factory()->create();
     $name = $race->name;
 
     $this->actingAs($user)
@@ -94,7 +93,6 @@ test('an authenticated user can\'t update another user\'s race', function () {
             'circuit_variation_id' => $race->variation->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
-            'stints' => $race->stints,
             'order' => $race->order,
         ])
         ->assertForbidden();
@@ -113,7 +111,6 @@ it('adds new races after already existing races', function () {
             'circuit_variation_id' => CircuitVariation::factory()->create()->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
-            'stints' => [['min_rng' => 0, 'max_rng' => 30]],
         ]);
 
     $race = $season->races()->where('order', 2)->first();
@@ -135,49 +132,10 @@ it('adds new races after reordered races', function () {
             'circuit_variation_id' => CircuitVariation::factory()->create()->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
-            'stints' => [['min_rng' => 0, 'max_rng' => 30]],
         ]);
 
     $race = $season->races()->where('order', 3)->first();
     $this->assertEquals('Test race with automatically generated order', $race->name);
-});
-
-test('stint min RNG must be lower than max RNG', function () {
-    $user = User::factory()->create();
-    $season = createSeasonForUser($user);
-
-    $circuit = Circuit::factory()->for($user)->create();
-
-    $this->actingAs($user)
-        ->post(route('seasons.races.store', [$season]), [
-            'circuit_id' => $circuit->id,
-            'name' => 'Test race with higher min RNG than max RNG',
-            'stints' => [
-                ['min_rng' => 0, 'max_rng' => 30],
-                ['min_rng' => 30, 'max_rng' => 0],
-            ],
-        ])
-        ->assertSessionHasErrors(['stints' => 'Min stint RNG must be lower than max stint RNG']);
-
-    $this->post(route('seasons.races.store', [$season]), [
-        'circuit_id' => $circuit->id,
-        'name' => 'Test race with equal min and max RNG',
-        'stints' => [
-            ['min_rng' => 0, 'max_rng' => 30],
-            ['min_rng' => 30, 'max_rng' => 30],
-        ],
-    ])
-        ->assertSessionHasErrors(['stints' => 'Min stint RNG must be lower than max stint RNG']);
-
-    $this->post(route('seasons.races.store', [$season]), [
-        'circuit_id' => $circuit->id,
-        'name' => 'Test race with correct min and max RNG',
-        'stints' => [
-            ['min_rng' => 0, 'max_rng' => 30],
-            ['min_rng' => 0, 'max_rng' => 30],
-        ],
-    ])
-        ->assertSessionDoesntHaveErrors(['stints']);
 });
 
 test('a universe owner can view the race create page', function () {
@@ -339,9 +297,6 @@ test('a race cannot be updated for a started season', function () {
         ->put(route('seasons.races.update', [$season, $race]), [
             'circuit_id' => $race->circuit_id,
             'name' => 'new name',
-            'stints' => [
-                ['min_rng' => 0, 'max_rng' => 30],
-            ],
         ])
         ->assertRedirect()
         ->assertSessionHas('error', 'The season has started and can therefore no longer be modified');
@@ -471,7 +426,6 @@ function getRaceCreationData(Season $season, ?User $user = null): array
         'circuit_variation_id' => CircuitVariation::factory()->for($circuit)->create()->id,
         'climate_id' => Climate::factory()->create()->id,
         'name' => "$season->year Test Grand Prix",
-        'stints' => [['min_rng' => 0, 'max_rng' => 30]],
         'order' => 1,
     ];
 }

@@ -54,7 +54,6 @@
                 <th></th>
                 <th>TEAM</th>
                 <th class="text-center">RAT</th>
-                <th class="text-center" v-for="stint in race.stints" :key="stint.order">{{ stint.order }}</th>
                 <th class="text-center">TOT</th>
             </tr>
             </thead>
@@ -74,13 +73,6 @@
                 <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
                 <td class="padded-left">{{ driver.team.short_team_name }}</td>
                 <td class="small-centered">{{ driver.ratings.total_rating + driver.result.bonus }}</td>
-                <td class="small-centered"
-                    v-for="(stint, index) in race.stints"
-                    :key="stint.order"
-                    :class="{ 'bg-accent-odd': !isEven(stint.order)}"
-                >
-                    {{ driver.result.stints ? driver.result.stints[index] : '' }}
-                </td>
                 <td class="biggest-centered text-uppercase" :class="getTotalDisplayClasses(driver)">
                     {{ getTotalDisplayValue(driver) }}
                 </td>
@@ -105,7 +97,6 @@ import {
     ReliabilityReasons,
 } from '@/Interfaces/RaceWeekend/RaceWeekendConfigurations';
 import Permission from '@/Interfaces/Permission';
-import { isEven } from '@/Utilities/IsEven.js';
 import { getRoll } from '@/Composables/useRng';
 import axios from 'axios';
 import {
@@ -178,69 +169,70 @@ const getFastestLapValues = (drivers: RaceDriver[]): object[] => {
 };
 
 const performNextStint = (): void => {
-    const currentStintSettings = props.race.stints[currentStint.value];
-
-    const minRng = currentStintSettings.min_rng;
-    const maxRng = currentStintSettings.max_rng;
-    const useDriverRating = currentStintSettings.use_driver_rating;
-    const useTeamRating = currentStintSettings.use_team_rating;
-    const useEngineRating = currentStintSettings.use_engine_rating;
-    const dnfRoll = currentStintSettings.reliability;
-
-    props.drivers.forEach(driver => {
-        if (driver.result.dnf) {
-            return;
-        }
-
-        if (dnfRoll) {
-            if (getDnfRoll(driver)) {
-                driver.result.total = 0;
-                return;
-            }
-        }
-
-        let total = getRoll(minRng, maxRng);
-
-        if (useDriverRating) {
-            total += driver.ratings.driver_rating;
-        }
-
-        if (useTeamRating) {
-            total += driver.ratings.team_rating;
-        }
-
-        if (useEngineRating) {
-            total += driver.ratings.engine_rating;
-        }
-
-        driver.result.stints[currentStint.value] = total;
-        driver.result.total = getTotal(driver);
-
-        driver.result.position_change = getPositionChange(driver);
-    });
-
-    sortDriversByTotal();
-    setDriverPositions();
-
-    if (shouldRollFastestLapAfterStint()) {
-        fastestLapRoll();
-    }
-
-    currentStint.value++;
-
-    saveRaceResults();
+    // const currentStintSettings = props.race.stints[currentStint.value];
+    //
+    // const minRng = currentStintSettings.min_rng;
+    // const maxRng = currentStintSettings.max_rng;
+    // const useDriverRating = currentStintSettings.use_driver_rating;
+    // const useTeamRating = currentStintSettings.use_team_rating;
+    // const useEngineRating = currentStintSettings.use_engine_rating;
+    // const dnfRoll = currentStintSettings.reliability;
+    //
+    // props.drivers.forEach(driver => {
+    //     if (driver.result.dnf) {
+    //         return;
+    //     }
+    //
+    //     if (dnfRoll) {
+    //         if (getDnfRoll(driver)) {
+    //             driver.result.total = 0;
+    //             return;
+    //         }
+    //     }
+    //
+    //     let total = getRoll(minRng, maxRng);
+    //
+    //     if (useDriverRating) {
+    //         total += driver.ratings.driver_rating;
+    //     }
+    //
+    //     if (useTeamRating) {
+    //         total += driver.ratings.team_rating;
+    //     }
+    //
+    //     if (useEngineRating) {
+    //         total += driver.ratings.engine_rating;
+    //     }
+    //
+    //     driver.result.stints[currentStint.value] = total;
+    //     driver.result.total = getTotal(driver);
+    //
+    //     driver.result.position_change = getPositionChange(driver);
+    // });
+    //
+    // sortDriversByTotal();
+    // setDriverPositions();
+    //
+    // if (shouldRollFastestLapAfterStint()) {
+    //     fastestLapRoll();
+    // }
+    //
+    // currentStint.value++;
+    //
+    // saveRaceResults();
 };
 
 const shouldRollFastestLapAfterStint = (): boolean => {
-    if (! props.fastestLap.awarded) {
-        return false;
-    }
-
-    if (props.fastestLap.type !== 'best_last_stint') {
-        return false;
-    }
-
-    return currentStint.value === props.race.stints.length - 1;
+    return false;
+    // if (! props.fastestLap.awarded) {
+    //     return false;
+    // }
+    //
+    // if (props.fastestLap.type !== 'best_last_stint') {
+    //     return false;
+    // }
+    //
+    // return currentStint.value === props.race.stints.length - 1;
 };
 
 const getDnfRoll = (driver: RaceDriver): string | null => {
@@ -357,7 +349,8 @@ const fastestLapRollCheck = (): boolean => {
     return allStintsCompleted.value && props.fastestLap.awarded && ! fastestLapRollPerformed.value;
 };
 
-const allStintsCompleted: ComputedRef<boolean> = computed(() => currentStint.value === props.race.stints.length);
+// const allStintsCompleted: ComputedRef<boolean> = computed(() => currentStint.value === props.race.stints.length);
+const allStintsCompleted: ComputedRef<boolean> = computed(() => true);
 const canCompleteRace: ComputedRef<boolean> = computed(() => raceCompletionCheck());
 const canPerformStint: ComputedRef<boolean> = computed(() => performNextStintCheck());
 const canPerformFastestLap: ComputedRef<boolean> = computed(() => fastestLapRollCheck());

@@ -1,6 +1,5 @@
 import Circuit from '@/Interfaces/Circuit';
 import Season from '@/Interfaces/Season';
-import RaceStint from '@/Interfaces/RaceStint';
 
 export interface Race {
     id: string,
@@ -17,7 +16,6 @@ export interface Race {
     season_name: string,
     qualifying_details?: QualifyingDetails,
     race_details?: RaceDetails,
-    stints: RaceStint[],
     circuit: Circuit
     pole?: Participant,
     winner?: Participant

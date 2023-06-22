@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\StintRngValid;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Collection;
 
 class RaceCreateRequest extends FormRequest
 {
@@ -21,14 +19,8 @@ class RaceCreateRequest extends FormRequest
     public function raceData(): array
     {
         $data = $this->validated();
-        unset($data['stints']);
 
         return $data;
-    }
-
-    public function stints(): Collection
-    {
-        return collect($this->safe(['stints'])['stints']);
     }
 
     /**
@@ -42,7 +34,6 @@ class RaceCreateRequest extends FormRequest
             'circuit_id' => ['required', 'exists:circuits,id'],
             'circuit_variation_id' => ['required', 'exists:circuit_variations,id'],
             'name' => ['required'],
-            'stints' => ['required', new StintRngValid],
             'climate_id' => ['required', 'exists:climates,id'],
         ];
     }

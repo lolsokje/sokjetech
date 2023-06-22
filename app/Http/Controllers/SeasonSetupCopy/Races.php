@@ -15,9 +15,7 @@ class Races extends Controller
     public function __invoke(CopyRaceSetupRequest $request, Season $season): Response
     {
         try {
-            (new CopyRaces($request->getSourceSeason(), $season))->handle(
-                copyStints: $request->copyStints(),
-            );
+            (new CopyRaces($request->getSourceSeason(), $season))->handle();
 
             return response()->json([], Response::HTTP_CREATED);
         } catch (InvalidSeasonRequirements $e) {

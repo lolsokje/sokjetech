@@ -17,16 +17,11 @@ class CopyRaces extends CopyAction
         'race_details',
     ];
 
-    private CopyStintsAction $copyStintsAction;
-
     /**
      * @throws InvalidSeasonRequirements
      */
-    public function handle(
-        ?bool $copyStints = false,
-    ): void {
-        $this->copyStintsAction = new CopyStintsAction($copyStints);
-
+    public function handle(): void
+    {
         $this->validateSeasonRequirementsMet();
         $this->removeExistingModels();
         $this->copyModels();
@@ -34,21 +29,18 @@ class CopyRaces extends CopyAction
 
     protected function removeExistingModels(): void
     {
-        $this->newSeason->races()->each(fn (Race $race) => $race->stints()->delete());
         $this->newSeason->races()->delete();
     }
 
     protected function copyModels(): void
     {
-        $this->oldSeason->load('races.stints');
+        $this->oldSeason->load('races');
 
         foreach ($this->oldSeason->races as $oldRace) {
             $newRace = $oldRace->replicate($this->columnsNotToCopy);
             $newRace->season()->associate($this->newSeason);
             $newRace->name = $this->getRaceName($oldRace);
             $newRace->save();
-
-            $this->copyStintsAction->handle($oldRace, $newRace);
         }
     }
 

@@ -8,7 +8,7 @@ test('universe owners can view the race weekend intro page', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $season->update(['started' => true]);
-    $race = Race::factory()->for($season)->withStints()->create(['started' => true]);
+    $race = Race::factory()->for($season)->create(['started' => true]);
 
     $this->actingAs($user)
         ->get(route('weekend.intro', $race))
@@ -19,8 +19,7 @@ test('universe owners can view the race weekend intro page', function () {
                 ->where('id', $race->id)
                 ->where('season', $season->id)
                 ->where('started', true)
-                ->etc())
-            ->has('stints', 3));
+                ->etc()));
 });
 
 test('unauthorised users can not view the race weekend intro page', function () {
