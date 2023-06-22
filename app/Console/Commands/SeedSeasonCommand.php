@@ -31,9 +31,7 @@ class SeedSeasonCommand extends Command
      */
     protected $description = 'Clears the database and seeds an entire season including calendar, teams and drivers';
 
-
     protected ?User $user;
-    protected array $stints;
     protected Universe $universe;
     protected Series $series;
     protected Season $season;
@@ -55,7 +53,6 @@ class SeedSeasonCommand extends Command
             ],
         );
 
-        $this->stints = $this->getStintsData()->toArray();
         $this->universe = Universe::factory()->for($this->user)->create(['name' => 'SokjeVerse']);
         $this->series = Series::factory()->for($this->universe)->create(['name' => 'Formula One']);
         $this->season = Season::factory()->for($this->series)->create(['year' => 2022]);
@@ -123,12 +120,6 @@ class SeedSeasonCommand extends Command
                 'name' => $circuit->race_name,
                 'order' => $key + 1,
             ]);
-
-            foreach ($this->stints as $stint) {
-                $stint['race_id'] = $createdRace->id;
-
-                $createdRace->stints()->create($stint);
-            }
         });
     }
 
@@ -189,11 +180,6 @@ class SeedSeasonCommand extends Command
                 'active' => true,
             ]);
         });
-    }
-
-    private function getStintsData(): Collection
-    {
-        return $this->getDataFromFile('StintData', true);
     }
 
     private function getCircuitData(): Collection

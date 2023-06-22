@@ -4,7 +4,6 @@ namespace App\Actions\Races;
 
 use App\Models\Race;
 use App\Models\Season;
-use App\Models\Stint;
 
 class DeleteRace
 {
@@ -14,14 +13,8 @@ class DeleteRace
 
     public function handle(): void
     {
-        $this->deleteStints();
         $this->deleteRace();
         $this->reorderRaces();
-    }
-
-    private function deleteStints(): void
-    {
-        $this->race->stints->each(fn (Stint $stint) => $stint->delete());
     }
 
     private function deleteRace(): void

@@ -4,18 +4,11 @@ namespace Database\Factories;
 
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
-use App\Models\Race;
 use App\Models\Season;
-use App\Models\Stint;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RaceFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition(): array
     {
         return [
@@ -29,10 +22,5 @@ class RaceFactory extends Factory
             'started' => false,
             'completed' => false,
         ];
-    }
-
-    public function withStints(): self
-    {
-        return $this->afterCreating(fn (Race $race) => Stint::factory(3)->for($race)->create());
     }
 }

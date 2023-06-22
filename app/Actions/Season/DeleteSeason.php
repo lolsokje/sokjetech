@@ -2,7 +2,6 @@
 
 namespace App\Actions\Season;
 
-use App\Models\Race;
 use App\Models\Season;
 
 class DeleteSeason
@@ -56,10 +55,7 @@ class DeleteSeason
 
     private function deleteRaces(): void
     {
-        $this->season->races()->each(function (Race $race) {
-            $race->stints()->delete();
-            $race->delete();
-        });
+        $this->season->races()->delete();
     }
 
     private function deletePointSystem(): void

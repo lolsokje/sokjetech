@@ -33,7 +33,7 @@ it('deletes a season and all dependencies', function () {
     $system = PointSystem::factory()->for($season)->create();
     PointDistribution::factory()->for($system)->create();
 
-    $race = Race::factory()->for($season)->withStints()->create();
+    $race = Race::factory()->for($season)->create();
 
     QualifyingResult::factory()
         ->for($race)
@@ -64,7 +64,6 @@ it('deletes a season and all dependencies', function () {
     $this->assertDatabaseCount('entrants', 0);
     $this->assertDatabaseCount('racers', 0);
     $this->assertDatabaseCount('races', 0);
-    $this->assertDatabaseCount('stints', 0);
     $this->assertDatabaseCount('reliability_reasons', 0);
     $this->assertDatabaseCount('reliability_configurations', 0);
     $this->assertDatabaseCount('single_sessions', 0);

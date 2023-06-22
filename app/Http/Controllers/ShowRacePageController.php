@@ -13,7 +13,7 @@ class ShowRacePageController extends Controller
 {
     public function __invoke(Race $race): Response|RedirectResponse
     {
-        if (!$race->qualifying_completed) {
+        if (! $race->qualifying_completed) {
             return to_route('weekend.qualifying', [$race]);
         }
 
@@ -22,9 +22,10 @@ class ShowRacePageController extends Controller
         $this->eagerLoadRace($race);
 
         $pointSystem = $race->season->pointSystem;
+
         return Inertia::render('RaceWeekend/Race', [
             'race' => $race->load('season'),
-            'drivers' => (new GetRaceResults())->handle($race),
+            'drivers' => (new GetRaceResults)->handle($race),
             'fastestLap' => [
                 'awarded' => $pointSystem->fastest_lap_point_awarded,
                 'type' => $pointSystem->fastest_lap_determination,
@@ -39,7 +40,6 @@ class ShowRacePageController extends Controller
     private function eagerLoadRace(Race $race): void
     {
         $race->load([
-            'stints',
             'season' => [
                 'activeRacers' => [
                     'driver',
