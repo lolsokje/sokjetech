@@ -5,7 +5,7 @@ use App\Models\CircuitVariation;
 use App\Models\Climate;
 use App\Models\Race;
 use App\Models\User;
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 use Inertia\Testing\AssertableInertia as Assert;
 
 use function Pest\Laravel\assertDatabaseCount;

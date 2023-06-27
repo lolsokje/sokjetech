@@ -2,7 +2,7 @@
 
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 
 it('creates default variations for circuits', function () {
     Circuit::factory(20)->create();

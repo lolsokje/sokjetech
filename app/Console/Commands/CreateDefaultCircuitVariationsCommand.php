@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Circuit;
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 use Illuminate\Console\Command;
 use Illuminate\Console\View\Components\Info;
 

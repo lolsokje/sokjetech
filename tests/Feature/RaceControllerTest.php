@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RaceType;
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
 use App\Models\Climate;
@@ -16,7 +17,6 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 
 test('a universe owner can create races', function () {
-    $this->withoutExceptionHandling();
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
 
@@ -62,6 +62,8 @@ test('a universe owner can update races', function () {
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
             'order' => $race->order,
+            'race_type' => $race->race_type->value,
+            'duration' => $race->duration,
         ])
         ->assertRedirect(route('seasons.races.index', [$season]));
 
@@ -94,6 +96,8 @@ test('an authenticated user can\'t update another user\'s race', function () {
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'New name',
             'order' => $race->order,
+            'race_type' => $race->race_type->value,
+            'duration' => $race->duration,
         ])
         ->assertForbidden();
 
@@ -111,6 +115,8 @@ it('adds new races after already existing races', function () {
             'circuit_variation_id' => CircuitVariation::factory()->create()->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
+            'race_type' => RaceType::LAP->value,
+            'duration' => 50,
         ]);
 
     $race = $season->races()->where('order', 2)->first();
@@ -132,6 +138,8 @@ it('adds new races after reordered races', function () {
             'circuit_variation_id' => CircuitVariation::factory()->create()->id,
             'climate_id' => Climate::factory()->create()->id,
             'name' => 'Test race with automatically generated order',
+            'race_type' => RaceType::LAP->value,
+            'duration' => 50,
         ]);
 
     $race = $season->races()->where('order', 3)->first();
@@ -232,7 +240,7 @@ it('shows all races in the selected season on the index page', function () {
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Races/Index')
-                ->has('season.races', 5),
+                ->has('races.data', 5),
         );
 });
 
@@ -427,5 +435,7 @@ function getRaceCreationData(Season $season, ?User $user = null): array
         'climate_id' => Climate::factory()->create()->id,
         'name' => "$season->year Test Grand Prix",
         'order' => 1,
+        'race_type' => RaceType::LAP->value,
+        'duration' => 50,
     ];
 }

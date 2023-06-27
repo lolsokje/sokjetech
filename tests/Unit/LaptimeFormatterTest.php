@@ -1,6 +1,6 @@
 <?php
 
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 
 it('correctly formats to string', function () {
     $this->assertEquals('1:23.456', LaptimeFormatter::toString(83456));
