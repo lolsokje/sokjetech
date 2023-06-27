@@ -58,3 +58,19 @@
                   var(--warning-color)
   );
 }
+
+.btn-outline-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+  outline-color: var(--primary);
+
+  &.dropdown-toggle.show {
+    background-color: var(--primary) !important;
+    outline-color: var(--primary);
+  }
+
+  &:hover {
+    border-color: var(--primary);
+    background-color: var(--primary);
+  }
+}

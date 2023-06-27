@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 

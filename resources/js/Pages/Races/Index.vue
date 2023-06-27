@@ -23,17 +23,13 @@
         <button class="btn btn-success" @click.prevent="confirmSeasonComplete()">Complete season</button>
     </div>
 
-    <!--    <BackLink :backTo="route('series.seasons.index', [season.series])" label="season index"/>-->
-
-    <!--    <h3>Races</h3>-->
-
     <InertiaLink v-if="canAddRace()" :href="route('seasons.races.create', [season])" class="btn btn-primary my-3">
         Add race
     </InertiaLink>
 
     <InertiaLink
-        v-if="canReorderRaces()" :href="route('seasons.races.reorder', [season])"
-        class="btn btn-primary my-3 ms-3"
+            v-if="canReorderRaces()" :href="route('seasons.races.reorder', [season])"
+            class="btn btn-primary my-3 ms-3"
     >
         Reorder races
     </InertiaLink>
@@ -53,6 +49,7 @@
             <th class="text-center">#</th>
             <th></th>
             <th>Name</th>
+            <th>Duration</th>
             <template v-if="!spoilerFree">
                 <th colspan="2">Pole</th>
                 <th colspan="2">Winning driver</th>
@@ -73,6 +70,7 @@
                 <CountryFlag :country="race.circuit.country"/>
             </td>
             <td class="padded-left">{{ race.name }}</td>
+            <td class="padded-left">{{ race.duration }} {{ race.postfix }}</td>
             <template v-if="!spoilerFree && race.completed">
                 <td class="smallest-centered" :style="race.pole?.style_string">{{ race.pole?.number }}</td>
                 <td class="padded-left">
@@ -80,7 +78,7 @@
                 </td>
                 <td class="smallest-centered" :style="race.winner?.style_string">{{ race.winner?.number }}</td>
                 <td class="padded-left">{{ race.winner?.full_name }}</td>
-                <BackgroundColourCell :backgroundColour="race.winner?.background_colour"/>
+                <BackgroundColourCell :backgroundColour="race.winner?.background_colour ?? ''"/>
                 <td class="padded-left">{{ race.winner?.team_name }}</td>
             </template>
             <template v-else>
@@ -110,13 +108,17 @@ import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { computed, onMounted, Ref, ref, watch } from 'vue';
 import axios from 'axios';
-import { Participant, Race } from '@/Interfaces/Race';
-import SeasonInterface from '@/Interfaces/Season';
+import { Participant } from '@/Interfaces/Race';
 import { router } from '@inertiajs/vue3';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import Permission from '@/Interfaces/Permission';
+import CalendarRace from '@/Interfaces/Race/CalendarRace';
+import CalendarRaceResource from '@/Interfaces/Race/CalendarRaceResource';
+import CalendarSeason from '@/Interfaces/Season/CalendarSeason';
 
 interface Props {
-    season: SeasonInterface,
+    season: CalendarSeason,
+    races: CalendarRaceResource,
     poles: Participant[],
     winners: Participant[],
     next_race_id?: string,
@@ -125,9 +127,10 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const races: Ref<CalendarRace[]> = ref(props.races.data);
+
 const canEdit = props.can.edit;
 const spoilerFree = ref(true);
-const races: Ref<Race[] | undefined> = ref([]);
 
 const stages: { [key: string]: string } = {
     INTRO: 'intro',
@@ -137,7 +140,7 @@ const stages: { [key: string]: string } = {
     RESULTS: 'results',
 };
 
-const deleteRace = async (race: Race) => {
+const deleteRace = async (race: CalendarRace) => {
     if (! confirm("Are you sure you want to delete this race from the calendar?")) {
         return;
     }
@@ -148,9 +151,9 @@ const deleteRace = async (race: Race) => {
     resetRacesAfterDeletion(race);
 };
 
-const resetRacesAfterDeletion = (race: Race): void => {
-    races.value = races.value?.filter((r: Race) => r.id !== race.id);
-    races.value?.forEach((race, index) => race.order = index + 1);
+const resetRacesAfterDeletion = (race: CalendarRace): void => {
+    races.value = races.value.filter((r: CalendarRace) => r.id !== race.id);
+    races.value.forEach((race, index) => race.order = index + 1);
 };
 
 const canRunRaces = (): boolean => {
@@ -162,14 +165,14 @@ const canAddRace = (): boolean => {
 };
 
 const canReorderRaces = (): boolean => {
-    return canAddRace() && props.season.races?.length > 1;
+    return canAddRace() && races.value.length > 1;
 };
 
-const isNextRace = (race: Race): boolean => {
+const isNextRace = (race: CalendarRace): boolean => {
     return race.id === props.next_race_id;
 };
 
-const getCurrentRaceStage = (race: Race): string => {
+const getCurrentRaceStage = (race: CalendarRace): string => {
     if (race.completed) {
         return stages.RESULTS;
     }
@@ -191,7 +194,7 @@ const getCurrentRaceStage = (race: Race): string => {
     }
 };
 
-const getRaceLink = (race: Race): string => {
+const getRaceLink = (race: CalendarRace): string => {
     if (canRunRaces() && ! props.season.started) {
         return route('seasons.races.edit', [ props.season, race ]);
     }
@@ -223,7 +226,7 @@ const getRaceLink = (race: Race): string => {
     return route('weekend.results', [ race ]);
 };
 
-const getRaceLinkText = (race: Race): string | null => {
+const getRaceLinkText = (race: CalendarRace): string | null => {
     const canRunRace = canRunRaces();
     if (canRunRace && ! props.season.started) {
         return 'edit';
@@ -252,7 +255,7 @@ const getRaceLinkText = (race: Race): string | null => {
     }
 };
 
-const attachPoleAndWinner = (race: Race): void => {
+const attachPoleAndWinner = (race: CalendarRace): void => {
     const pole = props.poles.find(pole => pole.race_id === race.id);
     const winner = props.winners.find(winner => winner.race_id === race.id);
 
@@ -284,12 +287,9 @@ watch(spoilerFree, (value) => {
 });
 
 onMounted(() => {
-    races.value = props.season?.races;
-    races.value?.forEach(race => {
+    races.value.forEach(race => {
         attachPoleAndWinner(race);
     });
-
-    races.value?.sort((raceOne: Race, raceTwo: Race): number => raceOne.order - raceTwo.order);
 
     if (localStorage.getItem('spoiler_free')) {
         spoilerFree.value = localStorage.getItem('spoiler_free') === 'true';

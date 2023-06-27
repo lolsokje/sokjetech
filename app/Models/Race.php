@@ -3,7 +3,12 @@
 namespace App\Models;
 
 use App\Builders\RaceBuilder;
+use App\Contracts\RaceDuration;
+use App\Enums\DistanceType;
 use App\Enums\RaceType;
+use App\Support\RaceDuration\Distance;
+use App\Support\RaceDuration\Lap;
+use App\Support\RaceDuration\Time;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +20,7 @@ class Race extends SnowflakeModel
     protected $casts = [
         'order' => 'integer',
         'race_type' => RaceType::class,
+        'distance_type' => DistanceType::class,
         'qualifying_started' => 'boolean',
         'qualifying_completed' => 'boolean',
         'started' => 'boolean',
@@ -52,6 +58,15 @@ class Race extends SnowflakeModel
     public function raceResults(): HasMany
     {
         return $this->hasMany(RaceResult::class);
+    }
+
+    public function raceDuration(): RaceDuration
+    {
+        return match ($this->race_type) {
+            RaceType::LAP => new Lap($this),
+            RaceType::TIME => new Time($this),
+            RaceType::DISTANCE => new Distance($this),
+        };
     }
 
     public static function query(): RaceBuilder

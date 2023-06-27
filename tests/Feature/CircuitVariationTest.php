@@ -3,7 +3,7 @@
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
 use App\Models\User;
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 use Inertia\Testing\AssertableInertia;
 
 dataset('unauthorised', [

@@ -14,13 +14,17 @@ class StoreRaceAction
 
     public function handle(): Race
     {
-        $data = array_merge(['order' => $this->getOrder()], $this->request->raceData());
+        $data = array_merge([
+            'order' => $this->getOrder(),
+        ], $this->request->validated());
+
         return $this->season->races()->create($data);
     }
 
     private function getOrder(): int
     {
         $lastRace = $this->season->races()->latest('order')->first();
+
         return $lastRace ? $lastRace->order + 1 : 1;
     }
 }
