@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\DistanceType;
+use App\Enums\RaceType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class RaceCreateRequest extends FormRequest
 {
@@ -14,13 +17,6 @@ class RaceCreateRequest extends FormRequest
     public function authorize(): bool
     {
         return auth()->check();
-    }
-
-    public function raceData(): array
-    {
-        $data = $this->validated();
-
-        return $data;
     }
 
     /**
@@ -35,6 +31,9 @@ class RaceCreateRequest extends FormRequest
             'circuit_variation_id' => ['required', 'exists:circuit_variations,id'],
             'name' => ['required'],
             'climate_id' => ['required', 'exists:climates,id'],
+            'race_type' => ['required', new Enum(RaceType::class)],
+            'duration' => ['required', 'numeric', 'min:1'],
+            'distance_type' => ['nullable', new Enum(DistanceType::class)],
         ];
     }
 }

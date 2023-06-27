@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\RaceType;
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
 use App\Models\EngineSeason;
@@ -114,11 +115,19 @@ class SeedSeasonCommand extends Command
                 'base_laptime' => $circuit->base_laptime,
             ]);
 
-            $createdRace = $this->season->races()->create([
+            $laps = ceil(305000 / $variation->length);
+
+            if ($createdCircuit->name === 'Circuit de Monaco') {
+                $laps = 78;
+            }
+
+            $this->season->races()->create([
                 'circuit_id' => $createdCircuit->id,
                 'circuit_variation_id' => $variation->id,
                 'name' => $circuit->race_name,
                 'order' => $key + 1,
+                'race_type' => RaceType::LAP,
+                'duration' => $laps,
             ]);
         });
     }

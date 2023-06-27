@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\DistanceType;
+use App\Enums\RaceType;
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
 use App\Models\Season;
@@ -17,6 +19,9 @@ class RaceFactory extends Factory
             'circuit_variation_id' => CircuitVariation::factory(),
             'name' => "{$this->faker->country()} Grand Prix",
             'order' => 1,
+            'race_type' => RaceType::LAP,
+            'distance_type' => DistanceType::KM,
+            'duration' => 50,
             'qualifying_started' => false,
             'qualifying_completed' => false,
             'started' => false,

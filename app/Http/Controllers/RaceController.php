@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Actions\Races\DeleteRace;
 use App\Actions\Races\StoreRaceAction;
 use App\Actions\Races\UpdateRaceOrderAction;
+use App\Enums\RaceType;
 use App\Http\Requests\RaceCreateRequest;
 use App\Http\Resources\CircuitResource;
+use App\Http\Resources\Race\CalendarRaceResource;
+use App\Http\Resources\Race\EditRaceResource;
 use App\Http\Resources\RaceOverviewPoleResource;
 use App\Http\Resources\RaceOverviewWinnerResource;
+use App\Http\Resources\Season\CalendarSeasonResource;
 use App\Models\Climate;
 use App\Models\Race;
 use App\Models\Season;
@@ -36,7 +40,8 @@ class RaceController extends Controller
         ])->append('can_start', 'can_complete');
 
         return Inertia::render('Races/Index', [
-            'season' => $season,
+            'season' => new CalendarSeasonResource($season),
+            'races' => CalendarRaceResource::collection($season->races),
             'poles' => RaceOverviewPoleResource::collection($season->poles)->toArray(request()),
             'winners' => RaceOverviewWinnerResource::collection($season->winners)->toArray(request()),
             'next_race_id' => $season->nextRace()?->id,
@@ -53,6 +58,7 @@ class RaceController extends Controller
             'season' => $season,
             'circuits' => CircuitResource::collection($circuits),
             'climates' => Climate::with('conditions')->get(),
+            'types' => RaceType::labels(),
         ]);
     }
 
@@ -82,9 +88,10 @@ class RaceController extends Controller
 
         return Inertia::render('Races/Edit', [
             'season' => $season,
-            'race' => $race,
+            'race' => new EditRaceResource($race),
             'circuits' => CircuitResource::collection($circuits),
             'climates' => Climate::with('conditions')->get(),
+            'types' => RaceType::labels(),
         ]);
     }
 
@@ -92,7 +99,7 @@ class RaceController extends Controller
     {
         $this->authorize('update', $season->universe);
 
-        $race->update($request->raceData());
+        $race->update($request->validated());
 
         return redirect(route('seasons.races.index', [$season]))
             ->with('notice', 'Race updated');

@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Circuit;
 use App\Models\CircuitVariation;
-use App\Support\LaptimeFormatter;
+use App\Support\Formatters\LaptimeFormatter;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CircuitVariationFactory extends Factory
