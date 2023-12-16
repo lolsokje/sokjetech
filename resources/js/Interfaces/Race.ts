@@ -14,6 +14,9 @@ export interface Race {
     completed: boolean,
     season: Season,
     season_name: string,
+    race_type: number,
+    duration: number,
+    distance_type: string,
     qualifying_details?: QualifyingDetails,
     race_details?: RaceDetails,
     circuit: Circuit

@@ -36,7 +36,9 @@
                     {{ Math.abs(driver.result.position_change) }}
                 </td>
                 <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
-                <td class="padded-left">{{ driver.full_name }}</td>
+                <td class="padded-left">
+                    <DriverName :firstName="driver.first_name" :lastName="driver.last_name"/>
+                </td>
                 <td v-if="race.fastest_lap_point_awarded" class="smallest-centered fastest-lap">
                     <fa icon="stopwatch" size="xl" v-if="driver.result.fastest_lap"/>
                 </td>
@@ -61,6 +63,7 @@ import Breadcrumb from '@/Components/Breadcrumb.vue';
 import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 import { RaceDriver } from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
 import { getPositionChangeIcon, getPositionChangeIconClasses } from '@/Composables/useRace';
+import DriverName from '@/Components/DriverName.vue';
 
 interface RaceInterface {
     id: string,
@@ -104,3 +107,18 @@ import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };
 </script>
+
+<style lang="scss">
+.driver-number-wrapper {
+  padding: 0;
+  text-align: center;
+
+  .driver-number {
+    display: inline-block;
+    width: 54px;
+    padding: 5px 0;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+}
+</style>

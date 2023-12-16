@@ -17,6 +17,8 @@ class RaceResultResource extends BaseResultResource
         return [
             'id' => $racer->id,
             'entrant_id' => $racer->entrant_id,
+            'first_name' => $racer->driver->first_name,
+            'last_name' => $racer->driver->last_name,
             'full_name' => $racer->driver->full_name,
             'number' => $racer->number,
             'team' => $this->getTeamDetails($racer),

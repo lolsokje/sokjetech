@@ -1,11 +1,10 @@
 import { RaceDriver } from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
-import { raceWeekendStore } from '@/Stores/raceWeekendStore.js';
-import { router } from '@inertiajs/vue3';
 import { Race } from '@/Interfaces/Race';
+import { raceStateStore } from '@/Stores/raceStateStore';
 
 export const completeRace = (race: Race): void => {
-    raceWeekendStore.completeRace();
-    router.post(route('weekend.race.complete', [ race ]));
+    // raceWeekendStore.completeRace();
+    // router.post(route('weekend.race.complete', [ race ]));
 };
 
 export const getPositionChange = (driver: RaceDriver): number => {
@@ -44,10 +43,29 @@ export const getTotalDisplayClasses = (driver: RaceDriver): string => {
     return driver.result.dnf ? 'driver-dnf' : '';
 };
 
-export const getTotalDisplayValue = (driver: RaceDriver): string | number | null => {
+export const getTotalDisplayValue = (driver: RaceDriver, maxPossibleRng: number): string | number | null => {
+    const currentLap = raceStateStore.currentLap;
+
     if (driver.result.dnf) {
-        return driver.result.dnf;
+        return driver.result.dnf.toUpperCase();
     }
 
-    return driver.result.total;
+    if (currentLap === 0) {
+        return '-';
+    }
+
+    const date = new Date(driver.result.total);
+
+    const hours = date.getUTCHours();
+    let minutes = date.getMinutes().toString();
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const millis = date.getMilliseconds().toString().padStart(3, '0');
+
+    if (hours === 0) {
+        return `${minutes}:${seconds}.${millis}`;
+    } else {
+        minutes = minutes.padStart(2, '0');
+    }
+
+    return `${hours}:${minutes}:${seconds}.${millis}`;
 };

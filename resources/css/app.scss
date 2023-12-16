@@ -130,3 +130,17 @@ ul.navbar-nav {
     border-top: 1px solid var(--base-300);
   }
 }
+
+.text-gray {
+  color: var(--muted);
+}
+
+.yellow-flag {
+  color: var(--bs-dark);
+  background-color: #EAC600;
+}
+
+.green-flag {
+  color: var(--bs-dark);
+  background-color: #2FBE2E;
+}

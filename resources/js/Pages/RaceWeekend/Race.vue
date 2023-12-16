@@ -5,35 +5,15 @@
                 append="Race"
     />
 
-    <div class="alert bg-danger text-white container w-50" v-if="showError">
+    <div class="alert bg-danger text-white container w-50" v-if="raceStateStore.showError">
         Something went wrong saving your stints. Please refresh the page and try again.
     </div>
 
-    <div class="d-flex mb-3">
-        <div class="ms-auto" v-if="can.edit">
-            <button v-if="canPerformStint"
-                    class="btn btn-primary"
-                    @click.prevent="performNextStint()"
-                    :disabled="saving"
-            >
-                Run next stint
-            </button>
-            <button class="btn btn-primary"
-                    v-if="canPerformFastestLap"
-                    @click.prevent="fastestLapRoll()"
-                    :disabled="saving"
-            >
-                Fastest lap roll
-            </button>
-            <button v-if="canCompleteRace"
-                    class="btn btn-success"
-                    @click.prevent="completeRace(race)"
-                    :disabled="saving"
-            >
-                Complete race
-            </button>
-        </div>
-    </div>
+    <RaceButtons
+        :can="can"
+        @simLap="simNextLap"
+        @simRace="simFullRace"
+    />
 
     <div id="screenshot-target">
         <div class="race-details">
@@ -42,7 +22,21 @@
                 Race
             </h2>
         </div>
-        <table class="table">
+        <div>
+            <h2 class="text-center mb-3">
+                <span
+                    class="rounded-3 px-3"
+                    :class="{ 'yellow-flag': flagEventStore.showYellowFlag(), 'green-flag': flagEventStore.showGreenFlag() }"
+                >
+                    {{ raceStateStore.currentLap }}/{{ raceStateStore.lapDetails.duration }}
+                </span>
+            </h2>
+            <p class="text-center mb-3" v-if="raceStateStore.fastestLapDetails.driver">
+                {{ getLaptime(raceStateStore.fastestLapDetails.laptime) }} -
+                {{ raceStateStore.fastestLapDetails.driver.full_name }}
+            </p>
+        </div>
+        <table class="table mb-0">
             <thead>
             <tr>
                 <th class="text-center">POS</th>
@@ -50,11 +44,14 @@
                 <th></th>
                 <th class="colour-accent"></th>
                 <th>DRIVER</th>
-                <th class="text-center" v-if="fastestLap.awarded"></th>
+                <th class="text-center"></th>
                 <th></th>
                 <th>TEAM</th>
-                <th class="text-center">RAT</th>
-                <th class="text-center">TOT</th>
+                <th class="text-center">LAST</th>
+                <th class="text-center">LAST n</th>
+                <th class="text-center">TOTAL</th>
+                <th class="text-center">LEADER</th>
+                <th class="text-center">INTERVAL</th>
             </tr>
             </thead>
             <tbody>
@@ -66,29 +63,39 @@
                     <span class="ms-3">{{ Math.abs(driver.result.position_change) }}</span>
                 </td>
                 <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
-                <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="smallest-centered fastest-lap" v-if="fastestLap.awarded">
-                    <fa icon="stopwatch" v-if="driver.result.fastest_lap" size="xl"/>
+                <td class="padded-left">
+                    <DriverName :firstName="driver.first_name" :lastName="driver.last_name"/>
+                </td>
+                <td class="smallest-centered fastest-lap">
+                    <fa icon="stopwatch" v-if="raceStateStore.fastestLapDetails.driver?.id === driver.id" size="lg"/>
                 </td>
                 <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
                 <td class="padded-left">{{ driver.team.short_team_name }}</td>
-                <td class="small-centered">{{ driver.ratings.total_rating + driver.result.bonus }}</td>
-                <td class="biggest-centered text-uppercase" :class="getTotalDisplayClasses(driver)">
-                    {{ getTotalDisplayValue(driver) }}
+                <td class="medium-centered">{{ getLaptime(driver.result.stints[raceStateStore.currentLap - 1]) }}</td>
+                <td class="medium-centered">{{ driver.result.stints.at(-1) }}</td>
+                <td class="biggest-centered" :class="getTotalDisplayClasses(driver)">
+                    {{ getTotalDisplayValue(driver, maxPossibleRng) }}
+                </td>
+                <td class="small-centered" :colspan="driver.result.dnf ? 2 : 1">
+                    {{ getGapToLeader(drivers, driver) }}
+                </td>
+                <td class="small-centered" v-if="!driver.result.dnf">
+                    {{ getInterval(drivers, driver) }}
                 </td>
             </tr>
             </tbody>
         </table>
+        <FlagHistory/>
     </div>
     <CopyScreenshotButton/>
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, onMounted, ref, Ref } from 'vue';
+import { computed, ComputedRef, onMounted } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
-import { Race } from '@/Interfaces/Race';
+import { Race as RaceInterface } from '@/Interfaces/Race';
 import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 import { RaceDriver } from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
 import {
@@ -97,20 +104,25 @@ import {
     ReliabilityReasons,
 } from '@/Interfaces/RaceWeekend/RaceWeekendConfigurations';
 import Permission from '@/Interfaces/Permission';
-import { getRoll } from '@/Composables/useRng';
-import axios from 'axios';
 import {
-    completeRace,
     getPositionChange,
     getPositionChangeIcon,
     getPositionChangeIconClasses,
     getTotalDisplayClasses,
     getTotalDisplayValue,
 } from '@/Composables/useRace';
-import { SaveRaceDriver } from '@/ValueObjects/SaveRaceDriver';
+import { getRoll } from '@/Composables/useRng';
+import { RaceEventFlag } from '@/Enums/RaceEventFlag';
+import FlagHistory from '@/Components/Race/FlagHistory.vue';
+import RaceButtons from '@/Components/Race/RaceButtons.vue';
+import { raceStateStore } from '@/Stores/raceStateStore';
+import { getGapToLeader, getInterval, getLaptime } from '@/Composables/Race/useFormatLaptime';
+import { flagEventStore, RaceFlagEvent } from '@/Stores/Race/flagEventStore';
+import DriverName from '@/Components/DriverName.vue';
+import { YellowFlagType } from '@/Enums/YellowFlagType';
 
 interface Props {
-    race: Race,
+    race: RaceInterface,
     drivers: RaceDriver[],
     fastestLap: FastestLapConfiguration,
     can: Permission,
@@ -120,127 +132,49 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const showError: Ref<boolean> = ref(false);
-const saving: Ref<boolean> = ref(false);
-
-const currentStint: Ref<number> = ref(props.race.race_details?.current_stint ?? 0);
-const fastestLapRollPerformed: Ref<boolean> = ref(props.race?.race_details?.fastest_lap_awarded ?? false);
+const minRng = 10;
+const maxRng = 40;
+let maxPossibleRng = maxRng;
 
 const reliabilityMinRng = props.reliability_configuration.min_rng;
 const reliabilityMaxRng = props.reliability_configuration.max_rng;
 
-const fastestLapRoll = (): void => {
-    const drivers = props.drivers.filter(driver => driver.result.dnf === null);
-    const values = getFastestLapValues(drivers);
+const yellowFlagTypeChances = {
+    [YellowFlagType.SINGLE]: 35,
+    [YellowFlagType.DOUBLE]: 35,
+    [YellowFlagType.VSC]: 20,
+    [YellowFlagType.SC]: 10,
+};
 
-    // https://stackoverflow.com/a/68587921/2466375
-    const sorted = values
-        .map(Object.entries)
-        .sort(([ a ], [ b ]) => b[1] - a[1])
-        .map(([ id ]) => id);
+// const isLapByLap = props.race.race_type === RaceType.LAP;
+// const isTime = props.race.race_type === RaceType.TIME;
+// const isDistance = props.race.race_type === RaceType.DISTANCE;
 
-    const [ driverId, roll ] = sorted[0];
-
-    const driver = props.drivers.find(d => d.id === driverId);
-    driver.result.fastest_lap = true;
-    driver.result.fastest_lap_roll = roll;
-
-    if (props.fastestLap.type === 'separate_stint') {
-        fastestLapRollPerformed.value = true;
-
-        saveRaceResults();
+const dnfRollThreshold: ComputedRef<number> = computed(() => {
+    // if (raceStateStore.currentLap === 7) {
+    //     return -1;
+    // }
+    //
+    // return 100;
+    if (raceStateStore.currentLap === 1) {
+        return 70;
     }
-};
 
-const getFastestLapValues = (drivers: RaceDriver[]): object[] => {
-    if (props.fastestLap.type === 'separate_stint') {
-        const minRng = props.fastestLap.min_rng;
-        const maxRng = props.fastestLap.max_rng;
-
-        return drivers.map(driver => {
-            const total = driver.ratings.total_rating + getRoll(minRng, maxRng);
-            return { [driver.id]: total };
-        });
-    } else if (props.fastestLap.type === 'best_last_stint') {
-        return drivers.map(driver => {
-            return { [driver.id]: driver.result.stints.at(-1) };
-        });
+    if (Math.floor(raceStateStore.currentLap / raceStateStore.lapDetails.duration) > 90) {
+        return 70;
     }
-};
 
-const performNextStint = (): void => {
-    // const currentStintSettings = props.race.stints[currentStint.value];
-    //
-    // const minRng = currentStintSettings.min_rng;
-    // const maxRng = currentStintSettings.max_rng;
-    // const useDriverRating = currentStintSettings.use_driver_rating;
-    // const useTeamRating = currentStintSettings.use_team_rating;
-    // const useEngineRating = currentStintSettings.use_engine_rating;
-    // const dnfRoll = currentStintSettings.reliability;
-    //
-    // props.drivers.forEach(driver => {
-    //     if (driver.result.dnf) {
-    //         return;
-    //     }
-    //
-    //     if (dnfRoll) {
-    //         if (getDnfRoll(driver)) {
-    //             driver.result.total = 0;
-    //             return;
-    //         }
-    //     }
-    //
-    //     let total = getRoll(minRng, maxRng);
-    //
-    //     if (useDriverRating) {
-    //         total += driver.ratings.driver_rating;
-    //     }
-    //
-    //     if (useTeamRating) {
-    //         total += driver.ratings.team_rating;
-    //     }
-    //
-    //     if (useEngineRating) {
-    //         total += driver.ratings.engine_rating;
-    //     }
-    //
-    //     driver.result.stints[currentStint.value] = total;
-    //     driver.result.total = getTotal(driver);
-    //
-    //     driver.result.position_change = getPositionChange(driver);
-    // });
-    //
-    // sortDriversByTotal();
-    // setDriverPositions();
-    //
-    // if (shouldRollFastestLapAfterStint()) {
-    //     fastestLapRoll();
-    // }
-    //
-    // currentStint.value++;
-    //
-    // saveRaceResults();
-};
+    return 90;
+});
 
-const shouldRollFastestLapAfterStint = (): boolean => {
-    return false;
-    // if (! props.fastestLap.awarded) {
-    //     return false;
-    // }
-    //
-    // if (props.fastestLap.type !== 'best_last_stint') {
-    //     return false;
-    // }
-    //
-    // return currentStint.value === props.race.stints.length - 1;
-};
+const shouldRollDnf: ComputedRef<boolean> = computed(() => getRoll(0, 100) > dnfRollThreshold.value);
 
 const getDnfRoll = (driver: RaceDriver): string | null => {
     if (driver.result.dnf) {
         return driver.result.dnf;
     }
 
-    const dnfTypes = [ 'team', 'driver', 'engine' ];
+    const dnfTypes = [ 'team', 'engine' ];
 
     for (let type of dnfTypes) {
         const rating = driver.ratings[`${type}_reliability`];
@@ -266,29 +200,8 @@ const getRandomDnfReasonByType = (type: string): string => {
     return reasons[Math.floor(Math.random() * reasons.length)];
 };
 
-const saveRaceResults = (): void => {
-    saving.value = true;
-
-    const drivers = props.drivers.map(driver => new SaveRaceDriver(driver));
-
-    const details = {
-        current_stint: currentStint.value,
-        fastest_lap_awarded: fastestLapRollPerformed.value,
-    };
-
-    axios.post(route('weekend.race.store', [ props.race ]), {
-        drivers: drivers,
-        race_details: details,
-    })
-        .catch(() => {
-            showError.value = true;
-            currentStint.value--;
-        })
-        .finally(() => saving.value = false);
-};
-
 const getTotal = (driver: RaceDriver): number => {
-    const total = driver.result.stints.reduce((sum, currentValue) => sum + currentValue, driver.ratings.total_rating + getStartingBonus(driver));
+    const total = driver.result.stints.reduce((sum, currentValue) => sum + currentValue, 0);
 
     return driver.result.dnf ? 0 : total;
 };
@@ -306,6 +219,13 @@ const prepareRace = (): void => {
         driver.result.total = getTotal(driver);
         driver.result.bonus = driver.result.bonus ?? getStartingBonus(driver);
     });
+
+    const ratings = props.drivers.map(driver => driver.ratings.total_rating)
+        .sort((a, b) => b - a);
+
+    maxPossibleRng = ratings[0] + maxRng;
+
+    raceStateStore.lapDetails.perPoint = raceStateStore.lapDetails.scale / maxPossibleRng;
 };
 
 const sortDriversByPosition = (): void => {
@@ -314,7 +234,7 @@ const sortDriversByPosition = (): void => {
 
 const sortDriversByTotal = (): void => {
     props.drivers.sort((driverOne, driverTwo) => {
-        return driverTwo.result.total - driverOne.result.total;
+        return driverOne.result.total - driverTwo.result.total;
     });
 };
 
@@ -325,37 +245,154 @@ const setDriverPositions = (): void => {
     });
 };
 
-const raceCompletionCheck = (): boolean => {
-    if (props.race.completed) {
-        return false;
+const getYellowFlagType = (): YellowFlagType => {
+    let chance = getRoll(0, 100);
+
+    for (let [ type, percentage ] of Object.entries(yellowFlagTypeChances)) {
+        chance -= percentage;
+
+        if (chance < 0) {
+            return <YellowFlagType>type;
+        }
     }
 
-    if (! allStintsCompleted.value) {
-        return false;
+    return YellowFlagType.SINGLE;
+};
+
+const getExpectedEndLap = (type: YellowFlagType): number => {
+    if (type === YellowFlagType.SINGLE || type === YellowFlagType.DOUBLE) {
+        return getRoll(1, 3);
     }
 
-    if (! props.fastestLap.awarded) {
-        return true;
+    if (type === YellowFlagType.VSC) {
+        return getRoll(2, 4);
     }
 
-    return fastestLapRollPerformed.value;
+    if (type === YellowFlagType.SC) {
+        return getRoll(3, 6);
+    }
 };
 
-const performNextStintCheck = (): boolean => {
-    return ! allStintsCompleted.value && ! showError.value;
+const simFullRace = (): void => {
+    while (raceStateStore.currentLap < raceStateStore.lapDetails.duration) {
+        simNextLap();
+    }
 };
 
-const fastestLapRollCheck = (): boolean => {
-    return allStintsCompleted.value && props.fastestLap.awarded && ! fastestLapRollPerformed.value;
-};
+const simNextLap = (): void => {
+    raceStateStore.currentLap++;
+    let hasDnf = false;
+    let lapMinRng = minRng;
+    let lapMaxRng = maxRng;
+    let overtakingAllowed = true;
+    let scale = raceStateStore.lapDetails.scale;
+    let margin = raceStateStore.lapDetails.margin;
+    let perPoint = scale / maxPossibleRng;
 
-// const allStintsCompleted: ComputedRef<boolean> = computed(() => currentStint.value === props.race.stints.length);
-const allStintsCompleted: ComputedRef<boolean> = computed(() => true);
-const canCompleteRace: ComputedRef<boolean> = computed(() => raceCompletionCheck());
-const canPerformStint: ComputedRef<boolean> = computed(() => performNextStintCheck());
-const canPerformFastestLap: ComputedRef<boolean> = computed(() => fastestLapRollCheck());
+    const lastFlag = flagEventStore.lastFlagEvent();
+
+    props.drivers.forEach((driver, index) => {
+        if (driver.result.dnf) {
+            return;
+        }
+
+        if (shouldRollDnf.value) {
+            if (getDnfRoll(driver)) {
+                driver.result.total = Number.MAX_SAFE_INTEGER;
+                driver.result.dnf_lap = raceStateStore.currentLap;
+                hasDnf = true;
+                return;
+            }
+        }
+
+        // const roll = index + 1 * 10;
+        const roll = getRoll(minRng, maxRng);
+        let score = driver.ratings.total_rating + roll;
+
+        if (raceStateStore.currentLap === 1) {
+            score += driver.result.bonus;
+        }
+
+        const total = score * perPoint;
+        let lapTotal = raceStateStore.lapDetails.baseLaptime + margin + (scale - total);
+
+        if (raceStateStore.currentLap === 1) {
+            lapTotal += raceStateStore.lapDetails.firstLapMargin;
+        }
+
+        lapTotal = Math.floor(lapTotal);
+
+        if (raceStateStore.isFastestLap(lapTotal)) {
+            raceStateStore.setFastestLap(lapTotal, raceStateStore.currentLap, driver);
+        }
+
+        driver.result.stints.push(lapTotal);
+        driver.result.total += lapTotal;
+    });
+
+    sortDriversByTotal();
+    setDriverPositions();
+
+    const yellowFlagThreshold = 30;
+    const lap = raceStateStore.currentLap;
+
+    if (lastFlag.flag === RaceEventFlag.GREEN) {
+        if (hasDnf) {
+            // roll for yellow
+            if (getRoll(0, 100) > yellowFlagThreshold) {
+                const type = getYellowFlagType();
+
+                const event: RaceFlagEvent = {
+                    type: type,
+                    flag: RaceEventFlag.YELLOW,
+                    startLap: lap,
+                    expectedEndLap: lap + getExpectedEndLap(type),
+                };
+
+                flagEventStore.addFlagEvent(event);
+
+                if (lastFlag) {
+                    lastFlag.endLap = lap;
+                }
+            }
+        }
+    } else if (lastFlag.flag === RaceEventFlag.YELLOW) {
+        // check whether to end yellow
+        if (lastFlag.expectedEndLap <= lap) {
+            lastFlag.endLap = lap;
+        }
+
+        if (lap >= lastFlag.endLap) {
+            const event: RaceFlagEvent = {
+                flag: RaceEventFlag.GREEN,
+                startLap: lap - 1,
+            };
+
+            flagEventStore.addFlagEvent(event);
+        }
+    }
+};
 
 onMounted(() => {
+    raceStateStore.race = props.race;
+    raceStateStore.currentLap = 0;
+    raceStateStore.completed = props.race.completed;
+    raceStateStore.saving = false;
+    raceStateStore.lapDetails = {
+        duration: props.race.duration,
+        // TODO set real data
+        // baseLaptime: 60000,
+        // scale: 5000,
+        // margin: 2000,
+        // firstLapMargin: 5000,
+        baseLaptime: getRoll(66000, 106000),
+        scale: getRoll(8000, 12000),
+        margin: getRoll(2000, 4000),
+        firstLapMargin: getRoll(4000, 6000),
+        perPoint: maxPossibleRng,
+    };
+    raceStateStore.setFastestLap(Number.MAX_SAFE_INTEGER, 0, null);
+
     prepareRace();
 
     sortDriversByPosition();
