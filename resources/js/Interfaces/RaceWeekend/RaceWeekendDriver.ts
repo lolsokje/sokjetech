@@ -45,6 +45,8 @@ export interface QualifyingDriver {
 export interface RaceDriver {
     id: string,
     entrant_id: string,
+    first_name: string,
+    last_name: string,
     full_name: string,
     number: number,
     team: RaceWeekendTeam,

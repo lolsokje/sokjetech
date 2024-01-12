@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\DataTransferObjects\RaceWeekend\QualifyingDriver;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 
@@ -14,7 +15,7 @@ class StoreQualifyingResultsRequest extends FormRequest
 
     public function drivers(): Collection
     {
-        return collect($this->validated('drivers'));
+        return collect($this->validated('drivers'))->map(fn (array $driver) => QualifyingDriver::fromRequest($driver));
     }
 
     public function authorize(): bool

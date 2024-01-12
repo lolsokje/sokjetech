@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\QualifyingResult;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin QualifyingResult */
 class StartingGridResource extends JsonResource
 {
     public function toArray($request): array

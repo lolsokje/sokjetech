@@ -1,6 +1,12 @@
 <?php
 
+use App\Actions\Races\Results\StoreQualifyingResultsAction;
+use App\DataTransferObjects\RaceWeekend\QualifyingDriver;
+use App\Models\Race;
+use App\Models\Racer;
+use App\Models\Season;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 
 use function Pest\Laravel\actingAs;
@@ -22,6 +28,24 @@ it('stores qualifying results in the database', function () {
 
     assertDatabaseCount('qualifying_results', 5);
     assertCount(5, $race->qualifyingResults);
+});
+
+// race IDs are cast to strings when fetched from the database, ensuring they're properly cast to integers
+// when looking for results when updating results ensures no double qualifying results are created
+it('casts the race ID to an integer', function () {
+    $race = Race::factory()->create();
+    $racers = Racer::factory(2)->for($race->season)->create();
+
+    $drivers = collect(getDriverRuns($racers, 1, 1)['drivers'])->map(
+        fn (array $driver) => QualifyingDriver::fromRequest($driver),
+    );
+
+    $action = new StoreQualifyingResultsAction;
+
+    $action->handle($drivers, $race->id, $race->season_id);
+    $action->handle($drivers, $race->id, $race->season_id);
+
+    $this->assertCount(2, $race->qualifyingResults);
 });
 
 it('overwrites existing qualifying results for the same race', function () {
@@ -136,6 +160,23 @@ it('marks qualifying as started once the first runs are stored', function () {
 
     assertTrue($race->fresh()->qualifying_started);
 });
+
+it('does not update the race when an error occurs', function () {
+    $this->withoutExceptionHandling();
+    $season = Season::factory()->started()->create();
+    $race = Race::factory()->for($season)->create();
+    $racers = Racer::factory(2)->for($race->season)->create();
+
+    $data = getDriverRuns($racers, 1, 1);
+
+    $data['drivers'][0]['id'] = 1234;
+
+    $this->actingAs($season->universe->user)
+        ->post(route('weekend.qualifying.results.store', $race), $data);
+
+    $this->assertFalse($race->qualifying_started);
+    $this->assertCount(0, $race->qualifyingResults);
+})->expectException(QueryException::class);
 
 function getDriverRuns(Collection $drivers, ?int $sessionCount = 3, ?int $runCount = 3): array
 {

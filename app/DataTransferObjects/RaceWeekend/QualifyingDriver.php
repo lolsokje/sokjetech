@@ -6,10 +6,15 @@ class QualifyingDriver extends RaceWeekendDriver
 {
     public QualifyingDriverResult $result;
 
-    public function __construct(array $driver)
+    private function __construct(array $driver)
     {
         parent::__construct($driver);
 
         $this->result = new QualifyingDriverResult($driver);
+    }
+
+    public static function fromRequest(array $driver): QualifyingDriver
+    {
+        return new self($driver);
     }
 }

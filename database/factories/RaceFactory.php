@@ -28,4 +28,14 @@ class RaceFactory extends Factory
             'completed' => false,
         ];
     }
+
+    public function raceReady(): self
+    {
+        return $this->state(function () {
+            return [
+                'qualifying_started' => true,
+                'qualifying_completed' => true,
+            ];
+        });
+    }
 }

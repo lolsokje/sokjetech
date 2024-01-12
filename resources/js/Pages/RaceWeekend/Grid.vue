@@ -38,29 +38,49 @@
     <CopyScreenshotButton/>
 </template>
 
-<script setup>
-import { onMounted } from 'vue';
-import { sortDriversByPosition } from '@/Composables/useRunQualifying';
+<script setup lang="ts">
 import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
-import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import { Race } from '@/Interfaces/Race';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
-const props = defineProps({
-    race: {
-        type: Object,
-        required: true,
+interface StartingGridDriver {
+    id: string,
+    full_name: string,
+    number: number,
+    team: {
+        team_name: string,
+        style_string: string,
+        background_colour: string,
     },
-    drivers: {
-        type: Array,
-        required: true,
-    },
-});
+    result: {
+        position: number,
+    }
+}
 
-onMounted(() => sortDriversByPosition(props.drivers));
+interface Props {
+    race: Race,
+    drivers: StartingGridDriver[],
+}
+
+const props = defineProps<Props>();
+
+// const props = defineProps({
+//     race: {
+//         type: Object,
+//         required: true,
+//     },
+//     drivers: {
+//         type: Array,
+//         required: true,
+//     },
+// });
+
+// onMounted(() => sortDriversByPosition(props.drivers));
 </script>
 
-<script>
+<script lang="ts">
 import RaceWeekend from '@/Layouts/RaceWeekend.vue';
 
 export default { layout: RaceWeekend };

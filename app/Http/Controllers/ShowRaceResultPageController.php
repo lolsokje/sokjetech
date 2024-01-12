@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\RaceResultPageResource;
+use App\Actions\GetRaceResults;
 use App\Http\Resources\RaceWeekend\RaceResultResource;
 use App\Models\Race;
 use Illuminate\Http\RedirectResponse;
@@ -11,7 +11,7 @@ use Inertia\Response;
 
 class ShowRaceResultPageController extends Controller
 {
-    public function __invoke(Race $race): Response|RedirectResponse
+    public function __invoke(Race $race, GetRaceResults $getRaceResults): Response|RedirectResponse
     {
         if (! $race->completed) {
             return to_route('weekend.race', [$race]);
@@ -19,19 +19,9 @@ class ShowRaceResultPageController extends Controller
 
         $this->authorize('view', $race->universe());
 
-        $race->load([
-            'season' => ['pointSystem'],
-            'raceResults' => [
-                'racer' => [
-                    'driver',
-                    'entrant' => ['engine'],
-                ],
-            ],
-        ]);
-
         return Inertia::render('RaceWeekend/Results', [
             'race' => RaceResultResource::array($race),
-            'drivers' => RaceResultPageResource::collection($race->raceResults)->toArray(request()),
+            'results' => $getRaceResults->handle($race),
         ]);
     }
 }
