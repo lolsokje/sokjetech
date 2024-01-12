@@ -15,4 +15,13 @@ class SeasonFactory extends Factory
             'name' => "season",
         ];
     }
+
+    public function started(): self
+    {
+        return $this->state(function () {
+            return [
+                'started' => true,
+            ];
+        });
+    }
 }

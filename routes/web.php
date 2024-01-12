@@ -60,7 +60,6 @@ use App\Http\Controllers\StartSeasonController;
 use App\Http\Controllers\StorePointsConfigurationController;
 use App\Http\Controllers\StoreQualifyingResultsController;
 use App\Http\Controllers\StoreQualifyingSettingsController;
-use App\Http\Controllers\StoreRaceResultsController;
 use App\Http\Controllers\StoreReliabilityConfigurationController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TeamController;
@@ -69,6 +68,7 @@ use App\Http\Controllers\UpdateDriverRatingsController;
 use App\Http\Controllers\UpdateDriverReliabilityController;
 use App\Http\Controllers\UpdateEngineRatingsController;
 use App\Http\Controllers\UpdateEngineReliabilityController;
+use App\Http\Controllers\UpdateRaceResultsController;
 use App\Http\Controllers\UpdateTeamRatingsController;
 use App\Http\Controllers\UpdateTeamReliabilityController;
 use Illuminate\Support\Facades\Route;
@@ -187,7 +187,7 @@ Route::group([
 
     Route::post('qualifying/results', StoreQualifyingResultsController::class)->name('qualifying.results.store');
     Route::post('qualifying/complete', CompleteQualifyingController::class)->name('qualifying.complete');
-    Route::post('race/results', StoreRaceResultsController::class)->name('race.store');
+    Route::put('race/results', UpdateRaceResultsController::class)->name('race.results.update');
     Route::post('race/complete', CompleteRaceController::class)->name('race.complete');
 });
 

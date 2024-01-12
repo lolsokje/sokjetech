@@ -119,6 +119,17 @@ ul.navbar-nav {
   background-color: var(--base-200);
 }
 
+.race-button-divider {
+  border-bottom: 2px solid var(--base-300);
+}
+
+.lap-counter {
+  @extend .h3;
+  padding: 0.5rem 1rem;
+  background-color: var(--base-100);
+  border-radius: .3rem;
+}
+
 .modal-content {
   background-color: var(--base-100);
 

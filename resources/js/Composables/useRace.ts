@@ -1,20 +1,10 @@
 import { RaceDriver } from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
-import { raceWeekendStore } from '@/Stores/raceWeekendStore.js';
-import { router } from '@inertiajs/vue3';
-import { Race } from '@/Interfaces/Race';
 
-export const completeRace = (race: Race): void => {
-    raceWeekendStore.completeRace();
-    router.post(route('weekend.race.complete', [ race ]));
+export const getPositionChange = (startingPosition: number, position: number): number => {
+    return startingPosition - position;
 };
 
-export const getPositionChange = (driver: RaceDriver): number => {
-    return driver.result.starting_position - driver.result.position;
-};
-
-export const getPositionChangeIconClasses = (driver: RaceDriver): string => {
-    const positionChange = driver.result.position_change;
-
+export const getPositionChangeIconClasses = (positionChange: number): string => {
     if (positionChange === 0) {
         return 'positions-unchanged';
     }
@@ -26,9 +16,7 @@ export const getPositionChangeIconClasses = (driver: RaceDriver): string => {
     return 'positions-lost';
 };
 
-export const getPositionChangeIcon = (driver: RaceDriver): string => {
-    const positionChange = driver.result.position_change;
-
+export const getPositionChangeIcon = (positionChange: number): string => {
     if (positionChange === 0) {
         return 'equals';
     }

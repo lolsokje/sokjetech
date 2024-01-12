@@ -1,46 +1,54 @@
 <template>
-    <Breadcrumb :link="route('seasons.races.index', race.season)"
-                :linkText="race.season.full_name"
-                :label="race.name"
-                append="Race"
-    />
-
-    <div class="alert bg-danger text-white container w-50" v-if="showError">
-        Something went wrong saving your stints. Please refresh the page and try again.
-    </div>
-
-    <div class="d-flex mb-3">
-        <div class="ms-auto" v-if="can.edit">
-            <button v-if="canPerformStint"
-                    class="btn btn-primary"
-                    @click.prevent="performNextStint()"
-                    :disabled="saving"
-            >
-                Run next stint
-            </button>
-            <button class="btn btn-primary"
-                    v-if="canPerformFastestLap"
-                    @click.prevent="fastestLapRoll()"
-                    :disabled="saving"
-            >
-                Fastest lap roll
-            </button>
-            <button v-if="canCompleteRace"
-                    class="btn btn-success"
-                    @click.prevent="completeRace(race)"
-                    :disabled="saving"
-            >
-                Complete race
-            </button>
+    <div class="mb-4 pb-3 race-button-divider">
+        <div class="alert alert-danger text-center" v-if="error">
+            Something went wrong saving the race result, please try again
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <Breadcrumb :link="route('seasons.races.index', race.season)"
+                            :linkText="race.season.full_name"
+                            :label="race.name"
+                            append="Race"
+                            withoutMargin
+                />
+            </div>
+            <div v-if="raceInProgress && canEdit">
+                <button class="btn btn-outline-warning me-3"
+                        v-if="maxLapsToSimulate > 1"
+                        @click.prevent="simulateLaps(maxLapsToSimulate)"
+                        :disabled="buttonsDisabled"
+                >
+                    Sim next {{ maxLapsToSimulate }} laps
+                </button>
+                <button class="btn btn-secondary me-3" @click.prevent="simulateNextLap()" :disabled="buttonsDisabled">
+                    Sim next lap
+                </button>
+                <button class="btn btn-danger" @click.prevent="simulateRace();" :disabled="buttonsDisabled">
+                    Sim race
+                </button>
+            </div>
+            <div v-else-if="!race.completed">
+                <button class="btn btn-success" @click.prevent="completeRace" :disabled="buttonsDisabled">
+                    Complete race
+                </button>
+            </div>
         </div>
     </div>
-
     <div id="screenshot-target">
-        <div class="race-details">
-            <h2>Round {{ race.order }} - {{ race.name }}</h2>
-            <h2 class="ms-auto">
-                Race
-            </h2>
+        <div class="d-flex justify-content-between align-items-center text-center mb-3">
+            <div>
+                <h3 class="text-uppercase">
+                    Round {{ race.order }} -{{ race.name }}
+                </h3>
+            </div>
+            <div class="lap-counter">
+                {{ currentLap }} / {{ race.duration }}
+            </div>
+            <div class="text-uppercase">
+                <h3>
+                    {{ race.circuit.name }}
+                </h3>
+            </div>
         </div>
         <table class="table">
             <thead>
@@ -50,315 +58,187 @@
                 <th></th>
                 <th class="colour-accent"></th>
                 <th>DRIVER</th>
-                <th class="text-center" v-if="fastestLap.awarded"></th>
                 <th></th>
                 <th>TEAM</th>
-                <th class="text-center">RAT</th>
-                <th class="text-center">TOT</th>
+                <th class="text-center">TOTAL</th>
+                <th class="text-center">LEADER</th>
+                <th class="text-center">INTERVAL</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="driver in drivers" :key="driver.id">
-                <td class="smallest-centered">{{ driver.result.position }}</td>
-                <td class="smallest-centered">{{ driver.result.starting_position }}</td>
-                <td class="small-centered" :class="getPositionChangeIconClasses(driver)">
-                    <fa :icon="getPositionChangeIcon(driver)"/>
-                    <span class="ms-3">{{ Math.abs(driver.result.position_change) }}</span>
+            <tr v-for="result in results" :key="result.id">
+                <td class="smallest-centered">{{ result.performance.position }}</td>
+                <td class="smallest-centered">{{ result.performance.starting_position }}</td>
+                <td class="small-centered" :class="getPositionChangeIconClasses(result.performance.position_change)">
+                    <fa :icon="getPositionChangeIcon(result.performance.position_change)"></fa>
+                    <span class="ms-3">{{ Math.abs(result.performance.position_change) }}</span>
                 </td>
-                <BackgroundColourCell :backgroundColour="driver.team.accent_colour"/>
-                <td class="padded-left">{{ driver.full_name }}</td>
-                <td class="smallest-centered fastest-lap" v-if="fastestLap.awarded">
-                    <fa icon="stopwatch" v-if="driver.result.fastest_lap" size="xl"/>
+                <BackgroundColourCell :backgroundColour="result.team.accent_colour"/>
+                <td class="padded-left">
+                    <DriverName :firstName="result.driver.first_name" :lastName="result.driver.last_name"/>
                 </td>
-                <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
-                <td class="padded-left">{{ driver.team.short_team_name }}</td>
-                <td class="small-centered">{{ driver.ratings.total_rating + driver.result.bonus }}</td>
-                <td class="biggest-centered text-uppercase" :class="getTotalDisplayClasses(driver)">
-                    {{ getTotalDisplayValue(driver) }}
+                <DriverNumberCell :number="result.driver.number" :styleString="result.team.style_string"/>
+                <td class="padded-left">{{ result.team.name }}</td>
+                <td class="medium-centered">{{ result.performance.race_total }}</td>
+                <td class="medium-centered">
+                    <span v-if="currentLap > 0">{{ getGapToLeader(result) }}</span>
+                    <span v-else>-</span>
+                </td>
+                <td class="medium-centered">
+                    <span v-if="currentLap > 0">{{ getInterval(result) }}</span>
+                    <span v-else>-</span>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <CopyScreenshotButton/>
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, onMounted, ref, Ref } from 'vue';
-import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
-import CopyScreenshotButton from '@/Shared/CopyScreenshotButton.vue';
-import Breadcrumb from '@/Components/Breadcrumb.vue';
 import { Race } from '@/Interfaces/Race';
+import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
+import DriverName from '@/Components/DriverName.vue';
 import DriverNumberCell from '@/Components/DriverNumberCell.vue';
-import { RaceDriver } from '@/Interfaces/RaceWeekend/RaceWeekendDriver';
-import {
-    FastestLapConfiguration,
-    ReliabilityConfiguration,
-    ReliabilityReasons,
-} from '@/Interfaces/RaceWeekend/RaceWeekendConfigurations';
-import Permission from '@/Interfaces/Permission';
+import RaceResult from '@/Interfaces/Race/RaceResult';
+import { computed, ComputedRef, onMounted, ref, Ref } from 'vue';
 import { getRoll } from '@/Composables/useRng';
+import { getPositionChange, getPositionChangeIcon, getPositionChangeIconClasses } from '@/Composables/useRace';
 import axios from 'axios';
-import {
-    completeRace,
-    getPositionChange,
-    getPositionChangeIcon,
-    getPositionChangeIconClasses,
-    getTotalDisplayClasses,
-    getTotalDisplayValue,
-} from '@/Composables/useRace';
-import { SaveRaceDriver } from '@/ValueObjects/SaveRaceDriver';
+import { router, usePage } from '@inertiajs/vue3';
+import route from 'ziggy-js';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 
-interface Props {
+type Props = {
     race: Race,
-    drivers: RaceDriver[],
-    fastestLap: FastestLapConfiguration,
-    can: Permission,
-    reliability_configuration: ReliabilityConfiguration,
-    reliability_reasons: ReliabilityReasons,
+    results: RaceResult[],
 }
 
 const props = defineProps<Props>();
 
-const showError: Ref<boolean> = ref(false);
 const saving: Ref<boolean> = ref(false);
+const error: Ref<boolean> = ref(false);
 
-const currentStint: Ref<number> = ref(props.race.race_details?.current_stint ?? 0);
-const fastestLapRollPerformed: Ref<boolean> = ref(props.race?.race_details?.fastest_lap_awarded ?? false);
+const canEdit = usePage().props.can.edit;
 
-const reliabilityMinRng = props.reliability_configuration.min_rng;
-const reliabilityMaxRng = props.reliability_configuration.max_rng;
+const buttonsDisabled: ComputedRef<boolean> = computed(() => saving.value || error.value);
 
-const fastestLapRoll = (): void => {
-    const drivers = props.drivers.filter(driver => driver.result.dnf === null);
-    const values = getFastestLapValues(drivers);
+const laps = props.race.duration;
+const currentLap: Ref<number> = ref(props.race.current_lap);
+const raceInProgress: ComputedRef<boolean> = computed(() => currentLap.value < laps);
+const maxLapsToSimulate: ComputedRef<number> = computed(() => Math.min(5, laps - currentLap.value));
 
-    // https://stackoverflow.com/a/68587921/2466375
-    const sorted = values
-        .map(Object.entries)
-        .sort(([ a ], [ b ]) => b[1] - a[1])
-        .map(([ id ]) => id);
+const minRng = 5;
+const maxRng = 30;
 
-    const [ driverId, roll ] = sorted[0];
+const simulateNextLap = (): void => {
+    simulateLap();
 
-    const driver = props.drivers.find(d => d.id === driverId);
-    driver.result.fastest_lap = true;
-    driver.result.fastest_lap_roll = roll;
-
-    if (props.fastestLap.type === 'separate_stint') {
-        fastestLapRollPerformed.value = true;
-
-        saveRaceResults();
-    }
+    saveResults();
 };
 
-const getFastestLapValues = (drivers: RaceDriver[]): object[] => {
-    if (props.fastestLap.type === 'separate_stint') {
-        const minRng = props.fastestLap.min_rng;
-        const maxRng = props.fastestLap.max_rng;
-
-        return drivers.map(driver => {
-            const total = driver.ratings.total_rating + getRoll(minRng, maxRng);
-            return { [driver.id]: total };
-        });
-    } else if (props.fastestLap.type === 'best_last_stint') {
-        return drivers.map(driver => {
-            return { [driver.id]: driver.result.stints.at(-1) };
-        });
-    }
-};
-
-const performNextStint = (): void => {
-    // const currentStintSettings = props.race.stints[currentStint.value];
-    //
-    // const minRng = currentStintSettings.min_rng;
-    // const maxRng = currentStintSettings.max_rng;
-    // const useDriverRating = currentStintSettings.use_driver_rating;
-    // const useTeamRating = currentStintSettings.use_team_rating;
-    // const useEngineRating = currentStintSettings.use_engine_rating;
-    // const dnfRoll = currentStintSettings.reliability;
-    //
-    // props.drivers.forEach(driver => {
-    //     if (driver.result.dnf) {
-    //         return;
-    //     }
-    //
-    //     if (dnfRoll) {
-    //         if (getDnfRoll(driver)) {
-    //             driver.result.total = 0;
-    //             return;
-    //         }
-    //     }
-    //
-    //     let total = getRoll(minRng, maxRng);
-    //
-    //     if (useDriverRating) {
-    //         total += driver.ratings.driver_rating;
-    //     }
-    //
-    //     if (useTeamRating) {
-    //         total += driver.ratings.team_rating;
-    //     }
-    //
-    //     if (useEngineRating) {
-    //         total += driver.ratings.engine_rating;
-    //     }
-    //
-    //     driver.result.stints[currentStint.value] = total;
-    //     driver.result.total = getTotal(driver);
-    //
-    //     driver.result.position_change = getPositionChange(driver);
-    // });
-    //
-    // sortDriversByTotal();
-    // setDriverPositions();
-    //
-    // if (shouldRollFastestLapAfterStint()) {
-    //     fastestLapRoll();
-    // }
-    //
-    // currentStint.value++;
-    //
-    // saveRaceResults();
-};
-
-const shouldRollFastestLapAfterStint = (): boolean => {
-    return false;
-    // if (! props.fastestLap.awarded) {
-    //     return false;
-    // }
-    //
-    // if (props.fastestLap.type !== 'best_last_stint') {
-    //     return false;
-    // }
-    //
-    // return currentStint.value === props.race.stints.length - 1;
-};
-
-const getDnfRoll = (driver: RaceDriver): string | null => {
-    if (driver.result.dnf) {
-        return driver.result.dnf;
+const simulateRace = (): void => {
+    while (currentLap.value < laps) {
+        simulateLap();
     }
 
-    const dnfTypes = [ 'team', 'driver', 'engine' ];
+    saveResults();
+};
 
-    for (let type of dnfTypes) {
-        const rating = driver.ratings[`${type}_reliability`];
+const simulateLaps = (lapsToSimulate: number): void => {
+    const targetLap = Math.min(currentLap.value + lapsToSimulate, laps);
 
-        if (! rating) {
-            return;
-        }
-
-        const roll = getRoll(reliabilityMinRng, reliabilityMaxRng);
-
-        if (roll > rating) {
-            const reason = getRandomDnfReasonByType(type);
-            driver.result.dnf = reason;
-
-            return reason;
-        }
+    while (currentLap.value < targetLap) {
+        simulateLap();
     }
+
+    saveResults();
 };
 
-const getRandomDnfReasonByType = (type: string): string => {
-    const reasons = props.reliability_reasons[type];
+const simulateLap = (): void => {
+    props.results.forEach(result => {
+        const roll = getRoll(minRng, maxRng);
 
-    return reasons[Math.floor(Math.random() * reasons.length)];
+        result.performance.stints.push(roll);
+
+        result.performance.stints_total += roll;
+        result.performance.race_total += roll;
+    });
+
+    props.results.sort((a, b) => b.performance.race_total - a.performance.race_total);
+
+    props.results.forEach((result, index) => {
+        result.performance.position = index + 1;
+        result.performance.position_change = getPositionChange(result.performance.starting_position, result.performance.position);
+    });
+
+    currentLap.value++;
 };
 
-const saveRaceResults = (): void => {
+const saveResults = (): void => {
     saving.value = true;
+    const results = [];
 
-    const drivers = props.drivers.map(driver => new SaveRaceDriver(driver));
+    props.results.forEach(result => {
+        results.push({
+            id: result.id,
+            position: result.performance.position,
+            stints: result.performance.stints,
+            total: result.performance.race_total,
+        });
+    });
 
     const details = {
-        current_stint: currentStint.value,
-        fastest_lap_awarded: fastestLapRollPerformed.value,
+        current_lap: currentLap.value,
+        results,
     };
 
-    axios.post(route('weekend.race.store', [ props.race ]), {
-        drivers: drivers,
-        race_details: details,
-    })
+    axios.put(route('weekend.race.results.update', props.race), details)
         .catch(() => {
-            showError.value = true;
-            currentStint.value--;
+            error.value = true;
         })
         .finally(() => saving.value = false);
 };
 
-const getTotal = (driver: RaceDriver): number => {
-    const total = driver.result.stints.reduce((sum, currentValue) => sum + currentValue, driver.ratings.total_rating + getStartingBonus(driver));
-
-    return driver.result.dnf ? 0 : total;
+const completeRace = (): void => {
+    saving.value = true;
+    router.post(route('weekend.race.complete', props.race));
 };
 
-const getStartingBonus = (driver: RaceDriver): number => {
-    const bonusDecrementBy = 3;
-    const maxBonus = props.drivers.length * bonusDecrementBy;
+const getGapToLeader = (driver: RaceResult): string | number => {
+    const leaderTotal = leader.value.performance.race_total;
+    const driverTotal = driver.performance.race_total;
 
-    return maxBonus - (driver.result.starting_position * bonusDecrementBy) + bonusDecrementBy;
-};
-
-const prepareRace = (): void => {
-    props.drivers.forEach(driver => {
-        driver.result.position_change = getPositionChange(driver);
-        driver.result.total = getTotal(driver);
-        driver.result.bonus = driver.result.bonus ?? getStartingBonus(driver);
-    });
-};
-
-const sortDriversByPosition = (): void => {
-    props.drivers.sort((a, b) => a.result.position - b.result.position);
-};
-
-const sortDriversByTotal = (): void => {
-    props.drivers.sort((driverOne, driverTwo) => {
-        return driverTwo.result.total - driverOne.result.total;
-    });
-};
-
-const setDriverPositions = (): void => {
-    props.drivers.forEach((driver, index) => {
-        driver.result.position = index + 1;
-        driver.result.position_change = driver.result.starting_position - driver.result.position;
-    });
-};
-
-const raceCompletionCheck = (): boolean => {
-    if (props.race.completed) {
-        return false;
+    if (leaderTotal === driverTotal) {
+        return '-';
     }
 
-    if (! allStintsCompleted.value) {
-        return false;
+    return driverTotal - leaderTotal;
+};
+
+const getInterval = (driver: RaceResult): string | number => {
+    if (driver.performance.position === 1) {
+        return '-';
     }
 
-    if (! props.fastestLap.awarded) {
-        return true;
+    const driverAhead = props.results.find(d => d.performance.position === driver.performance.position - 1);
+
+    if (! driverAhead) {
+        return '-';
     }
 
-    return fastestLapRollPerformed.value;
+    const interval = driver.performance.race_total - driverAhead.performance.race_total;
+
+    return interval === 0 ? '-' : interval;
 };
 
-const performNextStintCheck = (): boolean => {
-    return ! allStintsCompleted.value && ! showError.value;
-};
-
-const fastestLapRollCheck = (): boolean => {
-    return allStintsCompleted.value && props.fastestLap.awarded && ! fastestLapRollPerformed.value;
-};
-
-// const allStintsCompleted: ComputedRef<boolean> = computed(() => currentStint.value === props.race.stints.length);
-const allStintsCompleted: ComputedRef<boolean> = computed(() => true);
-const canCompleteRace: ComputedRef<boolean> = computed(() => raceCompletionCheck());
-const canPerformStint: ComputedRef<boolean> = computed(() => performNextStintCheck());
-const canPerformFastestLap: ComputedRef<boolean> = computed(() => fastestLapRollCheck());
+const leader: ComputedRef<RaceResult> = computed(() => props.results.find(r => r.performance.position === 1) ?? props.results[0]);
 
 onMounted(() => {
-    prepareRace();
-
-    sortDriversByPosition();
+    if (currentLap.value === 0) {
+        props.results.sort((a, b) => a.performance.starting_position - b.performance.starting_position);
+    } else {
+        props.results.sort((a, b) => a.performance.position - b.performance.position);
+    }
 });
 </script>
 

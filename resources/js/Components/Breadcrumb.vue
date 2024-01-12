@@ -1,5 +1,5 @@
 <template>
-    <h1 class="mb-3">
+    <h1 :class="{ 'mb-3': !withoutMargin }">
         <template v-if="true">
             <InertiaLink :href="link">{{ linkText }}</InertiaLink>
             <span class="text-muted"> /&nbsp;</span>
@@ -22,6 +22,7 @@ interface Props {
     label: string,
     labelLink?: string,
     append?: string,
+    withoutMargin?: boolean // TODO: check if other pages require this margin, remove if not
 }
 
 defineProps<Props>();

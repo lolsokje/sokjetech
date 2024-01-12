@@ -14,6 +14,7 @@ class RaceResultResource extends CustomJsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'round' => $this->order,
             'season' => [
                 'id' => $this->season_id,
                 'full_name' => $this->season->full_name,

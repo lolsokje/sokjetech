@@ -107,6 +107,8 @@ return [
         DocCommentSpacingSniff::class,
         NewWithBracesFixer::class,
         ClassInstantiationSniff::class,
+        ForbiddenPublicPropertySniff::class,
+        ForbiddenFinalClasses::class,
     ],
 
     'config' => [
