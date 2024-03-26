@@ -22,6 +22,9 @@ class RaceFactory extends Factory
             'race_type' => RaceType::LAP,
             'distance_type' => DistanceType::KM,
             'duration' => 50,
+            'qualifying_session' => 1,
+            'qualifying_run' => 1,
+            'current_lap' => 0,
             'qualifying_started' => false,
             'qualifying_completed' => false,
             'started' => false,
@@ -35,6 +38,18 @@ class RaceFactory extends Factory
             return [
                 'qualifying_started' => true,
                 'qualifying_completed' => true,
+            ];
+        });
+    }
+
+    public function completed(): self
+    {
+        return $this->state(function () {
+            return [
+                'qualifying_started' => true,
+                'qualifying_completed' => true,
+                'started' => true,
+                'completed' => true,
             ];
         });
     }

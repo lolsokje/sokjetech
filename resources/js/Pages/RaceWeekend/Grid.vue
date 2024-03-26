@@ -28,8 +28,10 @@
             <tr v-for="driver in drivers" :key="driver.id">
                 <td class="small-centered">{{ driver.result.position }}</td>
                 <BackgroundColourCell :backgroundColour="driver.team.background_colour"/>
-                <td class="padded-left">{{ driver.full_name }}</td>
-                <DriverNumberCell :number="driver.number" :styleString="driver.team.style_string"/>
+                <td>
+                    <DriverName :firstName="driver.driver.first_name" :lastName="driver.driver.last_name"/>
+                </td>
+                <DriverNumberCell :number="driver.driver.number" :styleString="driver.team.style_string"/>
                 <td class="padded-left">{{ driver.team.team_name }}</td>
             </tr>
             </tbody>
@@ -44,11 +46,15 @@ import Breadcrumb from '@/Components/Breadcrumb.vue';
 import { Race } from '@/Interfaces/Race';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import DriverNumberCell from '@/Components/DriverNumberCell.vue';
+import DriverName from '@/Components/DriverName.vue';
 
 interface StartingGridDriver {
     id: string,
-    full_name: string,
-    number: number,
+    driver: {
+        first_name: string,
+        last_name: string,
+        number: number,
+    },
     team: {
         team_name: string,
         style_string: string,
@@ -65,19 +71,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
-// const props = defineProps({
-//     race: {
-//         type: Object,
-//         required: true,
-//     },
-//     drivers: {
-//         type: Array,
-//         required: true,
-//     },
-// });
-
-// onMounted(() => sortDriversByPosition(props.drivers));
 </script>
 
 <script lang="ts">

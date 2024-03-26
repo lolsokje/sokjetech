@@ -1,4 +1,4 @@
-import { getRoll } from '@/Composables/useRunQualifying.js';
+import { getRoll } from '@/Composables/useRandom';
 import DevelopmentState from '@/Interfaces/Development';
 import { InertiaForm } from '@inertiajs/vue3';
 import DevelopmentItem from '@/Interfaces/DevelopmentItem';

@@ -32,11 +32,11 @@ function createSeasonForUser(User $user, ?UniverseVisibility $visibility = Unive
     return Season::factory()->for($series)->create();
 }
 
-function prepareSeason(): array
+function prepareSeason(?int $drivers = 5): array
 {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
-    $drivers = Racer::factory(5)->for($season)->create();
+    $drivers = Racer::factory($drivers)->for($season)->create();
     $race = Race::factory()->for($season)->create();
     $format = ThreeSessionElimination::factory()->create();
 

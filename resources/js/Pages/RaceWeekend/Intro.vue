@@ -6,7 +6,15 @@
                     append="Weekend intro"
         />
 
-        <InertiaLink :href="route('weekend.qualifying', race)" class="btn btn-primary mb-3">
+        <InertiaLink :href="route('weekend.qualifying.start', race)"
+                     as="button"
+                     method="POST"
+                     class="btn btn-primary mb-3"
+                     v-if="!race.qualifying_started"
+        >
+            Start weekend
+        </InertiaLink>
+        <InertiaLink :href="route('weekend.qualifying', race)" class="btn btn-primary mb-3" v-else>
             Go to qualifying
         </InertiaLink>
     </div>

@@ -32,6 +32,8 @@ class RaceResource extends JsonResource
             'race_type' => $this->race_type,
             'distance_type' => $this->distance_type,
             'duration' => $this->duration,
+            'qualifying_session' => $this->qualifying_session,
+            'qualifying_run' => $this->qualifying_run,
             'current_lap' => $this->current_lap,
             'climate' => ClimateResource::make($this->whenLoaded('climate')),
             'season' => GeneralSeasonResource::make($this->whenLoaded('season')),

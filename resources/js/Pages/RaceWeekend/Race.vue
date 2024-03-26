@@ -127,8 +127,16 @@ const currentLap: Ref<number> = ref(props.race.current_lap);
 const raceInProgress: ComputedRef<boolean> = computed(() => currentLap.value < laps);
 const maxLapsToSimulate: ComputedRef<number> = computed(() => Math.min(5, laps - currentLap.value));
 
-const minRng = 5;
-const maxRng = 30;
+const minRng = 0;
+const maxRng = 75;
+
+const ratingComponents = {
+    1: 'driver_rating',
+    2: 'team_rating',
+    3: 'engine_rating',
+};
+
+const ratingComponentTracker: Ref<number> = ref(1);
 
 const simulateNextLap = (): void => {
     simulateLap();
@@ -155,8 +163,10 @@ const simulateLaps = (lapsToSimulate: number): void => {
 };
 
 const simulateLap = (): void => {
+    const ratingComponent = getRatingComponent();
+
     props.results.forEach(result => {
-        const roll = getRoll(minRng, maxRng);
+        const roll = getRoll(minRng, maxRng) + result.ratings[ratingComponent];
 
         result.performance.stints.push(roll);
 
@@ -172,6 +182,14 @@ const simulateLap = (): void => {
     });
 
     currentLap.value++;
+};
+
+const getRatingComponent = (): string => {
+    const component = ratingComponents[ratingComponentTracker.value];
+
+    ratingComponentTracker.value = ratingComponentTracker.value === 3 ? 1 : ratingComponentTracker.value + 1;
+
+    return component;
 };
 
 const saveResults = (): void => {
