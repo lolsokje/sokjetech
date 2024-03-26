@@ -16,8 +16,11 @@ class StartingGridResource extends JsonResource
 
         return [
             'id' => $racer->id,
-            'full_name' => $driver->full_name,
-            'number' => $racer->number,
+            'driver' => [
+                'first_name' => $driver->first_name,
+                'last_name' => $driver->last_name,
+                'number' => $racer->number,
+            ],
             'team' => [
                 'team_name' => $entrant->full_name,
                 'style_string' => $entrant->style_string,

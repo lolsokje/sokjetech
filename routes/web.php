@@ -24,6 +24,7 @@ use App\Http\Controllers\EntrantController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
+use App\Http\Controllers\RaceWeekend\StartQualifyingController;
 use App\Http\Controllers\Season\Race\CompleteRaceController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeasonSetupCopy\Drivers;
@@ -185,6 +186,7 @@ Route::group([
     Route::get('race', ShowRacePageController::class)->name('race');
     Route::get('results', ShowRaceResultPageController::class)->name('results');
 
+    Route::post('qualifying/start', StartQualifyingController::class)->name('qualifying.start');
     Route::post('qualifying/results', StoreQualifyingResultsController::class)->name('qualifying.results.store');
     Route::post('qualifying/complete', CompleteQualifyingController::class)->name('qualifying.complete');
     Route::put('race/results', UpdateRaceResultsController::class)->name('race.results.update');

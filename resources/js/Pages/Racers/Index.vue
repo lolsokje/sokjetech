@@ -43,7 +43,7 @@
             <td class="small-centered">
                 <CountryFlag :country="driver.country"/>
             </td>
-            <td :style="driver.style_string" class="smallest-centered">{{ driver.number }}</td>
+            <DriverNumberCell :number="driver.number" :styleString="driver.style_string"/>
             <td class="padded-left">{{ driver.team_name }}</td>
             <td v-if="canEdit && !hasActiveRace" class="small-centered">
                 <InertiaLink :href="route('seasons.entrants.edit', [season, driver.entrant])">
@@ -70,6 +70,7 @@ import Racer from '@/Interfaces/Racer';
 import Permission from '@/Interfaces/Permission';
 import Entrant from '@/Interfaces/Entrant';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 interface Props {
     season: SeasonInterface,

@@ -56,7 +56,7 @@
                 <tr v-for="driver in form.drivers" :key="driver.id">
                     <BackgroundColourCell :backgroundColour="driver.accent_colour"/>
                     <td class="padded-left align-middle">{{ driver.full_name }}</td>
-                    <td :style="driver.team_style" class="small-centered">{{ driver.number }}</td>
+                    <DriverNumberCell :number="driver.number" :styleString="driver.team_style"/>
                     <td class="padded-left align-middle">{{ driver.team_name }}</td>
                     <td class="small-centered">{{ driver.age }}</td>
                     <td class="small-centered bg-accent-odd">
@@ -101,6 +101,7 @@ import DevelopmentState from '@/Interfaces/Development';
 import Season from '@/Interfaces/Season';
 import Development from '@/Utilities/Development';
 import DevelopmentDriver from '@/Interfaces/DevelopmentDriver';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 interface Props {
     season: Season,

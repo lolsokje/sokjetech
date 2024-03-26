@@ -38,7 +38,7 @@
                     <td class="padded-left" :rowspan="team.driver_count">{{ team.full_name }}</td>
                     <td class="small-centered" :rowspan="team.driver_count">{{ team.points }}</td>
                 </template>
-                <td class="smallest-centered" :style="team.style_string">{{ driver.number }}</td>
+                <DriverNumberCell :number="driver.number" :styleString="team.style_string"/>
                 <td class="colour-accent"></td>
                 <td v-for="race in races" :key="race.order" class="smallest-centered"
                     :class="getResultDisplayClasses(driver.results[race.order])"
@@ -60,6 +60,7 @@ import SeasonInterface from '@/Interfaces/Season';
 import { Race } from '@/Interfaces/Race';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import Series from '@/Interfaces/Series';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 interface DriverRaceResult {
     dnf: string | null,

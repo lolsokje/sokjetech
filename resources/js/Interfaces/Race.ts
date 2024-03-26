@@ -10,6 +10,8 @@ export interface Race {
     order: number,
     race_type: number,
     duration: number,
+    qualifying_session: number,
+    qualifying_run: number,
     current_lap: number,
     qualifying_started: boolean,
     qualifying_completed: boolean,

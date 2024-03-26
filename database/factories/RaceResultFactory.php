@@ -16,14 +16,18 @@ class RaceResultFactory extends Factory
     public function definition(): array
     {
         return [
-            'starting_position' => $this->faker->randomNumber(),
-            'position' => $this->faker->randomNumber(),
-            'fastest_lap' => $this->faker->boolean(),
-            'points' => $this->faker->randomNumber(),
             'race_id' => Race::factory(),
             'season_id' => Season::factory(),
             'racer_id' => Racer::factory(),
             'entrant_id' => Entrant::factory(),
+            'starting_position' => $this->faker->randomNumber(),
+            'position' => $this->faker->randomNumber(),
+            'driver_rating' => $this->faker->randomNumber(),
+            'team_rating' => $this->faker->randomNumber(),
+            'engine_rating' => $this->faker->randomNumber(),
+            'starting_bonus' => $this->faker->randomNumber(),
+            'fastest_lap' => $this->faker->boolean(),
+            'points' => $this->faker->randomNumber(),
         ];
     }
 }

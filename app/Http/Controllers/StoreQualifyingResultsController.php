@@ -25,10 +25,9 @@ class StoreQualifyingResultsController extends Controller
             $storeQualifyingResults->handle(
                 $request->drivers(),
                 $race->id,
-                $race->season_id,
             );
         });
 
-        return response()->json([]);
+        return response()->json();
     }
 }

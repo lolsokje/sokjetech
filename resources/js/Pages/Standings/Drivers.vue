@@ -36,7 +36,7 @@
                 <td v-if="team.first" class="padded-left" :rowspan="driver.rowspan">
                     {{ driver.name }}
                 </td>
-                <td class="smallest-centered" :style="team.style_string">{{ team.number }}</td>
+                <DriverNumberCell :number="team.number" :styleString="team.style_string"/>
                 <td class="padded-left">{{ team.name }}</td>
                 <BackgroundColourCell :backgroundColour="team.accent_colour"/>
                 <td v-if="team.first" class="small-centered" :rowspan="driver.rowspan">
@@ -66,6 +66,7 @@ import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
 import { onMounted } from 'vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import Series from '@/Interfaces/Series';
+import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 
 interface Results {
     [key: number]: RaceResult;

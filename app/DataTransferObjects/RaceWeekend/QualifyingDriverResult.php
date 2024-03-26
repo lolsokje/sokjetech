@@ -10,7 +10,7 @@ class QualifyingDriverResult
 
     public function __construct(array $driver)
     {
-        $this->position = $driver['result']['position'];
-        $this->sessions = $driver['result']['sessions'];
+        $this->position = $driver['performance']['position'];
+        $this->sessions = $driver['performance']['sessions'];
     }
 }

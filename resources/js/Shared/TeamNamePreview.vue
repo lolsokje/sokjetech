@@ -29,7 +29,7 @@
 <script setup>
 import { computed } from 'vue';
 import BackgroundColourCell from '@/Components/BackgroundColourCell.vue';
-import { getRoll } from '@/Composables/useRunQualifying';
+import { getRoll } from '@/Composables/useRandom';
 
 const props = defineProps({
     team: Object,
