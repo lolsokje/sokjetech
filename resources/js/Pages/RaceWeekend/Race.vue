@@ -63,6 +63,7 @@
                 <th class="text-center">TOTAL</th>
                 <th class="text-center">LEADER</th>
                 <th class="text-center">INTERVAL</th>
+                <th class="text-center">PROGRESS</th>
             </tr>
             </thead>
             <tbody>
@@ -78,15 +79,37 @@
                     <DriverName :firstName="result.driver.first_name" :lastName="result.driver.last_name"/>
                 </td>
                 <DriverNumberCell :number="result.driver.number" :styleString="result.team.style_string"/>
-                <td class="padded-left">{{ result.team.name }}</td>
-                <td class="medium-centered">{{ result.performance.race_total }}</td>
-                <td class="medium-centered">
-                    <span v-if="currentLap > 0">{{ getGapToLeader(result) }}</span>
-                    <span v-else>-</span>
+                <td class="padded-left d-flex justify-content-between align-items-center">
+                    <span>{{ result.team.name }}</span>
                 </td>
                 <td class="medium-centered">
-                    <span v-if="currentLap > 0">{{ getInterval(result) }}</span>
-                    <span v-else>-</span>
+                    <template v-if="result.performance.dnf">
+                        -
+                    </template>
+                    <template v-else>
+                        {{ result.performance.race_total }}
+                    </template>
+                </td>
+                <template v-if="result.performance.dnf">
+                    <td colspan="2" class="medium-centered bg-danger text-center">
+                        {{ result.performance.dnf }}
+                    </td>
+                </template>
+                <template v-else>
+                    <td class="medium-centered">
+                        <span v-if="currentLap > 0">{{ getGapToLeader(result) }}</span>
+                        <span v-else>-</span>
+                    </td>
+                    <td class="medium-centered">
+                        <span v-if="currentLap > 0">{{ getInterval(result) }}</span>
+                        <span v-else>-</span>
+                    </td>
+                </template>
+                <td style="min-width: 300px;padding:0 10px;">
+                    <DriverRaceProgressBar
+                        :progress="percentage(result.performance.stints.length, laps)"
+                        :events="result.performance.events"
+                    />
                 </td>
             </tr>
             </tbody>
@@ -101,12 +124,15 @@ import DriverName from '@/Components/DriverName.vue';
 import DriverNumberCell from '@/Components/DriverNumberCell.vue';
 import RaceResult from '@/Interfaces/Race/RaceResult';
 import { computed, ComputedRef, onMounted, ref, Ref } from 'vue';
-import { getRoll } from '@/Composables/useRng';
 import { getPositionChange, getPositionChangeIcon, getPositionChangeIconClasses } from '@/Composables/useRace';
 import axios from 'axios';
 import { router, usePage } from '@inertiajs/vue3';
 import route from 'ziggy-js';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import RaceEvent from '@/Interfaces/RaceWeekend/RaceEvent';
+import { RaceEventType } from '@/Interfaces/RaceWeekend/RaceEventType';
+import DriverRaceProgressBar from '@/Components/RaceWeekend/DriverRaceProgressBar.vue';
+import { percentage, random } from '@/Support/Math';
 
 type Props = {
     race: Race,
@@ -129,6 +155,7 @@ const maxLapsToSimulate: ComputedRef<number> = computed(() => Math.min(5, laps -
 
 const minRng = 0;
 const maxRng = 75;
+const dnfRollThreshold = 80;
 
 const ratingComponents = {
     1: 'driver_rating',
@@ -138,10 +165,12 @@ const ratingComponents = {
 
 const ratingComponentTracker: Ref<number> = ref(1);
 
+const events: Ref<RaceEvent[]> = ref([]);
+
 const simulateNextLap = (): void => {
     simulateLap();
 
-    saveResults();
+    // saveResults();
 };
 
 const simulateRace = (): void => {
@@ -149,7 +178,7 @@ const simulateRace = (): void => {
         simulateLap();
     }
 
-    saveResults();
+    // saveResults();
 };
 
 const simulateLaps = (lapsToSimulate: number): void => {
@@ -159,14 +188,64 @@ const simulateLaps = (lapsToSimulate: number): void => {
         simulateLap();
     }
 
-    saveResults();
+    // saveResults();
 };
 
 const simulateLap = (): void => {
     const ratingComponent = getRatingComponent();
+    const shouldRollDnf = random(0, 100) > dnfRollThreshold;
 
     props.results.forEach(result => {
-        const roll = getRoll(minRng, maxRng) + result.ratings[ratingComponent];
+        if (result.performance.events === undefined) {
+            result.performance.events = [];
+        }
+
+        if (result.performance.dnf) {
+            return;
+        }
+
+        if (shouldRollDnf) {
+            const roll = random(0, 100);
+            const component = getDnfComponent();
+
+            if (roll > result.ratings[`${component}_reliability`]) {
+                let event: RaceEvent;
+                if (component === 'driver') {
+                    event = {
+                        type: RaceEventType.MISTAKE,
+                        lap: currentLap.value,
+                        driver_id: result.driver_id,
+                        description: 'Mistake',
+                    };
+                } else {
+                    result.performance.dnf = `LAP ${currentLap.value} - ${component.toUpperCase()}`;
+                    result.performance.race_total = (props.race.duration * -100) - currentLap.value * -100;
+
+                    event = {
+                        type: RaceEventType.RETIREMENT,
+                        lap: currentLap.value,
+                        driver_id: result.driver_id,
+                        description: result.performance.dnf,
+                    };
+                }
+
+                events.value.push(event);
+
+                result.performance.events.push(event);
+
+                if (event.type === RaceEventType.RETIREMENT) {
+                    return;
+                }
+            }
+        }
+
+        let roll = random(minRng, maxRng) + result.ratings[ratingComponent];
+
+        const mistakeEvent = result.performance.events.find((e) => e.type === RaceEventType.MISTAKE && e.lap === currentLap.value);
+
+        if (mistakeEvent) {
+            roll -= random(50, 100);
+        }
 
         result.performance.stints.push(roll);
 
@@ -190,6 +269,22 @@ const getRatingComponent = (): string => {
     ratingComponentTracker.value = ratingComponentTracker.value === 3 ? 1 : ratingComponentTracker.value + 1;
 
     return component;
+};
+
+const getDnfComponent = (): string => {
+    const roll = random(0, 100);
+
+    if (roll < 40) {
+        return 'team';
+    } else if (roll < 70) {
+        return 'driver';
+    }
+
+    return 'engine';
+};
+
+const handleDnf = (type: string): void => {
+
 };
 
 const saveResults = (): void => {
@@ -247,6 +342,10 @@ const getInterval = (driver: RaceResult): string | number => {
     const interval = driver.performance.race_total - driverAhead.performance.race_total;
 
     return interval === 0 ? '-' : interval;
+};
+
+const getRaceCompletionPercentage = (stints: number[]): number => {
+    return (stints.length / laps) * 100;
 };
 
 const leader: ComputedRef<RaceResult> = computed(() => props.results.find(r => r.performance.position === 1) ?? props.results[0]);

@@ -1,3 +1,5 @@
+import RaceEvent from '@/Interfaces/RaceWeekend/RaceEvent';
+
 interface RaceResultDriver {
     first_name: string,
     last_name: string,
@@ -27,6 +29,7 @@ interface RaceResultPerformance {
     dnf: string | null,
     fastest_lap: boolean,
     points: number,
+    events?: RaceEvent[],
 }
 
 interface RaceResultTeam {
@@ -37,6 +40,7 @@ interface RaceResultTeam {
 
 export default interface RaceResult {
     id: string,
+    driver_id: string,
     driver: RaceResultDriver
     ratings: RaceResultRatings
     performance: RaceResultPerformance

@@ -2,12 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faBars,
+    faCarCrash,
     faCaretDown,
     faCaretRight,
     faCheck,
     faChevronDown,
     faChevronUp,
     faEquals,
+    faExclamationCircle,
     faGlobe,
     faHome,
     faInfoCircle,
@@ -23,12 +25,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faBars);
+library.add(faCarCrash);
 library.add(faTimes);
 library.add(faCaretRight);
 library.add(faCaretDown);
 library.add(faChevronDown);
 library.add(faChevronUp);
 library.add(faEquals);
+library.add(faExclamationCircle);
 library.add(faRoad);
 library.add(faThList);
 library.add(faHome);

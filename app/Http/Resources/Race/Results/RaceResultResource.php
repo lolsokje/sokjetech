@@ -21,6 +21,7 @@ class RaceResultResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'driver_id' => $this->racer->id,
             'driver' => DriverDetailsResource::make($this->getDriver()),
             'ratings' => DriverRatingResource::make($this->getRatings()),
             'performance' => DriverPerformanceResource::make($this->getPerformance()),
