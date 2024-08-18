@@ -24,13 +24,11 @@ final class StoreEngineDevelopment implements StoresDevelopment
     public function handle(
         string $seasonId,
         string $raceId,
-        array $entities,
+        Collection $entities,
         string $component,
     ): void {
         $this->seasonId = $seasonId;
         $this->raceId = $raceId;
-
-        $entities = DevelopmentEntity::fromRequest($entities);
 
         $this->models = $this->getEngines($entities);
 

@@ -45,10 +45,17 @@ const runDevelopment = (): void => {
 };
 
 const saveDevelopment = (): void => {
+    developmentStore.error = null;
+
     developmentStore.form.post(route('seasons.development.store', {
         season: seasonStore.season,
         type: developmentStore.selectedType,
         component: developmentStore.selectedComponent,
-    }));
+    }), {
+        onError: (errors: object): void => {
+            developmentStore.error = Object.values(errors)[0];
+            developmentStore.completed = false;
+        },
+    });
 };
 </script>

@@ -6,10 +6,10 @@ namespace App\Http\Controllers\Season\Development;
 
 use App\Enums\Season\Development\DevelopmentType;
 use App\Factories\StoreDevelopmentEntityActionFactory;
+use App\Http\Requests\Season\Development\StoreDevelopmentRequest;
 use App\Models\Season;
 use DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final readonly class StoreDevelopmentController
@@ -17,7 +17,7 @@ final readonly class StoreDevelopmentController
     use AuthorizesRequests;
 
     public function __invoke(
-        Request $request,
+        StoreDevelopmentRequest $request,
         Season $season,
         DevelopmentType $type,
         string $component,
@@ -43,7 +43,7 @@ final readonly class StoreDevelopmentController
             $action->handle(
                 seasonId: $season->id,
                 raceId: $season->nextRace()->id,
-                entities: $request->get('entities'),
+                entities: $request->entities(),
                 component: $component,
             );
         });

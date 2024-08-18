@@ -5,6 +5,7 @@ use App\Models\Entrant;
 use App\Models\Race;
 use App\Models\Season;
 use App\Models\TeamDevelopmentHistory;
+use App\ValueObjects\Season\Development\DevelopmentEntity;
 
 const BASE_TEAM_RATING = 40;
 const BASE_TEAM_DEV = 8;
@@ -17,11 +18,13 @@ it('creates new team development history records when no history exists', functi
         $component => BASE_TEAM_RATING,
     ]);
 
+    $entities = [generateDevelopmentEntity($team, $component, BASE_TEAM_DEV)];
+
     // Updates the rating to BASE_TEAM_RATING + BASE_TEAM_DEV
     (new StoreTeamDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: [generateDevelopmentEntity($team, $component, BASE_TEAM_DEV)],
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 
@@ -58,11 +61,13 @@ it('updates existing team development history records', function (string $compon
         $component => BASE_TEAM_RATING + HALF_TEAM_DEV,
     ]);
 
+    $entities = [generateDevelopmentEntity($team, $component, BASE_TEAM_DEV)];
+
     // Adds another BASE_TEAM_DEV points to the component rating
     (new StoreTeamDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: [generateDevelopmentEntity($team, $component, BASE_TEAM_DEV)],
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 
@@ -110,7 +115,7 @@ it('does not record development history for teams that do not exist', function (
     (new StoreTeamDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: $entities,
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 
@@ -145,14 +150,12 @@ it('creates new records for new races', function (string $component) {
     $race = Race::factory()->for($season)->create();
 
     // Adds BASE_TEAM_DEV to the already updating component rating from last dev round
-    $entities = [
-        generateDevelopmentEntity($team, $component, BASE_TEAM_DEV),
-    ];
+    $entities = [generateDevelopmentEntity($team, $component, BASE_TEAM_DEV)];
 
     (new StoreTeamDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: $entities,
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 

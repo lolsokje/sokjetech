@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace App\Actions\Season\Development;
 
 use App\ValueObjects\Season\Development\DevelopmentEntity;
+use Illuminate\Support\Collection;
 
 interface StoresDevelopment
 {
     /**
-     * @param array<DevelopmentEntity> $entities
+     * @param Collection<DevelopmentEntity> $entities
      */
     public function handle(
         string $seasonId,
         string $raceId,
-        array $entities,
+        Collection $entities,
         string $component,
     ): void;
 }

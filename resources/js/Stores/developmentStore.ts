@@ -20,6 +20,7 @@ type DevelopmentStore = {
     completed: boolean,
     isDriver: boolean,
     isEngine: boolean,
+    error: string | null,
 };
 
 export let developmentStore: DevelopmentStore = reactive({
@@ -34,4 +35,5 @@ export let developmentStore: DevelopmentStore = reactive({
     completed: false,
     isDriver: false,
     isEngine: false,
+    error: null,
 });

@@ -3,7 +3,9 @@
 use App\Contracts\Development\HasRatingHistory;
 use App\Contracts\Development\IsDevelopmentEntity;
 use App\Enums\Season\Development\DevelopmentType;
+use App\Models\DriverDevelopmentHistory;
 use App\Models\Race;
+use App\Models\Racer;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -41,9 +43,11 @@ test('development cannot be stored when there is an active race', function () {
     $season = createSeasonForUser($user);
     Race::factory()->for($season)->create(['qualifying_started' => true]);
 
+    $racer = Racer::factory()->for($season)->create();
+
     $this->actingAs($user)
         ->post(route('seasons.development.store', [$season, DevelopmentType::DRIVER, 'rating']), [
-            'entities' => [],
+            'entities' => [generateDevelopmentEntity($racer, 'rating', 0)],
         ])
         ->assertRedirectToRoute('seasons.development.show', [$season, DevelopmentType::DRIVER, 'rating'])
         ->assertSessionHas(
@@ -56,10 +60,11 @@ test('development cannot be stored when there is an active race', function () {
 test('development cannot be stored when there is no next race', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
+    $racer = Racer::factory()->for($season)->create();
 
     $this->actingAs($user)
         ->post(route('seasons.development.store', [$season, DevelopmentType::DRIVER, 'rating']), [
-            'entities' => [],
+            'entities' => [generateDevelopmentEntity($racer, 'rating', 0)],
         ])
         ->assertRedirectToRoute('seasons.development.show', [$season, DevelopmentType::DRIVER, 'rating'])
         ->assertSessionHas('error', 'No next race available for this season')
@@ -73,16 +78,39 @@ test('unauthorised users cannot store development', function (
     ?User $user,
 ) {
     $season = Season::factory()->create();
+    $entities = $factory->for($season)->create();
+
+    $entities = $entities->map(
+        fn(HasRatingHistory&IsDevelopmentEntity $entity) => generateDevelopmentEntity($entity, $component, 10),
+    )->toArray();
 
     if ($user) {
         $this->actingAs($user);
     }
 
     $this->post(route('seasons.development.store', [$season, $type, $component]), [
-        'entities' => [],
+        'entities' => $entities,
     ])
         ->assertForbidden();
 })->with('development options')->with([
     [null],
     [fn() => User::factory()->create()],
 ]);
+
+test('all new ratings must be at least 0', function () {
+    $season = Season::factory()->create();
+    Race::factory()->for($season)->create();
+    $racer = Racer::factory()->for($season)->create(['rating' => 10]);
+
+    $entity = generateDevelopmentEntity($racer, 'rating', -11);
+
+    $this->actingAs($season->universe->user)
+        ->from(route('seasons.development.show', [$season, DevelopmentType::DRIVER, 'rating']))
+        ->post(route('seasons.development.store', [$season, DevelopmentType::DRIVER, 'rating']), [
+            'entities' => [$entity],
+        ])
+        ->assertInvalid('entities.0.new')
+        ->assertRedirectToRoute('seasons.development.show', [$season, DevelopmentType::DRIVER, 'rating']);
+
+    $this->assertCount(0, DriverDevelopmentHistory::query()->get());
+});

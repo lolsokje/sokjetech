@@ -5,6 +5,7 @@ use App\Models\EngineDevelopmentHistory;
 use App\Models\EngineSeason;
 use App\Models\Race;
 use App\Models\Season;
+use App\ValueObjects\Season\Development\DevelopmentEntity;
 
 const BASE_ENGINE_RATING = 20;
 const BASE_ENGINE_DEV = 4;
@@ -17,11 +18,13 @@ it('creates new engine development history records when no history exists', func
         $component => BASE_ENGINE_RATING,
     ]);
 
+    $entities = [generateDevelopmentEntity($engine, $component, BASE_ENGINE_DEV)];
+
     // Updates the rating to BASE_ENGINE_RATING + BASE_ENGINE_DEV
     (new StoreEngineDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: [generateDevelopmentEntity($engine, $component, BASE_ENGINE_DEV)],
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 
@@ -58,11 +61,13 @@ it('updates existing engine development history records', function (string $comp
         $component => BASE_ENGINE_RATING + HALF_ENGINE_DEV,
     ]);
 
+    $entities = [generateDevelopmentEntity($engine, $component, BASE_ENGINE_DEV)];
+
     // Adds another BASE_ENGINE_DEV points to the component rating
     (new StoreEngineDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: [generateDevelopmentEntity($engine, $component, BASE_ENGINE_DEV)],
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 
@@ -110,7 +115,7 @@ it('does not record development history for engines that do not exist', function
     (new StoreEngineDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: $entities,
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 
@@ -145,14 +150,12 @@ it('creates new records for new races', function (string $component) {
     $race = Race::factory()->for($season)->create();
 
     // Adds BASE_ENGINE_DEV to the already updating component rating from last dev round
-    $entities = [
-        generateDevelopmentEntity($engine, $component, BASE_ENGINE_DEV),
-    ];
+    $entities = [generateDevelopmentEntity($engine, $component, BASE_ENGINE_DEV)];
 
     (new StoreEngineDevelopment)->handle(
         seasonId: $season->id,
         raceId: $race->id,
-        entities: $entities,
+        entities: DevelopmentEntity::fromRequest($entities),
         component: $component,
     );
 

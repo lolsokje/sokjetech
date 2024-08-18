@@ -14,6 +14,10 @@
                 <DevelopmentButtons/>
             </div>
 
+            <div class="alert bg-danger w-50 mx-auto text-center" v-if="developmentStore.error">
+                {{ developmentStore.error }}
+            </div>
+
             <table class="table" id="screenshot-target">
                 <thead>
                 <tr>
@@ -167,6 +171,7 @@ onMounted(() => {
 onUnmounted(() => {
     developmentStore.completed = false;
     developmentStore.form.entities = [];
+    developmentStore.error = null;
 });
 </script>
 
