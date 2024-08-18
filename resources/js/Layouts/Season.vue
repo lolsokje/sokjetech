@@ -44,25 +44,7 @@ seasonSetupLink.addChildren(
     new TabLink('seasons.engines.index', 'Engines', [ props.season ]),
 );
 
-const developmentLink = new TabLink(null, 'Development', [], showLink);
-
-if (developmentLink.show) {
-    developmentLink.addChildren(
-        new TabLink('seasons.development.teams', 'Teams', [ props.season ]),
-        new TabLink('seasons.development.drivers', 'Drivers', [ props.season ]),
-        new TabLink('seasons.development.engines', 'Engines', [ props.season ]),
-    );
-}
-
-const reliabilityLink = new TabLink(null, 'Reliability', [], showLink);
-
-if (reliabilityLink.show) {
-    reliabilityLink.addChildren(
-        new TabLink('seasons.development.reliability.teams', 'Teams', [ props.season ]),
-        new TabLink('seasons.development.reliability.drivers', 'Drivers', [ props.season ]),
-        new TabLink('seasons.development.reliability.engines', 'Engines', [ props.season ]),
-    );
-}
+const developmentLink = new TabLink('seasons.development.show', 'Development', [ props.season ], showLink);
 
 const configurationLink = new TabLink(null, 'Configuration', [], showLink);
 
@@ -79,7 +61,6 @@ const links = [
     new TabLink('seasons.races.index', 'Calendar', [ props.season ]),
     seasonSetupLink,
     developmentLink,
-    reliabilityLink,
     configurationLink,
 ];
 </script>

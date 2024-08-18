@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Contracts\Development\HasRatingHistory;
+use App\Contracts\Development\IsDevelopmentEntity;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Entrant extends SnowflakeModel
+class Entrant extends SnowflakeModel implements HasRatingHistory, IsDevelopmentEntity
 {
     use HasFactory;
 
@@ -20,6 +23,7 @@ class Entrant extends SnowflakeModel
         return Attribute::get(function () {
             $primary = $this->primary_colour;
             $secondary = $this->secondary_colour;
+
             return "background-color:$primary;color:$secondary;font-weight:bold";
         });
     }
@@ -62,5 +66,36 @@ class Entrant extends SnowflakeModel
     public function raceResults(): HasMany
     {
         return $this->hasMany(RaceResult::class);
+    }
+
+    public function getComponentRating(string $component): ?int
+    {
+        // TODO individual car components
+        return $this->getAttribute($component);
+    }
+
+    /**
+     * @return Builder<Entrant>
+     */
+    public function getHistoryTableQuery(): Builder
+    {
+        return TeamDevelopmentHistory::query();
+    }
+
+    public function getLabel(): string
+    {
+        return $this->full_name;
+    }
+
+    public function getStyleString(): string
+    {
+        return $this->style_string;
+    }
+
+    public function getExtra(): array
+    {
+        return [
+            'accent' => $this->accent_colour,
+        ];
     }
 }

@@ -25,6 +25,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
 use App\Http\Controllers\RaceWeekend\StartQualifyingController;
+use App\Http\Controllers\Season\Development\ShowDevelopmentPageController;
+use App\Http\Controllers\Season\Development\StoreDevelopmentController;
 use App\Http\Controllers\Season\Race\CompleteRaceController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeasonSetupCopy\Drivers;
@@ -38,12 +40,8 @@ use App\Http\Controllers\ShowCircuitDatabaseIndexPageController;
 use App\Http\Controllers\ShowCopySeasonSettingsPageController;
 use App\Http\Controllers\ShowDatabaseIndexPageController;
 use App\Http\Controllers\ShowDriverDatabaseIndexPageController;
-use App\Http\Controllers\ShowDriverDevelopmentPageController;
-use App\Http\Controllers\ShowDriverReliabilityController;
 use App\Http\Controllers\ShowDriverStandingsController;
 use App\Http\Controllers\ShowEngineDatabaseIndexPageController;
-use App\Http\Controllers\ShowEngineDevelopmentPageController;
-use App\Http\Controllers\ShowEngineReliabilityController;
 use App\Http\Controllers\ShowPointsConfigurationController;
 use App\Http\Controllers\ShowQualifyingPageController;
 use App\Http\Controllers\ShowQualifyingSettingsPage;
@@ -53,8 +51,6 @@ use App\Http\Controllers\ShowRaceWeekendIntroPageController;
 use App\Http\Controllers\ShowReliabilityConfigurationController;
 use App\Http\Controllers\ShowStartingGridController;
 use App\Http\Controllers\ShowTeamDatabaseIndexPageController;
-use App\Http\Controllers\ShowTeamDevelopmentPageController;
-use App\Http\Controllers\ShowTeamReliabilityController;
 use App\Http\Controllers\ShowTeamStandingsController;
 use App\Http\Controllers\ShowTutorialPageController;
 use App\Http\Controllers\StartSeasonController;
@@ -65,13 +61,7 @@ use App\Http\Controllers\StoreReliabilityConfigurationController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UniverseController;
-use App\Http\Controllers\UpdateDriverRatingsController;
-use App\Http\Controllers\UpdateDriverReliabilityController;
-use App\Http\Controllers\UpdateEngineRatingsController;
-use App\Http\Controllers\UpdateEngineReliabilityController;
 use App\Http\Controllers\UpdateRaceResultsController;
-use App\Http\Controllers\UpdateTeamRatingsController;
-use App\Http\Controllers\UpdateTeamReliabilityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [HomeController::class, 'index'])->name('index');
@@ -148,25 +138,8 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
     });
 
     Route::group(['prefix' => 'development', 'as' => 'development.'], function () {
-        Route::get('drivers', ShowDriverDevelopmentPageController::class)->name('drivers');
-        Route::post('drivers', UpdateDriverRatingsController::class)->name('drivers.store');
-
-        Route::get('teams', ShowTeamDevelopmentPageController::class)->name('teams');
-        Route::post('teams', UpdateTeamRatingsController::class)->name('teams.store');
-
-        Route::get('engines', ShowEngineDevelopmentPageController::class)->name('engines');
-        Route::post('engines', UpdateEngineRatingsController::class)->name('engines.store');
-
-        Route::group(['prefix' => 'reliability', 'as' => 'reliability.'], function () {
-            Route::get('drivers', ShowDriverReliabilityController::class)->name('drivers');
-            Route::post('drivers', UpdateDriverReliabilityController::class)->name('drivers.store');
-
-            Route::get('teams', ShowTeamReliabilityController::class)->name('teams');
-            Route::post('teams', UpdateTeamReliabilityController::class)->name('teams.store');
-
-            Route::get('engines', ShowEngineReliabilityController::class)->name('engines');
-            Route::post('engines', UpdateEngineReliabilityController::class)->name('engines.store');
-        });
+        Route::get('/{type?}/{component?}', ShowDevelopmentPageController::class)->name('show');
+        Route::post('/{type}/{component}', StoreDevelopmentController::class)->name('store');
     });
 
     Route::group(['prefix' => 'standings', 'as' => 'standings.'], function () {

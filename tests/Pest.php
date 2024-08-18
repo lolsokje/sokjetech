@@ -1,5 +1,7 @@
 <?php
 
+use App\Contracts\Development\HasRatingHistory;
+use App\Contracts\Development\IsDevelopmentEntity;
 use App\Enums\UniverseVisibility;
 use App\Models\PointSystem;
 use App\Models\QualifyingFormats\ThreeSessionElimination;
@@ -49,5 +51,20 @@ function prepareSeason(?int $drivers = 5): array
         $user,
         $drivers,
         $race,
+    ];
+}
+
+function generateDevelopmentEntity(IsDevelopmentEntity&HasRatingHistory $entity, string $component, int $rng): array
+{
+    return [
+        'id' => $entity->getKey(),
+        'label' => $entity->getLabel(),
+        'current' => $entity->getComponentRating($component),
+        'styleString' => $entity->getStyleString(),
+        'extra' => [],
+        'min' => 0,
+        'max' => 15,
+        'rng' => $rng,
+        'new' => $entity->getComponentRating($component) + $rng,
     ];
 }
