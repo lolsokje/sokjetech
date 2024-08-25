@@ -21,13 +21,27 @@ it('copies point system and distribution', function () {
     $this->assertDatabaseHas('point_distributions', ['point_system_id' => $newSeason->fresh()->pointSystem->id]);
 });
 
-test('a point system and distribution must exist when copying', function () {
+test('a point system must exist when copying', function () {
+    $this->expectExceptionMessage('No point system added to the selected season');
+
     [$season, $newSeason] = preparePoints();
 
     $season->pointDistribution()->delete();
     $season->pointSystem()->delete();
 
     $this->assertDatabaseCount('point_systems', 0);
+    $this->assertDatabaseCount('point_distributions', 0);
+
+    (new CopyPoints($season, $newSeason))->handle();
+})->throws(InvalidSeasonRequirements::class);
+
+test('a point distribution must exist when copying', function () {
+    $this->expectExceptionMessage('No point distribution configured for the selected season');
+    [$season, $newSeason] = preparePoints();
+
+    $season->pointDistribution()->delete();
+
+    $this->assertDatabaseCount('point_systems', 1);
     $this->assertDatabaseCount('point_distributions', 0);
 
     (new CopyPoints($season, $newSeason))->handle();
