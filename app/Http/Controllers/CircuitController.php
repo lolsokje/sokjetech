@@ -70,6 +70,8 @@ class CircuitController extends Controller
     {
         $this->authorize('alter', $circuit);
 
+        $circuit->loadCount('races');
+
         if ($circuit->races_count > 0) {
             throw new Exception("Circuits can't be deleted once they've been used in a race");
         }

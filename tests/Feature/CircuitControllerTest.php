@@ -143,6 +143,8 @@ test('an unauthorised  user cannot delete circuits', function () {
 
 test('a circuit cannot be removed once it has been used for a race', function () {
     $this->withoutExceptionHandling();
+    $this->expectExceptionMessage("Circuits can't be deleted once they've been used in a race");
+
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
     $circuit = Circuit::factory()->for($user)->create();
@@ -153,7 +155,7 @@ test('a circuit cannot be removed once it has been used for a race', function ()
         ->delete(route('circuits.destroy', $circuit));
 
     assertDatabaseCount('circuits', 1);
-})->throws(Exception::class);
+});
 
 test('circuits can be searched', function () {
     $user = User::factory()->create();
