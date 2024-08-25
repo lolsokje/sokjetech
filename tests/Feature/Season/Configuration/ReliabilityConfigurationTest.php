@@ -1,15 +1,30 @@
 <?php
 
+use App\Enums\ReliabilityReasonTypes;
+use App\Models\ReliabilityReason;
 use App\Models\Season;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('a universe owner can view the reliability configuration page', function () {
     $user = User::factory()->create();
     $season = createSeasonForUser($user);
+    ReliabilityReason::factory(3)->sequence(
+        ['type' => ReliabilityReasonTypes::DRIVER, 'reason' => 'skill issue'],
+        ['type' => ReliabilityReasonTypes::TEAM, 'reason' => 'suspension'],
+        ['type' => ReliabilityReasonTypes::ENGINE, 'reason' => 'exploded'],
+    )->for($season)->create();
 
     $this->actingAs($user)
         ->get(route('seasons.configuration.reliability', [$season]))
-        ->assertOk();
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->component('Seasons/Configuration/Reliability', true)
+            ->has('reasons', 3)
+            ->where('reasons.driver.0', 'skill issue')
+            ->where('reasons.team.0', 'suspension')
+            ->where('reasons.engine.0', 'exploded')
+            ->etc());
 });
 
 test('unauthorised users cannot view the reliability configuration page', function () {
@@ -61,10 +76,11 @@ it('only stores one reliability configuration for a season', function () {
 
     $this->actingAs($user)
         ->post(
-            route('seasons.configuration.reliability.store', [$season]), getRequestBody([
-            'min_rng' => 20,
-            'max_rng' => 30,
-        ]),
+            route('seasons.configuration.reliability.store', [$season]),
+            getRequestBody([
+                'min_rng' => 20,
+                'max_rng' => 30,
+            ]),
         )
         ->assertRedirect(route('seasons.configuration.reliability', [$season]));
 
@@ -144,7 +160,10 @@ test('the reason types must exist', function () {
     $season = createSeasonForUser($user);
 
     $this->actingAs($user)
-        ->post(route('seasons.configuration.reliability.store', [$season]), getRequestBody(['reasons' => ['test' => 'reasons']]))
+        ->post(
+            route('seasons.configuration.reliability.store', [$season]),
+            getRequestBody(['reasons' => ['test' => 'reasons']]),
+        )
         ->assertInvalid(['reason_keys' => 'in']);
 
     $this->assertCount(0, $season->reliabilityReasons);
