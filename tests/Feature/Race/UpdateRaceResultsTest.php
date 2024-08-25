@@ -42,7 +42,11 @@ it('updates race details', function () {
 test('results can be updated', function () {
     $season = Season::factory()->started()->create();
     $race = Race::factory()->for($season)->create(['qualifying_completed' => true]);
-    $result = RaceResult::factory()->for($race)->create();
+    $result = RaceResult::factory()->for($race)->create([
+        'position' => 3,
+        'stints' => [],
+        'total' => 0,
+    ]);
 
     $action = new UpdateRaceResults;
 
@@ -57,29 +61,31 @@ test('results can be updated', function () {
         ]),
     );
 
-    $this->assertDatabaseHas('race_results', [
-        'id' => 1,
-        'position' => 1,
-        'stints' => "[1]",
-        'total' => 6,
-    ]);
+    $result->refresh();
+
+    $this->assertEquals(1, $result->position);
+    $this->assertEquals([1], $result->stints);
+    $this->assertEquals(6, $result->total);
 });
 
 it('updates race results', function () {
     $season = Season::factory()->create(['started' => true]);
     $race = Race::factory()->for($season)->create(['qualifying_completed' => true]);
-    $result = RaceResult::factory()->for($race)->create();
+    $result = RaceResult::factory()->for($race)->create([
+        'position' => 3,
+        'stints' => [],
+        'total' => 0,
+    ]);
 
     $this->actingAs($season->universe->user)
         ->put(route('weekend.race.results.update', $race), getRaceResultData($result))
         ->assertOk();
 
-    $this->assertDatabaseHas('race_results', [
-        'id' => 1,
-        'position' => 1,
-        'stints' => "[1]",
-        'total' => 6,
-    ]);
+    $result->refresh();
+
+    $this->assertEquals(1, $result->position);
+    $this->assertEquals([1], $result->stints);
+    $this->assertEquals(6, $result->total);
 });
 
 function getRaceResultData(?RaceResult $raceResult = null): array

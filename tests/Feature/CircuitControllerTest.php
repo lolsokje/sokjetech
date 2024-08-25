@@ -172,7 +172,7 @@ test('circuits can be searched', function () {
         ->get(route('circuits.index', ['search' => 'match']))
         ->assertOk()
         ->assertInertia(fn(Assert $page) => $page
-            ->has('circuits', 1, fn(Assert $prop) => $prop
+            ->has('circuits.data', 1, fn(Assert $prop) => $prop
                 ->where('name', 'match')
                 ->etc()));
 });
