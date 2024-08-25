@@ -43,6 +43,11 @@ class Racer extends SnowflakeModel implements HasRatingHistory, IsDevelopmentEnt
         return $this->hasMany(RaceResult::class);
     }
 
+    public function developmentHistories(): HasMany
+    {
+        return $this->hasMany(DriverDevelopmentHistory::class);
+    }
+
     public function age(): int
     {
         return $this->driver->age($this->season);

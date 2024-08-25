@@ -20,8 +20,8 @@ final class DriverDevelopmentHistoryFactory extends Factory
             'racer_id' => Racer::factory(),
             'race_id' => $this->faker->randomNumber(),
             'component' => 'rating',
-            'initial' => $this->faker->randomNumber(),
-            'development' => $this->faker->randomNumber(),
+            'initial' => $this->faker->numberBetween(30, 60),
+            'development' => $this->faker->numberBetween(-5, 5),
         ];
     }
 }

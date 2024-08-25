@@ -17,17 +17,13 @@
 </template>
 
 <script lang="ts" setup>
-import { DevelopmentType } from '@/Interfaces/Season/Development/DevelopmentType';
 import { uppercaseFirstLetter } from '@/Support/String';
 import { developmentStore } from '@/Stores/developmentStore';
 import { router } from '@inertiajs/vue3';
 import { seasonStore } from '@/Stores/seasonStore';
+import DevelopmentTypes from '@/Constants/DevelopmentTypes';
 
-type Props = {
-    types: DevelopmentType[],
-};
-
-const props = defineProps<Props>();
+const types = DevelopmentTypes;
 
 const setComponent = (type: string, component: string): void => {
     const currentRouteName: string = route().current();

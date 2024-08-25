@@ -14,6 +14,8 @@
 import Base from './Base.vue';
 import TabLinks from '@/Components/TabLinks.vue';
 import { TabLink } from '@/Utilities/TabLink';
+import { onMounted } from 'vue';
+import { seasonStore } from '@/Stores/seasonStore';
 
 const props = defineProps({
     season: {
@@ -61,8 +63,15 @@ const links = [
     new TabLink('seasons.races.index', 'Calendar', [ props.season ]),
     seasonSetupLink,
     developmentLink,
+    new TabLink('seasons.history.show', 'Dev history', [ props.season ]),
     configurationLink,
 ];
+
+onMounted(() => {
+    if (! seasonStore.season) {
+        seasonStore.season = props.season;
+    }
+});
 </script>
 
 <script>

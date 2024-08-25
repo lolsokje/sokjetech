@@ -28,6 +28,16 @@ final class EngineDevelopmentHistory extends Model implements HasDevelopmentHist
         return $this->belongsTo(Race::class);
     }
 
+    public function raceId(): string|int
+    {
+        return $this->race_id;
+    }
+
+    public function getInitialRating(): ?int
+    {
+        return $this->initial;
+    }
+
     public function getCurrentDevelopment(): ?int
     {
         return $this->development;

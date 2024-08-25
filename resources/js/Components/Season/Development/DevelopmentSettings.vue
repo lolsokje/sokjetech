@@ -1,7 +1,7 @@
 <template>
     <h2>Settings</h2>
 
-    <DevelopmentTypeSelect :types="developmentStore.types"/>
+    <DevelopmentTypeSelect/>
 
     <h4 class="mt-4">Configuration</h4>
     <div class="d-flex justify-content-between gap-3">

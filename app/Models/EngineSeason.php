@@ -7,6 +7,7 @@ use App\Contracts\Development\IsDevelopmentEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EngineSeason extends SnowflakeModel implements HasRatingHistory, IsDevelopmentEntity
 {
@@ -25,6 +26,11 @@ class EngineSeason extends SnowflakeModel implements HasRatingHistory, IsDevelop
     public function baseEngine(): BelongsTo
     {
         return $this->belongsTo(Engine::class, 'base_engine_id');
+    }
+
+    public function developmentHistories(): HasMany
+    {
+        return $this->hasMany(EngineDevelopmentHistory::class);
     }
 
     public function getComponentRating(string $component): ?int

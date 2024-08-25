@@ -25,6 +25,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\RacerController;
 use App\Http\Controllers\RaceWeekend\StartQualifyingController;
+use App\Http\Controllers\Season\Development\ShowDevelopmentHistoryPageController;
 use App\Http\Controllers\Season\Development\ShowDevelopmentPageController;
 use App\Http\Controllers\Season\Development\StoreDevelopmentController;
 use App\Http\Controllers\Season\Race\CompleteRaceController;
@@ -141,6 +142,8 @@ Route::group(['prefix' => 'seasons/{season}', 'as' => 'seasons.'], function () {
         Route::get('/{type?}/{component?}', ShowDevelopmentPageController::class)->name('show');
         Route::post('/{type}/{component}', StoreDevelopmentController::class)->name('store');
     });
+
+    Route::get('/history/{type?}/{component?}', ShowDevelopmentHistoryPageController::class)->name('history.show');
 
     Route::group(['prefix' => 'standings', 'as' => 'standings.'], function () {
         Route::get('drivers', ShowDriverStandingsController::class)->name('drivers');

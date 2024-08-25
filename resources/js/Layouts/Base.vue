@@ -36,6 +36,7 @@
 <script setup>
 import Toast from '../Shared/Toast.vue';
 import Nav from '@/Shared/Nav.vue';
+import { themeStore } from '@/Stores/themeStore';
 
 const themes = [
     { name: 'dark', label: 'Dark', background: '#15151E', color: '#F8B739' },
@@ -51,6 +52,11 @@ const getStyle = (theme) => {
 const setTheme = (theme) => {
     localStorage.setItem('theme', theme.name);
     document.querySelector('html').dataset.theme = theme.name;
+
+    const style = getComputedStyle(document.body);
+
+    themeStore.color = style.getPropertyValue('--color');
+    themeStore.base300 = style.getPropertyValue('--base-300');
 };
 </script>
 

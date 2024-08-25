@@ -6,5 +6,9 @@ namespace App\Contracts\Development;
 
 interface HasDevelopmentHistory
 {
+    public function raceId(): string|int;
+
+    public function getInitialRating(): ?int;
+
     public function getCurrentDevelopment(): ?int;
 }

@@ -68,6 +68,11 @@ class Entrant extends SnowflakeModel implements HasRatingHistory, IsDevelopmentE
         return $this->hasMany(RaceResult::class);
     }
 
+    public function developmentHistories(): HasMany
+    {
+        return $this->hasMany(TeamDevelopmentHistory::class);
+    }
+
     public function getComponentRating(string $component): ?int
     {
         // TODO individual car components
