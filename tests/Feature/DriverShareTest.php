@@ -5,6 +5,7 @@ use App\Models\Driver;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertFalse;
@@ -46,7 +47,7 @@ it('only shows shared drivers on the driver database index page', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.drivers.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Drivers/Index')
             ->has('drivers', 5),
         );
@@ -63,7 +64,7 @@ it('groups drivers by full_name', function () {
     $this->actingAs($user)
         ->get(route('database.drivers.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Drivers/Index')
             ->has('drivers', 2));
 });
@@ -135,10 +136,25 @@ it('paginates shared drivers', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.drivers.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Drivers/Index')
             ->has('drivers', 20)
             ->has('links', 4));
+});
+
+test('shared drivers can be search', function () {
+    Driver::factory(2)->shared()->sequence(
+        ['first_name' => 'match', 'last_name' => 'match'],
+        ['first_name' => 'something else'],
+    )->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('database.drivers.index', ['search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $assert) => $assert
+            ->has('drivers', 1, fn(Assert $prop) => $prop
+                ->where('full_name', 'match match')
+                ->etc()));
 });
 
 it('shows the universes owned by the authenticated user on the index page', function () {
@@ -149,7 +165,7 @@ it('shows the universes owned by the authenticated user on the index page', func
     $this->actingAs($user)
         ->get(route('database.drivers.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Drivers/Index')
             ->has('universes', 3));
 });

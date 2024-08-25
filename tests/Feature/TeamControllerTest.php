@@ -186,7 +186,7 @@ it('shows the correct team on the show page', function () {
         ->get(route('universes.teams.show', [$universe, $team]))
         ->assertOk()
         ->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->component('Teams/Show')
                 ->where('team.full_name', $team->full_name),
         );
@@ -202,8 +202,25 @@ it('shows all teams in the selected universe on the index page', function () {
         ->get(route('universes.teams.index', [$universe]))
         ->assertOk()
         ->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->component('Teams/Index')
                 ->has('teams', 5),
         );
+});
+
+test('teams can be searched', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->for($user)->create();
+    $team = Team::factory(2)->sequence(
+        ['full_name' => 'match'],
+        ['full_name' => 'something else'],
+    )->for($universe)->create();
+
+    $this->actingAs($user)
+        ->get(route('universes.teams.index', [$universe, 'search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->has('teams', 1, fn(Assert $prop) => $prop
+                ->where('full_name', 'match')
+                ->etc()));
 });

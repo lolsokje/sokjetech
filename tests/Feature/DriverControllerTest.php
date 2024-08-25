@@ -172,7 +172,7 @@ it('shows all drivers in the selected universe on the index page', function () {
     $this->actingAs($universe->user)
         ->get(route('universes.drivers.index', [$universe]))
         ->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->component('Drivers/Index')
                 ->has('drivers', 5),
         );
@@ -186,9 +186,9 @@ it('shows the driver detail page for authorised users', function () {
     $this->actingAs($user)
         ->get(route('universes.drivers.show', [$universe, $driver]))
         ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn(Assert $page) => $page
             ->component('Drivers/Show')
-            ->has('driver', fn (Assert $prop) => $prop
+            ->has('driver', fn(Assert $prop) => $prop
                 ->where('id', $driver->id)
                 ->etc()));
 });
@@ -203,4 +203,21 @@ it('does not show the driver detail page for unauthorised users', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('universes.drivers.show', [$universe, $driver]))
         ->assertForbidden();
+});
+
+test('drivers can be search', function () {
+    $user = User::factory()->create();
+    $universe = Universe::factory()->for($user)->create();
+    Driver::factory(2)->sequence(
+        ['first_name' => 'match', 'last_name' => 'match'],
+        ['first_name' => 'something else'],
+    )->for($universe)->create();
+
+    $this->actingAs($user)
+        ->get(route('universes.drivers.index', [$universe, 'search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->has('drivers', 1, fn(Assert $prop) => $prop
+                ->where('full_name', 'match match')
+                ->etc()));
 });

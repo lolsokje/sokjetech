@@ -108,7 +108,7 @@ it('shows all circuits created by a user on the index page', function () {
     $this->actingAs($user)
         ->get(route('circuits.index'))
         ->assertInertia(
-            fn (Assert $page) => $page
+            fn(Assert $page) => $page
                 ->component('Circuits/Index')
                 ->has('circuits', 5)
                 ->has('filters'),
@@ -154,3 +154,19 @@ test('a circuit cannot be removed once it has been used for a race', function ()
 
     assertDatabaseCount('circuits', 1);
 })->throws(Exception::class);
+
+test('circuits can be searched', function () {
+    $user = User::factory()->create();
+    Circuit::factory(2)->sequence(
+        ['name' => 'match'],
+        ['name' => 'something else'],
+    )->for($user)->create();
+
+    $this->actingAs($user)
+        ->get(route('circuits.index', ['search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->has('circuits', 1, fn(Assert $prop) => $prop
+                ->where('name', 'match')
+                ->etc()));
+});

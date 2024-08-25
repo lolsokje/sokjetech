@@ -56,9 +56,9 @@ it('only shows shared circuits on the circuit database index page', function () 
     $this->actingAs(User::factory()->create())
         ->get(route('database.circuits.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Circuits/Index')
-            ->has('circuits', 5, fn (Assert $prop) => $prop
+            ->has('circuits', 5, fn(Assert $prop) => $prop
                 ->where('shared', true)
                 ->etc()),
         );
@@ -76,7 +76,7 @@ it('groups circuits by name, country and user', function () {
     $this->actingAs($user)
         ->get(route('database.circuits.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Circuits/Index')
             ->has('circuits', 2));
 });
@@ -108,8 +108,23 @@ it('paginates shared circuits', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.circuits.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Circuits/Index')
             ->has('circuits', 20)
             ->has('links', 4));
+});
+
+test('shared circuits can be search', function () {
+    Circuit::factory(2)->shared()->sequence(
+        ['name' => 'match'],
+        ['name' => 'something else'],
+    )->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('database.circuits.index', ['search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $assert) => $assert
+            ->has('circuits', 1, fn(Assert $prop) => $prop
+                ->where('name', 'match')
+                ->etc()));
 });

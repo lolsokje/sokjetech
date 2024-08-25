@@ -5,6 +5,7 @@ use App\Models\Series;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertFalse;
@@ -52,7 +53,7 @@ it('only shows shared engines on the team database index page', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.engines.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Engines/Index')
             ->has('engines', 5),
         );
@@ -66,7 +67,7 @@ it('groups engines by name', function () {
     $this->actingAs($user)
         ->get(route('database.engines.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Engines/Index')
             ->has('engines', 2));
 });
@@ -138,10 +139,25 @@ it('paginates shared engines', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.engines.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Engines/Index')
             ->has('engines', 20)
             ->has('links', 4));
+});
+
+test('shared engines can be searched', function () {
+    Engine::factory(2)->shared()->sequence(
+        ['name' => 'match'],
+        ['name' => 'something else'],
+    )->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('database.engines.index', ['search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $assert) => $assert
+            ->has('engines', 1, fn(Assert $prop) => $prop
+                ->where('name', 'match')
+                ->etc()));
 });
 
 it('shows the series owned by the authenticated user on the index page', function () {
@@ -154,7 +170,7 @@ it('shows the series owned by the authenticated user on the index page', functio
     $this->actingAs($user)
         ->get(route('database.engines.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Engines/Index')
             ->has('series', 3));
 });

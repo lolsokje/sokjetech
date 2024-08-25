@@ -4,6 +4,7 @@ use App\Models\Team;
 use App\Models\Universe;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertFalse;
@@ -45,7 +46,7 @@ it('only shows shared teams on the team database index page', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.teams.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Teams/Index')
             ->has('teams', 5),
         );
@@ -63,7 +64,7 @@ it('groups teams by short name, full_name and team_principal', function () {
     $this->actingAs($user)
         ->get(route('database.teams.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Teams/Index')
             ->has('teams', 2));
 });
@@ -135,10 +136,25 @@ it('paginates shared teams', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('database.teams.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Teams/Index')
             ->has('teams', 20)
             ->has('links', 4));
+});
+
+test('shared teams can be searched', function () {
+    Team::factory(2)->shared()->sequence(
+        ['full_name' => 'match'],
+        ['full_name' => 'something else'],
+    )->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('database.teams.index', ['search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $assert) => $assert
+            ->has('teams', 1, fn(Assert $prop) => $prop
+                ->where('full_name', 'match')
+                ->etc()));
 });
 
 it('shows the universes owned by the authenticated user on the index page', function () {
@@ -149,7 +165,7 @@ it('shows the universes owned by the authenticated user on the index page', func
     $this->actingAs($user)
         ->get(route('database.teams.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $assert) => $assert
+        ->assertInertia(fn(Assert $assert) => $assert
             ->component('Database/Teams/Index')
             ->has('universes', 3));
 });

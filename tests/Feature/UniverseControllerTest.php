@@ -123,8 +123,8 @@ it('only shows public and their own universes to authenticated users', function 
 
     $this->get(route('universes.index'))
         ->assertInertia(
-            fn (Assert $page) => $page
-                ->has('universes', 2)
+            fn(Assert $page) => $page
+                ->has('universes', 2),
         );
 });
 
@@ -134,6 +134,37 @@ it('only shows public universes to unauthenticated users', function () {
     Universe::factory()->auth()->create();
 
     $this->get(route('universes.index'))
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn(Assert $page) => $page
             ->has('universes', 1));
+});
+
+test('universes can be searched', function () {
+    Universe::factory(2)->sequence(
+        ['name' => 'match'],
+        ['name' => 'something else'],
+    )->create();
+
+    $this->get(route('universes.index', ['search' => 'match']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->has('universes', 1, fn(Assert $prop) => $prop
+                ->where('name', 'match')
+                ->etc()));
+});
+
+test('universes can be filtered to only the authenticated user', function () {
+    $user = User::factory()->create();
+
+    Universe::factory(2)->sequence(
+        ['user_id' => $user->id],
+        ['user_id' => User::factory()->create()->id],
+    )->create();
+
+    $this->actingAs($user)
+        ->get(route('universes.index', ['mine' => 'true']))
+        ->assertOk()
+        ->assertInertia(fn(Assert $page) => $page
+            ->has('universes', 1, fn(Assert $prop) => $prop
+                ->where('user.username', $user->username)
+                ->etc()));
 });
